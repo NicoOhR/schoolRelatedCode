@@ -1,0 +1,401 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Homework 7},
+  pdfauthor={Nimrod Ohayon Rozanes},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Homework 7}
+\author{Nimrod Ohayon Rozanes}
+\date{2024-04-15}
+
+\begin{document}
+\maketitle
+
+\section{Question 1}\label{question-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cola }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{15.997}\NormalTok{, }\FloatTok{16.005}\NormalTok{, }\FloatTok{15.981}\NormalTok{, }\FloatTok{15.954}\NormalTok{, }\FloatTok{15.986}\NormalTok{, }\FloatTok{16.021}\NormalTok{, }\FloatTok{15.985}\NormalTok{, }\FloatTok{16.001}\NormalTok{, }\FloatTok{16.018}\NormalTok{, }\FloatTok{16.056}\NormalTok{)}
+
+\CommentTok{\#step 1 specify distro }
+\CommentTok{\# Cola \textasciitilde{} Norm}
+
+\CommentTok{\#step 2 null and alt}
+\CommentTok{\#H\_0 = fill == 16}
+\CommentTok{\#H\_a = fill != 16}
+
+\CommentTok{\#step 3 t stat}
+\NormalTok{X\_bar }\OtherTok{\textless{}{-}}\NormalTok{ (}\FunctionTok{mean}\NormalTok{(cola) }\SpecialCharTok{{-}} \DecValTok{16}\NormalTok{)}\SpecialCharTok{/}\NormalTok{(}\FunctionTok{sd}\NormalTok{(cola)}\SpecialCharTok{/}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{length}\NormalTok{(cola)))}
+
+\NormalTok{p\_value }\OtherTok{\textless{}{-}} \FunctionTok{pnorm}\NormalTok{(X\_bar)}
+
+\NormalTok{p\_value}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5183085
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{t.test}\NormalTok{(cola)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  One Sample t-test
+## 
+## data:  cola
+## t = 1836.4, df = 9, p-value < 2.2e-16
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  15.98069 16.02011
+## sample estimates:
+## mean of x 
+##   16.0004
+\end{verbatim}
+
+in either approach, the p value is higher than the signficance level we
+set, and therefore we fail to reject the null hypothesis, and conclude
+that the cola bottles are filled with 16oz.
+
+\section{Question 2}\label{question-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stressed }\OtherTok{\textless{}{-}} \DecValTok{130}
+
+\NormalTok{tot }\OtherTok{\textless{}{-}} \DecValTok{200} 
+
+\NormalTok{prop }\OtherTok{\textless{}{-}}\NormalTok{ stressed}\SpecialCharTok{/}\NormalTok{tot}
+
+\NormalTok{P\_0 }\OtherTok{\textless{}{-}} \FloatTok{0.7}
+
+\NormalTok{std\_e }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(P\_0 }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ P\_0) }\SpecialCharTok{/}\NormalTok{ tot)}
+
+\NormalTok{Z }\OtherTok{\textless{}{-}}\NormalTok{ (prop }\SpecialCharTok{{-}}\NormalTok{ P\_0)}\SpecialCharTok{/}\NormalTok{std\_e}
+
+\NormalTok{p\_value }\OtherTok{\textless{}{-}} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{pnorm}\NormalTok{(}\FunctionTok{abs}\NormalTok{(Z)))}
+
+\NormalTok{p\_value}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1228226
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{prop.test}\NormalTok{(}\AttributeTok{x =} \DecValTok{130}\NormalTok{, }\AttributeTok{n =} \DecValTok{200}\NormalTok{, }\AttributeTok{p =} \FloatTok{0.7}\NormalTok{, }\AttributeTok{alternative =} \StringTok{"two.sided"}\NormalTok{, }\AttributeTok{conf.level =} \FloatTok{0.95}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  130 out of 200, null probability 0.7
+## X-squared = 2.1488, df = 1, p-value = 0.1427
+## alternative hypothesis: true p is not equal to 0.7
+## 95 percent confidence interval:
+##  0.5790769 0.7150579
+## sample estimates:
+##    p 
+## 0.65
+\end{verbatim}
+
+We fail to reject the null hypothesis, and conclude that the proportion
+of students on this campus who are stressed is not entirely different
+from 70\%
+
+\section{Question 3}\label{question-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mean\_under\_50 }\OtherTok{\textless{}{-}} \DecValTok{2}
+\NormalTok{mean\_over }\OtherTok{\textless{}{-}} \FloatTok{1.85}
+\NormalTok{std\_under\_50 }\OtherTok{\textless{}{-}} \FloatTok{0.812}
+\NormalTok{std\_over }\OtherTok{\textless{}{-}} \FloatTok{0.837}
+\NormalTok{n\_under\_50 }\OtherTok{\textless{}{-}} \DecValTok{350}
+\NormalTok{n\_over }\OtherTok{\textless{}{-}} \DecValTok{150}
+
+\NormalTok{se\_18\_50 }\OtherTok{\textless{}{-}}\NormalTok{ std\_under\_50 }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(n\_under\_50)}
+\NormalTok{se\_over\_50 }\OtherTok{\textless{}{-}}\NormalTok{ std\_over }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(n\_over)}
+\NormalTok{combined\_se }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(se\_18\_50}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{+}\NormalTok{ se\_over\_50}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{t }\OtherTok{\textless{}{-}}\NormalTok{ (mean\_over }\SpecialCharTok{{-}}\NormalTok{ mean\_under\_50)}\SpecialCharTok{/}\NormalTok{combined\_se}
+
+\NormalTok{p\_value }\OtherTok{\textless{}{-}} \FunctionTok{pt}\NormalTok{(t, }\AttributeTok{df =}\NormalTok{ n\_under\_50 }\SpecialCharTok{+}\NormalTok{ n\_over }\SpecialCharTok{{-}} \DecValTok{2}\NormalTok{, }\AttributeTok{lower.tail =} \ConstantTok{TRUE}\NormalTok{)}
+
+\NormalTok{p\_value}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.03225135
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#generating samples for t.test to use}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{data\_under\_50 }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\AttributeTok{n =} \DecValTok{350}\NormalTok{, }\AttributeTok{mean =} \DecValTok{2}\NormalTok{, }\AttributeTok{sd =} \FloatTok{0.812}\NormalTok{)}
+\NormalTok{data\_over }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\AttributeTok{n =} \DecValTok{150}\NormalTok{, }\AttributeTok{mean =} \FloatTok{1.85}\NormalTok{, }\AttributeTok{sd =} \FloatTok{0.837}\NormalTok{)}
+
+
+\FunctionTok{t.test}\NormalTok{(}\AttributeTok{x =}\NormalTok{ data\_under\_50, }\AttributeTok{y =}\NormalTok{ data\_over,}
+                      \AttributeTok{alternative =} \StringTok{"greater"}\NormalTok{, }
+                      \AttributeTok{var.equal =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Two Sample t-test
+## 
+## data:  data_under_50 and data_over
+## t = 1.7441, df = 498, p-value = 0.04088
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  0.00749825        Inf
+## sample estimates:
+## mean of x mean of y 
+##  2.024209  1.888279
+\end{verbatim}
+
+Despite the limitation of not having access to the original vectors,
+both p values are under the 5\%, leading us to accept the alternative
+hypothesis and conclude that there is a signficant different between the
+usage of people over 50 and those under.
+
+\section{Question 4}\label{question-4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{apple\_returns }\OtherTok{\textless{}{-}} \DecValTok{14}
+\NormalTok{apple\_sales }\OtherTok{\textless{}{-}} \DecValTok{150}
+\NormalTok{samsung\_returns }\OtherTok{\textless{}{-}} \DecValTok{15}
+\NormalTok{samsung\_sales }\OtherTok{\textless{}{-}} \DecValTok{125}
+
+\NormalTok{p\_apple }\OtherTok{\textless{}{-}}\NormalTok{ apple\_returns }\SpecialCharTok{/}\NormalTok{ apple\_sales}
+\NormalTok{p\_samsung }\OtherTok{\textless{}{-}}\NormalTok{ samsung\_returns }\SpecialCharTok{/}\NormalTok{ samsung\_sales}
+\NormalTok{p\_pooled }\OtherTok{\textless{}{-}}\NormalTok{ (apple\_returns }\SpecialCharTok{+}\NormalTok{ samsung\_returns) }\SpecialCharTok{/}\NormalTok{ (apple\_sales }\SpecialCharTok{+}\NormalTok{ samsung\_sales)}
+
+\NormalTok{se }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(p\_pooled }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ p\_pooled) }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{/}\NormalTok{apple\_sales }\SpecialCharTok{+} \DecValTok{1}\SpecialCharTok{/}\NormalTok{samsung\_sales))}
+
+\NormalTok{Z }\OtherTok{\textless{}{-}}\NormalTok{ (p\_apple }\SpecialCharTok{{-}}\NormalTok{ p\_samsung) }\SpecialCharTok{/}\NormalTok{ se}
+
+\NormalTok{p\_value }\OtherTok{\textless{}{-}} \FunctionTok{pnorm}\NormalTok{(Z) }
+
+\NormalTok{p\_value}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2367125
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{prop.test}\NormalTok{(}\AttributeTok{x =} \FunctionTok{c}\NormalTok{(apple\_returns, samsung\_returns),}
+                         \AttributeTok{n =} \FunctionTok{c}\NormalTok{(apple\_sales, samsung\_sales),}
+                         \AttributeTok{alternative =} \StringTok{"less"}\NormalTok{,}
+                         \AttributeTok{correct =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  2-sample test for equality of proportions without continuity correction
+## 
+## data:  c(apple_returns, samsung_returns) out of c(apple_sales, samsung_sales)
+## X-squared = 0.51397, df = 1, p-value = 0.2367
+## alternative hypothesis: less
+## 95 percent confidence interval:
+##  -1.00000000  0.03507449
+## sample estimates:
+##     prop 1     prop 2 
+## 0.09333333 0.12000000
+\end{verbatim}
+
+The test returns a p value under 5\%, leading us to conclude that
+samsung devices are returned at a higher rate than apple products.
+
+\section{Question 5}\label{question-5}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(UsingR)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: MASS
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: HistData
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: Hmisc
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'Hmisc'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     format.pval, units
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age }\OtherTok{\textless{}{-}}\NormalTok{ babies}\SpecialCharTok{$}\NormalTok{age[babies}\SpecialCharTok{$}\NormalTok{age }\SpecialCharTok{!=} \DecValTok{99}\NormalTok{]}
+\NormalTok{dage }\OtherTok{\textless{}{-}}\NormalTok{ babies}\SpecialCharTok{$}\NormalTok{dage[babies}\SpecialCharTok{$}\NormalTok{dage }\SpecialCharTok{!=} \DecValTok{99}\NormalTok{]}
+
+\NormalTok{n\_mom }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(age)}
+\NormalTok{n\_dad }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(dage)}
+
+\NormalTok{mean\_mom }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(age)}
+\NormalTok{mean\_dad }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(dage)}
+
+\NormalTok{var\_mom }\OtherTok{\textless{}{-}} \FunctionTok{var}\NormalTok{(age)}
+\NormalTok{var\_dad }\OtherTok{\textless{}{-}} \FunctionTok{var}\NormalTok{(dage)}
+
+\NormalTok{se }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(mean\_mom}\SpecialCharTok{/}\NormalTok{n\_mom }\SpecialCharTok{+}\NormalTok{ mean\_dad}\SpecialCharTok{/}\NormalTok{n\_dad)}
+
+\NormalTok{t }\OtherTok{\textless{}{-}}\NormalTok{ (mean\_mom }\SpecialCharTok{{-}}\NormalTok{ mean\_dad) }\SpecialCharTok{/}\NormalTok{ se}
+
+\NormalTok{p\_value }\OtherTok{=} \DecValTok{2} \SpecialCharTok{*} \FunctionTok{pt}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{abs}\NormalTok{(t), }\AttributeTok{df =} \FunctionTok{min}\NormalTok{(n\_mom, n\_dad) }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)}
+
+\FunctionTok{t.test}\NormalTok{(age, dage, }\AttributeTok{alternative =} \StringTok{"two.sided"}\NormalTok{, }\AttributeTok{var.equal =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Two Sample t-test
+## 
+## data:  age and dage
+## t = -12.157, df = 2461, p-value < 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -3.591901 -2.594065
+## sample estimates:
+## mean of x mean of y 
+##  27.25527  30.34825
+\end{verbatim}
+
+There is a very low p-value, indicating a very strong difference between
+the ages of the mom and the dad.
+
+\end{document}

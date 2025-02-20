@@ -1,0 +1,132 @@
+---
+title: "Homework 2"
+author: "Nimrod Ohayon Rozanes"
+date: "2024-02-14"
+output: pdf_document
+---
+
+## Problem 1
+
+### Part a
+
+```{r}
+mat <- matrix(c(34, 23, 53, 6, 78, 93, 12, 41, 99), nrow = 3)
+
+df <- as.data.frame(mat)
+names(df) <- c("score_given_to_car_on_driving_test",
+               "score_given_to_van_on_driving_test",
+               "score_given_to_truck_on_driving_test")
+library(ggplot2)
+head(mpg)
+second_version_of_mpg <- mpg[mpg$cyl == 6]
+second_version_of_mpg$class <- as.character(second_version_of_mpg$class)
+```
+### Part b
+```
+library(ggplot2)
+head(mpg)
+second_version_of_mpg <- mpg[mpg$cyl == 6]
+second_version_of_mpg$class <- as.character(second_version_of_mpg$class)
+```
+## Problem 2
+```
+senate <- read.csv("1976-2020-senate.csv")
+```
+# Part a
+```
+senate$year <- as.factor(senate$year)
+senate$state <- as.factor(senate$state)
+senate$party_simplified <- as.factor(senate$party_simplified)
+```
+# Part b
+```
+senate_tx <- senate[senate$state_po == "TX", 
+                    c("year", "state", "candidatevotes", "totalvotes", "party_simplified")]
+```
+# Part c
+```
+democrat_votes <- senate_tx[senate_tx$party_simplified == "DEMOCRAT", "candidatevotes"]
+republican_votes <- senate_tx[senate_tx$party_simplified == "REPUBLICAN", "candidatevotes"]
+libertarian_votes <- senate_tx[senate_tx$party_simplified == "LIBERTARIAN", "candidatevotes"]
+other_votes <- senate_tx[senate_tx$party_simplified == "OTHER", "candidatevotes"]
+
+democrat_avg <- round(mean(democrat_votes))
+democrat_median <- median(democrat_votes)
+
+republican_avg <- round(mean(republican_votes))
+republican_median <- median(republican_votes)
+
+libertarian_avg <- round(mean(libertarian_votes))
+libertarian_median <- median(libertarian_votes)
+
+other_avg <- round(mean(other_votes))
+other_median <- median(other_votes)
+```
+#Part d
+```
+election_years <- levels(senate_tx$year)
+democrat_won_years <- c()
+for(i in election_years){
+  democrat_votes <- senate_tx[(senate_tx$year == i) & (senate_tx$party_simplified == "DEMOCRAT"), "candidatevotes"]
+  democrat_won <- TRUE
+  
+  if (length(democrat_votes) > 0){
+    for(j in senate_tx[(senate_tx$year == i) & !(senate_tx$party_simplified == "DEMOCRAT"), "candidatevotes"]){
+      if(democrat_votes < j){
+        democrat_won <- FALSE
+      }
+    }
+    
+    if(democrat_won){
+      democrat_won_years = append(democrat_won_years, i)
+    }
+  }
+}
+#democrat_won_years stores all years when democrats won election
+```
+## Problem 3
+```
+ta_eval <- read.csv("tae.data")
+colnames(ta_eval) <- c("whether_or_not_the_TA_is_a_native_English_speaker",
+                       "Course_instructor",
+                       "Course",
+                       "Summer_or_regular_semester",
+                       "Class_size",
+                       "Class_attribute")
+```
+#Part a
+```
+ta_eval$whether_or_not_the_TA_is_a_native_English_speaker <- 
+  ifelse(ta_eval$whether_or_not_the_TA_is_a_native_English_speaker == 1, TRUE, FALSE)
+```
+#Part b
+```
+ta_eval$Summer_or_regular_semester <- ifelse(ta_eval$Summer_or_regular_semester == 2, "Summer", "Regular")
+```
+#Part c
+```
+ta_eval$Class_attribute <- factor(
+  ta_eval$Class_attribute,
+  levels = c(1, 2, 3),
+  labels = c("low", "medium", "high"),
+  ordered = TRUE)
+```
+#Part e
+```
+english_summer <- sum(ta_eval$whether_or_not_the_TA_is_a_native_English_speaker & ta_eval$Summer_or_regular_semester == "Summer")
+english_regular <- sum(ta_eval$whether_or_not_the_TA_is_a_native_English_speaker & ta_eval$Summer_or_regular_semester == "Regular")
+
+non_english_summer <- sum(!ta_eval$whether_or_not_the_TA_is_a_native_English_speaker & ta_eval$Summer_or_regular_semester == "Summer")
+non_english_regular <- sum(!ta_eval$whether_or_not_the_TA_is_a_native_English_speaker & ta_eval$Summer_or_regular_semester == "Regular")
+```
+#Part f
+```
+english_ta <- sum(ta_eval$whether_or_not_the_TA_is_a_native_English_speaker)
+english_ta_highscore <- sum(ta_eval$whether_or_not_the_TA_is_a_native_English_speaker & ta_eval$Class_attribute == "high")
+
+non_english_ta <- sum(!ta_eval$whether_or_not_the_TA_is_a_native_English_speaker)
+non_english_ta_highscore <- sum(!ta_eval$whether_or_not_the_TA_is_a_native_English_speaker & ta_eval$Class_attribute == "high")
+
+english_ta_highscore <- round(english_ta_highscore / english_ta, 2)
+non_english_ta_highscore <- round(non_english_ta_highscore / non_english_ta, 2)
+```

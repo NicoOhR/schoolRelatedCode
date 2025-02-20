@@ -1,0 +1,12 @@
+
+
+! kpathsea: Running mktexfmt pdflatex.fmt
+! mktexfmt: mktexfmt is using the following fmtutil.cnf files (in precedence order):
+! mktexfmt:   /etc/texmf/web2c/fmtutil.cnf
+! mktexfmt: mktexfmt is using the following fmtutil.cnf file for writing changes:
+! mktexfmt:   /home/nimoor/.texlive/texmf-config/web2c/fmtutil.cnf
+! mktexfmt [INFO]: writing formats under /home/nimoor/.texlive/texmf-var/web2c
+! mktexfmt [INFO]: Did not find entry for byfmt=pdflatex skipped
+! mktexfmt [INFO]: not selected formats: 8
+! mktexfmt [INFO]: total formats: 8
+! mktexfmt [INFO]: exiting with status 0

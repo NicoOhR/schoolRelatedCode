@@ -1,0 +1,148 @@
+---
+title: "Homework 7"
+author: "Nimrod Ohayon Rozanes"
+date: "2024-04-15"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question 1
+
+```{r}
+cola <- c(15.997, 16.005, 15.981, 15.954, 15.986, 16.021, 15.985, 16.001, 16.018, 16.056)
+
+#step 1 specify distro 
+# Cola ~ Norm
+
+#step 2 null and alt
+#H_0 = fill == 16
+#H_a = fill != 16
+
+#step 3 t stat
+X_bar <- (mean(cola) - 16)/(sd(cola)/sqrt(length(cola)))
+
+p_value <- pnorm(X_bar)
+
+p_value
+
+t.test(cola)
+```
+in either approach, the p value is higher than the signficance level we set, and therefore we fail to reject the null hypothesis, and conclude that the cola bottles are filled with 16oz.
+
+# Question 2
+
+```{r}
+stressed <- 130
+
+tot <- 200 
+
+prop <- stressed/tot
+
+P_0 <- 0.7
+
+std_e <- sqrt(P_0 * (1 - P_0) / tot)
+
+Z <- (prop - P_0)/std_e
+
+p_value <- 2 * (1 - pnorm(abs(Z)))
+
+p_value
+
+prop.test(x = 130, n = 200, p = 0.7, alternative = "two.sided", conf.level = 0.95)
+
+
+```
+
+We fail to reject the null hypothesis, and conclude that the proportion of students on this campus who are stressed is not entirely different from 70%
+
+# Question 3
+
+```{r}
+mean_under_50 <- 2
+mean_over <- 1.85
+std_under_50 <- 0.812
+std_over <- 0.837
+n_under_50 <- 350
+n_over <- 150
+
+se_18_50 <- std_under_50 / sqrt(n_under_50)
+se_over_50 <- std_over / sqrt(n_over)
+combined_se <- sqrt(se_18_50^2 + se_over_50^2)
+
+t <- (mean_over - mean_under_50)/combined_se
+
+p_value <- pt(t, df = n_under_50 + n_over - 2, lower.tail = TRUE)
+
+p_value
+
+#generating samples for t.test to use
+set.seed(123)
+data_under_50 <- rnorm(n = 350, mean = 2, sd = 0.812)
+data_over <- rnorm(n = 150, mean = 1.85, sd = 0.837)
+
+
+t.test(x = data_under_50, y = data_over,
+                      alternative = "greater", 
+                      var.equal = TRUE)
+```
+Despite the limitation of not having access to the original vectors, both p values are under the 5%, leading us to accept the alternative hypothesis and conclude that there is a signficant different between the usage of people over 50 and those under.
+
+# Question 4
+
+```{r}
+apple_returns <- 14
+apple_sales <- 150
+samsung_returns <- 15
+samsung_sales <- 125
+
+p_apple <- apple_returns / apple_sales
+p_samsung <- samsung_returns / samsung_sales
+p_pooled <- (apple_returns + samsung_returns) / (apple_sales + samsung_sales)
+
+se <- sqrt(p_pooled * (1 - p_pooled) * (1/apple_sales + 1/samsung_sales))
+
+Z <- (p_apple - p_samsung) / se
+
+p_value <- pnorm(Z) 
+
+p_value
+
+prop.test(x = c(apple_returns, samsung_returns),
+                         n = c(apple_sales, samsung_sales),
+                         alternative = "less",
+                         correct = FALSE)
+```
+The test returns a p value under 5%, leading us to conclude that samsung devices are returned at a higher rate than apple products.
+
+# Question 5
+
+```{r}
+library(UsingR)
+
+age <- babies$age[babies$age != 99]
+dage <- babies$dage[babies$dage != 99]
+
+n_mom <- length(age)
+n_dad <- length(dage)
+
+mean_mom <- mean(age)
+mean_dad <- mean(dage)
+
+var_mom <- var(age)
+var_dad <- var(dage)
+
+se <- sqrt(mean_mom/n_mom + mean_dad/n_dad)
+
+t <- (mean_mom - mean_dad) / se
+
+p_value = 2 * pt(-abs(t), df = min(n_mom, n_dad) - 1)
+
+t.test(age, dage, alternative = "two.sided", var.equal = TRUE)
+
+```
+There is a very low p-value, indicating a very strong difference between the ages of the mom and the dad.
