@@ -1,0 +1,241 @@
+\documentclass[11pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{enumerate}
+\usepackage{minted}
+\usepackage{afterpage}
+\usepackage{placeins}
+\usepackage{needspace}
+\usepackage{float}
+\usepackage{url}
+\usepackage[margin=0.75in]{geometry}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{center}
+	%% put the project number
+	\textbf{STAT 4360 (Introduction to Statistical Learning, Fall 2022)
+		\\[1ex]
+		Mini Project 1
+		\\[1ex]
+		Name: Nimrod Ohayon Rozanes}
+	\\
+	{\_}\hrulefill{\hspace{.01in}}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Section 1: 
+
+\begin{enumerate}
+	%% Question 1
+	\item
+	      \begin{enumerate}
+		      %% Question 1 (a)
+		      \item KNN implementation included in code section
+		            %% Question 1 (b)
+		      \item The errors when plotted against the reciprocal of K show a similar pattern to what is the theoretical behavior of KNN. When $K = 1$, the error rate for the training set is $0$, and the highest for the testing set. Further, as model flexibility decreases with $K$, bias increases and variance increases. It is a little difficult to see visually, but the test error (variance) achieves a minimum and then increases in a U-shape, while the training error (bias) is strictly increasing. So the model is following exactly the expected behavior.
+		            \begin{figure}[h]
+			            \centering
+			            \includegraphics*[width = 0.8\linewidth]{errors.png}
+			            \label{fig:errors}
+			            \caption[]{Error vs $K^{-1}$}
+		            \end{figure}
+		      \item The optimal K value to minimize the test error is at $K = 111$, which has an error rate of $0.115$ for the test set, and $0.1188$ for the training set.
+		            \clearpage
+		      \item ~
+		            \begin{figure}[H]
+			            \centering
+			            \includegraphics[width=0.8\linewidth]{boundry.png}
+			            \caption{Decision Boundary for \( K = 111 \)}
+			            \label{fig:Boundry}
+		            \end{figure}
+		      \item For points near the decision boundary, there is a lot of spill over from one category to the other, and there is a lot of "interaction" between the two categories. Points far from the decision boundary are generally well categorized, although some outliers exist. I think that the decision boundary is sensible because it does not make any extremely specific boundaries which single out points that are further from the correct category.
+	      \end{enumerate}
+	      \clearpage
+	\item
+	      \begin{enumerate}
+		      \item
+		            Want to show $\text{MSE}\{\hat f(x_0)\} = (\text{Bias}\{\hat f(x_0)\})^2 + \text{var}\{\hat f(x_0)\}$
+		            \begin{align*}
+			            \text{MSE}\{\hat f(x_0)\} & = E\{ \hat f(x_0) - f(x_0) \}^2                                 \\
+			                                      & = E\{ \hat f(x_0)^2 - \hat f(x_0) f(x_0) - f(x_0)^2\}           \\
+			                                      & = E\{ \hat{f}(x_0)^2 \} - f(x_0) E\{ \hat{f}(x_0) \} - f(x_0)^2 \\
+		            \end{align*}
+		            Using the identity $\text{var}(X) = E(X^2) - (E(X))^2$
+		            \begin{align*}
+			            E\{ \hat{f}(x_0)^2 \} - f(x_0) E\{ \hat{f}(x_0) \} - f(x_0)^2 & = \text{var}(\hat f(x_0)) + E\{\hat{f}(x_0)\}^2 -f(x_0) E\{ \hat{f}(x_0) \} - f(x_0)^2 \\
+			                                                                          & = \text{var}(\hat f(x_0))  + [E\{\hat{f}(x_0)\} - f(x_0)]^2                            \\
+			                                                                          & = \text{var}(\hat f(x_0))  + \text{Bias}\{\hat f(x_0)\}^2
+		            \end{align*}
+		      \item
+		            Want to show $E(\hat Y_0 - Y_0)^2 = (\text{Bias}\{\hat f(x_0)\})^2 + \text{var}\{\hat f(x_0)\} + \sigma^2$
+		            \begin{align*}
+			            E(\hat Y_0 - Y_0)^2 & = E(\hat Y_0^2 - 2Y_0 \hat Y_0 + Y_0^2)                                    \\
+			                                & = E(\hat Y_0^2) -2E(\hat Y_0 Y_0) + E(Y_0^2)                               \\
+			                                & = E(\hat Y_0^2) - 2E(\hat Y_0 Y_0) + \text{var}(Y_0) + E(Y_0)^2            \\
+			                                & = E(\hat Y_0^2) - 2E(\hat Y_0 Y_0)   + E(Y_0)^2 + \sigma^2                 \\
+			                                & = E\{ \hat{f}(x_0)^2 \} - f(x_0) E\{ \hat{f}(x_0) \} - f(x_0)^2 + \sigma^2 \\
+			                                & = \text{MSE}(\hat f(x_0)) + \sigma^2                                       \\
+			                                & = (\text{Bias}\{\hat f(x_0)\})^2 + \text{var}\{\hat f(x_0)\} + \sigma^2    \\
+		            \end{align*}
+		      \item
+		            Model flexibility causes an increase in variance and a decrease in bias since it is more able to fit to the training data, leading to lower bias, but it is also more likely to fluctate heavily with the training data, leading to higher variance. So on the lower end of flexibility, the bias term of the MSE tends to dominate while on the higher end there the variance term tends to dominate, and somewhere in between, the sum of the terms is minimized. Practically, the "U" shape of the test error is caused by the transition from underfitting (where the model cannot generalize very well because it lacks the flexibility to capture the relations in the training data set) and overfitting (where the model cannot generalize well because it is overly flexibly, capturing relations that are a product of random noise). In between those, there is a "correct" model complexity, such that it captures patterns in the data without entrenching itself to the patterns in the training data set.
+	      \end{enumerate}
+\end{enumerate}
+%% Section 2: present the code
+\newpage
+\begin{center}
+	\textbf{Python Code}
+\end{center}
+
+\hrule
+\begin{minted}{python}
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from tqdm import tqdm
+from scipy.spatial import KDTree
+df = pd.read_csv("1-training_data.csv")
+df_test = pd.read_csv("1-test_data.csv")
+print(df.head())
+
+features = df[['x.1', 'x.2']].values
+#using the K-D Tree we can more easily look for
+#the nearest neighbors of any one node
+tree = KDTree(features)
+print(df_test.iloc[0])
+
+def get_neighbors(i, K, test):
+    #get the K neighbors of element i
+    #return the labels of those labels
+    
+    #identify the element coordinate
+    coords = i.iloc[0:2].values 
+    #Query the three for the nearest neighbors + 1 to that coordinate
+    #we query an additional point since the query returns the element itself
+    _, neighbors = tree.query(coords, k = K) 
+    neighbors = np.atleast_1d(neighbors)
+    #for all the neighbors, check what label they have in the original dataframe
+    if test:
+        #if we are testing the KNN, we check for the neighbors generated during the training, column y_hat
+        nearest_labels = [df.iloc[n]['y_hat'] for n in neighbors]
+    else:
+        #otherwise, we use the training data
+        nearest_labels = [df.iloc[n]['y'] for n in neighbors]
+
+    return nearest_labels
+    
+def predict(neighbors):
+    #make a prediction given the labels of the elements neighbors
+    #neighbors.count returns the number of times an element is in the list, max of that is the 
+    #most likely label
+    return max(neighbors, key=neighbors.count)
+
+print(predict(get_neighbors(df_test.iloc[0], 3, False)))
+
+def KNN(K, test):
+    #iterate over the training data set, appending predictions to the array
+    pred = []
+    if test:
+        #if we're testing the kNN, iterate over the test data set
+        for i in range(len(df_test)):
+            pred.append(predict(get_neighbors(df_test.iloc[i], K, test)))
+    else:
+        #otherwise, we are generating new predictions
+        for i in range(len(df)):
+            pred.append(predict(get_neighbors(df.iloc[i],K,test)))
+    return pred
+
+
+def error(pred, test):
+    #take the array of predicted element labels
+    #return the error rate compared to training data
+    if test:
+        #measure error against the test data
+        return np.mean(pred != df_test['y'].values)
+    else:
+        #or against the training data
+        return np.mean(pred != df['y'].values)
+
+
+training_err = []
+test_err = []
+for i in tqdm(range(40)):
+    K = i * 5 + 1
+    #first we generate our training predictions
+    training_pred = KNN(K, False)
+    #append to the original dataframe, pandas knows to replace outdated columns
+    df['y_hat'] = training_pred
+    #we test for that iteration
+    test_pred = KNN(K, True)
+    #finally we append the error values to the total lists
+    training_err.append(error(training_pred, False))
+    test_err.append(error(test_pred, True))
+
+
+k_values = np.arange(1,197, 5)
+
+#find the minimum value of the test_err, i.e. where the model is most accurate
+print(min(zip(test_err, k_values), key= lambda x: x[0]))
+#look for the same point's training_err value
+training_dict = dict(zip(k_values, training_err))
+print(training_dict.get(111))
+
+#using that optimal value, generate the y_hat predictions
+optim_pred = KNN(111, False)
+df['y_hat'] = optim_pred
+
+X = df[['x.1', 'x.2']].values  
+y = df['y'].values 
+df = df.replace({"yes":0, "no":1})
+#pad the sides so the graph is a bit easier to look at
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+#meshgrid discretizes the linear space that the data exists in, allowing us to use our kNN on it
+xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100), np.linspace(y_min, y_max, 100))
+#because get_neighbors excepts a dataframe row as the element argument, np.c_ stacks the coordinantes into [x,y] pairs 
+# and pd.Dataframe() makes a frame out of it
+grid_points = pd.DataFrame(np.c_[xx.ravel(), yy.ravel()], columns=['x.1','x.2'])
+#apply the kNN over the grid
+Z = np.array([predict(get_neighbors(point, 111, True)) for _, point in grid_points.iterrows()])
+Z = Z.reshape(xx.shape)
+
+plt.figure(figsize=(8, 6))
+#plot the known points as a scatter plot with the color decided by the true label
+sns.scatterplot(x=X[:, 0], y=X[:, 1], hue=y, palette='coolwarm', edgecolor='k', s=10)
+#create a contour and fill in
+plt.contourf(xx, yy, Z, alpha=0.3, cmap="coolwarm") 
+plt.xlabel("x.1")
+plt.ylabel("x.2")
+plt.title("k-NN Decision Boundary")
+plt.show()
+
+
+#Plot the errors against 1/K
+inv_k_values = 1 / k_values
+data = pd.DataFrame({
+    '1/K': np.tile(inv_k_values, 2),
+    'Error Rate': np.concatenate([train_errors, test_errors]),
+    'Dataset': ['Training'] * len(train_errors) + ['Testing'] * len(test_errors)
+})
+sns.set_style("darkgrid")
+plt.figure(figsize=(10, 6))
+sns.lineplot(data=data, x='1/K', y='Error Rate', hue='Dataset', marker='o', markersize=3)
+plt.xscale('log')
+plt.axvline(x = (1/111))
+plt.xlabel('1/K')
+plt.ylabel('Error Rate')
+plt.title('Error Rate vs. 1/K in KNN')
+plt.legend(title='Dataset')
+plt.show()
+plt.savefig("errors.png")
+
+\end{minted}
+\end{document}

@@ -1,0 +1,227 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{float} 
+\usepackage{placeins}
+\usepackage{booktabs}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+
+\title{Homework 2}%replace X with the appropriate number
+\author{Nimrod Ohayon Rozanes\\ %replace with your name
+	Probability} %if necessary, replace with your course title
+
+\maketitle
+
+\begin{problem}{1.a}
+Since a head not appearing in the first four tosses is equivalent to the first four tosses coming up as tails, and the likelihood of a tails is $\frac{1}{2}$. The probability of a head not appearing in the first four tosses (event $A$) is
+\[
+	\mathbb{P}[A] = \frac{1}{2} \cdot\frac{1}{2} \cdot\frac{1}{2} \cdot\frac{1}{2} = \frac{1}{16}
+\]
+\end{problem}
+\begin{problem}{1.b}
+The probability of that the coin will be tossed four or more times (event $B$) is equivalent to the probability of the first three tosses coming out as tails,
+\[
+	\mathbb{P}[B] = \frac{1}{2} \cdot\frac{1}{2} \cdot\frac{1}{2} = \frac{1}{8}
+\]
+\end{problem}
+
+\begin{problem}{1.c}
+The probability that event $C$, at most five tosses occurring before the first heads comes up, is equal to $1$ minus the complement of $C$, or that more than five tosses occurr before a heads comes up, which is again equivalent to the probability of the first five coming up as tails.
+\[
+	\mathbb{P}[C] = \frac{1}{2} \cdot \frac{1}{2} \cdot\frac{1}{2} \cdot\frac{1}{2} \cdot\frac{1}{2} = \frac{1}{32}
+\]
+\end{problem}
+\clearpage
+\begin{problem}{2.1}
+The probability that $P[E]$ will occur is one minus the given probability that it will not occur, i.e. $0.7$, similarly, the probability that $F$ will not occur is $0.6$. That gives us enough information to find the joint probabilities between the two events.
+
+\begin{align*}
+	P[E' \cap F'] = 0.2                                       \\
+	P[E' \cap F] = P[E'] - P[E' \cap F'] = 0.3 - 0.2 = 0.1    \\
+	P[E \cap F'] = P[F'] - P[E' \cap F']  = 0.6 - 0.2 = 0.4   \\
+	P[E \cap F] = P[E] - P[E \cap F'] = 0.8 = 0.7 - 0.4 = 0.3 \\
+\end{align*}
+Thus allowing us to update the table
+\FloatBarrier
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.5} % Adjust row height
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		                  & \textit{F} & \textit{F'} & \textbf{Marginal} \\
+		\hline
+		\textit{E}        & 0.3        & 0.4         & 0.7               \\
+		\hline
+		\textit{E'}       & 0.1        & 0.2         & 0.3               \\
+		\hline
+		\textbf{Marginal} & 0.4        & 0.6         &                   \\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+\end{problem}
+
+\begin{problem}{2.2}
+The probability that at least one of the events will occur is included in the events of $E$ occurring but not $F$, $F$ occurring but not $E$, and both events occurring. Since the first two events already include the third, we subtract the probability of both events occurring from the total probability. Therefore the total probability is
+\[
+	P[E \cup F] = P[E] + P[F] - P[E \cap F] = 0.7 + 0.4 - 0.3 = 0.8
+\]
+
+The same conclusion could have been reached by using De Morgan's law
+\[
+	(P[E' \cap F'])' = P[E \cup F] \therefore P[E \cup F] = 1 - P[E' \cap F']
+\]
+
+\end{problem}
+\begin{problem}{2.3}
+The likelihood that exactly one of the event will occur is the same as the union of the events minus the intersection of the events
+\[
+	P[E \oplus F] = P[E \cup F] - P[E \cap F] = 0.8 - 0.3 = 0.5
+\]
+\end{problem}
+\clearpage
+
+\begin{problem}{3.1}
+If the two events are independent, then the probability of $P[E \cap F]$ follows the multiplication rule, $P[E] \cdot P[F] = 0.35 \geq 0.2$. If the two events are dependent, we can use
+\begin{align*}
+	F[E \cup F] & = P[E] + P[F] - P[E \cap F] \\
+	P[E \cap F] & = P[E] + P[F] - P[E \cup F]
+\end{align*}
+And since $P[E \cup F] \leq 1$
+\[
+	P[E\cap F] \geq P[E] + P[F] - 1
+\]
+Which finally becomes
+\[
+	P[E\cap F] \geq 0.7 + 0.5 - 1 \therefore P[E\cap F] \geq 0.2
+\]
+\end{problem}
+\begin{problem}{3.3}
+\begin{align*}
+	P[E' \cap F'] & \leq P[E'] + P[F'] - 1 \\
+	              & \leq 0.3 + 0.5 - 1 < 0
+\end{align*}
+Therefore, the smallest value of $P[E' \cap F']$ is $0$
+\end{problem}
+\clearpage
+\begin{problem}{4}
+\begin{align*}
+	P[A|B]                                & \leq P[A]     \\
+	\displaystyle\frac{P[A \cap B]}{P[B]} & \leq P[A]     \\
+	P[A \cap B]                           & \leq P[A]P[B] \\
+	P[B \cap A]                           & \leq P[A]P[B] \\
+	\displaystyle\frac{P[B \cap A]}{P[A]} & \leq P[B]     \\
+	P[B | A]                              & \leq P[B]
+\end{align*}
+Therefore, we can conclud that $P[A|B]\leq P[A]$ is equievalent to $P[B|A]\leq P[B]$
+\end{problem}
+\begin{problem}{5.1}
+The following table enumerates all possible values of W
+
+\begin{table}[h]
+	\centering
+	\renewcommand{\arraystretch}{1.5}
+	\begin{tabular}{c|cccccc}
+		  & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+		1 & 0 & 1 & 2 & 3 & 4 & 5 \\
+		2 & 1 & 0 & 1 & 2 & 3 & 4 \\
+		3 & 2 & 1 & 0 & 1 & 2 & 3 \\
+		4 & 3 & 2 & 1 & 0 & 1 & 2 \\
+		5 & 4 & 3 & 2 & 1 & 0 & 1 \\
+		6 & 5 & 4 & 3 & 2 & 1 & 0
+	\end{tabular}
+\end{table}
+Compiling the frequency of the differences in the above into a distribution
+\[
+	P(W = w) =
+	\begin{cases}
+		\frac{6}{36},  & \text{if } x = 0 \\
+		\frac{10}{36}, & \text{if } x = 1 \\
+		\frac{8}{36},  & \text{if } x = 2 \\
+		\frac{6}{36},  & \text{if } x = 3 \\
+		\frac{4}{36},  & \text{if } x = 4 \\
+		\frac{2}{36},  & \text{if } x = 5
+	\end{cases}
+\]
+\end{problem}
+\begin{problem}{5.2}
+\[
+	P[X =2 | W \leq 1] = \frac{P[X = 2 \cap W \leq 1]}{P[W \leq 1]}
+\]
+
+For $Y \in \{1,2,3\}, W \leq 1$ when $X = 2$, so that means that $P[X = 2 \cap W \leq 1] = \frac{3}{36} = \frac{1}{12}$. $P[ W \leq 1] = \frac{6}{36} + \frac{10}{36} = \frac{16}{36}$. Finally, the conditional probability becomes
+\[
+	P[X=2|W\leq 1] = \frac{\frac{1}{12}}{\frac{16}{36}} = \frac{3}{16}
+\]
+\end{problem}
+\begin{problem}{5.3}
+\[
+	P[(X=2) \cap (Y=2)|W \leq 1] = \frac{1}{36}
+\]
+\end{problem}
+\clearpage
+\begin{problem}{6}
+\begin{align*}
+	P[E \cap F]   & = P[E] + P[F] - P[E \cup F] = 0.4 + 0.3 - 0.5 = 0.2 \\
+	P[E \cap F']  & = P[E] - P[E \cap F] = 0.4 - 0.2 = 0.2              \\
+	P[E' \cap F]  & = P[F] - P[E \cap F] = 0.3 - 0.2 = 0.1              \\
+	P[E' \cap F'] & =  1 - P[E \cup F] = 1 - 0.5 = 0.5                  \\
+	P[E' \cup F'] & =  1 - P[E \cap F] = 1 - 0.2 = 0.8                  \\
+\end{align*}
+\end{problem}
+\begin{problem}{7}
+\begin{align*}
+	P[E]        & = 1 - P[E'] = 0.8                                          \\
+	P[F]        & = P[E \cup F] - P[E] + P[E \cap F] = 0.9 - 0.8 + 0.0 = 0.1 \\
+	P[E \cap F] & = 0                                                        \\
+	P[E | F]    & = 0                                                        \\
+	P[E | F]    & = 0                                                        \\
+\end{align*}
+\end{problem}
+
+\begin{problem}{8.1}
+Let the event that there are exactly two wins be event A, and winning the third be event B. Since each game is an independent event $P[B] = 0.5$, and there are only two events (where we only won the first game and last game, or only won the second game and the last game) where $A \cup B$ occurred. Out of $2^3$ possible combinations, $P[A \cup B] = \frac{2}{8}$
+\begin{align*}
+	P[A | B] & = \frac{P[A \cup B]}{P[B]} \\
+	         & = \frac{1}{2}
+\end{align*}
+
+\end{problem}
+\begin{problem}{8.2}
+Let W be the random variable corresponding to the number of wins. The only possible situation out of the event space where $W < 1$ is where we lost all three games, so the conditional probability becomes all of the events where we win exactly two games out of $7$ instead of $8$. Those events are winning the first and third, first and second, and second and third.
+\[
+	P[W = 2 | W \geq 1] = \frac{3}{7}
+\]
+\end{problem}
+
+\end{document}
+
