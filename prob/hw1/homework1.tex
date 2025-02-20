@@ -1,0 +1,230 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc} \usepackage[english]{babel}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+\usepackage[]{amssymb} %gives us the character \varnothing
+\usepackage{amsmath}
+\title{Homework 1}
+\author{Nimrod Ohayon Rozanes}
+\date\today
+%This information doesn't actually show up on your document unless you use the maketitle command below
+\begin{document}
+\maketitle %This command prints the title based on information entered above
+%Section and subsection automatically number unless you put the asterisk next to them.
+\section*{Problem 1}
+\subsection{}
+\[
+	\displaystyle\sum_{k=0}^{\infty}\displaystyle\frac{u^{2k}}{(2k)!}
+\]
+expanding the first couple of terms
+\[
+	1 \; + \frac{u^2}{2} \; + \frac{u^4}{4!} \; + ...
+\]
+are the even terms of $ e^u $
+\[
+	e^u = 1 + u + \frac{u^2}{2!} + \frac{u^3}{3!} + \frac{u^4}{4!} + \cdots
+\]
+So to get the expansion, we subtract the odd powered terms
+\[
+	1 + u - u + \frac{u^2}{2!} + \frac{u^3}{3!} - \frac{u^3}{3!} + \frac{u^4}{4!} + \cdots
+\]
+which can be achieved by adding the alternating Taylor expansion of $ e^{-u} $ and halving
+\[
+	\frac{e^u + e^{-u}}{2} = \frac{1 + 1 + u - u + \frac{u^2}{2!} + \frac{u^2}{2!}  + \frac{u^3}{3!} - \frac{u^3}{3!} + \cdots}{2} \\
+	=  1 + u + \frac{u^2}{2!} + \frac{u^3}{3!} + \frac{u^4}{4!} + \cdots
+\]
+The LHS of the equation is the hyperbolic cosine function, therefore
+\[
+	\displaystyle\sum_{k=0}^{\infty}\displaystyle\frac{u^{2k}}{(2k)!} = \cosh(u)
+\]
+\subsection{}
+Similarly, we want to subtract the even terms of the Taylor expansion of $ e^u $ to get to
+\[
+	\displaystyle\sum_{k=0}^{\infty}\displaystyle\frac{u^{2k+1}}{(2k + 1)!}
+\]
+By multiplying the Taylor expansion of $ e ^ {-u} $ by -1, we can now subtract the even terms and half to only get only the odd terms, so
+\[
+	\displaystyle\sum_{k=0}^{\infty}\displaystyle\frac{u^{2k+1}}{(2k + 1)!} = \displaystyle\frac{e^u - e^{-u}}{2} = \sinh{u}
+\]
+\clearpage
+\section*{Problem 2}
+\begin{align*}
+	f(x)  & = x^2 \cdot e^{-3x}                 \\
+	f'(x) & = 2x\cdot e^{-3x} + x^2 (-3)e^{-3x}
+\end{align*}
+The above $f$ attains an extrema at $f' = 0 $
+\begin{align*}
+	0              & = 2x\cdot e^{-3x} - x^2 (3)e^{-3x} \\
+	x^2 (3)e^{-3x} & = 2x\cdot e^{-3x}                  \\
+	3x             & = 2                                \\
+	x              & = \frac{2}{3}
+\end{align*}
+Finally, calculating for this value
+\begin{align*}
+	f(\frac{2}{3}) & = (\frac{2}{3})^2 \cdot e^{3\cdot\frac{2}{3}} \\
+	               & = \frac{4}{9} \cdot e^2
+\end{align*}
+To verify that this extrema is a maximum value over $x>0$, we calculate that the second derivative is negative at this point.
+\begin{align*}
+	f'(x)            & = 2x \cdot e^{-3x} - 3x^2e^{-3x}                                                                                       \\
+	f''(x)           & = 2e^{-3x} - 6xe^{-3x} - 6xe^{-3x} - 9x^2e^{-3x}                                                                       \\
+	f''(\frac{2}{3}) & = 2e^{-3\frac{2}{3}} - 6\frac{2}{3}e^{-3\frac{2}{3}} - 6\frac{2}{3}e^{-3\frac{2}{3}} - 9\frac{2}{3}^2e^{-3\frac{2}{3}} \\
+	f''(\frac{2}{3}) & = 2e^{-2} - 4e^{-2} -4e^{-2} - 2e^{-2}                                                                                 \\
+	                 & = -8e^-2
+\end{align*}
+Clearly, $f''(\frac{2}{3}) < 0 $, therefore confirming that $\frac{2}{3}$ is a maximum of the function.
+\clearpage
+\section*{Problem 3}
+\[
+	g(x) = x^3 \cdot (1-x)^5, 0 < x < 1
+\]
+To find extrema of function, we take derivative and solve for $0$.
+\begin{align*}
+	g'(x) & = \displaystyle\frac{d}{dx}(x^3 \cdot (1-x)^5)        \\
+	      & =  3x^2 \cdot (1-x)^5 + x^3 \cdot 5(1-x)^4 \cdot (-1) \\
+	      & =  3x^2 \cdot (1-x)^5 - x^3 \cdot 5(1-x)^4            \\
+	      & = x^2(1-x)^4 \cdot ( 3(1-x) - 5x)                     \\
+	      & = x^2(1-x)^4 \cdot (3 - 8x)                           \\
+\end{align*}
+Since the function is only defined for $0 < x < 1$, we can gurantee that there are no real solutions for which the first term $x^2(1-x)^4$ is equal to $0$. So, to find the extrema, we solve for $3-8x=0$, which is obviously $x = \frac{3}{8}$
+\\
+Finally, to confirm that the extrema is a maximum
+\begin{align*}
+	g'(x)            & = x^2(1-x)^4 \cdot (3-8x)                                                                                                   \\
+	g''(x)           & = (2x(1-x)^4 - x^2(4)(1-x)^3)(3-8x) + (x^2)(1-x)^4(-8)                                                                      \\
+	g''(\frac{3}{8}) & =(2\frac{3}{8}(1-\frac{3}{8})^4 - \frac{3}{8}^2(4)(1-\frac{3}{8})^3)(3-8\frac{3}{8}) + (\frac{3}{8}^2)(1-\frac{3}{8})^4(-8) \\
+	g''(\frac{3}{8}) & \approx -0.171...
+\end{align*}
+Since $g''{\frac{3}{8}} < 0$, the function achieves a maximum at $\frac{3}{8}$.
+\clearpage
+\section*{Problem 4}
+\begin{align*}
+	p_n & = (1 - q)^{n-1} \cdot q                          \\
+	A   & = \displaystyle\sum_{n=0}^{\infty}   n \cdot p_n
+\end{align*}
+assuming that $q \in (0,1)$ and therefore that $ |1 - q| < 1 $
+\begin{align*}
+	A & = \displaystyle\sum_{n=0}^{\infty} n \cdot (1-q)^{n-1} \cdot q \\
+	  & =  q\displaystyle\sum_{n=0}^{\infty} n \cdot (1-q)^{n-1}
+\end{align*}
+using the identity
+\[
+	\displaystyle\sum_{n=0}^{\infty}nx^{n-1} = \displaystyle\frac{d}{dx}\displaystyle\sum_{n=0}^{\infty}x^n = \displaystyle\frac{1}{(1-x)^2}
+\]
+We can say
+\[
+	A =  q\displaystyle\sum_{n=0}^{\infty} n \cdot (1-q)^{n-1} = q \cdot \displaystyle\frac{1}{(1-(1-q))^2}
+\]
+Which  can be simplified down to
+\[
+	A = \displaystyle\frac{q}{q^2} = \displaystyle\frac{1}{q}
+\]
+\clearpage
+\section*{Problem 5}
+\[
+	p_n = \displaystyle\frac{u^n}{n!} \cdot e^{-u}
+\]
+1.
+\begin{align*}
+	A & = \displaystyle\sum_{n=0}^{\infty} n \cdot \displaystyle\frac{u^n}{n!} \cdot e^{-u}     \\
+	  & = 0 + \displaystyle\sum_{n=1}^{\infty} n \cdot \displaystyle\frac{u^n}{n!} \cdot e^{-u} \\
+	  & =  e^{-u} \cdot \displaystyle\sum_{n=1}^{\infty} \displaystyle\frac{u^n}{(n-1)!}        \\
+	  & = u e^{-u} \cdot \displaystyle\sum_{n=1}^{\infty} \displaystyle\frac{u^{n-1}}{(n-1)!}
+\end{align*}
+We let $n-1=m$
+\begin{align*}
+	A & = u e^{-u} \displaystyle\sum_{m = 0}^{\infty} \displaystyle\frac{u^m}{m!}
+\end{align*}
+Notice, the summation is the power series of $e^u$
+\begin{align*}
+	A & = ue^{-u} \cdot e^u \\
+	  & = u \cdot 1         \\
+	  & = u
+\end{align*}
+\clearpage
+\section*{Problem 6}
+\[
+	J = \displaystyle\int_{0}^{\infty}x^5 \cdot e^{-4x} dx
+\]
+Let $u = 4x, du = 4dx$, therefore $x^5 = \displaystyle\frac{u^5}{4^5}$ and the integral becomes
+\[
+	J = \displaystyle\frac{1}{4^6}\displaystyle\int_{0}^{\infty}u^5 \cdot e^{-u} du
+\]
+Where the integral can be evaulated with the gamma function $\Gamma(6) = 5! = 120$ and the $J$ is then equal to $120/4096$
+\section*{Problem 7}
+\[
+	J = \displaystyle\int_{0}^{\infty} x^6(1-x)^5 dx
+\]
+Here we choose $a=7$ and $b=6$ such that
+\[
+	B(7, 6) = \displaystyle\int_{0}^{\infty} x^{7-1}(1-x)^{6-1} dx = J
+\]
+And we use the identity
+\[
+	B(a,b) = \displaystyle\frac{\Gamma(a) \cdot \Gamma(b)}{\Gamma(a + b)}
+\]
+to solve for $J$ as such
+\begin{align*}
+	J & = B(7,6)                                                    \\
+	  & = \displaystyle\frac{\Gamma(7) \cdot \Gamma(6)}{\Gamma(13)} \\
+	  & = \displaystyle\frac{6! \cdot 5!}{13!}                      \\
+	  & = \displaystyle\frac{86400}{6227020800}
+\end{align*}
+\clearpage
+\section*{Problem 8}
+1.
+\begin{align*}
+	    & 0 < q < 1                                 \\
+	p_n & = (1-q)^n \cdot q                         \\
+	A   & = \displaystyle\sum_{n=0}^{\infty} p_{2n}
+\end{align*}
+First, we expand the summation
+\[
+	A = q \displaystyle\sum_{n=0}^{\infty}(1-q)^{2n}
+\]
+Since we know that $q$ is positive and less than one, we can make the same guarentee on $1-q$ which we let equal to $l$, further, we can make the same guarentee on $l^2$
+\[
+	A = q \displaystyle\sum_{n=0}^{\infty}(l)^{2n} = q \displaystyle\sum_{n=0}^{\infty}(l^2)^{n}
+\]
+So, since our common ration $l^2$ is in the range $(-1,1)$, we can use the standard sum of a geometric series $\frac{1}{1-r}$, yielding us the result
+\begin{align*}
+	A = q \displaystyle\sum_{n=0}^{\infty} (l^2)^n = \displaystyle\frac{q}{1 - l^2} = \displaystyle\frac{q}{1-(1-q)^2}
+\end{align*}
+2.
+\begin{align*}
+	B & = \displaystyle\sum_{n=0}^{\infty}p_{2n+1}                      \\
+	  & = \displaystyle\sum_{n=0}^{\infty}(1-q)^{2n+1} \cdot q          \\
+	  & = \displaystyle\sum_{n=0}^{\infty}(1-q)^{2n}\cdot (1-q)\cdot q  \\
+	  & = (1-q)\cdot q \cdot \displaystyle\sum_{n=0}^{\infty}(1-q)^{2n} \\
+	  & = (1-q)\cdot A                                                  \\
+	  & = \displaystyle\frac{(1-q)q}{1 - (1-q)^2}
+\end{align*}
+\clearpage
+\section*{Problem 9}
+\[
+	J = \displaystyle\int_{0}^{\infty}(1+x)^{-6} dx
+\]
+Let $u = 1+x, du = dx$
+\begin{align*}
+	J & = \displaystyle\int_{0}^{\infty}(u)^{-6} du                     \\
+	  & = -\displaystyle\frac{1}{5u^5}                                  \\
+	  & = \left . -\displaystyle\frac{1}{5(1+x)^5} \right|_{0}^{\infty}
+\end{align*}
+Evaluating the improper limits
+\begin{align*}
+	J & = -(\lim_{x \to \infty}\displaystyle\frac{1}{5(1+x)^5} - \lim_{x \to 0}\displaystyle\frac{1}{5(1+x)^5}) \\
+	  & = \displaystyle\frac{1}{5(1+\infty)^5} + \displaystyle\frac{1}{5(1+0)^5}                                \\
+	  & = 0 + \displaystyle\frac{1}{5(1)}                                                                       \\
+	  & = \displaystyle\frac{1}{5}
+\end{align*}
+\section*{Problem 10}
+\[
+	J = \displaystyle\int_{0}^{\infty}x \cdot e^{-x^2} dx
+\]
+Let $u=-x^2, du=-2xdx$
+\begin{align*}
+	J & = -\displaystyle\frac{1}{2}\displaystyle\int_{}^{}e^udu              \\
+	  & = -\displaystyle\frac{1}{2} e^u = -\displaystyle\frac{1}{2} e^{-x^2} \\
+	  & = \left . \displaystyle\frac{1}{2} e^{-x^2} \right |_{0}^{\infty}    \\
+	  & = 0 - \displaystyle\frac{1}{2} = \displaystyle\frac{1}{2}
+\end{align*}
+\end{document}

@@ -1,0 +1,56 @@
+# LaTeX intermediate files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.xdv
+
+# LaTeX editor-specific files
+*.pdfsync
+*.synctex(busy)
+
+# Temporary files
+*.tmp
+*.bak
+*.sav
+*.bbl
+*.blg
+
+# Thumbnails and cache
+._*
+Thumbs.db
+.DS_Store
+
+# Latexmk build files
+latexmkrc
+*.lmx
+
+# Output files
+*.pdf
+*.dvi
+*.ps
+
+# Other auxiliary files
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.acn
+*.acr
+*.alg
+
+# Bibliography
+*.bbl
+*.blg
+
+
+.ipynb_checkpoints/
