@@ -1,0 +1,332 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYGZbs{}\PYG{n}{begin}\PYG{p}{\PYGZob{}}\PYG{n}{verbatim}\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{pandas}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{pd}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{warnings}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{matplotlib.pyplot}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{plt}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{statsmodels.api}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{sm}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{seaborn}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{sns}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{statsmodels.formula.api}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{smf}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{scipy.stats}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{stats}
+
+\PYG{c+c1}{\PYGZsh{} statsmodels doesn\PYGZsq{}t support discremenant analysis}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn.preprocessing}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{LabelEncoder}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn.model\PYGZus{}selection}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{train\PYGZus{}test\PYGZus{}split}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn.discriminant\PYGZus{}analysis}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{LinearDiscriminantAnalysis}\PYG{p}{,}\PYG{n}{QuadraticDiscriminantAnalysis}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn.metrics}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{confusion\PYGZus{}matrix}\PYG{p}{,} \PYG{n}{roc\PYGZus{}curve}\PYG{p}{,} \PYG{n}{auc}
+
+\PYG{n}{warnings}\PYG{o}{.}\PYG{n}{filterwarnings}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}ignore\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}exploratory analysis}
+\PYG{c+c1}{\PYGZsh{}plot quality against the quantitative as scatter plots and as a histogram for the qualitativeModel:}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}table}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}wine.txt\PYGZdq{}}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{independent\PYGZus{}vars} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:]}
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{set\PYGZus{}theme}\PYG{p}{(}\PYG{n}{style}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}darkgrid\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{df\PYGZus{}quant} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Region\PYGZdq{}}\PYG{p}{])}
+\PYG{k}{for} \PYG{n}{col} \PYG{o+ow}{in} \PYG{n}{df\PYGZus{}quant}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]:}
+    \PYG{n}{sns}\PYG{o}{.}\PYG{n}{scatterplot}\PYG{p}{(}
+    \PYG{n}{x}\PYG{o}{=}\PYG{n}{df\PYGZus{}quant}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]} \PYG{o}{/} \PYG{n}{df\PYGZus{}quant}\PYG{p}{[}\PYG{n}{col}\PYG{p}{]}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(),}
+    \PYG{n}{y}\PYG{o}{=}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Quality\PYGZsq{}}\PYG{p}{],}
+    \PYG{n}{label}\PYG{o}{=}\PYG{n}{col}
+    \PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Independent Variables\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Dependent Variable\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality vs Predictors\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}scatter.png\PYGZdq{}}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}notes}
+\PYG{c+c1}{\PYGZsh{}clarity seems to be the least correlated w/ the quality of the wine, it also seems to be a quasi\PYGZhy{}factor variable in itself}
+\PYG{c+c1}{\PYGZsh{}the other variables are visually similar in their plot}
+
+\PYG{n}{clarity\PYGZus{}by\PYGZus{}region} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{crosstab}\PYG{p}{(}\PYG{n}{index}\PYG{o}{=}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Region\PYGZdq{}}\PYG{p}{],} \PYG{n}{columns}\PYG{o}{=}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Clarity\PYGZdq{}}\PYG{p}{])}
+\PYG{n}{cbr} \PYG{o}{=} \PYG{n}{sns}\PYG{o}{.}\PYG{n}{heatmap}\PYG{p}{(}\PYG{n}{clarity\PYGZus{}by\PYGZus{}region}\PYG{p}{,} \PYG{n}{annot}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Blues\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}qualityByRegion.png\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{clarity\PYGZus{}by\PYGZus{}region} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{pivot\PYGZus{}table}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Region\PYGZdq{}}\PYG{p}{,} \PYG{n}{index}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Clarity\PYGZdq{}}\PYG{p}{,} \PYG{n}{values}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Quality\PYGZdq{}}\PYG{p}{,} \PYG{n}{aggfunc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}mean\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{qcbr} \PYG{o}{=} \PYG{n}{sns}\PYG{o}{.}\PYG{n}{heatmap}\PYG{p}{(}\PYG{n}{clarity\PYGZus{}by\PYGZus{}region}\PYG{p}{,} \PYG{n}{annot}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Blues\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}qualityByRegionByQuality.png\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{correlation\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{df\PYGZus{}quant}\PYG{o}{.}\PYG{n}{corr}\PYG{p}{()}
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{heatmap}\PYG{p}{(}\PYG{n}{correlation\PYGZus{}matrix}\PYG{p}{,} \PYG{n}{annot}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}coolwarm\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Correlation Matrix\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{catplot}\PYG{p}{(}\PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Region\PYGZsq{}}\PYG{p}{,} \PYG{n}{y}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Quality\PYGZsq{}}\PYG{p}{,} \PYG{n}{kind}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}box\PYGZsq{}}\PYG{p}{,} \PYG{n}{height}\PYG{o}{=}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{n}{aspect}\PYG{o}{=}\PYG{l+m+mf}{1.5}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality by Region\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{n}{num\PYGZus{}cols} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{df\PYGZus{}quant}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])} \PYG{o}{+} \PYG{l+m+mi}{1}
+\PYG{n}{cols} \PYG{o}{=} \PYG{l+m+mi}{3}
+\PYG{n}{rows} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{ceil}\PYG{p}{(}\PYG{n}{num\PYGZus{}cols} \PYG{o}{/} \PYG{n}{cols}\PYG{p}{))}
+\PYG{n}{fig}\PYG{p}{,} \PYG{n}{axes} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{n}{rows}\PYG{p}{,} \PYG{n}{cols}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{3} \PYG{o}{*} \PYG{n}{rows}\PYG{p}{),} \PYG{n}{sharey}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
+\PYG{n}{axes} \PYG{o}{=} \PYG{n}{axes}\PYG{o}{.}\PYG{n}{flatten}\PYG{p}{()}
+\PYG{n}{regressions} \PYG{o}{=} \PYG{p}{[]}
+
+\PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{col} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{df\PYGZus{}quant}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]):}
+    \PYG{n}{X} \PYG{o}{=} \PYG{n}{df\PYGZus{}quant}\PYG{p}{[[}\PYG{n}{col}\PYG{p}{]]}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{df\PYGZus{}quant}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Quality\PYGZdq{}}\PYG{p}{]}
+    \PYG{n}{X} \PYG{o}{=} \PYG{n}{sm}\PYG{o}{.}\PYG{n}{add\PYGZus{}constant}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+    \PYG{n}{reg} \PYG{o}{=} \PYG{n}{sm}\PYG{o}{.}\PYG{n}{OLS}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{X}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{reg}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{())}
+    \PYG{n}{regressions}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{reg}\PYG{p}{)}
+    \PYG{n}{sns}\PYG{o}{.}\PYG{n}{scatterplot}\PYG{p}{(}\PYG{n}{ax}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{x}\PYG{o}{=}\PYG{n}{df\PYGZus{}quant}\PYG{p}{[}\PYG{n}{col}\PYG{p}{],} \PYG{n}{y}\PYG{o}{=}\PYG{n}{df\PYGZus{}quant}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Quality\PYGZsq{}}\PYG{p}{],} \PYG{n}{label}\PYG{o}{=}\PYG{n}{col}\PYG{p}{)}
+    \PYG{n}{sns}\PYG{o}{.}\PYG{n}{lineplot}\PYG{p}{(}\PYG{n}{ax}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{x}\PYG{o}{=}\PYG{n}{X}\PYG{p}{[}\PYG{n}{col}\PYG{p}{],} \PYG{n}{y}\PYG{o}{=}\PYG{n}{reg}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X}\PYG{p}{),} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}red\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Regression\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{p\PYGZus{}value} \PYG{o}{=} \PYG{n}{reg}\PYG{o}{.}\PYG{n}{pvalues}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{text}\PYG{p}{(}\PYG{l+m+mf}{0.05}\PYG{p}{,} \PYG{l+m+mf}{0.95}\PYG{p}{,} \PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}p = }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{p\PYGZus{}value}\PYG{l+s+si}{:}\PYG{l+s+s1}{.4f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                 \PYG{n}{transform}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{transAxes}\PYG{p}{,}
+                 \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{12}\PYG{p}{,}
+                 \PYG{n}{verticalalignment}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}top\PYGZsq{}}\PYG{p}{,}
+                 \PYG{n}{bbox}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{boxstyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}round,pad=0.3\PYGZsq{}}\PYG{p}{,} \PYG{n}{facecolor}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}white\PYGZsq{}}\PYG{p}{,} \PYG{n}{edgecolor}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}gray\PYGZsq{}}\PYG{p}{))}
+
+    \PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{n}{col}\PYG{p}{)}
+    \PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Quality\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}Regression of Quality vs }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{col}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+
+\PYG{n}{reg} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality \PYGZti{} C(Region)\PYGZsq{}}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+\PYG{n}{y\PYGZus{}hat} \PYG{o}{=} \PYG{n}{reg}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Region\PYGZsq{}}\PYG{p}{]])}
+\PYG{n}{regressions}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{reg}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{reg}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{())}
+
+\PYG{n}{ax\PYGZus{}index} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{df\PYGZus{}quant}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{scatterplot}\PYG{p}{(}\PYG{n}{ax}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{n}{ax\PYGZus{}index}\PYG{p}{],} \PYG{n}{x}\PYG{o}{=}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Quality\PYGZsq{}}\PYG{p}{])),} \PYG{n}{y}\PYG{o}{=}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Quality\PYGZsq{}}\PYG{p}{],} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}blue\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Actual Quality\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{lineplot}\PYG{p}{(}\PYG{n}{ax}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{n}{ax\PYGZus{}index}\PYG{p}{],} \PYG{n}{x}\PYG{o}{=}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Quality\PYGZsq{}}\PYG{p}{])),} \PYG{n}{y}\PYG{o}{=}\PYG{n}{y\PYGZus{}hat}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}red\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Predicted Quality\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Display p\PYGZhy{}value for the categorical regression}
+\PYG{n}{p\PYGZus{}value\PYGZus{}region} \PYG{o}{=} \PYG{n}{reg}\PYG{o}{.}\PYG{n}{pvalues}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}  \PYG{c+c1}{\PYGZsh{} Assuming C(Region)[T.level] is the first predictor}
+\PYG{n}{axes}\PYG{p}{[}\PYG{n}{ax\PYGZus{}index}\PYG{p}{]}\PYG{o}{.}\PYG{n}{text}\PYG{p}{(}\PYG{l+m+mf}{0.05}\PYG{p}{,} \PYG{l+m+mf}{0.95}\PYG{p}{,} \PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}p = }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{p\PYGZus{}value\PYGZus{}region}\PYG{l+s+si}{:}\PYG{l+s+s1}{.4f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+                    \PYG{n}{transform}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{n}{ax\PYGZus{}index}\PYG{p}{]}\PYG{o}{.}\PYG{n}{transAxes}\PYG{p}{,}
+                    \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{12}\PYG{p}{,}
+                    \PYG{n}{verticalalignment}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}top\PYGZsq{}}\PYG{p}{,}
+                    \PYG{n}{bbox}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{boxstyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}round,pad=0.3\PYGZsq{}}\PYG{p}{,} \PYG{n}{facecolor}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}white\PYGZsq{}}\PYG{p}{,} \PYG{n}{edgecolor}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}gray\PYGZsq{}}\PYG{p}{))}
+
+\PYG{n}{axes}\PYG{p}{[}\PYG{n}{ax\PYGZus{}index}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Sample\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{n}{ax\PYGZus{}index}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{n}{ax\PYGZus{}index}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Regression of Quality vs Region\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{n}{ax\PYGZus{}index}\PYG{p}{]}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+
+\PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{ax\PYGZus{}index} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{axes}\PYG{p}{)):}
+    \PYG{n}{fig}\PYG{o}{.}\PYG{n}{delaxes}\PYG{p}{(}\PYG{n}{axes}\PYG{p}{[}\PYG{n}{j}\PYG{p}{])}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+
+\PYG{n}{fig}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}latex/singleregression.png\PYGZdq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{}b)}
+\PYG{c+c1}{\PYGZsh{}full model}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}table}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}wine.txt\PYGZdq{}}\PYG{p}{,}\PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Region\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Region\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}category\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{reg} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality \PYGZti{} C(Region) + Clarity + Aroma + Body + Flavor + Oakiness \PYGZsq{}}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{reg}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{()}\PYG{o}{.}\PYG{n}{as\PYGZus{}latex}\PYG{p}{())}
+\PYG{c+c1}{\PYGZsh{}full model with interaction with region}
+\PYG{n}{reg\PYGZus{}interaction} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality \PYGZti{} Clarity * Region + Aroma * Region + Body * Region + Flavor * Region + Oakiness * Region\PYGZsq{}}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{reg\PYGZus{}interaction}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{())}
+
+
+\PYG{c+c1}{\PYGZsh{} In[110]:}
+
+
+\PYG{c+c1}{\PYGZsh{}removing predictors for which all slopes have p \PYGZlt{} 0.05}
+\PYG{n}{reg\PYGZus{}reduced} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality \PYGZti{} Region + Flavor\PYGZsq{}}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{reg\PYGZus{}reduced}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{())}
+
+\PYG{n}{reg\PYGZus{}reduced\PYGZus{}most\PYGZus{}signifcant\PYGZus{}clarity} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality \PYGZti{} Flavor * Region + Clarity * Region\PYGZsq{}}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{reg\PYGZus{}reduced}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{())}
+
+\PYG{n}{reg\PYGZus{}reduced\PYGZus{}w\PYGZus{}body} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Quality \PYGZti{} Clarity * Region + Flavor * Region + Body * Region\PYGZsq{}}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{reg\PYGZus{}reduced\PYGZus{}w\PYGZus{}body}\PYG{o}{.}\PYG{n}{summary}\PYG{p}{())}
+
+
+\PYG{c+c1}{\PYGZsh{} In[119]:}
+
+
+\PYG{c+c1}{\PYGZsh{}Comparing the full and reduced model with anova}
+\PYG{n}{anova\PYGZus{}comparison} \PYG{o}{=} \PYG{n}{sm}\PYG{o}{.}\PYG{n}{stats}\PYG{o}{.}\PYG{n}{anova\PYGZus{}lm}\PYG{p}{(}\PYG{n}{reg\PYGZus{}reduced}\PYG{p}{,} \PYG{n}{reg\PYGZus{}interaction}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{anova\PYGZus{}comparison}\PYG{p}{)}
+
+\PYG{n}{X\PYGZus{}new} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(\PYGZob{}}
+    \PYG{l+s+s1}{\PYGZsq{}Region\PYGZsq{}}\PYG{p}{:} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],}
+    \PYG{l+s+s1}{\PYGZsq{}Flavor\PYGZsq{}} \PYG{p}{:} \PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Flavor\PYGZdq{}}\PYG{p}{])]}
+    \PYG{p}{\PYGZcb{})}
+
+\PYG{n}{pred} \PYG{o}{=} \PYG{n}{reg\PYGZus{}reduced}\PYG{o}{.}\PYG{n}{get\PYGZus{}prediction}\PYG{p}{(}\PYG{n}{X\PYGZus{}new}\PYG{p}{)}
+\PYG{n}{pred\PYGZus{}summary} \PYG{o}{=} \PYG{n}{pred}\PYG{o}{.}\PYG{n}{summary\PYGZus{}frame}\PYG{p}{(}\PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.05}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{pred\PYGZus{}summary}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}mean\PYGZsq{}}\PYG{p}{,}
+                    \PYG{l+s+s1}{\PYGZsq{}mean\PYGZus{}ci\PYGZus{}lower\PYGZsq{}}\PYG{p}{,}
+                    \PYG{l+s+s1}{\PYGZsq{}mean\PYGZus{}ci\PYGZus{}upper\PYGZsq{}}\PYG{p}{,}
+                    \PYG{l+s+s1}{\PYGZsq{}obs\PYGZus{}ci\PYGZus{}lower\PYGZsq{}}\PYG{p}{,}
+                    \PYG{l+s+s1}{\PYGZsq{}obs\PYGZus{}ci\PYGZus{}upper\PYGZsq{}}\PYG{p}{]])}
+
+
+\PYG{n}{residuals} \PYG{o}{=} \PYG{n}{reg\PYGZus{}reduced}\PYG{o}{.}\PYG{n}{resid}
+\PYG{n}{fitted\PYGZus{}values} \PYG{o}{=} \PYG{n}{reg\PYGZus{}reduced}\PYG{o}{.}\PYG{n}{fittedvalues}
+\PYG{n}{fig}\PYG{p}{,} \PYG{n}{axes} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{))}
+\PYG{n}{fig}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Residual Diagnostics\PYGZsq{}}\PYG{p}{,} \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{16}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Residual Plot}
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{scatterplot}\PYG{p}{(}\PYG{n}{ax}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{x}\PYG{o}{=}\PYG{n}{fitted\PYGZus{}values}\PYG{p}{,} \PYG{n}{y}\PYG{o}{=}\PYG{n}{residuals}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}blue\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{axhline}\PYG{p}{(}\PYG{n}{y}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}red\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Residuals vs Fitted Values\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Fitted Values\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Residuals\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Normal Q\PYGZhy{}Q Plot}
+\PYG{n}{stats}\PYG{o}{.}\PYG{n}{probplot}\PYG{p}{(}\PYG{n}{residuals}\PYG{p}{,} \PYG{n}{dist}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}norm\PYGZdq{}}\PYG{p}{,} \PYG{n}{plot}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Normal Q\PYGZhy{}Q Plot\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Residuals Time Series Plot}
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{lineplot}\PYG{p}{(}\PYG{n}{ax}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],} \PYG{n}{x}\PYG{o}{=}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{residuals}\PYG{p}{)),} \PYG{n}{y}\PYG{o}{=}\PYG{n}{residuals}\PYG{p}{,} \PYG{n}{marker}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}o\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}blue\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{o}{.}\PYG{n}{axhline}\PYG{p}{(}\PYG{n}{y}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}red\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Residuals Time Series Plot\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Observation Order\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Residuals\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{n}{rect}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mf}{0.95}\PYG{p}{])}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+
+\PYG{n}{diabetes} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}diabetes.csv\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Outcome\PYGZdq{}}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{LabelEncoder}\PYG{p}{()}\PYG{o}{.}\PYG{n}{fit\PYGZus{}transform}\PYG{p}{(}\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[:,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+\PYG{n}{fig} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{),} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Condensed pairplot}
+\PYG{n}{g} \PYG{o}{=} \PYG{n}{sns}\PYG{o}{.}\PYG{n}{pairplot}\PYG{p}{(}
+    \PYG{n}{diabetes}\PYG{p}{,}
+    \PYG{n}{hue}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Outcome\PYGZsq{}}\PYG{p}{,}
+    \PYG{n}{markers}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}o\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}s\PYGZdq{}}\PYG{p}{],}
+    \PYG{n}{plot\PYGZus{}kws}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}s\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{15}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}alpha\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{0.6}\PYG{p}{\PYGZcb{},}
+    \PYG{n}{diag\PYGZus{}kws}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}fill\PYGZsq{}}\PYG{p}{:} \PYG{k+kc}{True}\PYG{p}{\PYGZcb{}}
+\PYG{p}{)}
+
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{move\PYGZus{}legend}\PYG{p}{(}
+    \PYG{n}{g}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}lower center\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{bbox\PYGZus{}to\PYGZus{}anchor}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{.5}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{),}
+    \PYG{n}{ncol}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,}
+    \PYG{n}{title}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{,}
+    \PYG{n}{frameon}\PYG{o}{=}\PYG{k+kc}{False}
+\PYG{p}{)}
+
+
+\PYG{n}{diabetes} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}diabetes.csv\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Outcome\PYGZdq{}}\PYG{p}{])}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{LabelEncoder}\PYG{p}{()}\PYG{o}{.}\PYG{n}{fit\PYGZus{}transform}\PYG{p}{(}\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[:,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+\PYG{n}{fig} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{),} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Condensed pairplot}
+\PYG{n}{g} \PYG{o}{=} \PYG{n}{sns}\PYG{o}{.}\PYG{n}{pairplot}\PYG{p}{(}
+    \PYG{n}{diabetes}\PYG{p}{,}
+    \PYG{n}{hue}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Outcome\PYGZsq{}}\PYG{p}{,}
+    \PYG{n}{markers}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}o\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}s\PYGZdq{}}\PYG{p}{],}
+    \PYG{n}{plot\PYGZus{}kws}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}s\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{15}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}alpha\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{0.6}\PYG{p}{\PYGZcb{},}
+    \PYG{n}{diag\PYGZus{}kws}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}fill\PYGZsq{}}\PYG{p}{:} \PYG{k+kc}{True}\PYG{p}{\PYGZcb{}}
+\PYG{p}{)}
+
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{move\PYGZus{}legend}\PYG{p}{(}
+    \PYG{n}{g}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}lower center\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{bbox\PYGZus{}to\PYGZus{}anchor}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{.5}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{),}
+    \PYG{n}{ncol}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,}
+    \PYG{n}{title}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{,}
+    \PYG{n}{frameon}\PYG{o}{=}\PYG{k+kc}{False}
+\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}pairwise.png\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{train\PYGZus{}test\PYGZus{}split}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{test\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mf}{0.2}\PYG{p}{)}
+
+\PYG{n}{fig}\PYG{p}{,} \PYG{n}{axs} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{15}\PYG{p}{,} \PYG{l+m+mi}{12}\PYG{p}{),} \PYG{n}{gridspec\PYGZus{}kw}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}height\PYGZus{}ratios\PYGZsq{}}\PYG{p}{:} \PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]\PYGZcb{})}
+\PYG{n}{fig}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}LDA and QDA Analysis\PYGZsq{}}\PYG{p}{,} \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{20}\PYG{p}{)}
+
+\PYG{n}{lda} \PYG{o}{=} \PYG{n}{LinearDiscriminantAnalysis}\PYG{p}{()}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}hat\PYGZus{}lda} \PYG{o}{=} \PYG{n}{lda}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}prob\PYGZus{}lda} \PYG{o}{=} \PYG{n}{lda}\PYG{o}{.}\PYG{n}{predict\PYGZus{}proba}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)[:,} \PYG{l+m+mi}{1}\PYG{p}{]}
+\PYG{n}{y\PYGZus{}cutoff\PYGZus{}lda} \PYG{o}{=} \PYG{p}{(}\PYG{n}{y\PYGZus{}prob\PYGZus{}lda} \PYG{o}{\PYGZgt{}=}\PYG{l+m+mf}{0.5}\PYG{p}{)}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{)}
+\PYG{n}{cm\PYGZus{}lda} \PYG{o}{=} \PYG{n}{confusion\PYGZus{}matrix}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}cutoff\PYGZus{}lda}\PYG{p}{)}
+\PYG{n}{TN}\PYG{p}{,} \PYG{n}{FP}\PYG{p}{,} \PYG{n}{FN}\PYG{p}{,} \PYG{n}{TP} \PYG{o}{=} \PYG{n}{cm\PYGZus{}lda}\PYG{o}{.}\PYG{n}{ravel}\PYG{p}{()}
+
+\PYG{n}{sensitivity\PYGZus{}lda} \PYG{o}{=} \PYG{n}{TP} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TP} \PYG{o}{+} \PYG{n}{FN}\PYG{p}{)}
+\PYG{n}{specificity\PYGZus{}lda} \PYG{o}{=} \PYG{n}{TN} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TN} \PYG{o}{+} \PYG{n}{FP}\PYG{p}{)}
+\PYG{n}{misclassification\PYGZus{}rate\PYGZus{}lda} \PYG{o}{=} \PYG{p}{(}\PYG{n}{FP} \PYG{o}{+} \PYG{n}{FN}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TP} \PYG{o}{+} \PYG{n}{TN} \PYG{o}{+} \PYG{n}{FP} \PYG{o}{+} \PYG{n}{FN}\PYG{p}{)}
+
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{heatmap}\PYG{p}{(}\PYG{n}{cm\PYGZus{}lda}\PYG{p}{,} \PYG{n}{annot}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{fmt}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}d\PYGZsq{}}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Blues\PYGZsq{}}\PYG{p}{,} \PYG{n}{ax}\PYG{o}{=}\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{])}
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Confusion Matrix \PYGZhy{} LDA\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Predicted\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Actual\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{axis}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}off\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{metrics\PYGZus{}text\PYGZus{}lda} \PYG{o}{=} \PYG{p}{(}
+    \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Sensitivity: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{sensitivity\PYGZus{}lda}\PYG{l+s+si}{:}\PYG{l+s+s2}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+    \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Specificity: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{specificity\PYGZus{}lda}\PYG{l+s+si}{:}\PYG{l+s+s2}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+    \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Misclassification Rate: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{misclassification\PYGZus{}rate\PYGZus{}lda}\PYG{l+s+si}{:}\PYG{l+s+s2}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{p}{)}
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{text}\PYG{p}{(}\PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{n}{metrics\PYGZus{}text\PYGZus{}lda}\PYG{p}{,}
+               \PYG{n}{horizontalalignment}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}center\PYGZsq{}}\PYG{p}{,} \PYG{n}{verticalalignment}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}center\PYGZsq{}}\PYG{p}{,}
+               \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{14}\PYG{p}{,} \PYG{n}{bbox}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{facecolor}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}white\PYGZsq{}}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.5}\PYG{p}{))}
+
+\PYG{n}{qda} \PYG{o}{=} \PYG{n}{QuadraticDiscriminantAnalysis}\PYG{p}{()}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}hat\PYGZus{}qda} \PYG{o}{=} \PYG{n}{qda}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}prob\PYGZus{}qda} \PYG{o}{=} \PYG{n}{qda}\PYG{o}{.}\PYG{n}{predict\PYGZus{}proba}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)[:,} \PYG{l+m+mi}{1}\PYG{p}{]}
+\PYG{n}{y\PYGZus{}cutoff\PYGZus{}qda} \PYG{o}{=} \PYG{p}{(}\PYG{n}{y\PYGZus{}prob\PYGZus{}qda} \PYG{o}{\PYGZgt{}=}\PYG{l+m+mf}{0.5}\PYG{p}{)}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{)}
+
+\PYG{n}{cm\PYGZus{}qda} \PYG{o}{=} \PYG{n}{confusion\PYGZus{}matrix}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}cutoff\PYGZus{}qda}\PYG{p}{)}
+\PYG{n}{TN}\PYG{p}{,} \PYG{n}{FP}\PYG{p}{,} \PYG{n}{FN}\PYG{p}{,} \PYG{n}{TP} \PYG{o}{=} \PYG{n}{cm\PYGZus{}qda}\PYG{o}{.}\PYG{n}{ravel}\PYG{p}{()}
+
+\PYG{n}{sensitivity\PYGZus{}qda} \PYG{o}{=} \PYG{n}{TP} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TP} \PYG{o}{+} \PYG{n}{FN}\PYG{p}{)}
+\PYG{n}{specificity\PYGZus{}qda} \PYG{o}{=} \PYG{n}{TN} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TN} \PYG{o}{+} \PYG{n}{FP}\PYG{p}{)}
+\PYG{n}{misclassification\PYGZus{}rate\PYGZus{}qda} \PYG{o}{=} \PYG{p}{(}\PYG{n}{FP} \PYG{o}{+} \PYG{n}{FN}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TP} \PYG{o}{+} \PYG{n}{TN} \PYG{o}{+} \PYG{n}{FP} \PYG{o}{+} \PYG{n}{FN}\PYG{p}{)}
+
+\PYG{n}{sns}\PYG{o}{.}\PYG{n}{heatmap}\PYG{p}{(}\PYG{n}{cm\PYGZus{}qda}\PYG{p}{,} \PYG{n}{annot}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{fmt}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}d\PYGZsq{}}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Blues\PYGZsq{}}\PYG{p}{,} \PYG{n}{ax}\PYG{o}{=}\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{])}
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Confusion Matrix \PYGZhy{} QDA\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Predicted\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Actual\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{axis}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}off\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{metrics\PYGZus{}text\PYGZus{}qda} \PYG{o}{=} \PYG{p}{(}
+    \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Sensitivity: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{sensitivity\PYGZus{}qda}\PYG{l+s+si}{:}\PYG{l+s+s2}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+    \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Specificity: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{specificity\PYGZus{}qda}\PYG{l+s+si}{:}\PYG{l+s+s2}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}
+    \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Misclassification Rate: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{misclassification\PYGZus{}rate\PYGZus{}qda}\PYG{l+s+si}{:}\PYG{l+s+s2}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{p}{)}
+\PYG{n}{axs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{text}\PYG{p}{(}\PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{n}{metrics\PYGZus{}text\PYGZus{}qda}\PYG{p}{,}
+               \PYG{n}{horizontalalignment}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}center\PYGZsq{}}\PYG{p}{,} \PYG{n}{verticalalignment}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}center\PYGZsq{}}\PYG{p}{,}
+               \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{14}\PYG{p}{,} \PYG{n}{bbox}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{facecolor}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}white\PYGZsq{}}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.5}\PYG{p}{))}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{n}{rect}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mf}{0.1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mf}{0.95}\PYG{p}{])}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}confusionCombined.png\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{8}\PYG{p}{))}
+
+\PYG{n}{fpr\PYGZus{}lda}\PYG{p}{,} \PYG{n}{tpr\PYGZus{}lda}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o}{=} \PYG{n}{roc\PYGZus{}curve}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}cutoff\PYGZus{}lda}\PYG{p}{)}
+\PYG{n}{roc\PYGZus{}auc\PYGZus{}lda} \PYG{o}{=} \PYG{n}{auc}\PYG{p}{(}\PYG{n}{fpr\PYGZus{}lda}\PYG{p}{,} \PYG{n}{tpr\PYGZus{}lda}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{fpr\PYGZus{}lda}\PYG{p}{,} \PYG{n}{tpr\PYGZus{}lda}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}LDA (AUC = }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{roc\PYGZus{}auc\PYGZus{}lda}\PYG{l+s+si}{:}\PYG{l+s+s1}{.3f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{)\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}blue\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{fpr\PYGZus{}qda}\PYG{p}{,} \PYG{n}{tpr\PYGZus{}qda}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o}{=} \PYG{n}{roc\PYGZus{}curve}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}cutoff\PYGZus{}qda}\PYG{p}{)}
+\PYG{n}{roc\PYGZus{}auc\PYGZus{}qda} \PYG{o}{=} \PYG{n}{auc}\PYG{p}{(}\PYG{n}{fpr\PYGZus{}qda}\PYG{p}{,} \PYG{n}{tpr\PYGZus{}qda}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{fpr\PYGZus{}qda}\PYG{p}{,} \PYG{n}{tpr\PYGZus{}qda}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}QDA (AUC = }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{roc\PYGZus{}auc\PYGZus{}qda}\PYG{l+s+si}{:}\PYG{l+s+s1}{.3f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{)\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}green\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Random Classifier Line}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{([}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{],} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{],} \PYG{l+s+s1}{\PYGZsq{}k\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Random Guess\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlim}\PYG{p}{([}\PYG{l+m+mf}{0.0}\PYG{p}{,} \PYG{l+m+mf}{1.0}\PYG{p}{])}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylim}\PYG{p}{([}\PYG{l+m+mf}{0.0}\PYG{p}{,} \PYG{l+m+mf}{1.0}\PYG{p}{])}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}False Positive Rate\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}True Positive Rate\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}ROC Curves \PYGZhy{} LDA vs QDA\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}lower right\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}roccombined.png\PYGZdq{}}\PYG{p}{)}
+
+\end{Verbatim}

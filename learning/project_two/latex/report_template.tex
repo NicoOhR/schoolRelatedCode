@@ -1,0 +1,559 @@
+\documentclass[11pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{enumerate}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{minted}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage[margin=0.75in]{geometry}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{center}
+%% put the project number
+\textbf{STAT 4360 (Introduction to Statistical Learning, Fall 2022)
+\\[1ex]
+Mini Project 2
+\\[1ex]
+Name: Nimrod Ohayon Rozanes}
+\\
+{\_}\hrulefill{\hspace{.01in}}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Section 1: 
+
+\begin{enumerate}
+    %% Question 1
+    \item  
+    \begin{enumerate}
+        %% Question 1 (a)
+        \item First I plotted all the quantitaitve predictor variables against quality in a scatter plot (scaled by their max to make the graph more legible).
+        \begin{figure}[h]
+            \centering
+            \includegraphics*[width = 0.5\linewidth]{scatter.png}
+            \label{fig:Quality vs Predictors}
+            \caption[]{Scatter plot}
+        \end{figure}
+        The scatter plot shows that clarity is mostly uncorrelated with quality, as well as the fact that it's quasi-ordinal, as it only ever lands on five distinct values. Since it had an odd distribution, I plotted it as a heat map, first against region,and then as pivot table valued by the mean quality of that region-clarity pair.
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{clarityByRegion.png}
+                \caption{Clarity By Region}
+                \label{fig:image1}
+            \end{subfigure}
+            \hfill % Optional, adds space between subfigures
+            \begin{subfigure}[b]{0.45\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{clarityByRegionByQuality.png}
+                \caption{Clarity By Region Valued by Quality}
+                \label{fig:image2}
+            \end{subfigure}
+            \caption{Correlation Between Quality, Region, and Clarity}
+            \label{fig:side_by_side}
+        \end{figure}
+        The above graphs show two things, the most common type of wine has 1.0 clarity, (which we could have discerned from the scatterplot as well), region 1 makes the most 1.0 clear wines by a substantial amount, and that region 3 makes the highest quality wines regardless of clarity. Ineed, when quality is plotted against region as a box plot
+        \begin{figure}[H]
+            \centering
+            \includegraphics*[scale=0.7]{boxplot.png}
+            \label{fig:boxplots of quality vs region}
+            \caption[]{Box plots of Quality vs Region}
+        \end{figure}
+        We can see that all of region three's wines are of higher quality than region two, and that roughly the top 25\% of region ones wines overlap with the bottom 25\% of region three's wines in terms of quality. Returning to the quantitative variables, we use a correlation matrix to show that quality is most strongly correlated with Aroma and Flavor, although Flavor and Aroma are themselves colinear. The Body predictor is also somewhat strongly colinear with Aroma and Flavor. The correlation matrix provides further evidence that clarity is weakly correlated to the other quantative predictors, and it also shows that oakiness is also weakly correlated.
+        \begin{figure}[H]
+            \centering
+            \includegraphics*[scale=0.7]{correlation.png}
+            \label{fig:correlation matrix of the quantative variables}
+            \caption[]{Box plots of Quality vs Region}
+        \end{figure}
+        \item Fitting a single regression over the predictor variables we get
+        \begin{figure}[H]
+            \centering
+            \includegraphics*[scale=0.5]{singleregression.png}
+            \label{fig:single regression}
+            \caption[]{Box plots of Quality vs Region}
+        \end{figure}
+    If we set the p-value threshold for signficance to be the standard $0.05$, we can reject the null hypothesis for Aroma, Flavor, Body, and Clarity, showing that they have a signficant correlation with the Quality variable.
+    \item When we fit the full model to the data, with no interaction, we get the following summary
+        \begin{center}
+        \begin{tabular}{lclc}
+        \toprule
+        \textbf{Dep. Variable:}    &     Quality      & \textbf{  R-squared:         } &     0.838   \\
+        \textbf{Model:}            &       OLS        & \textbf{  Adj. R-squared:    } &     0.800   \\
+        \textbf{Method:}           &  Least Squares   & \textbf{  F-statistic:       } &     22.10   \\
+        \textbf{Date:}             & Sun, 23 Feb 2025 & \textbf{  Prob (F-statistic):} &  3.29e-10   \\
+        \textbf{Time:}             &     14:58:13     & \textbf{  Log-Likelihood:    } &   -46.070   \\
+        \textbf{No. Observations:} &          38      & \textbf{  AIC:               } &     108.1   \\
+        \textbf{Df Residuals:}     &          30      & \textbf{  BIC:               } &     121.2   \\
+        \textbf{Df Model:}         &           7      & \textbf{                     } &             \\
+        \textbf{Covariance Type:}  &    nonrobust     & \textbf{                     } &             \\
+        \bottomrule
+        \end{tabular}
+        \begin{tabular}{lcccccc}
+                                & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+        \midrule
+        \textbf{Intercept}      &       7.8144  &        1.969     &     3.968  &         0.000        &        3.792    &       11.837     \\
+        \textbf{C(Region)[T.2]} &      -1.5129  &        0.392     &    -3.857  &         0.001        &       -2.314    &       -0.712     \\
+        \textbf{C(Region)[T.3]} &       0.9726  &        0.510     &     1.906  &         0.066        &       -0.069    &        2.014     \\
+        \textbf{Clarity}        &       0.0171  &        1.456     &     0.012  &         0.991        &       -2.957    &        2.991     \\
+        \textbf{Aroma}          &       0.0890  &        0.252     &     0.353  &         0.727        &       -0.427    &        0.605     \\
+        \textbf{Body}           &       0.0797  &        0.268     &     0.298  &         0.768        &       -0.467    &        0.626     \\
+        \textbf{Flavor}         &       1.1172  &        0.240     &     4.650  &         0.000        &        0.627    &        1.608     \\
+        \textbf{Oakiness}       &      -0.3464  &        0.233     &    -1.487  &         0.148        &       -0.822    &        0.129     \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+        The R-squared is close to one, and F-statistic is very far from one, so we can reject the null hypothesis for the model. However, the individual predictors for which we can reject the null hypothesis for are only the Region and Flavor predictors.
+        When fitting to the full model where each quantitative variable has interaction with the Region predictor, a similar summary is produced. We again get that the full model is statistically significant since the adjusted R-squared remained high ($0.824$), and the F-statistic is still far from one ($11.22$), although less so than the full model with no interaction, indicating that the over all the indicators are less relevant, since each one explains less of the overall variance in the model. However, with interaction we find that Clarity becomes a signficant predictor when the region indicators is equal to Region 3. Similarly, Body also inches out as a significant predictor for when the wine is from Region 3. So the signficant variables for the full model with interaction with Region are Flavor, Region, Clarity, and Body. However, as Body seems to only be relevant in the full model, as it loses signficance when the Aroma and Oakiness predictors are removed from the model.
+        \item To build a suffeciently good model, I used the intuition gained from the exploratory analysis, which showed that Region 3 produced signficantly higher quality wine (Fig. 3), and that Body and Aroma were colinear with flavor (fig. 4), to produce the following reduced model
+            \begin{align*}
+                \text{Quality} \sim \text{Region} + {Flavor}
+            \end{align*}
+            Either Aroma or Body could have replaced Flavor in the reduced model, however both of those produced slightly larger p values than the Flavor model. Of note is the fact that Clarity becomes a \textit{more} significant predictor when interacting with Region, but still above the chosen threshold (at its most significant, it has a p value of $0.059$ in the model with interaction between region, flavor, and clarity). The reduced model produced the following summary:
+        \begin{center}
+            \begin{tabular}{lclc}
+            \toprule
+            \textbf{Dep. Variable:}    &     Quality      & \textbf{  R-squared:         } &     0.824   \\
+            \textbf{Model:}            &       OLS        & \textbf{  Adj. R-squared:    } &     0.809   \\
+            \textbf{Method:}           &  Least Squares   & \textbf{  F-statistic:       } &     53.13   \\
+            \textbf{Date:}             & Sun, 23 Feb 2025 & \textbf{  Prob (F-statistic):} &  6.36e-13   \\
+            \textbf{Time:}             &     15:42:16     & \textbf{  Log-Likelihood:    } &   -47.576   \\
+            \textbf{No. Observations:} &          38      & \textbf{  AIC:               } &     103.2   \\
+            \textbf{Df Residuals:}     &          34      & \textbf{  BIC:               } &     109.7   \\
+            \textbf{Df Model:}         &           3      & \textbf{                     } &             \\
+            \textbf{Covariance Type:}  &    nonrobust     & \textbf{                     } &             \\
+            \bottomrule
+            \end{tabular}
+            \begin{tabular}{lcccccc}
+                                 & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+            \midrule
+            \textbf{Intercept}   &       7.0943  &        0.791     &     8.967  &         0.000        &        5.486    &        8.702     \\
+            \textbf{Region[T.2]} &      -1.5335  &        0.369     &    -4.158  &         0.000        &       -2.283    &       -0.784     \\
+            \textbf{Region[T.3]} &       1.2234  &        0.400     &     3.056  &         0.004        &        0.410    &        2.037     \\
+            \textbf{Flavor}      &       1.1155  &        0.174     &     6.417  &         0.000        &        0.762    &        1.469     \\
+            \bottomrule
+            \end{tabular}
+        \end{center}
+        Even when testing interaction between other predictors, it seems that every other variable reduces the quality of the model. Using an ANOVA table, to compare the full and reduced model, we can see taht the additional variables of the full model do not explain any additional variance in the data since the $p$ value is higher than the selected threshold of $0.05$. 
+    \begin{table}[H]
+    \centering
+        \begin{tabular}{lrrrrrr}
+            \toprule
+            Model & df\_resid & SSR & df\_diff & SS\_diff & F & Pr(\textless F) \\
+            \midrule
+            0     & 34.0 & 27.213 & 0.0   & NaN      & NaN       & NaN      \\
+            1     & 20.0 & 14.689 & 14.0  & 12.524   & 1.218     & 0.335    \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+        We verify the assumptions of the model using the residuals plot, the normal Q-Q plot, and the Residuals Time Series plot. 
+        \begin{figure}[h]
+            \centering
+            \includegraphics*[width = 0.8\linewidth]{assumptions.png}
+            \label{fig:Assumptions Plots}
+        \end{figure}
+        These plots verify our assumptions since as we can see in the Q-Q plot has very closely clustered data points near 0 and more losely clustered points at either ends, showing that the errors roughly follow a normal distribution. Further more the residuals plot has a mean at 0 and the residuals are randomly distributed. Further more there is no dependence on the index of the observation and the residuals, confirming the assumptions required for a linear model.
+    \item 
+        \begin{align*}
+            Q = -1.5335 \cdot z_2 + 1.2234 \cdot z_3 + 1.115 \cdot \text{flavor} + 7.0943
+        \end{align*}
+        Where $z_2, z_3$ are the indicator variables of the Region predictor. Notice that the Region 2 indicator variable is negative, which checks out since it had the lowest mean out of the regions.
+    \item 
+        For a wine from Region 1, $z_2 = z_3 = 0$, the mean of the Flavor predictor is $4.768$. Netting a predicted quality of 
+        \[
+            Q = 1.115 * 4.768 + 7.0943 = 12.41062
+        \]
+        The 95\% prediction interval for the response is $(10.538, 14.290)$ and the 95\% mean confidence interval is $(11.951, 12,876)$. Meaning that we can expect 95\% of new observations from Region 1 with the average Flavor rating to fall in the interval $(10.538, 14.290)$, and we can expect any already measured wines from Region 1 with the average Flavor rating to fall in the interval $(11.951, 12,876)$.
+    \end{enumerate}
+\item
+\begin{enumerate}
+    \item ~ 
+        \begin{figure}[H]
+            \centering
+            \includegraphics*[width = 0.5\linewidth]{pairwise.png}
+            \label{fig:Pairwise features of the Diabetes data set}
+        \end{figure}
+        From the above pairwise graph of predictor variables, with some exception, most of the time we can see that the diabetes diagnosis occurs in the top right of the graph, where both predictor variables are at their maximum. Looking through the diagonal, we can also conlude that the data set includes significantly more data points of people who were not diagnosed with diabetes, as well as that the distribution of that predictor is roughly equivalent in both diabetes and non-diabetes populations, hinting that no single feature is likely to be a very strong predictor of a diabetes diagnosis.
+    \item ~
+        \begin{figure}[H]
+            \centering
+            \includegraphics*[width = 0.7\linewidth]{confusionCombined.png}
+            \label{fig:Confusion Matricies for QDA and LDA}
+        \end{figure}
+        We can see from the above confusion matrix and misclassification statistics that the LDA and QDA are very similar in their accuracy, although the LDA is slightly more accurate. This is confirmed by their ROC curves, and the AUROC quantity where the AUROC for the LDA ROC curve is slightly bigger than that of the QDA.
+        \begin{figure}[H]
+            \centering
+            \includegraphics*[width = 0.5\linewidth]{roccombined.png}
+            \label{fig: ROC for QDA and LDA}
+        \end{figure}
+        I believe that the similarity between the QDA and LDA can be explained by the large sample size, leading the individual covariance matricies of the QDA to approach the pooled covariance matrix of the LDA. Further, I think that LDA performs slightly better because of the large feature space of 8 variables. 
+    \item I woud likely choose the LDA to classify a person, since it generally performs better at most cut offs. As such, I would also lower the cut off to $0.2$ or $0.3$ so that the classifier would be more likely to pick up on True Positive, since it is likely more dangerous for a person with diabetes to be classified as negative (false negative) than a person without diabetes to be classified as positive (false positive),  
+\end{enumerate}
+\end{enumerate}
+
+%% Section 2: present the code
+\newpage
+\begin{center}
+	\textbf{Python Code (or R Code)}
+\end{center}
+
+\hrule
+\begin{minted}{python}
+\begin{verbatim}
+
+import pandas as pd
+import warnings
+import matplotlib.pyplot as plt
+import numpy as np
+import statsmodels.api as sm
+import seaborn as sns
+import statsmodels.formula.api as smf
+import scipy.stats as stats
+
+# statsmodels doesn't support discremenant analysis
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis,QuadraticDiscriminantAnalysis
+from sklearn.metrics import confusion_matrix, roc_curve, auc
+
+warnings.filterwarnings("ignore")
+
+#exploratory analysis
+#plot quality against the quantitative as scatter plots and as a histogram for the qualitativeModel:
+df = pd.read_table("wine.txt", sep="\t")
+
+independent_vars = df.columns[1:]
+sns.set_theme(style="darkgrid")
+df_quant = df.drop(columns=["Region"])
+for col in df_quant.columns[:-1]:
+    sns.scatterplot(
+    x=df_quant[col] / df_quant[col].max(), 
+    y=df['Quality'], 
+    label=col
+    )
+plt.xlabel('Independent Variables')
+plt.legend()
+plt.ylabel('Dependent Variable')
+plt.title('Quality vs Predictors')
+plt.grid(True)
+plt.show()
+plt.savefig("scatter.png")
+#notes
+#clarity seems to be the least correlated w/ the quality of the wine, it also seems to be a quasi-factor variable in itself
+#the other variables are visually similar in their plot
+
+clarity_by_region = pd.crosstab(index=df["Region"], columns=df["Clarity"])
+cbr = sns.heatmap(clarity_by_region, annot=True, cmap='Blues')
+plt.savefig("qualityByRegion.png")
+
+clarity_by_region = df.pivot_table(columns="Region", index="Clarity", values="Quality", aggfunc='mean')
+
+qcbr = sns.heatmap(clarity_by_region, annot=True, cmap='Blues')
+plt.savefig("qualityByRegionByQuality.png")
+
+correlation_matrix = df_quant.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+plt.title('Correlation Matrix')
+plt.show()
+
+
+sns.catplot(data=df, x='Region', y='Quality', kind='box', height=4, aspect=1.5)
+plt.title('Quality by Region')
+plt.show()
+
+num_cols = len(df_quant.columns[:-1]) + 1
+cols = 3
+rows = int(np.ceil(num_cols / cols))
+fig, axes = plt.subplots(rows, cols, figsize=(10, 3 * rows), sharey=False)
+axes = axes.flatten()
+regressions = []
+
+for i, col in enumerate(df_quant.columns[:-1]):
+    X = df_quant[[col]]
+    y = df_quant["Quality"]
+    X = sm.add_constant(X)
+    reg = sm.OLS(y, X).fit()
+    print(reg.summary())
+    regressions.append(reg)
+    sns.scatterplot(ax=axes[i], x=df_quant[col], y=df_quant['Quality'], label=col)
+    sns.lineplot(ax=axes[i], x=X[col], y=reg.predict(X), color='red', label='Regression')
+    p_value = reg.pvalues[1] 
+    axes[i].text(0.05, 0.95, f'p = {p_value:.4f}', 
+                 transform=axes[i].transAxes, 
+                 fontsize=12, 
+                 verticalalignment='top',
+                 bbox=dict(boxstyle='round,pad=0.3', facecolor='white', edgecolor='gray'))
+    
+    axes[i].set_xlabel(col)
+    axes[i].set_ylabel("Quality")
+    axes[i].set_title(f'Regression of Quality vs {col}')
+    axes[i].legend()
+
+reg = smf.ols('Quality ~ C(Region)', data=df).fit()
+y_hat = reg.predict(df[['Region']])
+regressions.append(reg)
+print(reg.summary())
+
+ax_index = len(df_quant.columns) - 1
+sns.scatterplot(ax=axes[ax_index], x=range(len(df['Quality'])), y=df['Quality'], color='blue', label='Actual Quality')
+sns.lineplot(ax=axes[ax_index], x=range(len(df['Quality'])), y=y_hat, color='red', label='Predicted Quality', linestyle='--')
+
+# Display p-value for the categorical regression
+p_value_region = reg.pvalues[1]  # Assuming C(Region)[T.level] is the first predictor
+axes[ax_index].text(0.05, 0.95, f'p = {p_value_region:.4f}', 
+                    transform=axes[ax_index].transAxes, 
+                    fontsize=12, 
+                    verticalalignment='top',
+                    bbox=dict(boxstyle='round,pad=0.3', facecolor='white', edgecolor='gray'))
+
+axes[ax_index].set_xlabel('Sample')
+axes[ax_index].set_ylabel('Quality')
+axes[ax_index].set_title('Regression of Quality vs Region')
+axes[ax_index].legend()
+
+for j in range(ax_index + 1, len(axes)):
+    fig.delaxes(axes[j])
+
+plt.tight_layout()
+
+fig.savefig("latex/singleregression.png", dpi=100) 
+
+
+#b)
+#full model
+df = pd.read_table("wine.txt",sep="\t")
+df['Region'] = df['Region'].astype("category")
+reg = smf.ols('Quality ~ C(Region) + Clarity + Aroma + Body + Flavor + Oakiness ', data=df).fit()
+print(reg.summary().as_latex())
+#full model with interaction with region
+reg_interaction = smf.ols('Quality ~ Clarity * Region + Aroma * Region + Body * Region + Flavor * Region + Oakiness * Region', data=df).fit()
+print(reg_interaction.summary())
+
+
+# In[110]:
+
+
+#removing predictors for which all slopes have p < 0.05
+reg_reduced = smf.ols('Quality ~ Region + Flavor', data=df).fit()
+print(reg_reduced.summary())
+
+reg_reduced_most_signifcant_clarity = smf.ols('Quality ~ Flavor * Region + Clarity * Region', data=df).fit()
+print(reg_reduced.summary())
+
+reg_reduced_w_body = smf.ols('Quality ~ Clarity * Region + Flavor * Region + Body * Region', data=df).fit()
+print(reg_reduced_w_body.summary())
+
+
+# In[119]:
+
+
+#Comparing the full and reduced model with anova
+anova_comparison = sm.stats.anova_lm(reg_reduced, reg_interaction)
+print(anova_comparison)
+
+X_new = pd.DataFrame({
+    'Region': [1],
+    'Flavor' : [np.mean(df["Flavor"])]
+    })
+
+pred = reg_reduced.get_prediction(X_new) 
+pred_summary = pred.summary_frame(alpha=0.05)
+print(pred_summary[['mean',
+                    'mean_ci_lower',
+                    'mean_ci_upper',
+                    'obs_ci_lower',
+                    'obs_ci_upper']])
+
+
+residuals = reg_reduced.resid
+fitted_values = reg_reduced.fittedvalues
+fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+fig.suptitle('Residual Diagnostics', fontsize=16)
+
+#Residual Plot
+sns.scatterplot(ax=axes[0], x=fitted_values, y=residuals, color='blue')
+axes[0].axhline(y=0, color='red', linestyle='--')
+axes[0].set_title('Residuals vs Fitted Values')
+axes[0].set_xlabel('Fitted Values')
+axes[0].set_ylabel('Residuals')
+axes[0].grid(True)
+
+#Normal Q-Q Plot
+stats.probplot(residuals, dist="norm", plot=axes[1])
+axes[1].set_title('Normal Q-Q Plot')
+axes[1].grid(True)
+
+#Residuals Time Series Plot
+sns.lineplot(ax=axes[2], x=range(len(residuals)), y=residuals, marker='o', color='blue')
+axes[2].axhline(y=0, color='red', linestyle='--')
+axes[2].set_title('Residuals Time Series Plot')
+axes[2].set_xlabel('Observation Order')
+axes[2].set_ylabel('Residuals')
+axes[2].grid(True)
+
+plt.tight_layout(rect=[0, 0, 1, 0.95])
+plt.show()
+
+
+diabetes = pd.read_csv("diabetes.csv")
+diabetes.columns = diabetes.columns.str.replace(' ','')
+diabetes.columns = diabetes.columns.str.replace('\n','')
+X = diabetes.drop(columns=["Outcome"])
+print(X.shape)
+y = LabelEncoder().fit_transform(diabetes.iloc[:, -1])
+fig = plt.figure(figsize=(10, 5), dpi=10)
+# Condensed pairplot
+g = sns.pairplot(
+    diabetes, 
+    hue='Outcome', 
+    markers=["o", "s"], 
+    plot_kws={'s': 15, 'alpha': 0.6},
+    diag_kws={'fill': True}
+)
+
+sns.move_legend(
+    g, 
+    "lower center",
+    bbox_to_anchor=(.5, 1), 
+    ncol=3, 
+    title=None, 
+    frameon=False
+)
+
+
+diabetes = pd.read_csv("diabetes.csv")
+diabetes.columns = diabetes.columns.str.replace(' ','')
+diabetes.columns = diabetes.columns.str.replace('\n','')
+X = diabetes.drop(columns=["Outcome"])
+y = LabelEncoder().fit_transform(diabetes.iloc[:, -1])
+fig = plt.figure(figsize=(10, 5), dpi=10)
+# Condensed pairplot
+g = sns.pairplot(
+    diabetes, 
+    hue='Outcome', 
+    markers=["o", "s"], 
+    plot_kws={'s': 15, 'alpha': 0.6}, 
+    diag_kws={'fill': True}  
+)
+
+sns.move_legend(
+    g, 
+    "lower center",
+    bbox_to_anchor=(.5, 1), 
+    ncol=3, 
+    title=None, 
+    frameon=False
+)
+
+plt.savefig("pairwise.png")
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+fig, axs = plt.subplots(2, 2, figsize=(15, 12), gridspec_kw={'height_ratios': [3, 1]})
+fig.suptitle('LDA and QDA Analysis', fontsize=20)
+
+lda = LinearDiscriminantAnalysis().fit(X_train, y_train)
+y_hat_lda = lda.predict(X_test)
+y_prob_lda = lda.predict_proba(X_test)[:, 1]
+y_cutoff_lda = (y_prob_lda >=0.5).astype(int)
+cm_lda = confusion_matrix(y_test, y_cutoff_lda)
+TN, FP, FN, TP = cm_lda.ravel()
+
+sensitivity_lda = TP / (TP + FN)
+specificity_lda = TN / (TN + FP)
+misclassification_rate_lda = (FP + FN) / (TP + TN + FP + FN)
+
+sns.heatmap(cm_lda, annot=True, fmt='d', cmap='Blues', ax=axs[0, 0])
+axs[0, 0].set_title('Confusion Matrix - LDA')
+axs[0, 0].set_xlabel('Predicted')
+axs[0, 0].set_ylabel('Actual')
+
+axs[1, 0].axis('off')
+metrics_text_lda = (
+    f"Sensitivity: {sensitivity_lda:.2f}\n"
+    f"Specificity: {specificity_lda:.2f}\n"
+    f"Misclassification Rate: {misclassification_rate_lda:.2f}"
+)
+axs[1, 0].text(0.5, 0.5, metrics_text_lda, 
+               horizontalalignment='center', verticalalignment='center', 
+               fontsize=14, bbox=dict(facecolor='white', alpha=0.5))
+
+qda = QuadraticDiscriminantAnalysis().fit(X_train, y_train)
+y_hat_qda = qda.predict(X_test)
+y_prob_qda = qda.predict_proba(X_test)[:, 1]
+y_cutoff_qda = (y_prob_qda >=0.5).astype(int)
+
+cm_qda = confusion_matrix(y_test, y_cutoff_qda)
+TN, FP, FN, TP = cm_qda.ravel()
+
+sensitivity_qda = TP / (TP + FN)
+specificity_qda = TN / (TN + FP)
+misclassification_rate_qda = (FP + FN) / (TP + TN + FP + FN)
+
+sns.heatmap(cm_qda, annot=True, fmt='d', cmap='Blues', ax=axs[0, 1])
+axs[0, 1].set_title('Confusion Matrix - QDA')
+axs[0, 1].set_xlabel('Predicted')
+axs[0, 1].set_ylabel('Actual')
+
+axs[1, 1].axis('off')
+metrics_text_qda = (
+    f"Sensitivity: {sensitivity_qda:.2f}\n"
+    f"Specificity: {specificity_qda:.2f}\n"
+    f"Misclassification Rate: {misclassification_rate_qda:.2f}"
+)
+axs[1, 1].text(0.5, 0.5, metrics_text_qda, 
+               horizontalalignment='center', verticalalignment='center', 
+               fontsize=14, bbox=dict(facecolor='white', alpha=0.5))
+
+plt.tight_layout(rect=[0, 0.1, 1, 0.95])
+plt.savefig("confusionCombined.png")
+
+plt.figure(figsize=(10, 8))
+
+fpr_lda, tpr_lda, _ = roc_curve(y_test, y_cutoff_lda)
+roc_auc_lda = auc(fpr_lda, tpr_lda)
+plt.plot(fpr_lda, tpr_lda, label=f'LDA (AUC = {roc_auc_lda:.3f})', color='blue')
+
+fpr_qda, tpr_qda, _ = roc_curve(y_test, y_cutoff_qda)
+roc_auc_qda = auc(fpr_qda, tpr_qda)
+plt.plot(fpr_qda, tpr_qda, label=f'QDA (AUC = {roc_auc_qda:.3f})', color='green')
+
+# Random Classifier Line
+plt.plot([0, 1], [0, 1], 'k--', label='Random Guess')
+
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.0])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curves - LDA vs QDA')
+plt.legend(loc="lower right")
+plt.savefig("roccombined.png")
+
+\end{minted}
+\end{verbatim}
+
+
+
+
+\end{document}  
+
+
+
+
+
+
+
+
+
+
