@@ -1,0 +1,160 @@
+\documentclass{article}
+\usepackage[a4paper, margin=0.1in]{geometry}
+\usepackage{paracol} 
+\usepackage{lipsum} 
+\usepackage{amsmath, amssymb, bm}
+\hfuzz=10pt
+\hbadness=10000  
+\setlength{\columnsep}{0.5cm}
+\setlength{\columnseprule}{0.4pt} 
+
+\begin{document}
+
+\begin{center}
+\textbf{\Large Exam 1 Cheat Sheet}
+\end{center}
+
+\vspace{1cm} 
+
+\begin{paracol}{3} 
+
+% Column 1
+\section*{Basic Probability}
+\begin{enumerate}
+  \item \textbf{Bayes' Theorem}
+    \begin{align*}
+      P(X|Y) &= \frac{P(X \cap Y)}{P(Y)}\\
+             &= \frac{P(Y|X)P(X)}{P(Y)}
+    \end{align*}
+  \item \textbf{LOTP}
+    \begin{align*}
+      P[X] = \sum^{n}_{k} P[Y_k]P[X|Y_k]
+    \end{align*}
+  \item \textbf{Expectation}
+    \\
+    For $T$ being some linear transformation of $X$
+    \begin{align*}
+      E[X] &= \int xP[X] dx\\
+      E[T] &= \int T[x] P[X] dx \\
+      Var[X] &= E[(X - \mu)^2] \\
+             &= E[X^2] - E[X]^2 
+    \end{align*}
+  \item \textbf{Total Variance}
+    \[
+      \text{Var}[X] = E[\text{Var}[X|Y]] + \text{Var}[E[X|Y]]
+    \]
+  \item \textbf{Double Expectation}
+    \\
+    Given, $P[X|Y] \text{ and } P[Y]$
+    \begin{align*}
+      P[X] &= E[P[X|Y]]\\
+           &= \int P[X|Y = b]P[Y=b]db \\
+      E[X] &= E[E[X|Y]]\\
+           &= \int E[X|Y = b]P[Y=b]db 
+    \end{align*}
+  \item \textbf{Joint, Marginal, conditional}  \\
+    given $f^{(X,Y)}$ 
+    \begin{align*}
+      f^X &= \int f^{(X,Y)}(x,y) dy \\
+      f^Y &= \int f^{(X,Y)}(x,y) dx \\
+      f^{X|Y}(x \mid y) &= \frac{f(x,y)}{f^Y(y)} \\
+      f^{Y|X}(y \mid x) &= \frac{f(x,y)}{f^X(x)} \\
+      E[Y|X=x] &= \int y f^{Y|X}(y|x) dy \\
+      f(x,y) &= f^X(x) \cdot f^{Y|X}(y \mid x)\\  
+             &= f^Y(y) \cdot f^{X|Y}(x \mid y)
+    \end{align*}
+\end{enumerate}
+
+\switchcolumn
+
+\section*{Continuous Distributions}
+\begin{enumerate}
+      \item \textbf{Uniform } \( U(a, b) \)
+    \begin{itemize}
+        \item PDF:
+        \[
+        f(x) = \frac{1}{b - a}, \quad a \leq x \leq b
+        \]
+        \item Mean: \( \frac{a + b}{2} \)
+        \item Variance: \( \frac{(b - a)^2}{12} \)
+    \end{itemize}
+
+    \item \textbf{Exponential } \( \text{Exp}(\lambda) \)
+    \begin{itemize}
+        \item PDF:
+        \[
+        f(x) = \lambda e^{-\lambda x}, \quad x \geq 0
+        \]
+        \item Mean: \( \frac{1}{\lambda} \)
+        \item Variance: \( \frac{1}{\lambda^2} \)
+    \end{itemize}
+
+  \item \textbf{Gamma} \( \text{Gamma}(a, \theta = \frac{1}{\lambda}) \)
+    \begin{itemize}
+        \item PDF:
+        \[
+        f(x) = \frac{\lambda^a x^{a-1} e^{-\lambda x}}{\Gamma(a)}, \quad x \geq 0
+        \]
+        \item Mean: \( \frac{a}{\lambda} \)
+        \item Variance: \( \frac{a}{\lambda^2} \)
+    \end{itemize}
+
+    \item \textbf{Beta } \( \text{Beta}(\alpha, \beta) \)
+    \begin{itemize}
+        \item PDF:
+        \[
+        f(x) = \frac{x^{\alpha - 1} (1 - x)^{\beta - 1}}{B(\alpha, \beta)}
+        \]
+        \item Mean: \( \frac{\alpha}{\alpha + \beta} \)
+        \item Variance: \( \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)} \)
+    \end{itemize}
+    \item \textbf{Beta and Gamma integrals} 
+    \begin{itemize}
+      \item Gamma
+      \[
+      \Gamma(x) = \int_0^\infty t^{x-1} e^{-t} \, dt, \quad x > 0
+      \]
+    \item Beta
+      \begin{align*}
+        B(x, y) &= \int_0^1 t^{x-1} (1 - t)^{y-1}dt \\
+                &= \frac{\Gamma(x) \Gamma(y)}{\Gamma(x + y)} 
+      \end{align*}
+    \end{itemize}
+\end{enumerate}
+\switchcolumn 
+\section*{Common Moments}
+\begin{enumerate}
+  \item Moments of Gamma Distribution
+    \begin{itemize}
+      \item Reciprocal:
+        \begin{align*}
+        \mathbb{E} \left[ \frac{1}{X} \right] &= \frac{\lambda}{(a-1)}
+        \end{align*}
+      \item Second Reciprocal:
+        \begin{align*}
+        \mathbb{E} \left[ \frac{1}{X^2} \right] &= \frac{\lambda^2}{(a-1)(a-2)}
+        \end{align*}
+    \end{itemize} 
+  \item Moments of Beta
+    \begin{itemize}
+      \item Reciprocal:
+        \begin{align*}
+        \mathbb{E} \left[ \frac{1}{Q} \right] &= \frac{\beta}{\alpha - 1} + 1
+        \end{align*}
+      \item Odds Ratio:
+        \begin{align*}
+        \mathbb{E} \left[ \frac{1 - Q}{Q} \right] &= \frac{\beta}{\alpha - 1}
+        \end{align*}
+      \item Second Odds:
+        \begin{align*}
+        \mathbb{E} \left[ \frac{(1 - Q)^2}{Q^2} \right] &= \frac{\beta \cdot (\beta + 1)}{(\alpha - 1) \cdot (\alpha - 2)}
+        \end{align*}
+      \item Variance of Odds:
+        \begin{align*}
+        \text{Var} \left[\frac{1-Q}{Q} \right] &= \frac{\beta(\alpha+\beta-1)}{(\alpha-1)^2(\alpha-2)}
+        \end{align*}
+    \end{itemize}
+\end{enumerate}
+\end{paracol} 
+\end{document}
+
