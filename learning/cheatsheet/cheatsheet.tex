@@ -1,0 +1,84 @@
+\documentclass[a4paper,11pt]{article}
+
+% Encoding and language settings
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+% Mathematics support
+\usepackage{amsmath, amssymb, amsthm}
+
+% Graphics and figures
+\usepackage{graphicx}
+
+% Page layout
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Miscellaneous useful packages
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+
+\begin{document}
+\section{Definitions}
+\begin{itemize}
+    \item \textbf{Flexibility vs Bias:} $\uparrow\!\text{Flexibility} = \downarrow\!\text{Bias} = \uparrow\!\text{Variance}$ \\
+    Where: Flexibility is the number of model variables, Bias is the error caused by model simplification, and Variance is the model's sensitivity to data.
+    
+    \item \textbf{Supervised vs. Unsupervised:} \\
+    Supervised data comes in (input, output) labeled pairs. The objective is to learn the mapping from input to output. Unsupervised learning does not require labels, with the goal of identifying patterns in the data.
+    
+    \item \textbf{Prediction vs. Inference:} \\
+    Prediction takes a new data point and assigns it an output from the learned mapping. Inference aims to make a statement about the relationship between the predictor and the predicted variable.
+\end{itemize}
+
+\section{Linear Models}
+\begin{itemize}
+    \item \textbf{Assumptions:} Predictors and outcomes have a linear relationship, residuals in observations are independent (i.e., the value of the last observation should not affect the next), residuals have constant variance, predictors are not collinear, and irreducible error is normally distributed.
+    
+    \item \textbf{Structure:} $\hat{y} = X \hat{\beta} = X (X^TX)^{-1}X^Ty$
+    
+    \item \textbf{Properties:} Unbiased (expected value of predicted is equal to expected value of true), each element of $\hat{\beta}$ represents the change in outcome per unit increase in the corresponding predictor.
+    
+    \item \textbf{Hypothesis Testing:} $t = \frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}$ \\
+    Standard error is calculated by estimating $\sigma$ as $\hat{\sigma} = \sqrt{\frac{RSS}{n - p}}$, allowing for covariance matrix $Var(\hat{\beta}) = \hat{\sigma}^2(X^TX)^{-1}$, where $\text{SE}(\beta_j)$ is the square root of the $j$-th diagonal entry of the covariance matrix. The T-statistic measures the number of standard deviations from 0; larger $t$ indicates more significance.\\
+    The p-value of the predictor is the probability of obtaining results as extreme as the observed t-statistic, given that the null hypothesis is true. If the p-value is small, it is very unlikely that the t-statistic would be observed if the predictor was insignificant.
+    
+    \item \textbf{Diagnostics:} Plot of residuals against fitted results, quantiles of residuals for normality, time-series for independence.
+    
+    \item \textbf{Evaluation:} $R^2 = 1 - \frac{RSS}{SST}$ measures the ratio of the difference between fitted and sample values to the difference between mean and sample values. Adjusted $R^2$ accounts for the number of predictors. Mean Squared Error (MSE) is the average difference between observed and predicted values, assessing prediction accuracy.
+    
+    \item \textbf{ANOVA:} Used to compare two nested models. $SS_{model} = SS_{simple} - SS_{complex}$ and $SS_{error} = SS_{complex}$. Sum of Squares explains the total variation attributable to each model. Mean Square evaluates the additional variation per degree of freedom between the simple and complex models, and is equal to the SS divided by the degrees of freedom. The F-statistic is the ratio between the Mean Squared Model (variance explained by moving from reduced to full) and the Mean Squared Error (variance unexplained by the full model). A large F-statistic indicates that the full model explains more variance.
+\end{itemize}
+
+\section{Classification}
+\begin{itemize}
+    \item \textbf{Bayes' Classifier:} Assigns to sample $x$ class $k$ if $k$ maximizes $P(Y=k|X=x)$.
+    
+    \item \textbf{LDA Assumptions:} Predictors follow normal distributions per class, predictors share variance, and observations are independent. QDA allows for classes to have different variances. LDA and QDA work by modeling the distribution of predictors in class $k$ by $f^k(x)$, using Bayes' theorem: $P(Y=k|X=x) = \frac{\pi_kf^k(x)}{\sum\pi_if^i(x)}$. The difference lies in how they model $f^k(x)$, where LDA uses the sample variance, whereas QDA estimates the covariance matrix per class. LDA is less flexible, while QDA works better with more data.
+    
+    \item \textbf{Naive Bayes:} Assumes that every predictor is independent. 
+    \[ 
+    P(Y = k | X = x) = \frac{\pi_k \times f_{k1}(x_1) \times f_{k2}(x_2) \times \cdots \times f_{kp}(x_p)}{
+    \sum_{l=1}^{K} \pi_l \times f_{l1}(x_1) \times f_{l2}(x_2) \times \cdots \times f_{lp}(x_p)} 
+    \]
+    where each $f^{ki}(x)$ is a one-dimensional density, estimated using a univariate normal distribution (special case of LDA) or with a histogram.
+    
+    \item \textbf{Logistic Regression:} Uses the log odds as a link function between the probability range $[0,1]$ and the real number line: 
+    \[
+    \log \left( \frac{P(Y=1|X)}{1-P(Y=1|X)} \right) 
+    \]
+    Positive $\beta_j$ indicates that $X_j$ increases the likelihood of the probability class, while negative $\beta_j$ indicates a decrease in likelihood. Since we fit the logit function to a linear combination, it has a linear decision boundary.
+\end{itemize}
+
+\section{Cross-Validation}
+\begin{itemize}
+    \item \textbf{Validation Set:} Split data into training and testing randomly, estimate the function $f$ from training, and test against the validation set. The validation estimate of the test Mean Squared Error (MSE) can be calculated to evaluate the model.
+    
+    \item \textbf{Bootstrap:} Resample data $n$ times with replacement and calculate $\hat{\theta}^i$. Repeating this process creates the sampling distribution of $\hat{\theta}$. This allows us to compute statistics like standard error and mean.
+    
+    \item \textbf{Jackknife:} Compute the statistic $\hat{\theta}$ from the full sample, then calculate $\hat{\theta}_k$ by removing sample $k$. The k-th pseudovalue of $\theta$ is $ps_k(Y) = n\hat{\theta} - (n-1)\hat{\theta}_k$. Treating these pseudovalues as random variables allows for confidence interval estimation.
+\end{itemize}
+\end{document}
+
