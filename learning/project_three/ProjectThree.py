@@ -103,6 +103,10 @@ for _ in tqdm(range(100000)):
 
 bootstrap_quant_estimate = np.mean(estimates)
 upper_ci = np.percentile(estimates, 95)
+bias = bootstrap_quant_estimate - quant
+se = np.std(estimates, ddof=1)
+print(bias)
+print(se)
 print(upper_ci)
 print(bootstrap_quant_estimate)
 
@@ -117,10 +121,13 @@ res = bootstrap(
     data,
     statistic=quantile_90,
     confidence_level=0.95,
-    n_resamples=10000,
+    n_resamples=100000,
     method="percentile",
     vectorized=False,
     axis=1,
 )
-
+bias = np.mean(res.bootstrap_distribution) - np.quantile(data, 0.9)
+print(np.mean(res.bootstrap_distribution))
+print(bias)
 print(res.confidence_interval)
+print(res.standard_error)
