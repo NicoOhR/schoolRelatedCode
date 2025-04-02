@@ -1,0 +1,136 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+	\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{random}
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{plt}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{pandas}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{pd}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{seaborn}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{sns}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{scipy}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{stats}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{scipy}\PYG{n+nn}{.}\PYG{n+nn}{stats}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{bootstrap}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{linear\PYGZus{}model}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{LogisticRegression}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{metrics}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{accuracy\PYGZus{}score}\PYG{p}{,} \PYG{n}{confusion\PYGZus{}matrix}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{model\PYGZus{}selection}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{LeaveOneOut}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tqdm}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{tqdm}
+
+\PYG{n}{diabetes} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{diabetes.csv}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{diabetes} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{rename}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{x}\PYG{o}{.}\PYG{n}{strip}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n}{feature\PYGZus{}cols} \PYG{o}{=} \PYG{p}{[}
+    \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Pregnancies}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Glucose}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{BloodPressure}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{SkinThickness}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Insulin}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{BMI}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{DiabetesPedigreeFunction}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Age}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+\PYG{p}{]}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{diabetes}\PYG{p}{[}\PYG{n}{feature\PYGZus{}cols}\PYG{p}{]}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{diabetes}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Outcome}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+
+\PYG{n}{diabetes\PYGZus{}mod} \PYG{o}{=} \PYG{n}{LogisticRegression}\PYG{p}{(}\PYG{n}{solver}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{lbfgs}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{max\PYGZus{}iter}\PYG{o}{=}\PYG{l+m+mi}{1000}\PYG{p}{)}
+\PYG{n}{diabetes\PYGZus{}mod}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}pred} \PYG{o}{=} \PYG{n}{diabetes\PYGZus{}mod}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+\PYG{n}{c\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{confusion\PYGZus{}matrix}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred}\PYG{p}{)}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{metrics}\PYG{p}{(}\PYG{n}{confusion\PYGZus{}matrix}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{TP}\PYG{p}{,} \PYG{n}{FP}\PYG{p}{,} \PYG{n}{FN}\PYG{p}{,} \PYG{n}{TN} \PYG{o}{=} \PYG{n}{confusion\PYGZus{}matrix}\PYG{o}{.}\PYG{n}{ravel}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{error} \PYG{o}{=} \PYG{p}{(}\PYG{n}{FP} \PYG{o}{+} \PYG{n}{FN}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TP} \PYG{o}{+} \PYG{n}{FP} \PYG{o}{+} \PYG{n}{FN} \PYG{o}{+} \PYG{n}{TN}\PYG{p}{)}
+    \PYG{n}{sensitivity} \PYG{o}{=} \PYG{n}{TP} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TP} \PYG{o}{+} \PYG{n}{FN}\PYG{p}{)}
+    \PYG{n}{specifity} \PYG{o}{=} \PYG{n}{TN} \PYG{o}{/} \PYG{p}{(}\PYG{n}{TN} \PYG{o}{+} \PYG{n}{FP}\PYG{p}{)}
+    \PYG{k}{return} \PYG{p}{(}\PYG{n}{error}\PYG{p}{,} \PYG{n}{sensitivity}\PYG{p}{,} \PYG{n}{specifity}\PYG{p}{)}
+
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{metrics}\PYG{p}{(}\PYG{n}{c\PYGZus{}matrix}\PYG{p}{)}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}part b}
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{oneZeroError}\PYG{p}{(}\PYG{n}{prediction}\PYG{p}{,} \PYG{n}{row}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{actual} \PYG{o}{=} \PYG{n}{row}\PYG{o}{.}\PYG{n}{at}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Outcome}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+    \PYG{n}{pred} \PYG{o}{=} \PYG{l+m+mi}{0} \PYG{k}{if} \PYG{n}{prediction} \PYG{o}{\PYGZlt{}}\PYG{o}{=} \PYG{l+m+mf}{0.5} \PYG{k}{else} \PYG{l+m+mi}{1}
+    \PYG{k}{return} \PYG{l+m+mi}{1} \PYG{k}{if} \PYG{p}{(}\PYG{n}{pred} \PYG{o}{==} \PYG{n}{actual}\PYG{p}{)} \PYG{k}{else} \PYG{l+m+mi}{0}
+
+
+\PYG{n}{errors} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{k}{for} \PYG{n}{idx}\PYG{p}{,} \PYG{n}{row} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{p}{(}\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{iterrows}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{X\PYGZus{}test} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{p}{[}\PYG{n}{row}\PYG{p}{[}\PYG{n}{feature\PYGZus{}cols}\PYG{p}{]}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{dropped} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{idx}\PYG{p}{)}
+    \PYG{n}{X} \PYG{o}{=} \PYG{n}{dropped}\PYG{p}{[}\PYG{n}{feature\PYGZus{}cols}\PYG{p}{]}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{dropped}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Outcome}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+    \PYG{n}{diabetes\PYGZus{}mod}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+    \PYG{n}{prediction} \PYG{o}{=} \PYG{n}{diabetes\PYGZus{}mod}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)}
+    \PYG{n}{errors}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{oneZeroError}\PYG{p}{(}\PYG{n}{prediction}\PYG{p}{,} \PYG{n}{row}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{errors}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Part c}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{diabetes}\PYG{p}{[}\PYG{n}{feature\PYGZus{}cols}\PYG{p}{]}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{diabetes}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Outcome}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+
+\PYG{n}{loo} \PYG{o}{=} \PYG{n}{LeaveOneOut}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{n}{y\PYGZus{}true}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}\PYG{p}{,} \PYG{p}{[}\PYG{p}{]}
+
+\PYG{k}{for} \PYG{n}{train\PYGZus{}index}\PYG{p}{,} \PYG{n}{test\PYGZus{}index} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{p}{(}\PYG{n}{loo}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{train\PYGZus{}index}\PYG{p}{]}\PYG{p}{,} \PYG{n}{X}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{test\PYGZus{}index}\PYG{p}{]}
+    \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{y}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{train\PYGZus{}index}\PYG{p}{]}\PYG{p}{,} \PYG{n}{y}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{test\PYGZus{}index}\PYG{p}{]}
+
+    \PYG{n}{diabetes\PYGZus{}mod}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+
+    \PYG{n}{prediction} \PYG{o}{=} \PYG{n}{diabetes\PYGZus{}mod}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)}
+
+    \PYG{n}{y\PYGZus{}true}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{o}{.}\PYG{n}{values}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{y\PYGZus{}pred}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{prediction}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+
+\PYG{n}{accuracy} \PYG{o}{=} \PYG{n}{accuracy\PYGZus{}score}\PYG{p}{(}\PYG{n}{y\PYGZus{}true}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{LOOCV Accuracy: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{accuracy}\PYG{l+s+si}{:}\PYG{l+s+s2}{.4f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}Question 2}
+
+\PYG{n}{blood} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{oxygen\PYGZus{}saturation.txt}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{blood}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{agreement}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{blood}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{pos}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{blood}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{osm}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} part b}
+
+\PYG{c+c1}{\PYGZsh{} non\PYGZhy{}bootstrap estimation of the 90th quantile}
+\PYG{n}{quant} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{percentile}\PYG{p}{(}\PYG{n}{blood}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{agreement}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{l+m+mi}{90}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{quant}\PYG{p}{)}
+
+\PYG{n}{estimates} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{k}{for} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{100000}\PYG{p}{)}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{bootstrap\PYGZus{}sample} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{(}\PYG{n}{blood}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{agreement}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{size}\PYG{o}{=}\PYG{l+m+mi}{72}\PYG{p}{,} \PYG{n}{replace}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+    \PYG{n}{quant\PYGZus{}estimate} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{percentile}\PYG{p}{(}\PYG{n}{bootstrap\PYGZus{}sample}\PYG{p}{,} \PYG{l+m+mi}{90}\PYG{p}{)}
+    \PYG{n}{estimates}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{quant\PYGZus{}estimate}\PYG{p}{)}
+
+\PYG{n}{bootstrap\PYGZus{}quant\PYGZus{}estimate} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{estimates}\PYG{p}{)}
+\PYG{n}{upper\PYGZus{}ci} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{percentile}\PYG{p}{(}\PYG{n}{estimates}\PYG{p}{,} \PYG{l+m+mi}{95}\PYG{p}{)}
+\PYG{n}{bias} \PYG{o}{=} \PYG{n}{bootstrap\PYGZus{}quant\PYGZus{}estimate} \PYG{o}{\PYGZhy{}} \PYG{n}{quant}
+\PYG{n}{se} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{std}\PYG{p}{(}\PYG{n}{estimates}\PYG{p}{,} \PYG{n}{ddof}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{bias}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{se}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{upper\PYGZus{}ci}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{bootstrap\PYGZus{}quant\PYGZus{}estimate}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} part c}
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{quantile\PYGZus{}90}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{percentile}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{l+m+mi}{90}\PYG{p}{)}
+
+
+\PYG{n}{data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{blood}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{agreement}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,}\PYG{p}{)}
+\PYG{n}{res} \PYG{o}{=} \PYG{n}{bootstrap}\PYG{p}{(}
+    \PYG{n}{data}\PYG{p}{,}
+    \PYG{n}{statistic}\PYG{o}{=}\PYG{n}{quantile\PYGZus{}90}\PYG{p}{,}
+    \PYG{n}{confidence\PYGZus{}level}\PYG{o}{=}\PYG{l+m+mf}{0.95}\PYG{p}{,}
+    \PYG{n}{n\PYGZus{}resamples}\PYG{o}{=}\PYG{l+m+mi}{100000}\PYG{p}{,}
+    \PYG{n}{method}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{percentile}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{vectorized}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
+    \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,}
+\PYG{p}{)}
+\PYG{n}{bias} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{res}\PYG{o}{.}\PYG{n}{bootstrap\PYGZus{}distribution}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{quantile}\PYG{p}{(}\PYG{n}{data}\PYG{p}{,} \PYG{l+m+mf}{0.9}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{res}\PYG{o}{.}\PYG{n}{bootstrap\PYGZus{}distribution}\PYG{p}{)}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{bias}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{res}\PYG{o}{.}\PYG{n}{confidence\PYGZus{}interval}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{res}\PYG{o}{.}\PYG{n}{standard\PYGZus{}error}\PYG{p}{)}
+
+\end{MintedVerbatim}

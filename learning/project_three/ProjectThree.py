@@ -1,9 +1,9 @@
 import random
-from re import S
 
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from scipy import stats
 from scipy.stats import bootstrap
 from sklearn.linear_model import LogisticRegression
