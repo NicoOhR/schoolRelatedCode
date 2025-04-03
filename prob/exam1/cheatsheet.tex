@@ -185,6 +185,49 @@
     \[
       f^Y(y) = \frac{1}{y^2} f^X(\frac{1}{y})
     \]
+  \item Generally, the p.d.f follows the Jacobian Change of variables formula, for $Y = g(X)$
+    \[
+      f^Y(y) = |\frac{d}{dy}g^{-1}(y)|f^X(g^{-1}(x))
+    \]
+\end{enumerate}
+\section*{Geometric}
+\begin{enumerate}
+  \item $X$ is geometric with support $\mathbb{N}$:
+    \begin{align*}
+      Pr(X = k) &= (1-p)^{k-1}p \\
+      E[X] &= \frac{1}{p}
+    \end{align*}
+  \item Y is geometric with support $\mathbb{N_0}$:
+    \begin{align*}
+      Pr(Y = k) &= (1-p)^{k-1}p \\
+      E[Y] &= \frac{1-p}{p}
+    \end{align*}
+  \item Both share the same variance $\frac{1-p}{p^2}$
+  \item if $Q \sim \text{Beta}[\alpha, \beta]$, and $(N|Q = q) \sim \text{Geom}[q;0]$ (that is $0$ is included in the support.
+    \begin{align*}
+      E[N] &= E[\frac{1-Q}{Q}]= \frac{\beta}{\alpha - 1} \\
+      E[N^2] &= \frac{\beta(\beta + 1)}{(\alpha -1)(\alpha -2)}
+    \end{align*}
+  \item if $M | Q = q \sim \text{Geom}[q;0]$
+    \begin{align*}
+      E[M] &= E[\frac{1}{Q}] = \frac{\alpha + \beta - 1}{\alpha - 1}
+    \end{align*}
+\end{enumerate}
+\section*{Other useful things}
+\begin{enumerate}
+  \item $Y \sim \text{Gamma}[a, \theta]$ if $W | Y = y \sim \text{Gamma}[1, \frac{1}{y}]$
+    \begin{align*}
+      E[W] &= E[\frac{1}{Y}] = \frac{\theta^{-1}}{a-1} \\
+      E[W^2] &= 2\frac{\theta^{-2}}{(a-1)(a-2)} \\
+      Y | W &= w \sim \text{Gamma}[a+1,\frac{1}{\theta^{-1}+w}]
+    \end{align*}
+  \item with the same $Y$, if $N | Y = y \sim \text{Pois}[y]$ then
+    \begin{align*}
+      E[N] = E[Y] &= a \cdot \theta \\
+      E[N|Y] &= y\\
+      Var[N] &= E[Y] + Var[Y] \\
+      Y | N = n &\sim Gamma[a + n; \frac{1}{\lambda + 1}
+    \end{align*}
 \end{enumerate}
 \end{paracol} 
 \end{document}
