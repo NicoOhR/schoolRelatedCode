@@ -124,6 +124,10 @@
 \switchcolumn 
 \section*{Common Moments}
 \begin{enumerate}
+  \item 
+    $$ 
+    1 - \text{Beta}[\alpha, \beta] = \text{Beta}[\beta, \alpha]
+    $$
   \item Moments of Gamma Distribution
     \begin{itemize}
       \item Reciprocal:
@@ -154,6 +158,33 @@
         \text{Var} \left[\frac{1-Q}{Q} \right] &= \frac{\beta(\alpha+\beta-1)}{(\alpha-1)^2(\alpha-2)}
         \end{align*}
     \end{itemize}
+\end{enumerate}
+\section*{random sum}
+\begin{enumerate}
+  \item given discrete random variable $n$, and a group of i.i.d. continous random variables $x_j$, then the random sum $s = \sum^{n} x_j$ has the following moments
+  \break
+  \[
+    e[s] = \mu \cdot \nu ~ \text{var}[s] = \mu^2 \cdot \tau^2 + \nu \cdot \sigma^2
+  \]
+  where:
+  \begin{align*}
+    \mu = e[x], \sigma^2 &= var[x],\nu = e[n]\\
+    \tau^2 &= \text{var}[n]
+  \end{align*}
+\end{enumerate}
+\end{paracol}
+\newpage
+\begin{paracol}{3}
+\section*{Change of Variables}
+\begin{enumerate}
+  \item Linear change of variables: if $X$ is an RV, and $Y = aX+b$ 
+    \[
+      f^Y(y) = \frac{1}{a}f^X(\frac{y-b}{a}) 
+    \]
+  \item reciporcal distribution: let $Y = X^{-1}$
+    \[
+      f^Y(y) = \frac{1}{y^2} f^X(\frac{1}{y})
+    \]
 \end{enumerate}
 \end{paracol} 
 \end{document}
