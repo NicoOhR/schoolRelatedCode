@@ -1,0 +1,406 @@
+\documentclass[11pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{enumerate}
+\usepackage{minted}
+\usepackage{afterpage}
+\usepackage{placeins}
+\usepackage{needspace}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{url}
+\usepackage[margin=0.75in]{geometry}
+\hfuzz=40pt
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{center}
+	%% put the project number
+	\textbf{STAT 4360 (Introduction to Statistical Learning, Fall 2022)
+		\\[1ex]
+		Mini Project 4
+		\\[1ex]
+		Name: Nimrod Ohayon Rozanes}
+	\\
+	{\_}\hrulefill{\hspace{.01in}}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Section 1: 
+
+\begin{enumerate}
+	\item ~
+	\begin{enumerate}
+		\item The variable selection method, formula, and LOOCV MSE for parts (a) - (d) are shown below	
+		\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|c|}
+		\hline
+		Selection & formula & LOOCV MSE \\
+		\hline
+		Full Model & $Quality \sim Clarity + Aroma + Body + Flavor + Oakiness + C(Region)$ & 1.135  \\
+		\hline
+		All Permutations & $Quality \sim Flavor + Oakiness + C(Region)$ & 0.871  \\
+		\hline
+		Forward Selection & $Quality \sim Flavor + Oakiness + C(Region)$  & 0.871  \\
+		\hline
+		Backward Selection & $Quality \sim Flavor + Oakiness + C(Region)$  & 0.871  \\
+		\hline
+		\end{tabular}
+		\caption{Full, permutations, forwards, and backwards selection}
+		\end{table}
+		\item Fitting a Ridge regression to the full model, with a penalty parameter choosen with LOOCV from a logspace $[-3,3]$ (that is, a linear space $[0.001, 1000]$), we find that the optimal $\lambda = 1.683$ and that it produces an MSE of $0.993$ 
+		\item With a similar process, the Lasso regression has an optimal $\lambda = 0.0222$ and an MSE of $0.974$
+		\item Since both all permutations and forwards selection selected the same submodel, only two tabular results are shown, firstly the results for the full model:
+			\begin{center}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}    &     Quality      & \textbf{  R-squared:        
+ } &     0.840   \\
+\textbf{Model:}            &       OLS        & \textbf{  Adj. R-squared:   
+ } &     0.802   \\
+\textbf{Method:}           &  Least Squares   & \textbf{  F-statistic:      
+ } &     21.79   \\
+\textbf{Date:}             & Sun, 13 Apr 2025 & \textbf{  Prob (F-statistic)
+:} &  6.02e-10   \\
+\textbf{Time:}             &     13:29:02     & \textbf{  Log-Likelihood:   
+ } &   -44.976   \\
+\textbf{No. Observations:} &          37      & \textbf{  AIC:              
+ } &     106.0   \\
+\textbf{Df Residuals:}     &          29      & \textbf{  BIC:              
+ } &     118.8   \\
+\textbf{Df Model:}         &           7      & \textbf{                    
+ } &             \\
+\textbf{Covariance Type:}  &    nonrobust     & \textbf{                    
+ } &             \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lcccccc}
+                        & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+\midrule
+\textbf{Intercept}      &       7.9732  &        1.994     &     4.000  &         0.000        &        3.896    &       12.050     \\
+\textbf{C(Region)[T.2]} &      -1.5642  &        0.401     &    -3.905  &         0.001        &       -2.383    &       -0.745     \\
+\textbf{C(Region)[T.3]} &       0.8401  &        0.542     &     1.551  &         0.132        &       -0.268    &        1.948     \\
+\textbf{Clarity}        &      -0.1262  &        1.478     &    -0.085  &         0.933        &       -3.149    &        2.896     \\
+\textbf{Aroma}          &       0.1163  &        0.257     &     0.453  &         0.654        &       -0.409    &        0.641     \\
+\textbf{Body}           &       0.0612  &        0.271     &     0.226  &         0.823        &       -0.492    &        0.615     \\
+\textbf{Flavor}         &       1.1592  &        0.248     &     4.675  &         0.000        &        0.652    &        1.666     \\
+\textbf{Oakiness}       &      -0.3928  &        0.242     &    -1.622  &         0.116        &       -0.888    &        0.103     \\
+\bottomrule
+\end{tabular}
+%\caption{OLS Regression Results}
+\end{center}
+And for the second, reduced model:
+	\begin{center}
+	\begin{tabular}{lclc}
+	\toprule
+	\textbf{Dep. Variable:}    &     Quality      & \textbf{  R-squared:         } &     0.839
+		 \\
+	\textbf{Model:}            &       OLS        & \textbf{  Adj. R-squared:    } &     0.818
+		 \\
+	\textbf{Method:}           &  Least Squares   & \textbf{  F-statistic:       } &     41.55
+		 \\
+	\textbf{Date:}             & Sun, 13 Apr 2025 & \textbf{  Prob (F-statistic):} &  3.08e-12
+		 \\
+	\textbf{Time:}             &     13:34:12     & \textbf{  Log-Likelihood:    } &   -45.170
+		 \\
+	\textbf{No. Observations:} &          37      & \textbf{  AIC:               } &     100.3
+		 \\
+	\textbf{Df Residuals:}     &          32      & \textbf{  BIC:               } &     108.4
+		 \\
+	\textbf{Df Model:}         &           4      & \textbf{                     } &          
+		 \\
+	\textbf{Covariance Type:}  &    nonrobust     & \textbf{                     } &          
+		 \\
+	\bottomrule
+	\end{tabular}
+	\begin{tabular}{lcccccc}
+													& \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$
+	|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+	\midrule
+	\textbf{Intercept}      &       8.1440  &        1.023     &     7.957  &         0.000   
+			 &        6.059    &       10.229     \\
+	\textbf{C(Region)[T.2]} &      -1.5567  &        0.368     &    -4.232  &         0.000   
+			 &       -2.306    &       -0.807     \\
+	\textbf{C(Region)[T.3]} &       0.9859  &        0.428     &     2.305  &         0.028   
+			 &        0.115    &        1.857     \\
+	\textbf{Flavor}         &       1.2397  &        0.189     &     6.555  &         0.000   
+			 &        0.854    &        1.625     \\
+	\textbf{Oakiness}       &      -0.3623  &        0.213     &    -1.699  &         0.099   
+			 &       -0.797    &        0.072     \\
+	\bottomrule
+	\end{tabular}
+	\\
+\end{center}
+	Comparing the two models, it is obvious that the reduced model has lower MSE as well as a higher R-squared when compared to the reduced model. Further more, the predictors of the reduced model have much lower p-values, implying that each predictor is much more meaningful than those in the full model. Interestingly, the AIC and BIC between the two models are somewhat similar, although it would be expected that the BIC would favor the reduced model much more heavily. I would suggest using the reduced model, as it has lower error and better fit, and I would suggest using the forward selection to find the reduced model because it is more effecient (of course, this is retroactivly justified since both all permutations and the forward selection found the same one, although there is no gurantee that this would happen).
+	\end{enumerate}
+	\item ~
+	\begin{enumerate}
+		\item To minimize the ridge regression, we first take the gradient with respect to $\beta$, set the derivative equal to $0$ and then solve for $\hat\beta$. This is with the assumption that the problem is convex, which is reasonable since it is known that the RSS is convex, as well as the quadratic function $\lambda\| \beta\|^2$, and the sum of two convex functions is convex in itself.
+			\begin{align*}
+			&\min_{\boldsymbol{\beta}} \; \frac{1}{2}\,\|\mathbf{y} - X\boldsymbol{\beta}\|^2 \;+\; \lambda \,\|\boldsymbol{\beta}\|^2,\\[6pt]
+			&\min_{\boldsymbol{\beta}} \; \frac{1}{2}\,(\mathbf{y} - X\boldsymbol{\beta})^T(\mathbf{y} - X\boldsymbol{\beta})
+			\;+\;\lambda\,\boldsymbol{\beta}^T\boldsymbol{\beta},\\[6pt]
+			&\nabla_{\boldsymbol{\beta}}\!\Bigl[\tfrac{1}{2}\,(\mathbf{y}-X\boldsymbol{\beta})^T(\mathbf{y}-X\boldsymbol{\beta}) 
+			\;+\;\lambda\,\boldsymbol{\beta}^T\boldsymbol{\beta}\Bigr] \;=\; 0,\\[6pt]
+			&\nabla_{\boldsymbol{\beta}}\!\Bigl[\tfrac{1}{2}\,(\mathbf{y}-X\boldsymbol{\beta})^T(\mathbf{y}-X\boldsymbol{\beta})\Bigr]
+			\;=\; 2X^T X\,\boldsymbol{\beta} - 2X^T \mathbf{y},\\[6pt]
+			&\nabla_{\boldsymbol{\beta}}[\lambda\,\boldsymbol{\beta}^T\boldsymbol{\beta}]
+			\;=\; 2\,\lambda\,\boldsymbol{\beta},\\[6pt]
+			&2X^T X\,\boldsymbol{\beta} \;-\; 2X^T \mathbf{y} \;+\; 2\,\lambda\,\boldsymbol{\beta} \;=\; 0,\\[6pt]
+			&(X^T X + \lambda\,I)\,\boldsymbol{\beta} \;=\; X^T \mathbf{y} \\[6pt]
+			&\widehat{\boldsymbol{\beta}} 
+			\;=\; (X^T X + \lambda\,I)^{-1}\,X^T \mathbf{y}.
+		\end{align*}
+	\item 
+		\begin{align*}
+		\mathrm{Cov}(Y_i, Y_j)
+		&= \mathbb{E}[Y_i\,Y_j] \;-\; \mathbb{E}[Y_i]\;\mathbb{E}[Y_j],\\[6pt]
+		&= \mathbb{E}\bigl[(f(X_i) + \epsilon_i)\,(f(X_j) + \epsilon_j)\bigr]
+			 \;-\;
+			 \Bigl(\mathbb{E}[f(X_i)] + \mathbb{E}[\epsilon_i]\Bigr)\,
+			 \Bigl(\mathbb{E}[f(X_j)] + \mathbb{E}[\epsilon_j]\Bigr),\\[6pt]
+		&= \mathbb{E}[f(X_i)\,f(X_j)]
+			 + \mathbb{E}[f(X_i)\,\epsilon_j]
+			 + \mathbb{E}[\epsilon_i\,f(X_j)]
+			 + \mathbb{E}[\epsilon_i\,\epsilon_j]\\
+		&\quad -\;
+			 \mathbb{E}[f(X_i)]\,\mathbb{E}[f(X_j)]
+			 - \mathbb{E}[f(X_i)]\,\mathbb{E}[\epsilon_j]
+			 - \mathbb{E}[\epsilon_i]\,\mathbb{E}[f(X_j)]
+			 - \mathbb{E}[\epsilon_i]\,\mathbb{E}[\epsilon_j],\\[6pt]
+		&= \;
+			 \mathbb{E}[f(X_i)]\,\mathbb{E}[f(X_j)]
+			 + \mathbb{E}[f(X_i)]\,\mathbb{E}[\epsilon_j]
+			 + \mathbb{E}[\epsilon_i]\,\mathbb{E}[f(X_j)]
+			 + \mathbb{E}[\epsilon_i]\,\mathbb{E}[\epsilon_j],\\[6pt]
+		&\quad -\;
+			 \mathbb{E}[f(X_i)]\,\mathbb{E}[f(X_j)]
+			 - \mathbb{E}[f(X_i)]\,\mathbb{E}[\epsilon_j]
+			 - \mathbb{E}[\epsilon_i]\,\mathbb{E}[f(X_j)]
+			 - \mathbb{E}[\epsilon_i]\,\mathbb{E}[\epsilon_j],\\[6pt]
+		&= 0
+		\end{align*}
+	\item 
+		\begin{align*}
+		\widehat{\boldsymbol{\beta}}
+		&= \bigl(X^T X \;+\; \lambda\,I\bigr)^{-1} \,X^T\,\mathbf{y}, \\[6pt]
+		\hat{\mathbf{y}}
+		&= X \,\widehat{\boldsymbol{\beta}}
+		= X \,\bigl(X^T X \;+\; \lambda\,I\bigr)^{-1} X^T \,\mathbf{y}, \\[6pt]
+		\widehat{Y}_i
+		&= \mathbf{x}_i^T \,\bigl(X^T X \;+\; \lambda\,I\bigr)^{-1} X^T \,\mathbf{y},
+		\end{align*}
+	\item Let $H$ equal $X \cdot \hat\beta$, found in part (a), then:
+		\begin{align*}
+			\text{Cov}(\hat Y_i, Y_i) &= \text{Cov}(H Y_i, Y_i) \\
+																&= \text{Cov}(\sum H_{ij}Y_j, Y_i) \\
+																&= \sum H_{ij}\text{Cov}(Y_j, Y_i) 
+		\end{align*}
+		As we found in part (b), $\text{Cov}(Y_i, Y_j) = 0$ for $i \neq j$. If $i = j$ then $\text{Cov}(Y_i, Y_i) = \text{Var}(Y) = \sigma^2$. Therefore, $\text{Cov}(Y_j, Y_i) = I \sigma^2$. Finally
+		\begin{align*}
+			\text{Cov}(\hat y_i, y_i) &= \text{Trace}(H) \cdot \sigma^2 \\
+		\end{align*}
+	\end{enumerate}
+\end{enumerate}
+%% Section 2: present the code
+\newpage
+\begin{center}
+	\textbf{Python Code}
+\end{center}
+
+\hrule
+\begin{minted}{python}
+# |%%--%%| <ifzhvxab22|xctttrudvgc>
+import itertools
+
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+from pandas.core.indexes.base import format_object_summary
+from sklearn import model_selection
+from sklearn.model_selection import leaveoneout
+from tqdm import tqdm
+
+df = pd.read_csv("wine.txt", delimiter="\t")
+print(df)
+
+# |%%--%%| <xctttrudvgc|pw7jin8lec>
+x = df.drop(columns=["quality"])
+y = df["quality"]
+
+
+# |%%--%%| <pw7jin8lec|jvbch4yjcy>
+def loocv(formula, df, y):
+    errors = []
+    loo = leaveoneout()
+    for train_idx, test_idx in tqdm(loo.split(df), total=df.shape[0]):
+        # fit on n−1 rows
+        df_train = df.iloc[train_idx]
+        model = smf.ols(formula=formula, data=df_train).fit()
+        # predict on the held‑out row, extracting the scalar correctly
+        df_test = df.iloc[test_idx]
+        y_pred = model.predict(df_test).iloc[0]
+        y_true = y.iloc[test_idx].values[0]
+        errors.append((y_true - y_pred) ** 2)
+    return np.mean(errors)
+
+
+# |%%--%%| <jvbch4yjcy|qt4m746jvf>
+#full model, part a
+formula = "quality ~ clarity + aroma + body + flavor + oakiness + c(region)"
+print(loocv(formula, df, y))
+# |%%--%%| <qt4m746jvf|oh210jluqu>
+#all combinations, part b
+predictors = ["clarity", "aroma", "body", "flavor", "oakiness", "c(region)"]
+bestofcombs = []
+for k in range(1, len(predictors)):
+    adjustedr2list = []
+    for subset in itertools.combinations(predictors, k):
+        formula = "quality ~ " + " + ".join(subset)
+        model = smf.ols(formula=formula, data=df).fit()
+        adjustedr2list.append((formula, model.rsquared_adj))
+    bestofcombs.append(max(adjustedr2list, key=lambda t: t[1]))
+
+bestoverall = max(bestofcombs, key=lambda t: t[1])[0]
+print(bestoverall)
+print(loocv(bestoverall, df, y))
+
+# |%%--%%| <oh210jluqu|pz6emqhgux>
+# forward selection, part c
+selected = []
+predictors = {"clarity", "aroma", "body", "flavor", "oakiness", "c(region)"}
+remaining = set(predictors)
+current_score = -np.inf
+while remaining:
+    scores = []
+    for candidate in remaining:
+        formula = "quality ~ " + " + ".join(selected + [candidate])
+        model = smf.ols(formula=formula, data=df).fit()
+        scores.append((candidate, model.rsquared_adj))
+
+    best_candidate, best_score = max(scores, key=lambda x: x[1])
+
+    if best_score <= current_score:
+        print("done")
+        break
+
+    remaining.remove(best_candidate)
+    selected.append(best_candidate)
+    current_score = best_score
+
+print(selected)
+formula = "quality ~ " + " + ".join(selected)
+print(loocv(formula, df, y))
+
+
+# |%%--%%| <pz6emqhgux|ke5hz0t9vd>
+# backward selection, part d
+predictors = {"clarity", "aroma", "body", "flavor", "oakiness", "c(region)"}
+selected = predictors.copy()
+m = []
+for k in range(len(predictors) - 1):
+    scores = []
+    for candidates in itertools.combinations(selected, len(selected) - 1):
+        formula = "quality ~ " + " + ".join(candidates)
+        model = smf.ols(formula=formula, data=df).fit()
+        scores.append((candidates, model.rsquared_adj))
+    scores.sort(key=lambda x: x[1], reverse=true)
+    best_candidate, best_score = scores[0]
+    m.append((best_candidate, best_score))
+    dropped = (set(selected) - set(best_candidate)).pop()
+    selected.remove(dropped)
+
+m.sort(key=lambda x: x[1])
+best_combination, best_rsquared = m[-1]
+back_formula = "quality ~ " + " + ".join(best_combination)
+print(back_formula)
+print(loocv(back_formula, df, y))
+
+# |%%--%%| <ke5hz0t9vd|bdazyeeoaw>
+#Lasso regression
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import lasso, ridge
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import leaveoneout
+
+# statmodels was giving back somewhat illogical results
+# the rest of the results checked out with scikitlearn and r
+# not sure what caused the discrepency
+
+
+df = pd.read_csv("wine.txt", sep="\t")
+
+response_col = "quality"
+df = pd.get_dummies(df, columns=["region"], drop_first=true)
+predictor_cols = [col for col in df.columns if col != response_col]
+
+x = df[predictor_cols]
+y = df[response_col]
+
+
+def loocv_ridge_mse(x, y, alpha):
+    loo = leaveoneout()
+    preds = []
+    actuals = []
+    for train_idx, test_idx in loo.split(x):
+        x_train, x_test = x.iloc[train_idx], x.iloc[test_idx]
+        y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+
+        model = ridge(alpha=alpha).fit(x_train, y_train)
+        preds.append(model.predict(x_test)[0])
+        actuals.append(y_test)
+    return mean_squared_error(actuals, preds)
+
+
+errors = []
+alpha_grid = np.logspace(-3, 3, 200)
+for alpha in alpha_grid:
+    mse_val = loocv_ridge_mse(x, y, alpha)
+    errors.append((mse_val, alpha))
+
+print(min(errors))
+
+
+# |%%--%%| <bdazyeeoaw|yao6yicjw3>
+#ridge regression
+df = pd.read_csv("wine.txt", sep="\t")
+
+response_col = "quality"
+df = pd.get_dummies(df, columns=["region"], drop_first=true)
+predictor_cols = [col for col in df.columns if col != response_col]
+
+x = df[predictor_cols]
+y = df[response_col]
+
+
+def loocv_lasso(x, y, alpha):
+    loo = leaveoneout()
+    preds = []
+    actuals = []
+    for train_idx, test_idx in loo.split(x):
+        x_train, x_test = x.iloc[train_idx], x.iloc[test_idx]
+        y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+
+        model = lasso(alpha=alpha).fit(x_train, y_train)
+        preds.append(model.predict(x_test)[0])
+        actuals.append(y_test)
+    return mean_squared_error(actuals, preds)
+
+
+errors = []
+alpha_grid = np.logspace(-3, 3, 50)
+for alpha in alpha_grid:
+    mse_val = loocv_lasso(x, y, alpha)
+    errors.append((mse_val, alpha))
+
+print(min(errors))
+\end{minted}
+\end{document}

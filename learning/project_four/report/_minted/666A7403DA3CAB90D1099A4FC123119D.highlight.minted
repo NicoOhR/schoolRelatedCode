@@ -1,0 +1,188 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}ifzhvxab22|xctttrudvgc\PYGZgt{}}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{itertools}
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{pandas}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{pd}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{api}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{sm}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{statsmodels}\PYG{n+nn}{.}\PYG{n+nn}{formula}\PYG{n+nn}{.}\PYG{n+nn}{api}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{smf}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{pandas}\PYG{n+nn}{.}\PYG{n+nn}{core}\PYG{n+nn}{.}\PYG{n+nn}{indexes}\PYG{n+nn}{.}\PYG{n+nn}{base}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{format\PYGZus{}object\PYGZus{}summary}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{model\PYGZus{}selection}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{model\PYGZus{}selection}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{leaveoneout}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tqdm}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{tqdm}
+
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{wine.txt}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{delimiter}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{df}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}xctttrudvgc|pw7jin8lec\PYGZgt{}}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+
+
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}pw7jin8lec|jvbch4yjcy\PYGZgt{}}
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{loocv}\PYG{p}{(}\PYG{n}{formula}\PYG{p}{,} \PYG{n}{df}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{errors} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{n}{loo} \PYG{o}{=} \PYG{n}{leaveoneout}\PYG{p}{(}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{train\PYGZus{}idx}\PYG{p}{,} \PYG{n}{test\PYGZus{}idx} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{p}{(}\PYG{n}{loo}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{n}{df}\PYG{p}{)}\PYG{p}{,} \PYG{n}{total}\PYG{o}{=}\PYG{n}{df}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} fit on n−1 rows}
+        \PYG{n}{df\PYGZus{}train} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{train\PYGZus{}idx}\PYG{p}{]}
+        \PYG{n}{model} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{n}{formula}\PYG{o}{=}\PYG{n}{formula}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df\PYGZus{}train}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} predict on the held‑out row, extracting the scalar correctly}
+        \PYG{n}{df\PYGZus{}test} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{test\PYGZus{}idx}\PYG{p}{]}
+        \PYG{n}{y\PYGZus{}pred} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{df\PYGZus{}test}\PYG{p}{)}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+        \PYG{n}{y\PYGZus{}true} \PYG{o}{=} \PYG{n}{y}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{test\PYGZus{}idx}\PYG{p}{]}\PYG{o}{.}\PYG{n}{values}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+        \PYG{n}{errors}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{y\PYGZus{}true} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}pred}\PYG{p}{)} \PYG{o}{*}\PYG{o}{*} \PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{errors}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}jvbch4yjcy|qt4m746jvf\PYGZgt{}}
+\PYG{c+c1}{\PYGZsh{}full model, part a}
+\PYG{n}{formula} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality \PYGZti{} clarity + aroma + body + flavor + oakiness + c(region)}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{loocv}\PYG{p}{(}\PYG{n}{formula}\PYG{p}{,} \PYG{n}{df}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}qt4m746jvf|oh210jluqu\PYGZgt{}}
+\PYG{c+c1}{\PYGZsh{}all combinations, part b}
+\PYG{n}{predictors} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{clarity}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{aroma}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{body}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{flavor}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{oakiness}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{c(region)}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+\PYG{n}{bestofcombs} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{predictors}\PYG{p}{)}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{adjustedr2list} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{subset} \PYG{o+ow}{in} \PYG{n}{itertools}\PYG{o}{.}\PYG{n}{combinations}\PYG{p}{(}\PYG{n}{predictors}\PYG{p}{,} \PYG{n}{k}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{formula} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality \PYGZti{} }\PYG{l+s+s2}{\PYGZdq{}} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ + }\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{subset}\PYG{p}{)}
+        \PYG{n}{model} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{n}{formula}\PYG{o}{=}\PYG{n}{formula}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{adjustedr2list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{formula}\PYG{p}{,} \PYG{n}{model}\PYG{o}{.}\PYG{n}{rsquared\PYGZus{}adj}\PYG{p}{)}\PYG{p}{)}
+    \PYG{n}{bestofcombs}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{adjustedr2list}\PYG{p}{,} \PYG{n}{key}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{t}\PYG{p}{:} \PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n}{bestoverall} \PYG{o}{=} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{bestofcombs}\PYG{p}{,} \PYG{n}{key}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{t}\PYG{p}{:} \PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{bestoverall}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{loocv}\PYG{p}{(}\PYG{n}{bestoverall}\PYG{p}{,} \PYG{n}{df}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}oh210jluqu|pz6emqhgux\PYGZgt{}}
+\PYG{c+c1}{\PYGZsh{} forward selection, part c}
+\PYG{n}{selected} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{n}{predictors} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{clarity}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{aroma}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{body}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{flavor}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{oakiness}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{c(region)}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}
+\PYG{n}{remaining} \PYG{o}{=} \PYG{n+nb}{set}\PYG{p}{(}\PYG{n}{predictors}\PYG{p}{)}
+\PYG{n}{current\PYGZus{}score} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{inf}
+\PYG{k}{while} \PYG{n}{remaining}\PYG{p}{:}
+    \PYG{n}{scores} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{candidate} \PYG{o+ow}{in} \PYG{n}{remaining}\PYG{p}{:}
+        \PYG{n}{formula} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality \PYGZti{} }\PYG{l+s+s2}{\PYGZdq{}} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ + }\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{selected} \PYG{o}{+} \PYG{p}{[}\PYG{n}{candidate}\PYG{p}{]}\PYG{p}{)}
+        \PYG{n}{model} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{n}{formula}\PYG{o}{=}\PYG{n}{formula}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{scores}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{candidate}\PYG{p}{,} \PYG{n}{model}\PYG{o}{.}\PYG{n}{rsquared\PYGZus{}adj}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{n}{best\PYGZus{}candidate}\PYG{p}{,} \PYG{n}{best\PYGZus{}score} \PYG{o}{=} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{scores}\PYG{p}{,} \PYG{n}{key}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
+
+    \PYG{k}{if} \PYG{n}{best\PYGZus{}score} \PYG{o}{\PYGZlt{}}\PYG{o}{=} \PYG{n}{current\PYGZus{}score}\PYG{p}{:}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{done}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+        \PYG{k}{break}
+
+    \PYG{n}{remaining}\PYG{o}{.}\PYG{n}{remove}\PYG{p}{(}\PYG{n}{best\PYGZus{}candidate}\PYG{p}{)}
+    \PYG{n}{selected}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{best\PYGZus{}candidate}\PYG{p}{)}
+    \PYG{n}{current\PYGZus{}score} \PYG{o}{=} \PYG{n}{best\PYGZus{}score}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{selected}\PYG{p}{)}
+\PYG{n}{formula} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality \PYGZti{} }\PYG{l+s+s2}{\PYGZdq{}} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ + }\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{selected}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{loocv}\PYG{p}{(}\PYG{n}{formula}\PYG{p}{,} \PYG{n}{df}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}pz6emqhgux|ke5hz0t9vd\PYGZgt{}}
+\PYG{c+c1}{\PYGZsh{} backward selection, part d}
+\PYG{n}{predictors} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{clarity}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{aroma}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{body}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{flavor}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{oakiness}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{c(region)}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{\PYGZcb{}}
+\PYG{n}{selected} \PYG{o}{=} \PYG{n}{predictors}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{m} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{predictors}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{scores} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{candidates} \PYG{o+ow}{in} \PYG{n}{itertools}\PYG{o}{.}\PYG{n}{combinations}\PYG{p}{(}\PYG{n}{selected}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{selected}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{formula} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality \PYGZti{} }\PYG{l+s+s2}{\PYGZdq{}} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ + }\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{candidates}\PYG{p}{)}
+        \PYG{n}{model} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}\PYG{n}{formula}\PYG{o}{=}\PYG{n}{formula}\PYG{p}{,} \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{p}{)}
+        \PYG{n}{scores}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{candidates}\PYG{p}{,} \PYG{n}{model}\PYG{o}{.}\PYG{n}{rsquared\PYGZus{}adj}\PYG{p}{)}\PYG{p}{)}
+    \PYG{n}{scores}\PYG{o}{.}\PYG{n}{sort}\PYG{p}{(}\PYG{n}{key}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{,} \PYG{n}{reverse}\PYG{o}{=}\PYG{n}{true}\PYG{p}{)}
+    \PYG{n}{best\PYGZus{}candidate}\PYG{p}{,} \PYG{n}{best\PYGZus{}score} \PYG{o}{=} \PYG{n}{scores}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{n}{m}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{best\PYGZus{}candidate}\PYG{p}{,} \PYG{n}{best\PYGZus{}score}\PYG{p}{)}\PYG{p}{)}
+    \PYG{n}{dropped} \PYG{o}{=} \PYG{p}{(}\PYG{n+nb}{set}\PYG{p}{(}\PYG{n}{selected}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n+nb}{set}\PYG{p}{(}\PYG{n}{best\PYGZus{}candidate}\PYG{p}{)}\PYG{p}{)}\PYG{o}{.}\PYG{n}{pop}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{selected}\PYG{o}{.}\PYG{n}{remove}\PYG{p}{(}\PYG{n}{dropped}\PYG{p}{)}
+
+\PYG{n}{m}\PYG{o}{.}\PYG{n}{sort}\PYG{p}{(}\PYG{n}{key}\PYG{o}{=}\PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{best\PYGZus{}combination}\PYG{p}{,} \PYG{n}{best\PYGZus{}rsquared} \PYG{o}{=} \PYG{n}{m}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+\PYG{n}{back\PYGZus{}formula} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality \PYGZti{} }\PYG{l+s+s2}{\PYGZdq{}} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ + }\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{best\PYGZus{}combination}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{back\PYGZus{}formula}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{loocv}\PYG{p}{(}\PYG{n}{back\PYGZus{}formula}\PYG{p}{,} \PYG{n}{df}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}ke5hz0t9vd|bdazyeeoaw\PYGZgt{}}
+\PYG{c+c1}{\PYGZsh{}Lasso regression}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{pandas}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{pd}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{linear\PYGZus{}model}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{lasso}\PYG{p}{,} \PYG{n}{ridge}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{metrics}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{mean\PYGZus{}squared\PYGZus{}error}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{model\PYGZus{}selection}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{leaveoneout}
+
+\PYG{c+c1}{\PYGZsh{} statmodels was giving back somewhat illogical results}
+\PYG{c+c1}{\PYGZsh{} the rest of the results checked out with scikitlearn and r}
+\PYG{c+c1}{\PYGZsh{} not sure what caused the discrepency}
+
+
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{wine.txt}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{response\PYGZus{}col} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{get\PYGZus{}dummies}\PYG{p}{(}\PYG{n}{df}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{region}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{drop\PYGZus{}first}\PYG{o}{=}\PYG{n}{true}\PYG{p}{)}
+\PYG{n}{predictor\PYGZus{}cols} \PYG{o}{=} \PYG{p}{[}\PYG{n}{col} \PYG{k}{for} \PYG{n}{col} \PYG{o+ow}{in} \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns} \PYG{k}{if} \PYG{n}{col} \PYG{o}{!=} \PYG{n}{response\PYGZus{}col}\PYG{p}{]}
+
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{n}{predictor\PYGZus{}cols}\PYG{p}{]}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{n}{response\PYGZus{}col}\PYG{p}{]}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{loocv\PYGZus{}ridge\PYGZus{}mse}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{loo} \PYG{o}{=} \PYG{n}{leaveoneout}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{preds} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{n}{actuals} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{train\PYGZus{}idx}\PYG{p}{,} \PYG{n}{test\PYGZus{}idx} \PYG{o+ow}{in} \PYG{n}{loo}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{x\PYGZus{}test} \PYG{o}{=} \PYG{n}{x}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{train\PYGZus{}idx}\PYG{p}{]}\PYG{p}{,} \PYG{n}{x}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{test\PYGZus{}idx}\PYG{p}{]}
+        \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{y}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{train\PYGZus{}idx}\PYG{p}{]}\PYG{p}{,} \PYG{n}{y}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{test\PYGZus{}idx}\PYG{p}{]}
+
+        \PYG{n}{model} \PYG{o}{=} \PYG{n}{ridge}\PYG{p}{(}\PYG{n}{alpha}\PYG{o}{=}\PYG{n}{alpha}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+        \PYG{n}{preds}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+        \PYG{n}{actuals}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{mean\PYGZus{}squared\PYGZus{}error}\PYG{p}{(}\PYG{n}{actuals}\PYG{p}{,} \PYG{n}{preds}\PYG{p}{)}
+
+
+\PYG{n}{errors} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{n}{alpha\PYGZus{}grid} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{logspace}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{200}\PYG{p}{)}
+\PYG{k}{for} \PYG{n}{alpha} \PYG{o+ow}{in} \PYG{n}{alpha\PYGZus{}grid}\PYG{p}{:}
+    \PYG{n}{mse\PYGZus{}val} \PYG{o}{=} \PYG{n}{loocv\PYGZus{}ridge\PYGZus{}mse}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{)}
+    \PYG{n}{errors}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{mse\PYGZus{}val}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{errors}\PYG{p}{)}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} |\PYGZpc{}\PYGZpc{}\PYGZhy{}\PYGZhy{}\PYGZpc{}\PYGZpc{}| \PYGZlt{}bdazyeeoaw|yao6yicjw3\PYGZgt{}}
+\PYG{c+c1}{\PYGZsh{}ridge regression}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{wine.txt}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{response\PYGZus{}col} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{quality}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{get\PYGZus{}dummies}\PYG{p}{(}\PYG{n}{df}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{region}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{drop\PYGZus{}first}\PYG{o}{=}\PYG{n}{true}\PYG{p}{)}
+\PYG{n}{predictor\PYGZus{}cols} \PYG{o}{=} \PYG{p}{[}\PYG{n}{col} \PYG{k}{for} \PYG{n}{col} \PYG{o+ow}{in} \PYG{n}{df}\PYG{o}{.}\PYG{n}{columns} \PYG{k}{if} \PYG{n}{col} \PYG{o}{!=} \PYG{n}{response\PYGZus{}col}\PYG{p}{]}
+
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{n}{predictor\PYGZus{}cols}\PYG{p}{]}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{n}{response\PYGZus{}col}\PYG{p}{]}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{loocv\PYGZus{}lasso}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{loo} \PYG{o}{=} \PYG{n}{leaveoneout}\PYG{p}{(}\PYG{p}{)}
+    \PYG{n}{preds} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{n}{actuals} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{train\PYGZus{}idx}\PYG{p}{,} \PYG{n}{test\PYGZus{}idx} \PYG{o+ow}{in} \PYG{n}{loo}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{x\PYGZus{}test} \PYG{o}{=} \PYG{n}{x}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{train\PYGZus{}idx}\PYG{p}{]}\PYG{p}{,} \PYG{n}{x}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{test\PYGZus{}idx}\PYG{p}{]}
+        \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{y}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{train\PYGZus{}idx}\PYG{p}{]}\PYG{p}{,} \PYG{n}{y}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{test\PYGZus{}idx}\PYG{p}{]}
+
+        \PYG{n}{model} \PYG{o}{=} \PYG{n}{lasso}\PYG{p}{(}\PYG{n}{alpha}\PYG{o}{=}\PYG{n}{alpha}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+        \PYG{n}{preds}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{)}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+        \PYG{n}{actuals}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{mean\PYGZus{}squared\PYGZus{}error}\PYG{p}{(}\PYG{n}{actuals}\PYG{p}{,} \PYG{n}{preds}\PYG{p}{)}
+
+
+\PYG{n}{errors} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{n}{alpha\PYGZus{}grid} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{logspace}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{50}\PYG{p}{)}
+\PYG{k}{for} \PYG{n}{alpha} \PYG{o+ow}{in} \PYG{n}{alpha\PYGZus{}grid}\PYG{p}{:}
+    \PYG{n}{mse\PYGZus{}val} \PYG{o}{=} \PYG{n}{loocv\PYGZus{}lasso}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{)}
+    \PYG{n}{errors}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{mse\PYGZus{}val}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{errors}\PYG{p}{)}\PYG{p}{)}
+\end{MintedVerbatim}
