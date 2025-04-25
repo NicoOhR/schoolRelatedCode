@@ -132,7 +132,6 @@ def loocv_ridge_mse(x, y, alpha):
     for train_idx, test_idx in loo.split(x):
         x_train, x_test = x.iloc[train_idx], x.iloc[test_idx]
         y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
-
         model = ridge(alpha=alpha).fit(x_train, y_train)
         preds.append(model.predict(x_test)[0])
         actuals.append(y_test)
