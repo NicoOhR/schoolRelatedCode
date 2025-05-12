@@ -1,0 +1,13 @@
+{
+"command": "clean",
+"jobname": "projectsix",
+"timestamp": "20250511194001",
+"cachepath": "_minted/",
+"cachefiles":
+"""\
+[
+\"default.style.minted\",
+\"A79EE6B3BD488B4F7204B0CD8552CCDD.highlight.minted\",
+]
+""",
+}

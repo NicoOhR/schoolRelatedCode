@@ -1,4 +1,196 @@
-import numpy as np
+\documentclass[11pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{enumerate}
+\usepackage{minted}
+\usepackage{afterpage}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{needspace}
+\usepackage{float}
+\usepackage{url}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{center}
+	%% put the project number
+	\textbf{STAT 4360 (Introduction to Statistical Learning, Fall 2022)
+		\\[1ex]
+		Mini Project 5 
+		\\[1ex]
+		Name: Nimrod Ohayon Rozanes}
+	\\
+	{\_}\hrulefill{\hspace{.01in}}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Section 1: 
+
+\begin{enumerate}
+\item ~
+	\begin{enumerate}
+    \item Fitting a full, unpruned tree to the data, leads to a prohibitively large tree, which is to be expected. The unpruned tree has a LOOCV MSE of $0.358$, and the variable importances are plotted, arranged in order below.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{unprunedImportance.png}
+			\end{figure}
+		Obviously, the most important variable contributing to a players salary is their CAtBat, which is a statistic measuring how many times a player appears on the field against a pitcher. This qualitativly makes sense, as a better (or more valuable) player would be played earlier in the inning, and will have more appearances on the field, so it would make sense that those players would be paid more. 
+	\item Due to the large size of the unpruned model, to make any use of the model we have to prune it. By sweeping over different $\alpha$ values, we find an optimal $\alpha=0.01$ which leads to a tree depth of $4$.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{prunedMSEvsAlpha.png}
+			\end{figure}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{pruned.png}
+			\end{figure}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{prunedimportance.png}
+			\end{figure}
+			As with the unpruned tree, the most important predictor is still CAtBat, although the other statistics, CHits, Runs, Hits, and CRBI, are all weighed much more equally than before. The pruned tree has an MSE of $0.228$. 
+		\item Bagging produces an MSE of $0.187$
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{baggingImportance.png}
+			\end{figure}
+			Again, CAtBat dominates the predictor, however the bagging regression prioritizes the cumilitive versions of Runs, and Hits. This may be due to the fact that these cumilitive statistics have a more subtle effect on the overall regression, which only appears when an ensemble method is used.
+		\item The random forest regression produces a similar MSE of $0.187$ And an almost identical importance bar graph
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{randomImportance.png}
+			\end{figure}
+		\item The boosting regression has a slightly higher MSE of $0.193$, however CHits is twice as important in this regression than any other regression. Taking into account how boosting grows the tree sequentially, the importance of CHits implies that in the cases that when the CAtBat split leads to an incorrect result, the CHits split can account for that and compensate. Qualitatively, CHits measures \textit{the success at bat}, which might mean that while some players were played often, they were not as successful while they were at bat. 
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{boostedImportance.png}
+			\end{figure}
+		\item Despite the slightly higher MSE, I would reccomend the pruned tree due to its interprability, it highlights which statistics correlate with a higher salary most directly, and gives the statitician a more intuitive understanding of baseball salaries than the other, more opaque strategies. If prediction accuracy is the goal, however, I would likely use one of the regressions from the previous project since they had much lower MSE's, likely choosing the Ridge regression due to the multicolinearity present in the dataset. 
+  \end{enumerate}
+\item ~
+	\begin{enumerate}
+		\item Fitting an SVC with the linear kernel, we find that the optimal C (sweeping over a log-space from $-2$ to $2$) we find is $12.9$ which demonstrates that the data is a fair bit not seperable, and the MSE of this SVC is $0.230$. Since feature importance is easily attainable using the linear kernel, we can see that the the pedigree of the individual, if they are closely related to someone else with diabetes, is the most important and by far. This implies that the the pedigree of the individual interacts most linearly with the outcome, and if we were to work on a reduced data set, with less predictors, it's very likely that an SVC with a lower C value would be able to seperate categorize the data using the Pedigree function alone.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{linearImportance.png}
+			\end{figure}
+		\item Fitting an SVM with a polynomial and RBF kernel, we get MSEs of $0.221$ and $0.002$. The polynomial kernel has an optimal C of $4.64$, and the RBF kernel had an optimal C of $35.9$ and a $\gamma$ of $0.004$. To characterize the two models, I used the permutation feature importance of each variable.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{polyImportance.png}
+			\end{figure}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{rbfImportance.png}
+			\end{figure}
+			Both had similar variable importances, indicating that there is a lot of interaction between the variables in higher dimensions. The importance of glucose in both models shows that when combined with other variables, it interacts most directly with the outcome, while the complete absance of the PedigreeFunction shows that in higher dimensions, this variable very minory interacts with the the rest of the variables.
+		\item Due to the strikingly low MSE of the RBF kernel, as well as the fact that the C value which was chosen over the sweep was so large, I would say that it is likely overfit, and probably would not generalize very well for new data. Because of that, I would likely utilize the polynomial kernel, which is supported by the fact that the optimal C for this kernel is relatively low, controling the variance of this model.
+	\end{enumerate}
+	\begin{enumerate}
+		\item When clustering with K-means, which relies on a distance metric between two points to update the location and radius of centroids, standardizing the data is important since the scales of different variables would greatly effect the accuracy of the model. That is, if we wish for every variable to contribute equally to the clustering process, they must all have the same scale or one variable with a larger scale would dominate the process.
+		\item Since there is no direct meaning to the geometric metric distance between two points, I would likely utilize correlation based distances. 
+		\item ~
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{fullDendrogram.png}
+			\end{figure}
+		\item The two tables of cluster means are shown side by side.
+\begin{table}[ht]
+\centering
+\begin{minipage}[t]{0.48\textwidth}
+  \centering
+  \caption{K-Means Cluster Means}
+  \begin{tabular}{lrr}
+    \toprule
+    & 0 & 1 \\
+    \midrule
+    AtBat & 421.742857 & 397.077720 \\
+    Hits & 113.442857 & 105.792746 \\
+    HmRun & 13.957143 & 10.772021 \\
+    Runs & 57.814286 & 53.632124 \\
+    RBI & 58.300000 & 49.015544 \\
+    Walks & 46.857143 & 39.031088 \\
+    Years & 13.642857 & 5.015544 \\
+    CAtBat & 5836.942857 & 1504.393782 \\
+    CHits & 1612.800000 & 399.165803 \\
+    CHmRun & 162.028571 & 35.585492 \\
+    CRuns & 817.085714 & 195.880829 \\
+    CRBI & 756.885714 & 175.740933 \\
+    CWalks & 597.942857 & 137.792746 \\
+    PutOuts & 275.414286 & 296.259067 \\
+    Assists & 101.442857 & 125.041451 \\
+    Errors & 7.471429 & 9.000000 \\
+    Salary & 6.579321 & 5.690709 \\
+    League\_A & 0.614286 & 0.497409 \\
+    League\_N & 0.385714 & 0.502591 \\
+    Division\_E & 0.500000 & 0.487047 \\
+    Division\_W & 0.500000 & 0.512953 \\
+    NewLeague\_A & 0.614286 & 0.507772 \\
+    NewLeague\_N & 0.385714 & 0.492228 \\
+    \bottomrule
+  \end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+  \centering
+  \caption{Hierarchical Means}
+  \begin{tabular}{lrr}
+    \toprule
+    & 0 & 1 \\
+    \midrule
+		AtBat & 397.142857 & 434.304348 \\
+		Hits & 106.161290 & 115.695652 \\
+		HmRun & 10.769585 & 15.630435 \\
+		Runs & 53.843318 & 59.000000 \\
+		RBI & 48.866359 & 63.847826 \\
+		Walks & 39.018433 & 51.000000 \\
+		Years & 5.737327 & 14.739130 \\
+		CAtBat & 1802.069124 & 6693.152174 \\
+		CHits & 481.751152 & 1856.413043 \\
+		CHmRun & 41.239631 & 201.326087 \\
+		CRuns & 237.525346 & 944.739130 \\
+		CRBI & 207.663594 & 909.500000 \\
+		CWalks & 166.188940 & 704.065217 \\
+		PutOuts & 289.649770 & 295.717391 \\
+		Assists & 126.235023 & 83.500000 \\
+		Errors & 8.921659 & 7.043478 \\
+		Salary & 5.773981 & 6.650115 \\
+		League\_A & 0.516129 & 0.586957 \\
+		League\_N & 0.483871 & 0.413043 \\
+		Division\_E & 0.502304 & 0.434783 \\
+		Division\_W & 0.497696 & 0.565217 \\
+		NewLeague\_A & 0.529954 & 0.565217 \\
+		NewLeague\_N & 0.470046 & 0.434783 \\
+
+    \bottomrule
+  \end{tabular}
+\end{minipage}
+\end{table}
+	While both clustering algorithms indeed have very different cluster means, both seem to cluster players into a "older" and "younger" category, most evident by looking at the years mean, as well as the rather extreme difference in the cumilitive statistics between the two clusters. Because of this, cluster $1$ of the K-means algorithm likely correlates with cluster $0$ of the heirarchical clustering algorithm.
+	\end{enumerate}
+\begin{enumerate}
+	\item Notice that the left hand side of the equation is exactly the sum of square errors. 
+\end{enumerate}
+\end{enumerate}
+%% Section 2: present the code
+\newpage
+\begin{center}
+	\textbf{Python Code}
+\end{center}
+
+\hrule
+\begin{minted}{python}
+
+	import numpy as np
 import pandas as pd
 from ISLP import load_data
 from pandas.core.arrays import categorical
@@ -393,3 +585,6 @@ kmeans = KMeans(n_clusters=2, random_state=0, n_init="auto").fit(Hitters)
 cluster_means = pd.DataFrame(kmeans.cluster_centers_, columns=Hitters.columns)
 
 cluster_means.T.to_latex("KMeans.tex", caption="K-Means Sample Mean", index=True)
+
+\end{minted}
+\end{document}

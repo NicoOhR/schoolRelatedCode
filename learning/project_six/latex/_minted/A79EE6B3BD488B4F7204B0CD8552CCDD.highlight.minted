@@ -1,0 +1,399 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+
+	\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{pandas}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{pd}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{ISLP}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{load\PYGZus{}data}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{pandas}\PYG{n+nn}{.}\PYG{n+nn}{core}\PYG{n+nn}{.}\PYG{n+nn}{arrays}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{categorical}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{pandas}\PYG{n+nn}{.}\PYG{n+nn}{core}\PYG{n+nn}{.}\PYG{n+nn}{common}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{random\PYGZus{}state}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{pipeline}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{FunctionTransformer}\PYG{p}{,} \PYG{n}{Pipeline}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{tree}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{DecisionTreeRegressor}\PYG{p}{,} \PYG{n}{plot\PYGZus{}tree}
+
+\PYG{n}{Hitters} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{get\PYGZus{}dummies}\PYG{p}{(}
+    \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{load\PYGZus{}data}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Hitters}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{)}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{(}\PYG{n}{subset}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Salary}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{League}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Division}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{NewLeague}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}
+    \PYG{n}{drop\PYGZus{}first}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
+\PYG{p}{)}
+
+\PYG{n}{tree} \PYG{o}{=} \PYG{n}{DecisionTreeRegressor}\PYG{p}{(}\PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{Hitters}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Salary}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{Hitters}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Salary}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
+
+
+\PYG{n}{tree}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{plt}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{tree}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{export\PYGZus{}text}\PYG{p}{,} \PYG{n}{plot\PYGZus{}tree}
+
+\PYG{c+c1}{\PYGZsh{} Excessively large tree}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plot\PYGZus{}tree}\PYG{p}{(}\PYG{n}{tree}\PYG{p}{,} \PYG{n}{filled}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{max\PYGZus{}depth}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{unpruned.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{model\PYGZus{}selection}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{LeaveOneOut}\PYG{p}{,} \PYG{n}{cross\PYGZus{}val\PYGZus{}score}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{tqdm}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{tqdm}
+
+\PYG{n}{cv\PYGZus{}mse} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}
+    \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}
+        \PYG{n}{tree}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{LeaveOneOut}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}
+    \PYG{p}{)}
+\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Unpruned Tree MSE: }\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{cv\PYGZus{}mse}\PYG{p}{)}
+
+\PYG{n}{importances} \PYG{o}{=} \PYG{n}{tree}\PYG{o}{.}\PYG{n}{feature\PYGZus{}importances\PYGZus{}}
+\PYG{n}{feature\PYGZus{}names} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}  \PYG{c+c1}{\PYGZsh{} If X is a DataFrame}
+
+\PYG{n}{feature\PYGZus{}importances} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}
+    \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{n}{feature\PYGZus{}names}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Importance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{n}{importances}\PYG{p}{\PYGZcb{}}
+\PYG{p}{)}
+
+\PYG{n}{feature\PYGZus{}importances} \PYG{o}{=} \PYG{n}{feature\PYGZus{}importances}\PYG{o}{.}\PYG{n}{sort\PYGZus{}values}\PYG{p}{(}\PYG{n}{by}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Importance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{ascending}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{barh}\PYG{p}{(}\PYG{n}{feature\PYGZus{}importances}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{feature\PYGZus{}importances}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Importance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Importance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature Importances in Unpruned Decision Tree}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{gca}\PYG{p}{(}\PYG{p}{)}\PYG{o}{.}\PYG{n}{invert\PYGZus{}yaxis}\PYG{p}{(}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} Highest importance at the top}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{unprunedImportance.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} b)}
+\PYG{n}{tree} \PYG{o}{=} \PYG{n}{DecisionTreeRegressor}\PYG{p}{(}\PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n}{path} \PYG{o}{=} \PYG{n}{tree}\PYG{o}{.}\PYG{n}{cost\PYGZus{}complexity\PYGZus{}pruning\PYGZus{}path}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+\PYG{n}{alphas}\PYG{p}{,} \PYG{n}{impurities} \PYG{o}{=} \PYG{n}{path}\PYG{o}{.}\PYG{n}{ccp\PYGZus{}alphas}\PYG{p}{,} \PYG{n}{path}\PYG{o}{.}\PYG{n}{impurities}
+
+\PYG{n}{trees} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{k}{for} \PYG{n}{alpha} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{p}{(}\PYG{n}{alphas}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{regressor} \PYG{o}{=} \PYG{n}{DecisionTreeRegressor}\PYG{p}{(}\PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{ccp\PYGZus{}alpha}\PYG{o}{=}\PYG{n}{alpha}\PYG{p}{)}
+    \PYG{n}{regressor}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+    \PYG{n}{trees}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{regressor}\PYG{p}{)}
+
+
+\PYG{n}{loo} \PYG{o}{=} \PYG{n}{LeaveOneOut}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{mse\PYGZus{}scores} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{n}{counts} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{k}{for} \PYG{n}{regressor} \PYG{o+ow}{in} \PYG{n}{tqdm}\PYG{p}{(}\PYG{n}{trees}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{scores} \PYG{o}{=} \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}
+        \PYG{n}{regressor}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{loo}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}
+    \PYG{p}{)}
+    \PYG{n}{mse\PYGZus{}scores}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{scores}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}
+    \PYG{n}{counts}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{regressor}\PYG{o}{.}\PYG{n}{tree\PYGZus{}}\PYG{o}{.}\PYG{n}{node\PYGZus{}count}\PYG{p}{)}
+
+\PYG{n}{optimal\PYGZus{}index} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argmin}\PYG{p}{(}\PYG{n}{mse\PYGZus{}scores}\PYG{p}{)}
+\PYG{n}{optimal\PYGZus{}alpha} \PYG{o}{=} \PYG{n}{alphas}\PYG{p}{[}\PYG{n}{optimal\PYGZus{}index}\PYG{p}{]}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Optimal ccp\PYGZus{}alpha: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{optimal\PYGZus{}alpha}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{optimal\PYGZus{}tree} \PYG{o}{=} \PYG{n}{DecisionTreeRegressor}\PYG{p}{(}\PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{ccp\PYGZus{}alpha}\PYG{o}{=}\PYG{n}{optimal\PYGZus{}alpha}\PYG{p}{)}
+\PYG{n}{optimal\PYGZus{}tree}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}
+    \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}
+        \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}
+            \PYG{n}{optimal\PYGZus{}tree}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{loo}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}
+        \PYG{p}{)}
+    \PYG{p}{)}
+\PYG{p}{)}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{tree}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{plot\PYGZus{}tree}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plot\PYGZus{}tree}\PYG{p}{(}\PYG{n}{optimal\PYGZus{}tree}\PYG{p}{,} \PYG{n}{feature\PYGZus{}names}\PYG{o}{=}\PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{,} \PYG{n}{filled}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Pruned Decision Tree}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{pruned.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{alphas}\PYG{p}{,} \PYG{n}{mse\PYGZus{}scores}\PYG{p}{,} \PYG{n}{marker}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{o}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{drawstyle}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{steps\PYGZhy{}post}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ccp\PYGZus{}alpha}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{LOOCV Mean Squared Error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{LOOCV MSE vs. ccp\PYGZus{}alpha}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{prunedMSEvsAlpha.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{counts}\PYG{p}{,} \PYG{n}{mse\PYGZus{}scores}\PYG{p}{,} \PYG{n}{marker}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{o}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Number of Nodes in Tree}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{LOOCV Mean Squared Error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Tree Size vs LOOCV MSE}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{prunedSizevsMSE.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{importances} \PYG{o}{=} \PYG{n}{optimal\PYGZus{}tree}\PYG{o}{.}\PYG{n}{feature\PYGZus{}importances\PYGZus{}}
+\PYG{n}{feature\PYGZus{}names} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}
+
+\PYG{n}{indices} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argsort}\PYG{p}{(}\PYG{n}{importances}\PYG{p}{)}\PYG{p}{[}\PYG{p}{:}\PYG{p}{:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature Importances \PYGZhy{} Pruned Decision Tree}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{bar}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{n}{importances}\PYG{p}{[}\PYG{n}{indices}\PYG{p}{]}\PYG{p}{,} \PYG{n}{align}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{center}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xticks}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{p}{[}\PYG{n}{feature\PYGZus{}names}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{indices}\PYG{p}{]}\PYG{p}{,} \PYG{n}{rotation}\PYG{o}{=}\PYG{l+m+mi}{90}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Features}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Importance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{prunedimportance.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} c)}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{ensemble}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{BaggingRegressor}
+
+\PYG{n}{B} \PYG{o}{=} \PYG{l+m+mi}{1000}
+\PYG{n}{bagg} \PYG{o}{=} \PYG{n}{BaggingRegressor}\PYG{p}{(}\PYG{n}{n\PYGZus{}estimators}\PYG{o}{=}\PYG{n}{B}\PYG{p}{,} \PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+\PYG{n}{cv\PYGZus{}mse} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}
+    \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}
+        \PYG{n}{bagg}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{LeaveOneOut}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}
+    \PYG{p}{)}
+\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Bagging MSE}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{cv\PYGZus{}mse}\PYG{p}{)}
+
+\PYG{n}{importances} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{p}{[}\PYG{n}{tree}\PYG{o}{.}\PYG{n}{feature\PYGZus{}importances\PYGZus{}} \PYG{k}{for} \PYG{n}{tree} \PYG{o+ow}{in} \PYG{n}{bagg}\PYG{o}{.}\PYG{n}{estimators\PYGZus{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n}{indices} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argsort}\PYG{p}{(}\PYG{n}{importances}\PYG{p}{)}\PYG{p}{[}\PYG{p}{:}\PYG{p}{:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} Plot the feature importances}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature Importances \PYGZhy{} Bagging Regressor}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{bar}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{n}{importances}\PYG{p}{[}\PYG{n}{indices}\PYG{p}{]}\PYG{p}{,} \PYG{n}{align}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{center}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xticks}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{p}{[}\PYG{n}{feature\PYGZus{}names}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{indices}\PYG{p}{]}\PYG{p}{,} \PYG{n}{rotation}\PYG{o}{=}\PYG{l+m+mi}{90}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Features}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Importance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{baggingImportance.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} d}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{ensemble}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{RandomForestRegressor}
+
+\PYG{n}{random} \PYG{o}{=} \PYG{n}{RandomForestRegressor}\PYG{p}{(}
+    \PYG{n}{n\PYGZus{}estimators}\PYG{o}{=}\PYG{n}{B}\PYG{p}{,} \PYG{n}{max\PYGZus{}depth}\PYG{o}{=}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{floor}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}
+\PYG{p}{)}
+\PYG{n}{cv\PYGZus{}mse} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}
+    \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}
+        \PYG{n}{random}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{LeaveOneOut}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}
+    \PYG{p}{)}
+\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Random Forest MSE: }\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{cv\PYGZus{}mse}\PYG{p}{)}
+\PYG{n}{random}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+\PYG{n}{importances} \PYG{o}{=} \PYG{n}{random}\PYG{o}{.}\PYG{n}{feature\PYGZus{}importances\PYGZus{}}
+
+\PYG{n}{indices} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argsort}\PYG{p}{(}\PYG{n}{importances}\PYG{p}{)}\PYG{p}{[}\PYG{p}{:}\PYG{p}{:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature Importances \PYGZhy{} Random Forest Regressor}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{bar}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{n}{importances}\PYG{p}{[}\PYG{n}{indices}\PYG{p}{]}\PYG{p}{,} \PYG{n}{align}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{center}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xticks}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{p}{[}\PYG{n}{feature\PYGZus{}names}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{indices}\PYG{p}{]}\PYG{p}{,} \PYG{n}{rotation}\PYG{o}{=}\PYG{l+m+mi}{90}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Features}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Importance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{randomImportance.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} e}
+
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{ensemble}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{GradientBoostingRegressor}
+
+\PYG{n}{boost} \PYG{o}{=} \PYG{n}{GradientBoostingRegressor}\PYG{p}{(}\PYG{n}{n\PYGZus{}estimators}\PYG{o}{=}\PYG{n}{B}\PYG{p}{,} \PYG{n}{learning\PYGZus{}rate}\PYG{o}{=}\PYG{l+m+mf}{0.01}\PYG{p}{,} \PYG{n}{max\PYGZus{}depth}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{cv\PYGZus{}mse} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}
+    \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}
+        \PYG{n}{boost}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{LeaveOneOut}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}
+    \PYG{p}{)}
+\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Boosting MSE }\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{cv\PYGZus{}mse}\PYG{p}{)}
+\PYG{n}{boost}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+\PYG{n}{importances} \PYG{o}{=} \PYG{n}{boost}\PYG{o}{.}\PYG{n}{feature\PYGZus{}importances\PYGZus{}}
+
+\PYG{c+c1}{\PYGZsh{} Sort the feature importances in descending order}
+\PYG{n}{indices} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argsort}\PYG{p}{(}\PYG{n}{importances}\PYG{p}{)}\PYG{p}{[}\PYG{p}{:}\PYG{p}{:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} Plot the feature importances}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature Importances \PYGZhy{} Gradient Boosting Regressor}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{bar}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{n}{importances}\PYG{p}{[}\PYG{n}{indices}\PYG{p}{]}\PYG{p}{,} \PYG{n}{align}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{center}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xticks}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,} \PYG{p}{[}\PYG{n}{feature\PYGZus{}names}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{indices}\PYG{p}{]}\PYG{p}{,} \PYG{n}{rotation}\PYG{o}{=}\PYG{l+m+mi}{90}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Features}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Importance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{boostedImportance.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} 2)}
+\PYG{n}{diabetes} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{diabetes.csv}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ }\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{columns}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{inspection}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{permutation\PYGZus{}importance}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{model\PYGZus{}selection}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{GridSearchCV}\PYG{p}{,} \PYG{n}{KFold}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{preprocessing}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{StandardScaler}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{svm}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{SVC}
+
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{diabetes}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Outcome}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{diabetes}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Outcome}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+
+\PYG{n}{scaler} \PYG{o}{=} \PYG{n}{StandardScaler}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{scaler}\PYG{o}{.}\PYG{n}{fit\PYGZus{}transform}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+
+\PYG{n}{c\PYGZus{}logspace} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{logspace}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{num}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} from 0.01 to 100}
+\PYG{n}{gamma\PYGZus{}values} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{logspace}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{15}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{num}\PYG{o}{=}\PYG{l+m+mi}{19}\PYG{p}{,} \PYG{n}{base}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+
+\PYG{n}{param\PYGZus{}grid} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{C}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{n}{c\PYGZus{}logspace}\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{svc} \PYG{o}{=} \PYG{n}{SVC}\PYG{p}{(}\PYG{n}{kernel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{linear}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{cv} \PYG{o}{=} \PYG{n}{KFold}\PYG{p}{(}\PYG{n}{n\PYGZus{}splits}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+
+\PYG{n}{grid\PYGZus{}search} \PYG{o}{=} \PYG{n}{GridSearchCV}\PYG{p}{(}
+    \PYG{n}{svc}\PYG{p}{,} \PYG{n}{param\PYGZus{}grid}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{cv}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{verbose}\PYG{o}{=}\PYG{l+m+mi}{3}
+\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+
+\PYG{n}{cv\PYGZus{}mse} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}
+    \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}\PYG{n}{svc}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{cv}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{p}{)}
+
+\PYG{n}{cv\PYGZus{}mse}
+
+\PYG{n}{best\PYGZus{}params} \PYG{o}{=} \PYG{n}{grid\PYGZus{}search}\PYG{o}{.}\PYG{n}{best\PYGZus{}params\PYGZus{}}
+\PYG{n}{best\PYGZus{}score} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{grid\PYGZus{}search}\PYG{o}{.}\PYG{n}{best\PYGZus{}score\PYGZus{}}
+\PYG{n}{best\PYGZus{}params}
+\PYG{n}{optim\PYGZus{}svm} \PYG{o}{=} \PYG{n}{SVC}\PYG{p}{(}\PYG{n}{kernel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{linear}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{C}\PYG{o}{=}\PYG{n}{best\PYGZus{}params}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{C}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+\PYG{n}{coefs} \PYG{o}{=} \PYG{n}{optim\PYGZus{}svm}\PYG{o}{.}\PYG{n}{coef\PYGZus{}}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{n}{feature\PYGZus{}names} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{barh}\PYG{p}{(}\PYG{n}{feature\PYGZus{}names}\PYG{p}{,} \PYG{n}{coefs}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Coefficient Value}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Feature Importance in Linear SVC}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{linearImportance.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{svm} \PYG{o}{=} \PYG{n}{SVC}\PYG{p}{(}\PYG{n}{kernel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{poly}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{degree}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n}{grid\PYGZus{}search} \PYG{o}{=} \PYG{n}{GridSearchCV}\PYG{p}{(}
+    \PYG{n}{svm}\PYG{p}{,} \PYG{n}{param\PYGZus{}grid}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{cv}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{verbose}\PYG{o}{=}\PYG{l+m+mi}{3}
+\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+
+\PYG{n}{best\PYGZus{}params} \PYG{o}{=} \PYG{n}{grid\PYGZus{}search}\PYG{o}{.}\PYG{n}{best\PYGZus{}params\PYGZus{}}
+\PYG{n}{best\PYGZus{}score} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{grid\PYGZus{}search}\PYG{o}{.}\PYG{n}{best\PYGZus{}score\PYGZus{}}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{best\PYGZus{}params}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{best\PYGZus{}score}\PYG{p}{)}
+\PYG{n}{optim\PYGZus{}svm} \PYG{o}{=} \PYG{n}{SVC}\PYG{p}{(}\PYG{n}{kernel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{poly}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{degree}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{C}\PYG{o}{=}\PYG{n}{best\PYGZus{}params}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{C}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+
+\PYG{n}{cv\PYGZus{}mse} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}
+    \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}
+        \PYG{n}{optim\PYGZus{}svm}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{cv}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{verbose}\PYG{o}{=}\PYG{l+m+mi}{3}
+    \PYG{p}{)}
+\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{cv\PYGZus{}mse}\PYG{p}{)}
+\PYG{n}{result} \PYG{o}{=} \PYG{n}{permutation\PYGZus{}importance}\PYG{p}{(}\PYG{n}{optim\PYGZus{}svm}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{n\PYGZus{}repeats}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,} \PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+
+\PYG{n}{importances} \PYG{o}{=} \PYG{n}{result}\PYG{o}{.}\PYG{n}{importances\PYGZus{}mean}
+\PYG{n}{feature\PYGZus{}names} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{barh}\PYG{p}{(}\PYG{n}{feature\PYGZus{}names}\PYG{p}{,} \PYG{n}{importances}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Mean Decrease in Accuracy}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Permutation Feature Importance in SVM with Polynomial Kernel}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{polyImportance.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{param\PYGZus{}grid} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{C}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{n}{c\PYGZus{}logspace}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{gamma}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{n}{gamma\PYGZus{}values}\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{svm} \PYG{o}{=} \PYG{n}{SVC}\PYG{p}{(}\PYG{n}{kernel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{rbf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{grid\PYGZus{}search} \PYG{o}{=} \PYG{n}{GridSearchCV}\PYG{p}{(}
+    \PYG{n}{svm}\PYG{p}{,} \PYG{n}{param\PYGZus{}grid}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{cv}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{verbose}\PYG{o}{=}\PYG{l+m+mi}{3}
+\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+
+\PYG{n}{best\PYGZus{}params} \PYG{o}{=} \PYG{n}{grid\PYGZus{}search}\PYG{o}{.}\PYG{n}{best\PYGZus{}params\PYGZus{}}
+
+\PYG{n}{optim\PYGZus{}svm} \PYG{o}{=} \PYG{n}{SVC}\PYG{p}{(}\PYG{n}{kernel}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{rbf}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{gamma}\PYG{o}{=}\PYG{n}{best\PYGZus{}params}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{gamma}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{C}\PYG{o}{=}\PYG{n}{best\PYGZus{}params}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{C}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+
+\PYG{n}{cv\PYGZus{}mse} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}
+    \PYG{n}{cross\PYGZus{}val\PYGZus{}score}\PYG{p}{(}\PYG{n}{optim\PYGZus{}svm}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{cv}\PYG{o}{=}\PYG{n}{cv}\PYG{p}{,} \PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{neg\PYGZus{}mean\PYGZus{}squared\PYGZus{}error}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{n\PYGZus{}jobs}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{cv\PYGZus{}mse}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{best\PYGZus{}params}\PYG{p}{)}
+\PYG{n}{result} \PYG{o}{=} \PYG{n}{permutation\PYGZus{}importance}\PYG{p}{(}\PYG{n}{optim\PYGZus{}svm}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{n\PYGZus{}repeats}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,} \PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+
+\PYG{n}{importances} \PYG{o}{=} \PYG{n}{result}\PYG{o}{.}\PYG{n}{importances\PYGZus{}mean}
+\PYG{n}{feature\PYGZus{}names} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{barh}\PYG{p}{(}\PYG{n}{feature\PYGZus{}names}\PYG{p}{,} \PYG{n}{importances}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Mean Decrease in Accuracy}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Permutation Feature Importance in SVM with RBF Kernel}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{rbfImportance.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} 3)}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{scipy}\PYG{n+nn}{.}\PYG{n+nn}{cluster}\PYG{n+nn}{.}\PYG{n+nn}{hierarchy}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{dendrogram}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{cluster}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{AgglomerativeClustering}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{preprocessing}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{StandardScaler}
+
+\PYG{n}{Hitters} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{get\PYGZus{}dummies}\PYG{p}{(}
+    \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{load\PYGZus{}data}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Hitters}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{)}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{(}\PYG{n}{subset}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Salary}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}\PYG{p}{,}
+    \PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{League}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Division}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{NewLeague}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,}
+    \PYG{n}{drop\PYGZus{}first}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,}
+\PYG{p}{)}
+
+\PYG{n}{std} \PYG{o}{=} \PYG{n}{StandardScaler}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{std}\PYG{o}{.}\PYG{n}{fit\PYGZus{}transform}\PYG{p}{(}\PYG{n}{Hitters}\PYG{p}{)}
+\PYG{n}{Hitters}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Salary}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{Hitters}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Salary}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
+
+\PYG{n}{model} \PYG{o}{=} \PYG{n}{AgglomerativeClustering}\PYG{p}{(}
+    \PYG{n}{n\PYGZus{}clusters}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{,} \PYG{n}{distance\PYGZus{}threshold}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{linkage}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{complete}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{metric}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{euclidean}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{Hitters}\PYG{p}{)}
+
+
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{matplotlib}\PYG{n+nn}{.}\PYG{n+nn}{pyplot}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{plt}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{n+nn}{numpy}\PYG{+w}{ }\PYG{k}{as}\PYG{+w}{ }\PYG{n+nn}{np}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{scipy}\PYG{n+nn}{.}\PYG{n+nn}{cluster}\PYG{n+nn}{.}\PYG{n+nn}{hierarchy}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{dendrogram}
+
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{plot\PYGZus{}dendrogram}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,} \PYG{o}{*}\PYG{o}{*}\PYG{n}{kwargs}\PYG{p}{)}\PYG{p}{:}
+    \PYG{c+c1}{\PYGZsh{} Create linkage matrix and then plot the dendrogram}
+    \PYG{n}{counts} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{model}\PYG{o}{.}\PYG{n}{children\PYGZus{}}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{)}
+    \PYG{n}{n\PYGZus{}samples} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{model}\PYG{o}{.}\PYG{n}{labels\PYGZus{}}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{merge} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{model}\PYG{o}{.}\PYG{n}{children\PYGZus{}}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{current\PYGZus{}count} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{k}{for} \PYG{n}{child\PYGZus{}idx} \PYG{o+ow}{in} \PYG{n}{merge}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n}{child\PYGZus{}idx} \PYG{o}{\PYGZlt{}} \PYG{n}{n\PYGZus{}samples}\PYG{p}{:}
+                \PYG{n}{current\PYGZus{}count} \PYG{o}{+}\PYG{o}{=} \PYG{l+m+mi}{1}  \PYG{c+c1}{\PYGZsh{} Leaf node}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{current\PYGZus{}count} \PYG{o}{+}\PYG{o}{=} \PYG{n}{counts}\PYG{p}{[}\PYG{n}{child\PYGZus{}idx} \PYG{o}{\PYGZhy{}} \PYG{n}{n\PYGZus{}samples}\PYG{p}{]}
+        \PYG{n}{counts}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{current\PYGZus{}count}
+
+    \PYG{n}{linkage\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{column\PYGZus{}stack}\PYG{p}{(}
+        \PYG{p}{[}\PYG{n}{model}\PYG{o}{.}\PYG{n}{children\PYGZus{}}\PYG{p}{,} \PYG{n}{model}\PYG{o}{.}\PYG{n}{distances\PYGZus{}}\PYG{p}{,} \PYG{n}{counts}\PYG{p}{]}
+    \PYG{p}{)}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n+nb}{float}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Plot the corresponding dendrogram}
+    \PYG{n}{dendrogram}\PYG{p}{(}\PYG{n}{linkage\PYGZus{}matrix}\PYG{p}{,} \PYG{o}{*}\PYG{o}{*}\PYG{n}{kwargs}\PYG{p}{)}
+
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{l+m+mi}{8}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Hierarchical Clustering Dendrogram}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Set orientation to \PYGZsq{}left\PYGZsq{} to display distances on the left}
+\PYG{n}{plot\PYGZus{}dendrogram}\PYG{p}{(}
+    \PYG{n}{model}\PYG{p}{,}
+    \PYG{n}{orientation}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{left}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{truncate\PYGZus{}mode}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{level}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{p}\PYG{o}{=}\PYG{l+m+mi}{6}\PYG{p}{,}
+    \PYG{n}{show\PYGZus{}leaf\PYGZus{}counts}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,}
+    \PYG{n}{leaf\PYGZus{}rotation}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,}
+    \PYG{n}{leaf\PYGZus{}font\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{,}
+\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Distance}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{fullDendrogram.png}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{scipy}\PYG{n+nn}{.}\PYG{n+nn}{cluster}\PYG{n+nn}{.}\PYG{n+nn}{hierarchy}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{fcluster}\PYG{p}{,} \PYG{n}{linkage}
+
+\PYG{n}{Z} \PYG{o}{=} \PYG{n}{linkage}\PYG{p}{(}\PYG{n}{Hitters}\PYG{p}{,} \PYG{n}{method}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{complete}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{labels} \PYG{o}{=} \PYG{n}{fcluster}\PYG{p}{(}\PYG{n}{Z}\PYG{p}{,} \PYG{n}{t}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{criterion}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{maxclust}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{cluster\PYGZus{}means} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+\PYG{k}{for} \PYG{n}{cluster\PYGZus{}id} \PYG{o+ow}{in} \PYG{n}{np}\PYG{o}{.}\PYG{n}{unique}\PYG{p}{(}\PYG{n}{labels}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{cluster\PYGZus{}data} \PYG{o}{=} \PYG{n}{Hitters}\PYG{p}{[}\PYG{n}{labels} \PYG{o}{==} \PYG{n}{cluster\PYGZus{}id}\PYG{p}{]}
+    \PYG{n}{cluster\PYGZus{}mean} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{cluster\PYGZus{}data}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{cluster\PYGZus{}means}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{cluster\PYGZus{}mean}\PYG{p}{)}
+
+
+\PYG{n}{cluster\PYGZus{}means} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{cluster\PYGZus{}means}\PYG{p}{)}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{n}{Hitters}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{)}
+
+\PYG{n}{cluster\PYGZus{}means}\PYG{o}{.}\PYG{n}{T}\PYG{o}{.}\PYG{n}{to\PYGZus{}latex}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{hier.tex}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{caption}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Hierarchical Means}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{index}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} d)}
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{sklearn}\PYG{n+nn}{.}\PYG{n+nn}{cluster}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{KMeans}
+
+\PYG{n}{kmeans} \PYG{o}{=} \PYG{n}{KMeans}\PYG{p}{(}\PYG{n}{n\PYGZus{}clusters}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{random\PYGZus{}state}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{n\PYGZus{}init}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{auto}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{Hitters}\PYG{p}{)}
+\PYG{n}{cluster\PYGZus{}means} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{kmeans}\PYG{o}{.}\PYG{n}{cluster\PYGZus{}centers\PYGZus{}}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{n}{Hitters}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{)}
+
+\PYG{n}{cluster\PYGZus{}means}\PYG{o}{.}\PYG{n}{T}\PYG{o}{.}\PYG{n}{to\PYGZus{}latex}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{KMeans.tex}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{caption}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{K\PYGZhy{}Means Sample Mean}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{index}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+
+\end{MintedVerbatim}
