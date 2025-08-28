@@ -1,0 +1,136 @@
+\documentclass[a4paper,10pt]{article}
+
+%A Few Useful Packages
+\usepackage{marvosym}
+\usepackage{xunicode,xltxtra,url,parskip} 	%other packages for formatting
+\RequirePackage{color,graphicx}
+\usepackage{fontspec} % enables \setmainfont
+\setmainfont[SmallCapsFont=Fontin-SmallCaps.otf]{Fontin.otf}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[big]{layaureo} 				%better formatting of the A4 page
+% an alternative to Layaureo can be ** \usepackage{fullpage} **
+\usepackage{supertabular} 				%for Grades
+\usepackage{titlesec}					%custom \section
+
+%Setup hyperref package, and colours for links
+\usepackage{hyperref}
+\definecolor{linkcolour}{rgb}{0,0.2,0.6}
+\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour, linkcolor=linkcolour}
+
+%FONTS
+\defaultfontfeatures{Mapping=tex-text}
+%\setmainfont[SmallCapsFont = Fontin SmallCaps]{Fontin}
+%%% modified for Karol Kozioł for ShareLaTeX use
+\setmainfont[
+SmallCapsFont = Fontin-SmallCaps.otf,
+BoldFont = Fontin-Bold.otf,
+ItalicFont = Fontin-Italic.otf
+]
+{Fontin.otf}
+%%%
+\titleformat{\section}
+  {\Large\scshape\raggedright}  % Format for the title
+  {}  % No label (numbering)
+  {0em}  % Space between the label and the title
+  {} 
+  [\titlerule]  % Code after the title (places the rule under the title)
+\titlespacing{\section}{0pt}{3pt}{3pt}
+%Tweak a bit the top margin
+%\addtolength{\voffset}{-1.3cm}
+
+%Italian hyphenation for the word: ''corporations''
+\hyphenation{im-pre-se}
+
+%-------------WATERMARK TEST [**not part of a CV**]---------------
+\usepackage[absolute]{textpos}
+
+\setlength{\TPHorizModule}{30mm}
+\setlength{\TPVertModule}{\TPHorizModule}
+\textblockorigin{2mm}{0.65\paperheight}
+\setlength{\parindent}{0pt}
+
+%--------------------BEGIN DOCUMENT----------------------
+\begin{document}
+
+%WATERMARK TEST [**not part of a CV**]---------------
+%\font\wm=''Baskerville:color=787878'' at 8pt
+%\font\wmweb=''Baskerville:color=FF1493'' at 8pt
+%{\wm 
+%	\begin{textblock}{1}(0,0)
+%		\rotatebox{-90}{\parbox{500mm}{
+%			Typeset by Alessandro Plasmati with \XeTeX\  \today\ for 
+%			{\wmweb \href{http://www.aleplasmati.comuv.com}{aleplasmati.comuv.com}}
+%		}
+%	}
+%	\end{textblock}
+%}
+
+\pagestyle{empty} % non-numbered pages
+
+\font\fb=''[cmr10]'' %for use with \LaTeX command
+
+%--------------------TITLE-------------
+\par{\centering
+		{\Huge Nico \textsc{Ohayon Rozanes}
+	}\bigskip\par}
+
+%--------------------SECTIONS-----------------------------------
+%Section: Personal Data
+\section{Personal Data}
+
+\begin{tabular}{rl}
+    \textsc{University:} & University of Texas at Dallas \\
+    \textsc{Website:} & \href{https://nicoohr.github.io/Sicarii/index.html}{Sicarii} \\
+    \textsc{Phone:}     & 469 560 0141\\
+    \textsc{email:}     & \href{mailto:nohayonr@gmail.com}{nohayonr@gmail.com} \\
+    \textsc{Majors:}     & Data Science (B.S.) \& Mathematics (B.S.) \\
+\end{tabular}
+
+\section{Research}
+\begin{tabular}{r|p{11cm}}
+  & \href{https://utdallas.box.com/s/t28glylm344xo8ppgxfarmu3sms1m53s}{Undergraduate Research Scholar Award} \\\textsc{April 2023}&\emph{Mathematics and Computer Science}\\&\footnotesize{Worked with Professor Bereg to analyze transversals over latin squares. The research aimed to numerically verify and expand on the results of Wanless's
+"Transversals in Latin Squares" (2009), my work was mostly in creating effective and effecient algorithms on large matrices in C++. }\\\multicolumn{2}{c}{} \\
+ \textsc{February 2023} & \href{https://github.com/ACM-TradeX/TradeX}{ACM Research TradeX} \\&\emph{Statistics}\\&\footnotesize{Semester long research project with Professor Smiley, applying the \href{https://sites.google.com/a/channing.harvard.edu/kimberlyglass/tools/panda}{PANDA algorithm} by Professor Glass to financial markets to find assets which are most correlated in movement, for use in a pairwise trading algorithm.}\\\multicolumn{2}{c}{} \\
+\end{tabular}
+
+\section{Clubs and Organizations}
+\begin{tabular}{r|p{11cm}}	
+& \textbf{Dallas Formula Racing Embedded Lead} \\
+& \footnotesize{Embedded devices sub team lead at the UT Dallas SAE chapter. Responsible for programming and organizing the Data Acquisition System and Driver Dashboard projects. Specific experience with the STM33 family of microcontrollers, arm-none build tools, and CI/CD pipelines.}
+\end{tabular}
+
+\section{Projects}
+\begin{tabular}{r|p{11cm}}	
+& \textbf{NoTeC Data Acquistion Device} \\
+& \footnotesize{A device based on the STM32F429ZI which collects data from several peripherals on a race car, synchronizes, filters, and passes along to the race car engineers for further use. The project is built on top of ST's HAL and CMSIS RTOS, but is decoupled and can be quickly re implemented towards other architectures and microcontrollers} \\
+
+& \textbf{FSAEStats} \\
+& \footnotesize{An API built in rust for easier, programmatic access results from the FSAE competition. The results were plumbed from the competition results pdf, formatted into a database, and served via the Hyper crate. Graphs are generated with the polars crate.}
+\end{tabular}
+
+%Section: Languages
+\section{Languages}
+\begin{tabular}{rl}
+\textsc{English:}&Fluent\\
+\textsc{Spanish:}&Conversational \\
+\textsc{Hebrew:}&Mothertongue\\
+\end{tabular}
+
+\section{Computer Skills}
+\begin{tabular}{rl}
+ Languages: & \textsc{Rust}, \textsc{Python}, \textsc{Embedded C/C++}, \textsc{R}, \textsc{Haskell}, \LaTeX \\
+ Technologies: & \textsc{Linux, BusyBox}, Kafka, SQL, Nix, Vim, Docker and k8s, Git (Actions and CI/CD) \\
+\end{tabular}
+
+
+\section{Interests and Activities}
+Open-Source Development, Systems Programming, Controls and Robotics\\
+Geometric Algebra, Stochastic Calculus, Type Theory\\
+
+%\newpage
+%\hypertarget{gmat}{\textsc{Gmat}\setmainfont{LMRoman10 Regular}\textregistered\setmainfont[SmallCapsFont=Fontin-SmallCaps]{Fontin-Regular}}
+
+%\XeTeXpdffile ''GMAT.pdf'' page 1 scaled 800
+
+\end{document}
+
