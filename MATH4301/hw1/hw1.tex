@@ -1,0 +1,205 @@
+\documentclass[15pt]{article}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\pagestyle{fancy}
+\renewcommand{\phi}{\varphi}
+\renewcommand{\epsilon}{\varepsilon}
+
+\lhead{Problem \arabic{enumi}}
+\chead{Nimrod Ohayon Rozanes - Homework 1}
+
+\begin{document}
+\begin{enumerate}
+
+\title{Homework Number Solutions}
+\item
+\begin{enumerate}
+\item $\inf(-A) = -\sup(A)$ \\[6pt]
+Let $s = \sup(A)$. Then $s$ must be an upper bound:  
+\[
+  \forall a \in A,\quad s \geq a,
+\]
+as well as the least upper bound:
+\[
+  \forall y \in \{\,y \mid (\forall a \in A,\; y \geq a)\},\quad s \leq y.
+\]
+therefore
+\begin{align*}
+  s \geq a 
+  &\implies s + (-s - a) \geq a + (-s - a) \\[6pt]
+  &\implies -a \geq -s \quad \forall a \in A \\[6pt]
+  &\implies -s \leq b \quad \forall b \in -A.
+\end{align*}
+so $-s$ must be a lower bound of $-A$. Additionally:
+\begin{align*}
+  s \leq y  
+  &\implies s + (-s -y) \leq y + (-s -y ) \\
+  &\implies -y \leq -s 
+\end{align*}
+So $-s$ is larger or equal to all $-y$, and  
+\begin{align*}
+  \{y \mid (\forall a \in A), y \geq a \} 
+  &\implies \{y \mid (\forall a \in A), -y \leq -a\} \\
+  &\implies \{y \mid (\forall b \in -A) -y \leq b \}
+\end{align*}
+so $-s$ is smaller than or equal to all elements of $-A$ as well as greater than or equal to all lower bounds of $-A$, so it is the infimum of $-A$
+\item $\sup(-A) = -\inf(A)$ \\[6pt]
+Let $m = \inf(A)$. Then $m$ must be a lower bound:  
+\[
+  \forall a \in A,\quad m \leq a,
+\]
+as well as the greatest lower bound:
+\[
+  \forall y \in \{\,y \mid (\forall a \in A,\; y \leq a)\},\quad m \geq y.
+\]
+
+Therefore
+\begin{align*}
+  m \leq a 
+  &\implies m + (-m - a) \leq a + (-m - a) \\[6pt]
+  &\implies -a \leq -m \quad \forall a \in A \\[6pt]
+  &\implies -m \geq b \quad \forall b \in -A.
+\end{align*}
+So $-m$ must be an upper bound of $-A$. Additionally:
+\begin{align*}
+  m \geq y  
+  &\implies m + (-m - y) \geq y + (-m - y) \\[6pt]
+  &\implies -y \geq -m.
+\end{align*}
+So $-m$ is smaller or equal to all $-y$, and  
+\begin{align*}
+  \{y \mid (\forall a \in A), y \leq a \} 
+  &\implies \{y \mid (\forall a \in A), -y \geq -a\} \\[6pt]
+  &\implies \{y \mid (\forall b \in -A), -y \geq b \}.
+\end{align*}
+So $-m$ is greater than or equal to all elements of $-A$ as well as smaller than or equal to all upper bounds of $-A$, so it is the supremum of $-A$.
+\end{enumerate}
+\item
+  \begin{enumerate}
+    \item
+    by the defintion of a partially ordered set, $a \leq  b \implies a + c \leq b + c$ . So 
+    \begin{align*}
+      s = \sup(A) &\implies s \geq a \quad \forall a \in A \\
+                  &\implies s + c \geq a + c \\
+                  &\implies s + c \geq b \quad \forall b \in c + A 
+    \end{align*}
+    and 
+    \begin{align*}
+      s = \sup(A) &\implies s \leq y \quad \forall y \in \{y \mid (\forall a \in  A), y \geq a\} \\
+      &\implies s + c \leq y + c\\ 
+      &\implies s + c \leq z \quad \forall z \in \{z  \mid (\forall a \in c + A), z \geq a\}
+    \end{align*}
+    Therefore, $s + c$ is both $\geq$ than all elements of $A$ as well as $\leq$ all upper bounds on $c + A$, and is therefore the supremum of the set
+  \item 
+    \begin{align*}
+      m = \inf(A) &\implies m \leq a  \quad\forall a \in A \\
+                  &\implies m + (-m - a + c) \leq a + (-m -a + c) \\
+                  &\implies c -a \leq c-m \\
+    \end{align*}
+    also 
+    \begin{align*}
+      m = \inf(A) &\implies m \geq y \quad \forall y \in \{y \mid (\forall a \in A) y \leq a\}  \\ 
+                  &\implies m + (-m-y+c) \geq y + (-m-y+c) \\
+                  &\implies c-y \geq c-m \\
+    \end{align*}
+    $c - m$ is both larger than all elements of $c - A$ as well as smaller than all higher bounds of $c - A$ and is therefore is a supremum of $c - A$
+  \pagebreak
+  \end{enumerate}
+  \item
+    \begin{enumerate}
+      \item  
+        First, prove that $a  \leq b \implies ac \leq bc $ if $c \geq 0$
+        \begin{align*}
+          a \leq b &\implies a - b \leq 0 \\ 
+                   &\implies c(a-b) \leq 0  && \text{(compatibility of $\cdot$ with $\leq$)} \\
+                   &\implies ca - cb \leq 0 \\  
+                   &\implies ac \leq bc
+        \end{align*}
+        With that:
+        \begin{align*}
+        s = \sup(A) &\implies s \geq a \quad \forall a \in A \\
+                    &\implies cs \geq ca
+        \end{align*}
+        and 
+        \begin{align*}
+        s = \sup(A) &\implies s \leq y \quad \forall y \in \{y \mid (\forall a \in  A), y \geq a\} \\
+                    &\implies cs \leq cy 
+        \end{align*}
+        $c \cdot s$ is an upper bound of $cA$ and the smaller than or equal to all upper bounds of $cA$, so $c \cdot s = \sup(cA)$
+      \item 
+        if $c < 0$ then $-c \geq 0$
+        \begin{align*}
+          a \leq b &\implies a - b \leq 0  \\
+                   &\implies -c(a-b) \leq 0 \\
+                   &\implies -ca + cb \leq 0 \\
+                   &\implies  cb \leq ca
+        \end{align*}
+        a similar procedure can be followed to part (a)
+        \begin{align*}
+        s = \sup(A) &\implies s \geq a \quad \forall a \in A \\
+                    &\implies cs \leq ca
+        \end{align*}
+        and 
+        \begin{align*}
+        s = \sup(A) &\implies s \leq y \quad \forall y \in \{y \mid (\forall a \in  A), y \geq a\} \\
+                    &\implies cs \geq cy 
+        \end{align*}
+        If $c < 0$ then $c\sup(A)$ is the less than or equal to all elements of $cA$ and is greater than or equal to all lower bounds of $cA$, so it is the infinmum of $cA$
+    \end{enumerate}
+    \pagebreak
+  \item 
+    let $s_a = \sup(A)$ and $s_b = \sup(B)$, by the characterization of the supremum:
+    \begin{align*}
+      \forall \epsilon > 0, &\exists b \in B : s_b - \epsilon < b \\
+                            &\exists a \in a : s_a - \epsilon < a \\
+    \end{align*}
+    and
+    \begin{align*}
+      s_a < s_b &\implies s_b - s_a > 0 \\ 
+    \end{align*}
+    so take $\epsilon = s_b - s_a$ 
+    \begin{align*}
+      s_b - (s_b - s_a) < b \implies s_a < b
+    \end{align*}
+    so by definition, 
+    \begin{align*}
+      \exists b \in B : \forall a \in a, a < b 
+    \end{align*}
+     \pagebreak
+  \item let $m_b = \inf B$ and  $s_a =  \sup A$
+    \begin{enumerate}
+      \item 
+        \begin{align}
+          s_a &\geq a && \forall a \in A\\ 
+          m_b &\leq b && \forall b \in B\\
+          s_a - m_b &\geq a - m_b \\ 
+          a - m_b &\geq a - b && \text{As a result of (2)}\\ 
+          s_a - m_b &\geq a - b && \text{(3) and (4) together}
+        \end{align}
+        Therefore $s_a - m_b$ is an upper bound for $a-b$
+      \item Assume for the sake of contradiction that $\exists$ an upper limit $u < a - \inf B$ for the set $A - B$
+        \begin{align*}
+          u &< a - m_b  &&\forall a\in A \\
+          0 &< a - u - m_b\\
+        \end{align*}
+        By characterization of the infimum, $\forall\epsilon > 0 , \exists b \in B$ such that 
+        $$ m_b + \epsilon \geq b$$
+        take  $\epsilon = a - u - m_b$ 
+        \begin{align*}
+          m_b  + (a - u - m_b) \geq b \implies a - u \geq b \\
+        \end{align*}
+        However since $u$ is an upper limit of $A - B$
+        \begin{align*}
+          u \geq a - b &\implies u + (b - u) \geq a - b + (b - u)&&\forall  a, b \in A, B \\
+                       &\implies b \geq a - u
+        \end{align*}
+        Which is a contradiction since there must be at least one $b \in B$ such that $a - u \geq b$. So either $u$ is not an upper bound, or $u$ is greater than or equal to $a - m_b$. Showing that there cannot exist an upper bound strictly less than $a - m_b$, equivalently $a - m_b \leq u$ for all upper bounds $u$. 
+    \end{enumerate}
+\end{enumerate}
+
+\end{document}
