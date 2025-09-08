@@ -1,0 +1,109 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+
+
+\title{Homework #2}
+\author{N. Ohayon Rozanes}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+\begin{enumerate}
+  \item
+\begin{proof}
+  Our goal is to find $N$ such that  $ \frac{2s}N + \frac1N^2 < 2  = \frac{2sN + 1}{N^2} < \delta$ 
+  \begin{align*}
+    \frac{2sN + 1}{N^2} &< \delta \\
+                      0 &< -1 - 2sN + \delta N^2  \\ 
+  \end{align*}
+  Using the quadratic roots of the above inequality:
+  \[
+    N_0 = \frac{2s + \sqrt{4s^2 + 4\delta}}{2\delta} = \frac{s + \sqrt{s^2 + \delta}}{\delta}
+  \]
+  The negative root can be discarded since $N$ is strictly positive. So 
+  $$\forall N > \frac{s + \sqrt{s^2 + \delta}}{\delta}\implies (s + \frac1N)^2 < 2$$ 
+  Therefore $s + \frac1N \in A$. However $s$ is the supremum of $A$, and $s < s + \frac1N$, leading to a contradiction. 
+\end{proof}
+\item
+  \begin{proof}
+  Assume $s^2 > 2$. Want to find $N$ such that 
+  \[
+  (s - \frac1N)^2 > 2
+  \]
+  This is achieved in a similar manner to part 1. 
+  \begin{align*}
+    s^2 - \frac{2s}N + \frac1{N^2} &> 2 \\
+    s^2 - 2 - \frac{2s}N + \frac1{N^2} &> 0 \\ 
+    (s^2 - 2)N^2 - 2sN + 1 &> 0 \\
+  \end{align*}
+  Which has solution: 
+  \[
+    N_0 = \frac{2s + \sqrt{4s^2 - 4(s^2 -2)}}{2(s^2 - 2)} = \frac{s + \sqrt{2}}{(s^2 -2)} 
+  \]
+  So
+  \[
+    \forall N > \frac{s + \sqrt{2}}{(s^2 -2)} \implies (s - \frac1N)^2  > 2
+  \]
+  Which would mean that $s - \frac1N$ is an upper bound of $A$, however, since $s > s - \frac1N$ it would be smaller than $s$ which is a contradiction since $s = \sup A$
+  \end{proof}
+\end{enumerate}
+
+\subsection*{Exercise 2}
+\begin{proof}
+  Fix first $b \in B$, then $Ab := \{a \cdot b \mid a\in A\}$  then, using the result 
+  \[
+    cA := \{c \cdot a \mid a \in A\} \quad \implies \quad \sup(cA) = c \cdot \sup A,
+  \]
+  we get $\sup Ab = b \cdot \sup A \quad \forall b \in B$. Also, for a fixed $a \in A$, $\sup aB = a \sup B \quad \forall a \in A$ \\ 
+
+  Consider the set $C = \{b\sup A \mid b \in B\}$, then 
+  \[
+    \sup C = \sup \{b \cdot \sup A\} = \sup B \sup A
+  \]
+  and also: 
+  \[
+    \sup AB = \sup(Ab) = \sup C = \sup B \sup A
+  \]
+\end{proof}
+\subsection*{Exercise 3}
+\begin{proof}
+  For set $$A = \bigcap_{n = 1}^{\infty} (0, \frac1n) = \emptyset$$ then $\forall x \in \mathbb{R}, x \notin A$. Also \[
+  A_N = \bigcap_{n=1}^N(0, \frac1n) = (0, \frac1N)
+  \]
+  To find the final open interval of $A$ as $N \rightarrow \infty$, we evaluate the series $\{\frac1n\}_{n=1}^\infty$, since with every increment of $n$, $\frac1n$ halves, we hypothesize that the limit is $0$. To prove this limit, $\forall \varepsilon > 0$ find an $N$ such that $\forall n \geq N, \frac1n < \varepsilon$
+  \begin{align*}
+    \mid \frac1N - 0\mid &< \varepsilon  \\
+    \mid \frac1N \mid &< \varepsilon  \\
+    \frac1N &< \varepsilon \\ 
+    \frac1\varepsilon &< N
+  \end{align*}
+  In this case, simply take the next integer larger than $\frac1\varepsilon$ to be $N$. Therefore the final open interval, which is the interval $A$ evaluates to, is $(0,0)$. And sinceopen intervals do not include the endpoints 
+  \[
+    A = (0,0) = \emptyset
+  \]
+\end{proof}  
+\subsection*{Exercise 4}
+\begin{proof}
+  For the sequence $r_n$ to converge to real number $a$, it must mean that $\forall \varepsilon > 0 \quad \exists N \in \mathbb{N} : \forall n \geq N \implies \mid r_n - a \mid < \varepsilon$
+  \[
+    
+  \]
+\end{proof}
+\end{document}
+
