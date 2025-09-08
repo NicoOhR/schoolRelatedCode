@@ -1,0 +1,158 @@
+\documentclass[11pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{enumerate}
+\usepackage{minted}
+\usepackage{afterpage}
+\usepackage{placeins}
+\usepackage{needspace}
+\usepackage{float}
+\usepackage{url}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{center}
+	%% put the project number
+	\textbf{STAT 4360 (Introduction to Statistical Learning, Fall 2022)
+		\\[1ex]
+		Mini Project 5 
+		\\[1ex]
+		Name: Nimrod Ohayon Rozanes}
+	\\
+	{\_}\hrulefill{\hspace{.01in}}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Section 1: 
+
+\begin{enumerate}
+\item ~
+	\begin{enumerate}
+		\item When performing a principle component analysis, it is necessary to standardize the predictors since the PCA maximizes the variance of each created principle component. As such when we standardize the predictors, each variable contributes equally, so a predictor on a larger scale will not dominate the analysis.
+		\item Following is the Scree Plot for the PCA 
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.8\textwidth]{scree.png}
+			\end{figure}
+    The elbow of the of the PCA lays in the range of $4-7$, with the least amount that I would likely use being $M = 5$
+    \pagebreak
+    \item Following is also the biplot for the biplot for a PCA with $M=2$. As well as the loadings of each predictor and the principle components
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.6\textwidth]{biplot.png}
+			\end{figure}
+      \begin{table}[htbp]
+      \centering
+        \caption{PCA Loadings for PC1 and PC2}
+        \begin{tabular}{lrr}
+        \toprule
+        \textbf{Feature} & \textbf{PC1} & \textbf{PC2} \\
+        \midrule
+        AtBat    &  0.196209 &  0.391118 \\
+        Hits     &  0.193644 &  0.383922 \\
+        HmRun    &  0.201534 &  0.235943 \\
+        Runs     &  0.195226 &  0.381179 \\
+        RBI      &  0.232769 &  0.318169 \\
+        Walks    &  0.208483 &  0.237312 \\
+        Years    &  0.285183 & -0.259716 \\
+        CAtBat   &  0.333319 & -0.186708 \\
+        CHits    &  0.333577 & -0.176440 \\
+        CHmRun   &  0.320087 & -0.124551 \\
+        CRuns    &  0.340501 & -0.167246 \\
+        CRBI     &  0.342675 & -0.163078 \\
+        CWalks   &  0.319261 & -0.187581 \\
+        PutOuts  &  0.078227 &  0.163404 \\
+        Assists  & -0.000531 &  0.176953 \\
+        Errors   & -0.007283 &  0.210699 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+    Visually, the biplot shows two clusters of predictors that correlate with PC1 and PC2. The first, correlating with PC1, are CAtBat, CHits, CRBI, CRuns, which are all cumilative statistics about the player. Notebly, PC1 does not have any high magnitude negative loadings. PC2 on the other hand has high positive loadings with the season specific statistics of a player, AtBat, RBI, etc. with negative loadings on the cumaltive statistics, which could be interpreted as contrasting the players perfomance in this season vs hish career averages.
+    \end{enumerate}
+    \item ~
+    \begin{enumerate}
+        \item Following is a table of the type of regression, any meta variables chosen, and the MSE of the that variable 
+        \begin{table}[htbp]
+        \centering
+        \caption{Sample Three-Column Table}
+        \begin{tabular}{l c r}
+        \toprule
+        \textbf{Regression} & \textbf{Parameter} & \textbf{LOOCV MSE} \\
+        \midrule
+        OLS & N/A & 0.0804 \\
+        PCR & $M=13$ & 0.079 \\
+        PLS & $M=10$ & 0.079\\
+        Ridge & $\alpha=13.22$ & 0.078 \\
+        \bottomrule
+        \end{tabular}
+        \label{tab:sample}
+        \end{table}
+        All of the above regressions have similar MSE's, suggesting that the assumptions of the OLS linear regression are likely to be true. However, I would likely suggest to use the ridge regression, whihc has the lowest MSE, but also because it handles multicolinearity the best, which is relevant since this data set in particular has several predictors which have correlating other predictors that they would be linear with (cRBI with RBI, for example). Both PCR and PLS also address multicolinearlity, but on merit of the Ridge regression's lower MSE, I believe it is the most suitable regression for this data.
+    \end{enumerate}	
+    \item ~ 
+        \begin{enumerate}
+        \item After fitting a full linear regression to the data, the p-values of the predictors follow:
+            \begin{center}
+            \begin{tabular}{lclc}
+            \toprule
+            \textbf{Dep. Variable:}    &      Salary      & \textbf{  R-squared:         } &     0.543   \\
+            \textbf{Model:}            &       OLS        & \textbf{  Adj. R-squared:    } &     0.513   \\
+            \textbf{Method:}           &  Least Squares   & \textbf{  F-statistic:       } &     18.25   \\
+            \textbf{Date:}             & Thu, 24 Apr 2025 & \textbf{  Prob (F-statistic):} &  2.47e-33   \\
+            \textbf{Time:}             &     17:18:48     & \textbf{  Log-Likelihood:    } &   -19.558   \\
+            \textbf{No. Observations:} &         263      & \textbf{  AIC:               } &     73.12   \\
+            \textbf{Df Residuals:}     &         246      & \textbf{  BIC:               } &     133.8   \\
+            \textbf{Df Model:}         &          16      & \textbf{                     } &             \\
+            \textbf{Covariance Type:}  &    nonrobust     & \textbf{                     } &             \\
+            \bottomrule
+            \end{tabular}
+            \begin{tabular}{lcccccc}
+                             & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+            \midrule
+            \textbf{const}   &       2.0056  &        0.070     &    28.465  &         0.000        &        1.867    &        2.144     \\
+            \textbf{AtBat}   &      -0.0015  &        0.001     &    -2.789  &         0.006        &       -0.003    &       -0.000     \\
+            \textbf{Hits}    &       0.0060  &        0.002     &     2.987  &         0.003        &        0.002    &        0.010     \\
+            \textbf{HmRun}   &       0.0038  &        0.005     &     0.724  &         0.470        &       -0.007    &        0.014     \\
+            \textbf{Runs}    &      -0.0006  &        0.003     &    -0.245  &         0.807        &       -0.006    &        0.004     \\
+            \textbf{RBI}     &      -0.0001  &        0.002     &    -0.063  &         0.950        &       -0.004    &        0.004     \\
+            \textbf{Walks}   &       0.0048  &        0.002     &     3.098  &         0.002        &        0.002    &        0.008     \\
+            \textbf{Years}   &       0.0243  &        0.010     &     2.311  &         0.022        &        0.004    &        0.045     \\
+            \textbf{CAtBat}  &    6.282e-05  &        0.000     &     0.546  &         0.586        &       -0.000    &        0.000     \\
+            \textbf{CHits}   &      -0.0003  &        0.001     &    -0.483  &         0.630        &       -0.001    &        0.001     \\
+            \textbf{CHmRun}  &      -0.0002  &        0.001     &    -0.121  &         0.904        &       -0.003    &        0.003     \\
+            \textbf{CRuns}   &       0.0008  &        0.001     &     1.207  &         0.228        &       -0.000    &        0.002     \\
+            \textbf{CRBI}    &     9.54e-05  &        0.001     &     0.162  &         0.872        &       -0.001    &        0.001     \\
+            \textbf{CWalks}  &      -0.0006  &        0.000     &    -2.235  &         0.026        &       -0.001    &    -7.44e-05     \\
+            \textbf{PutOuts} &       0.0002  &      6.6e-05     &     2.406  &         0.017        &     2.88e-05    &        0.000     \\
+            \textbf{Assists} &       0.0003  &        0.000     &     1.445  &         0.150        &     -9.9e-05    &        0.001     \\
+            \textbf{Errors}  &      -0.0043  &        0.004     &    -1.166  &         0.245        &       -0.012    &        0.003     \\
+            \bottomrule
+            \end{tabular}
+            \end{center}
+            The most relevant predictors, measured by the p-value of that predictor, are AtBat, Hits, and Walks, while the career statistics have a much less substantive contribution to the pay of the player. This is qualitatively reasonable, as it makes since that an older player, who would have higher career statistics, might get paid less than a younger player. While walks does have a slightly lower p-value to hits, I am choosing hits as the most important predictor, since in an actual game of baseball walks are relatively rare, and do not reflect much about the actual player.
+        \item Fitting a natural cubic spline regression to Hits vs Log(Salary), and sweeping over possible knot values, we get that the the optimal number of knots is $8$ with an cross validated MSE of $0.115$, which produces the following graph
+			\begin{figure}[htbp]
+				\centering
+          \includegraphics[width=0.8\textwidth]{cubic.png}
+        \end{figure}
+        \end{enumerate}
+\end{enumerate}
+%% Section 2: present the code
+\newpage
+\begin{center}
+	\textbf{Python Code}
+\end{center}
+
+\hrule
+\begin{minted}{python}
+\end{minted}
+\end{document}

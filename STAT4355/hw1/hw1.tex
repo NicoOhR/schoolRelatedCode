@@ -1,0 +1,117 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+\renewcommand{\labelenumi}{(\alph{enumi})}
+
+
+\title{STAT 4355}
+\author{N. Ohayon Rozanes}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+\begin{enumerate}
+    \item 
+        \begin{proof}
+            \begin{align*}
+                S_{yy} &= \sum (y_i - \bar{y})^2 \\
+                       &= \sum (y_i^2 - 2y_i\bar{y} + \bar{y}^2) \\ 
+                       &= \sum (y_i^2 -2y_i\bar y) +  n\bar  y^2 \\
+                       &= \sum(y_i^2) - 2\bar y \sum y_i + n\bar y^2 \\
+                       &= \sum(y_i^2)  + \bar y n(-\frac2n\sum y_i + \bar y) \\
+                       &= \sum(y_i^2) + \bar y n(-2\bar y + \bar y) \\
+                       &= \sum (y_i^2) - n\bar y ^2  
+            \end{align*}
+        \end{proof}
+    \item 
+        Define $\hat x  := \sum x_i$
+        \begin{proof}
+            \begin{align*}
+                S_{xy} &= \sum (x_i - \bar x )(y_i - \bar y) \\
+                       &= \sum (x_iy_i - \bar xy_i -\bar yx_i + \bar x \bar y) \\
+                       &= \sum x_iy_i - \bar x\hat y  -\bar y \hat x + n \bar x \bar y \\
+                       &= \sum x_iy_i - \frac1n(\hat x\hat y  -\hat y \hat x + n^2\bar x \bar y) \\
+                       &= \sum x_iy_i - (n\bar x \bar y) \\
+                       &= \sum x_iy_i - (\frac{\hat x  \hat y}{n})\\
+                       &= \sum x_iy_i - (\frac{\sum x_i  \sum y_i}{n})\\
+            \end{align*}     
+        \end{proof}
+\end{enumerate}
+
+\vspace{2in} %Leave space for comments!
+
+
+\subsection*{Exercise 2}
+\begin{enumerate}
+    \item 
+        \begin{proof}
+        \begin{align*}
+            Var(cX) &= E[(cX - E(cX))^2] \\
+                    &= E[(cX)^2 - 2cXE(cX) + E(cX)^2] \\
+                    &= E[(cX)^2] -2E[cX]E[cX] + E[cX]^2 \\
+                    &= E[(cX)^2] - E[cX]^2 \\
+                    &= c^2E[X^2] - c^2E[X]^2 \\ 
+                    &= c^2(E[X^2] - E[X]^2) \\
+                    &= c^2(Var[X])
+        \end{align*}
+        \end{proof}
+    \item 
+        \begin{proof}
+            \begin{align*}
+                Var(aX + bY) &= E[(aX + bY)^2] - E[aX + bY]^2 \\
+                             &= E[a^2X^2 + 2abXY + b^2Y^2] - (E[aX] + E[bY])^2 \\
+                             &= a^2E[X^2] + 2abE[XY] + b^2E[Y^2] - E[aX]^2 -2E[aX]E[bX] - E[bY]^2 \\
+                             &= a^2E[X^2] + 2abE[XY] + b^2E[Y^2] -a^2E[X]^2 -2abE[X]E[Y]- b^2E[Y]^2 \\
+                             &= a^2(E[X^2] - E[X]^2) + b^2(E[Y^2] - E[Y]^2) + 2ab(E[XY] -E[X]E[Y]) \\
+                             &= a^2Var(X) + b^2Var(Y) + 2abCov(X,Y)
+            \end{align*}
+            The last step $2ab(E[XY] - E[X]E[Y]) = 2abCov(X, Y)$ is justified by the result in part (c)
+        \end{proof}
+    \item  
+        \begin{proof}
+            \begin{align*}
+                Cov(X,Y)  &:= E[(X-E[X])(Y-E[Y])] \\
+                          &= E[XY -XE[Y] -YE[X] + E[X]E[Y]]\\ 
+                          &= E[XY] - E[XE[Y]] -E[YE[X]] + E[E[X]E[Y]] \\
+                          &= E[XY] - E[X]E[Y] - E[Y]E[X] + E[X]E[Y] \\ 
+                          &= E[XY] - E[X]E[Y]
+            \end{align*}
+        \end{proof}
+    \item Using the result from part (c): $$Cov(aX + bY, Z) = E[(aX + bY)Z] - E[aX + bY]E[Z]$$
+        Therefore:
+    \begin{align*}
+        E[(aX + bY)Z] - E[aX + bY]E[Z] &= E[aXZ + bYZ] - E[aX]E[Z] - E[bY]E[Z] \\
+                                       &= aE[XZ] + bE[YZ] -aE[X]E[Z] - bE[Y]E[Z] \\
+                                       &= a(E[XZ] - E[X]E[Z]) + b(E[YZ] - E[YZ]) \\
+                                       &= aCov(X, Z) + bCov(Y,Z)
+    \end{align*}
+\end{enumerate}
+\subsection*{Question 3}
+\begin{enumerate}
+    \item  
+\end{enumerate}
+\vspace{2in} %Leave more space for comments!
+
+
+
+
+
+
+
+\end{document}
+

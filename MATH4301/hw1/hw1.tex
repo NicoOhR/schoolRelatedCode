@@ -199,7 +199,12 @@ So $-m$ is greater than or equal to all elements of $-A$ as well as smaller than
                        &\implies b \geq a - u
         \end{align*}
         Which is a contradiction since there must be at least one $b \in B$ such that $a - u \geq b$. So either $u$ is not an upper bound, or $u$ is greater than or equal to $a - m_b$. Showing that there cannot exist an upper bound strictly less than $a - m_b$, equivalently $a - m_b \leq u$ for all upper bounds $u$. 
-      \item To show $\sup(A  - B) = \sup A - \inf B$ we use the result from part (a) that $s_a - m_b$ is an upper bound for $A - B$, and prove that $u \geq s_a - m_b$. Construct a set $S = A - m_b = \{a - m_b \mid \forall a \in A \}$ for which $\sup S = s_a - m_b$, and using the result from part (b), $a - m_b \leq u \implies \sup(S) = s_a  - m_b \leq u$. Demonstrating that $s_a - m_b$ is the least upper bound, or that $\sup(A - B) = \sup A - \inf B$
+      \item From part (a), $s_a - m_b$ is an upper bound for $A - B$. To prove that $u \geq s_a - m_b$ : 
+        \begin{itemize}
+          \item Construct a set $S = A - m_b = \{a - m_b \mid \forall a \in A \}$ for which $\sup S = s_a - m_b$ since $s_a \geq a \forall a \in A$ 
+          \item and using the result from part (b), $a - m_b \leq u \implies \sup(S) = s_a  - m_b \leq u$.
+        \end{itemize}
+          Demonstrating that $s_a - m_b$ is the least upper bound, or that $\sup(A - B) = \sup A - \inf B$
     \end{enumerate}
 \end{enumerate}
 
