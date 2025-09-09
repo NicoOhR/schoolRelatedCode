@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+\usepackage{latexsym, mathtools, amsfonts,amssymb,amsthm,amsmath}
 
 \setlength{\parindent}{0in}
 \setlength{\oddsidemargin}{0in}
@@ -20,7 +20,6 @@
 \maketitle
 
 \vspace{0.5in}
-
 
 
 \subsection*{Exercise 1}
@@ -68,9 +67,9 @@
 \begin{proof}
   Fix first $b \in B$, then $Ab := \{a \cdot b \mid a\in A\}$  then, using the result 
   \[
-    cA := \{c \cdot a \mid a \in A\} \quad \implies \quad \sup(cA) = c \cdot \sup A,
+    cA := \{c \cdot a \mid a \in A\} \quad \implies \quad \sup(cA) = c \cdot \sup A
   \]
-  we get $\sup Ab = b \cdot \sup A \quad \forall b \in B$. Also, for a fixed $a \in A$, $\sup aB = a \sup B \quad \forall a \in A$ \\ 
+  we get $\sup Ab = b \cdot \sup A \quad \forall b \in B$. Also, for a fixed $a \in A$, $\sup aB = a \sup B \quad \forall a \in A$ 
 
   Consider the set $C = \{b\sup A \mid b \in B\}$, then 
   \[
@@ -100,10 +99,16 @@
 \end{proof}  
 \subsection*{Exercise 4}
 \begin{proof}
-  For the sequence $r_n$ to converge to real number $a$, it must mean that $\forall \varepsilon > 0 \quad \exists N \in \mathbb{N} : \forall n \geq N \implies \mid r_n - a \mid < \varepsilon$
-  \[
-    
-  \]
+  For the sequence $r_n$ to converge to real number $a$, it must mean that $$\forall \varepsilon > 0 \quad \exists N \in \mathbb{N} : \forall n \geq N \implies \mid r_n - a \mid < \varepsilon$$
+  Define $\{r_n\}$ as $\{\frac{\lfloor na\rfloor}{n}\}$ which is obviously in $\mathbb{Q}$.
+  Then, to show convergance: 
+  \begin{align*}
+    \lfloor na \rfloor &\leq na  < \lfloor na \rfloor + 1 \\ 
+    \frac{\lfloor na \rfloor}{n} &\leq a < \frac{\lfloor na \rfloor + 1}{n} \\ 
+    0 &\leq a - \frac{\lfloor na \rfloor}{n} < \frac{1}{n} \\ 
+    0 &\leq \mid \frac{\lfloor na \rfloor}{n} - a \mid < \mid \frac{1}{n}\mid
+  \end{align*}
+  So for any $\epsilon > 0$ simply choose $N = \frac1\varepsilon$
 \end{proof}
 \end{document}
 
