@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
-
+\usepackage{physics}
 \setlength{\parindent}{0in}
 \setlength{\oddsidemargin}{0in}
 \setlength{\textwidth}{6.5in}
@@ -11,7 +11,7 @@
 \setlength{\headheight}{18pt}
 
 \renewcommand{\labelenumi}{(\alph{enumi})}
-
+\newcommand*{\pd}[3][]{\ensuremath{\frac{\partial^{#1} #2}{\partial #3}}}
 
 \title{STAT 4355}
 \author{N. Ohayon Rozanes}
@@ -104,6 +104,25 @@
 \subsection*{Question 3}
 \begin{enumerate}
     \item  
+    \[
+        S(\beta_1) = \sum^n_{i=1}(y_i - \beta_0 - \beta_1x_i)^2
+    \]
+    \item 
+    \[
+        \pdv{S}{\beta_1} = -2 \sum_{i=1}^n(y_i - \hat \beta_0 - \beta_1x_i)x_i
+    \]
+    Setting to 0 to optimize, then simplify to obtain the normal equation
+    \begin{align*}
+            0 &=  \sum_{i=1}^n(y_i - \hat \beta_0 - \beta_1x_i)x_i \\
+              &= \sum y_ix_i - \hat\beta_0x_i - \hat \beta_1x_i^2 \\
+              &= \sum y_ix_i - \hat\beta_0\sum x_i - \hat\beta_1\sum x_i^2 \\
+    \end{align*}
+\item following immediatly from the normal equation 
+    \begin{align*}
+            0 &= \sum y_ix_i - \hat\beta_0\sum x_i - \hat\beta_1\sum x_i^2 \\
+            \hat\beta_1\sum x_i^2 &= \sum y_ix_i - \hat\beta_0\sum x_i  \\
+            \hat\beta_1 &= \frac{\sum y_ix_i - \hat\beta_0\sum x_i}{\sum x_i^2} \\
+    \end{align*}
 \end{enumerate}
 \vspace{2in} %Leave more space for comments!
 
