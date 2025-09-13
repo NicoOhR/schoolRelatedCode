@@ -48,7 +48,9 @@ ItalicFont = Fontin-Italic.otf
 \setlength{\TPVertModule}{\TPHorizModule}
 \textblockorigin{2mm}{0.65\paperheight}
 \setlength{\parindent}{0pt}
-
+\addtolength{\voffset}{-8mm}     % shift everything up
+\addtolength{\textheight}{12mm}  % more vertical room
+\addtolength{\textheight}{2cm} % increases the usable text area
 %--------------------BEGIN DOCUMENT----------------------
 \begin{document}
 
@@ -85,7 +87,19 @@ ItalicFont = Fontin-Italic.otf
     \textsc{email:}     & \href{mailto:nohayonr@gmail.com}{nohayonr@gmail.com} \\
     \textsc{Majors:}     & Data Science (B.S.) \& Mathematics (B.S.) \\
 \end{tabular}
-
+\section{Employment}
+\begin{tabular}{r|p{11cm}}
+  & {Software Engineer at Exolambda} \\
+  \textsc{May--August 2025} & \emph{Embedded Systems and Hardware Development} \\
+  & \footnotesize{
+    Contributed to the development of next-generation avionics systems at an avionics startup. 
+    Responsibilities included hardware bring-up of custom embedded platforms, integration of networking 
+    and computational subsystems, and development of scalable build and deployment pipelines. 
+    Worked closely with cross-disciplinary teams to design and implement real-time control and signal 
+    processing algorithms for safety-critical applications. 
+  }\\
+  \multicolumn{2}{c}{} \\
+\end{tabular}
 \section{Research}
 \begin{tabular}{r|p{11cm}}
   & \href{https://utdallas.box.com/s/t28glylm344xo8ppgxfarmu3sms1m53s}{Undergraduate Research Scholar Award} \\\textsc{April 2023}&\emph{Mathematics and Computer Science}\\&\footnotesize{Worked with Professor Bereg to analyze transversals over latin squares. The research aimed to numerically verify and expand on the results of Wanless's
@@ -121,12 +135,6 @@ ItalicFont = Fontin-Italic.otf
  Languages: & \textsc{Rust}, \textsc{Python}, \textsc{Embedded C/C++}, \textsc{R}, \textsc{Haskell}, \LaTeX \\
  Technologies: & \textsc{Linux, BusyBox}, Kafka, SQL, Nix, Vim, Docker and k8s, Git (Actions and CI/CD) \\
 \end{tabular}
-
-
-\section{Interests and Activities}
-Open-Source Development, Systems Programming, Controls and Robotics\\
-Geometric Algebra, Stochastic Calculus, Type Theory\\
-
 %\newpage
 %\hypertarget{gmat}{\textsc{Gmat}\setmainfont{LMRoman10 Regular}\textregistered\setmainfont[SmallCapsFont=Fontin-SmallCaps]{Fontin-Regular}}
 
