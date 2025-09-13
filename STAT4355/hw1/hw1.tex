@@ -12,6 +12,7 @@
 
 \renewcommand{\labelenumi}{(\alph{enumi})}
 \newcommand*{\pd}[3][]{\ensuremath{\frac{\partial^{#1} #2}{\partial #3}}}
+\renewcommand{\epsilon}{\varepsilon}
 
 \title{STAT 4355}
 \author{N. Ohayon Rozanes}
@@ -123,14 +124,75 @@
             \hat\beta_1\sum x_i^2 &= \sum y_ix_i - \hat\beta_0\sum x_i  \\
             \hat\beta_1 &= \frac{\sum y_ix_i - \hat\beta_0\sum x_i}{\sum x_i^2} \\
     \end{align*}
+\item 
+    \begin{align*}
+        E[\hat \beta_1] &= E[ \frac{\sum y_ix_i - \beta_0\sum x_i}{\sum x_i^2} ]\\
+                        &= E[\frac{\sum y_ix_i}{\sum x_i^2}] - \beta_0E[\frac{\sum x_i}{\sum x_i^2}]\\ 
+                        &= E[\frac{\sum y_ix_i}{\sum x_i^2}] - \beta_0\frac{\sum x_i}{\sum x_i^2} \\ 
+                        &= \frac1{\sum x_i^2}\sum x_iE[y_i] - \beta_0\frac{\sum x_i}{\sum x_i^2} \\ 
+                        &= \frac1{\sum x_i^2}(\sum x_iE[y_i] - \beta_0{\sum x_i}) \\ 
+                        &= \frac1{\sum x_i^2}(\sum x_i(\beta_0 + \beta_1x_i) - \beta_0{\sum x_i}) \\ 
+                        &= \frac1{\sum x_i^2}(\beta_0\sum x_i+ \beta_1\sum x_i^2 - \beta_0{\sum x_i}) \\ 
+                        &= \frac1{\sum x_i^2}(\beta_1\sum x_i^2) \\ 
+                        &=  \beta_1
+    \end{align*}
+\item 
+    \begin{align*}
+        Var[\hat\beta_1]  &=  Var[ \frac{\sum y_ix_i - \beta_0\sum x_i}{\sum x_i^2} ]\\
+                          &= Var[ \frac{\sum y_ix_i}{\sum x_i^2} + (-\beta_0\frac{\sum x_i}{\sum x^2_i})]\\ 
+                          &= \frac1{(\sum x_i^2)^2}Var[{\sum y_ix_i}] + \beta_0^2Var[\frac{\sum x_i}{x_i^2}] + 2\frac{\beta_0}{\sum x_i^2}Cov(\sum y_ix_i, \frac{\sum x_i}{x_i^2}) \\ 
+    \end{align*}
+    Notice, only the first term is non-constant, therefore:
+    $$
+    Var[\hat\beta_1]= \frac1{(\sum x_i^2)^2}Var[{\sum y_ix_i}] 
+    $$
+    And because $y_i$ obersvations are assumed to be independent, the covariance terms fall out, so the above summation can be rewritten as:
+    $$
+    Var[\hat\beta_1]= \frac{1}{(\sum x_i^2)^2}\sum x_i^2 Var(y_i) 
+    $$
+    Since $y_i = \beta_0 + \beta_1 xi + \varepsilon$, the variance of $y_i$ is exactly $Var(\varepsilon)$ which we assume to be $\sigma^2$ 
+    \begin{align*}
+        Var[\hat\beta_1]&= \frac{\sigma^2\sum x_i^2}{(\sum x_i^2)^2} \\
+        &= \frac{\sigma^2}{\sum x_i^2}
+    \end{align*}
 \end{enumerate}
-\vspace{2in} %Leave more space for comments!
-
-
-
-
-
-
-
+\subsection*{exercise 4}
+\begin{enumerate}
+    \item 
+\begin{align*}
+    \sum (y_i - \bar y)^2 &= \sum ((\beta_0 + \beta_1x_i + \varepsilon_i) - (\beta_0 + \beta_1\bar x + \bar \epsilon))^2 \\
+                          &= \sum (\beta_1(x_i - \bar x) + (\epsilon_i - \bar\epsilon))^2\\
+                          &= \sum (\beta_1(x_i - \bar x))^2 + 2\beta_1(x_i - \bar x)(\epsilon_i - \bar\epsilon) + (\epsilon_i - \bar\epsilon)^2 \\
+                          &= \beta_1^2\sum(x_i - \bar x)^2 + 2\beta_1\sum(x_i - \bar x)(\epsilon_i - \bar\epsilon) + \sum(\epsilon_i - \bar\epsilon)^2 \\
+                          &= \beta_1^2S_{xx}+ 2\beta_1\sum(x_i - \bar x)(\epsilon_i - \bar\epsilon) + \sum(\epsilon_i - \bar\epsilon)^2
+\end{align*}
+\item 
+    \begin{align*}
+        E[S_{yy}] &= E[\beta_1^2S_{xx}+ 2\beta_1\sum(x_i - \bar x)(\epsilon_i - \bar\epsilon) + \sum(\epsilon_i - \bar\epsilon)^2] \\
+                  &=  \beta_1^2E[S_{xx}] + 2\beta_1E[\sum(x_i - \bar x)(\epsilon_i - \bar\epsilon)] + E[\sum(\epsilon_i - \bar\epsilon)^2]] \\
+                  &= \beta_1^2S_{xx} + 2\beta_1\sum(x_i - \bar x)E[\epsilon_i - \bar\epsilon] + E[\sum (\epsilon_i - \bar\epsilon)^2]\\
+                  &= \beta_1^2S_{xx} + \frac{n-1}{n-1}E[\sum (\epsilon_i - \bar\epsilon)^2] \\
+                  &= \beta_1^2S_{xx} + (n-1)E[\sum (\frac{\epsilon_i - \bar\epsilon)^2}{n-1}]\\
+                  &= \beta_1^2S_{xx} + (n-1)\sigma^2 
+    \end{align*}
+\item  Given that $Var[X] = E[X^2] - E[X]^2 \implies E[X^2] = Var[X] + E[X]^2$ 
+    $$
+        E[\hat\beta_1^2]  = Var[\hat\beta_1] + E[\hat\beta_1^2]
+    $$
+    Using the results from question 2, part (d) and (e), $Var[\hat\beta_1] = \frac{\sigma^2}{\sum x_i^2}$ and $E[\hat\beta_1] = \beta_1$
+    $$  
+    E[\hat\beta_1^2] = \frac{\sigma^2}{\sum x_i^2} + \hat\beta_1^2
+    $$
+\item 
+\begin{align*}
+    E[\frac{SSE}{n-2}] &= E[\frac{S_{yy} - \hat\beta_1^2S_{xx}}{n-2}]\\
+                       &= E[\frac{S_{yy}}{n-2}]   - E[\frac{\hat\beta_1^2S_{xx}}{n-2}] \\ 
+                       &= \frac1{n-2}(\beta_1^2S_{xx}  + (n-1)\sigma^2 - S_{xx}E[\beta_1^2])\\
+                       &= \frac1{n-2}(\beta_1^2S_{xx}  + (n-1)\sigma^2 - S_{xx}(\frac{\sigma^2}{S_{xx}}) - S_{xx}\beta_1^2)\\
+                       &= \frac1{n-2}(\beta_1^2S_{xx}  + (n-1)\sigma^2 - \sigma^2 - S_{xx}\beta_1^2)\\
+                       &= \frac1{n-2}((n-2)\sigma^2)\\
+                       &= \sigma^2
+\end{align*}
+\end{enumerate}
 \end{document}
 
