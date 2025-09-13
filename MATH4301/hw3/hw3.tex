@@ -1,0 +1,126 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+\let\epsilon\varepsilon
+
+
+\title{Homework 3}
+\author{N. Ohayon Rozanes}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+\begin{enumerate}
+  \item 
+  For $\lvert \lvert x \rvert - \lvert y \rvert \rvert \leq \lvert x - y \rvert$, then 
+  $-\lvert x - y\rvert \leq \lvert x \rvert - \lvert y \rvert \leq \lvert x - y \rvert$
+\begin{proof}
+\begin{align*}
+  \lvert x \rvert &= \lvert x - y + y \rvert  \\
+  \lvert x \rvert &\leq \lvert x - y \rvert + \lvert y \rvert \\
+  \lvert x \rvert - \lvert y \rvert &\leq \lvert x - y \rvert 
+\end{align*}
+And
+\begin{align*}
+  \lvert y \rvert &= \lvert y - x + x \rvert  \\
+  \lvert y \rvert &\leq \lvert y - x \rvert + \lvert x \rvert \\
+  \lvert y \rvert - \lvert x \rvert &\leq \lvert y - x \rvert \\
+  -1(\lvert x \rvert - \lvert y \rvert) &\leq \lvert y - x \rvert \\
+  \lvert x \rvert - \lvert y \rvert &\geq -\lvert y - x \rvert
+\end{align*}
+And since:
+\begin{align*}
+  \lvert x - y \rvert &= \lvert -1(y - x) \rvert  \\
+                       &= \lvert y - x \rvert 
+\end{align*}
+We combine $\lvert x\rvert - \lvert y \rvert \leq \lvert x - y \rvert$ 
+and $\lvert x \rvert - \lvert y \rvert \geq - \lvert y - x \rvert$, 
+resulting in 
+\[
+-\lvert x - y\rvert \leq \lvert x \rvert - \lvert y \rvert \leq \lvert x - y \rvert,
+\]
+which implies
+\[
+\lvert \lvert x \rvert - \lvert y \rvert \rvert \leq \lvert x - y \rvert
+\]
+as desired.
+\end{proof}
+\item If $\lim_{n \to \infty} a_n = a$ then $\forall \epsilon, \exists N \in \mathbb{N} : \forall n \geq N, \lvert a_n - a \rvert \leq \epsilon$. Using the reverse triangle inequality, $\epsilon \geq \lvert  a_n - a \rvert \geq \lvert \lvert a_n \rvert - \lvert a \rvert \rvert$. Therefore, for any positive $\epsilon$, the same lower bound $N$ will satisfy both $\lvert a_n - a \rvert \leq  \epsilon$ and $\lvert\lvert a_n \rvert - \lvert a \rvert\rvert \leq \epsilon$ which implies that $\lim\limits_{n\to\infty} \lvert a_n\rvert = \lvert a \rvert$.  
+\item False, consider 
+  \[
+    \{ a_n \}^\infty_{n=1} =
+    \begin{cases}
+      1, &\text{ if } n \text{ is even}\\
+      -1, &\text{ if } n \text{ is odd}\\
+    \end{cases}
+  \]
+  where $\lvert a_n\rvert$ will converge to $1$, for any $N$. But for any $\epsilon < 2$ no such $N$ can be found for $a_n$.
+\end{enumerate}
+\subsection*{Exercise 2}
+Want to show: if $\lim a_n = a$ then, $\forall \delta > 0, \exists N \in \mathbb{N} : \forall n > N, \lvert a_n^3  - a^3 \rvert < \delta$ 
+\begin{proof}
+  \begin{align*}
+a_n^3 - a^3
+&= a_n^3 - a_n^2a + a_n^2a - a_na^2 + a_na^2 - a^3 \\
+&= (a_n^3 - a_n^2a) + (a_n^2a - a_na^2) + (a_na^2 - a^3) \\
+&= a_n^2(a_n - a) + a_na(a_n - a) + a^2(a_n - a) \\
+&= (a_n - a)(a_n^2 + a_na + a^2).
+\end{align*}
+So \[
+  \lvert a^3_n - a^3 \rvert = \lvert a_n - a\rvert\lvert a_n^2 + a_na + a^2\rvert
+\]
+Because $\lvert a_n - a \rvert < \epsilon$ then: 
+\[
+  \lvert a^3_n - a^3 \rvert = \lvert a_n - a\rvert\lvert a_n^2 + a_na + a^2\rvert < \epsilon\lvert a_n^2 + a_na + a^2\rvert
+\]
+Further, since $a_n \to a$, we can find $N_1$ such that $\lvert a_n - a\rvert < 1$, so 
+\begin{align*}
+  \lvert a_n \rvert &= \lvert a_n - a + a \rvert \\ 
+                    &\le \lvert a_n - a \rvert + \lvert a\rvert \\
+                    &\le 1 + \lvert a \rvert
+\end{align*}
+Which allows us to introduce an upper bound not dependent on $n$ on $\lvert a_n^2 + a_na + a^2\rvert$
+\begin{align*}
+  \lvert a_n^2 + a_na + a^2 \rvert  &\leq \lvert a_n^2 \rvert + \lvert a_n a\rvert + \lvert a^2 \rvert \\
+                                    &\le \lvert (\lvert a \rvert + 1)^2 \rvert + \lvert \lvert a \rvert a \rvert+ \lvert a^2\rvert \\
+                                    &= 3\lvert a \rvert^2 + 2\lvert a \rvert + 1
+\end{align*}
+So \[
+  \lvert a_n^3 - a^3 \rvert \le \epsilon(3\lvert a\rvert^2 + 2\lvert a\rvert + 1)
+\]
+So for any $\delta$, choose an $N$ sufficiently large such that $\epsilon(3\lvert a\rvert^2 + 2\lvert a\rvert + 1) < \delta$
+%for the love of god make the above and below better phrased jfc
+\end{proof}
+\pagebreak
+\subsection*{Exercise 3}
+\begin{proof}
+  \begin{align*}
+    \lvert\sqrt{c + x_n} - \sqrt{c + x}\rvert &= \frac{\lvert\sqrt{c + x_n} + \sqrt{c + x}\rvert}{\lvert\sqrt{c + x_n} + \sqrt{c + x}\rvert}\lvert\sqrt{c + x_n} - \sqrt{c + x}\rvert  \\ 
+                                              &= \frac{\lvert c + x_n - c - x\rvert}{\lvert\sqrt{c + x_n} + \sqrt{c + x}\rvert}\\
+                                              &= \frac{\lvert x_n - x \rvert}{\lvert\sqrt{c + x_n} + \sqrt{c + x}\rvert} \\
+                                              &\le \frac{\epsilon}{\lvert\sqrt{c + x_n} + \sqrt{c + x}\rvert}
+  \end{align*}
+  Since $c + x_n > 0$, $$\lvert\sqrt{c + x_n} + \sqrt{c + x}\rvert \geq \lvert \sqrt{c + x}\rvert \implies \frac{1}{\lvert\sqrt{c + x_n} + \sqrt{c + x}\rvert} \leq \frac{1}{\lvert \sqrt{c + x}\rvert}$$
+  So 
+  \[
+    \lvert\sqrt{c + x_n} - \sqrt{c + x}\rvert  \le \frac{\epsilon}{\sqrt{c + x}}
+  \]
+  And because $x_n \to x$ for any $\delta$, we can find an $N \in \mathbb{N}$ such that $$\frac{\epsilon}{\sqrt{c + x}} \le \delta$$
+\end{proof}
+
+\end{document}
+
