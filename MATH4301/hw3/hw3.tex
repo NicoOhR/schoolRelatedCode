@@ -121,6 +121,32 @@ So for any $\delta$, choose an $N$ sufficiently large such that $\epsilon(3\lver
   \]
   And because $x_n \to x$ for any $\delta$, we can find an $N \in \mathbb{N}$ such that $$\frac{\epsilon}{\sqrt{c + x}} \le \delta$$
 \end{proof}
-
+\subsection*{Exercise 4}
+\begin{proof}
+  After calcuating the first couple of terms, the sequence seems to tend to $2$, working from that hypothesis, set $x = 2$. Want to show that the sequence is convergent by showing that it is increasing, as well as bounded. First we prove that $0 < x_n < 2 \forall n \in \mathbb{N}$ using induction:
+  \begin{enumerate}
+    \item Base case $0 < x_1 < 2$ 
+    \item assume $0 < x_n < 2$ 
+    \item Since the square root function is increasing for all positive reals and has a codomain of $[0, \infty)$, then $x_{n+1} = \sqrt{2 + x_n} < \sqrt{2 + 2} \implies x_{n+1} < 2$and $x_{n+1} = \sqrt{2 + x_n} > 0$ because $x_n + 2 > 0$ by assumption. 
+  \end{enumerate}
+  Then we show that it is increasing
+  \begin{align*}
+    x_{n+1} &\ge x_n \\
+    \sqrt{x_n + 2} &\ge x_n \\
+    x_n + 2 &\ge x_n^2 \\
+    x_n + 2 &\ge x_n^2 \\
+    -x_n^2 + x_n + 2 &\ge 0 \\
+    -x_n^2 + x_n + 2 &\ge 0 \\
+    (x_n+1)(2 - x_n) &\ge 0
+  \end{align*}
+  And since $0 < x_n < 2 \forall n \in \mathbb{N}$  the inequality holds. Therefore, the sequence is both bounded and increasing, it converges. To find the limit, set $l = \lim x_n$ as $n \to \infty$, then $l = \sqrt{2 + l} \implies l^2 - l - 2 = 0$ Which has solutions $2$ and $-1$, since we know that $x_n > 0$, the limit must be $2$.
+\end{proof}
+\subsection*{Exercise 5}
+False 
+\begin{proof}
+  We are given that the sequence (call it $x_n$) is increasing and divergent, then by the monotone convergance theorem, we know it must not be bounded above, that is, there does not exist a real number $M$ such that for all $n \in \mathbb{N}$ $x_n < M$ and $x_{n+1} > x_n$.  Lets assume for the sake of contradiction that we can construct an increasing integer sequence $n_i$ such that $x_{n_i} \to L$. 
+  Notice also that every subsequence of an increasing sequence is also increasing, since $n_{i+1} > n_{i} \implies x_{n_{i+1}} > x_{n_i}$. Since $x_{n_i}$ is convergent and increasing, it must be bounded. That is, $$\exists M_1 \in \mathbb{R} : \forall n_i, x_{n_i} < M_1$$
+  However, since both $n$ and $n_i$ are infinite increasing integer sequences, $\forall n, \exists n_i$ such that $n < n_i \implies x_n < x_{n_i} < M_1$. Which implies that $x_n$ is bounded, and therefore is a contradiction, concluding that no such subsequence $n_i$ exists.
+\end{proof}
 \end{document}
 
