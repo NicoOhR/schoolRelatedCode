@@ -96,16 +96,23 @@ Further, since $a_n \to a$, we can find $N_1$ such that $\lvert a_n - a\rvert < 
 Which allows us to introduce an upper bound not dependent on $n$ on $\lvert a_n^2 + a_na + a^2\rvert$
 \begin{align*}
   \lvert a_n^2 + a_na + a^2 \rvert  &\leq \lvert a_n^2 \rvert + \lvert a_n a\rvert + \lvert a^2 \rvert \\
-                                    &\le \lvert (\lvert a \rvert + 1)^2 \rvert + \lvert \lvert a \rvert a \rvert+ \lvert a^2\rvert \\
-                                    &= 3\lvert a \rvert^2 + 2\lvert a \rvert + 1
+                                    &\le \lvert (\lvert a \rvert + 1)^2 \rvert + \lvert \lvert a + 1 \rvert \rvert a \rvert \rvert+ \lvert a^2\rvert \\
+                                    &= \lvert (\lvert a \rvert^2 + 2\lvert a \rvert+ 1) \rvert + \lvert \lvert a \rvert^2  + \rvert a \rvert\rvert+ \lvert a^2\rvert \\
+                                    &\le 3\lvert a \rvert^2 + 3\lvert a \rvert + 1
 \end{align*}
 So \[
-  \lvert a_n^3 - a^3 \rvert \le \epsilon(3\lvert a\rvert^2 + 2\lvert a\rvert + 1)
+  \lvert a_n^3 - a^3 \rvert \le \epsilon(3\lvert a\rvert^2 + 3\lvert a\rvert + 1)
 \]
-So for any $\delta$, choose an $N$ sufficiently large such that $\epsilon(3\lvert a\rvert^2 + 2\lvert a\rvert + 1) < \delta$
-%for the love of god make the above and below better phrased jfc
+Set $C:= 3\lvert a\rvert^2 + 3\lvert a\rvert + 1$. Now set $\varepsilon:=\delta/C$ (note $C\ge 1$, so $\varepsilon>0$). Since $a_n\to a$, choose $N_1$ such that for all $n\ge N_1$, $|a_n-a|<\varepsilon$.
+For $n\ge N:=\max\{N_0,N_1\}$ we have
+\[
+|a_n^3-a^3|
+=|a_n-a|\cdot|a_n^2+a_na+a^2|
+\le \varepsilon\, C
+=\delta.
+\]
+Therefore $a_n^3\to a^3$.
 \end{proof}
-\pagebreak
 \subsection*{Exercise 3}
 \begin{proof}
   \begin{align*}
@@ -119,7 +126,32 @@ So for any $\delta$, choose an $N$ sufficiently large such that $\epsilon(3\lver
   \[
     \lvert\sqrt{c + x_n} - \sqrt{c + x}\rvert  \le \frac{\epsilon}{\sqrt{c + x}}
   \]
-  And because $x_n \to x$ for any $\delta$, we can find an $N \in \mathbb{N}$ such that $$\frac{\epsilon}{\sqrt{c + x}} \le \delta$$
+Since $x_n\to x$ and $c+x>0$, there exists $N_0$ such that for all $n\ge N_0$,
+\[
+|x_n-x|<\tfrac{c+x}{4}\qquad\Rightarrow\qquad c+x_n\ge c+x - |x_n-x|>\tfrac{c+x}{2}>0,
+\]
+hence
+\[
+\sqrt{c+x_n}+\sqrt{c+x}\;\ge\;\sqrt{\tfrac{c+x}{2}}+\sqrt{c+x}\;\ge\;\tfrac12\sqrt{c+x}.
+\]
+Therefore, for $n\ge N_0$,
+\[
+\bigl|\sqrt{c+x_n}-\sqrt{c+x}\bigr|
+=\frac{|x_n-x|}{\sqrt{c+x_n}+\sqrt{c+x}}
+\le \frac{2}{\sqrt{c+x}}\,|x_n-x|.
+\]
+Now let $\delta>0$ be given. Since $x_n\to x$, there exists $N_1$ such that for all $n\ge N_1$,
+\[
+|x_n-x|<\frac{\delta\,\sqrt{c+x}}{2}.
+\]
+Taking $N=\max\{N_0,N_1\}$, for all $n\ge N$ we have
+\[
+\bigl|\sqrt{c+x_n}-\sqrt{c+x}\bigr|
+\le \frac{2}{\sqrt{c+x}}\,|x_n-x|
+< \frac{2}{\sqrt{c+x}}\cdot \frac{\delta\,\sqrt{c+x}}{2}
+=\delta.
+\]
+Hence $\sqrt{c+x_n}\to\sqrt{c+x}$.
 \end{proof}
 \subsection*{Exercise 4}
 \begin{proof}
@@ -144,7 +176,9 @@ So for any $\delta$, choose an $N$ sufficiently large such that $\epsilon(3\lver
 \subsection*{Exercise 5}
 False 
 \begin{proof}
-  We are given that the sequence (call it $x_n$) is increasing and divergent, then by the monotone convergance theorem, we know it must not be bounded above, that is, there does not exist a real number $M$ such that for all $n \in \mathbb{N}$ $x_n < M$ and $x_{n+1} > x_n$.  Lets assume for the sake of contradiction that we can construct an increasing integer sequence $n_i$ such that $x_{n_i} \to L$. 
+  We are given that the sequence (call it $x_n$) is increasing and divergent, then by the monotone convergance theorem, we know it must not be bounded above, that is, there does not exist a real number $M$ such that for all $n \in \mathbb{N}$ $x_n < M$ and $x_{n+1} > x_n$.
+  \\ \\
+  Lets assume for the sake of contradiction that we can construct an increasing integer sequence $n_i$ such that $x_{n_i} \to L$. 
   Notice also that every subsequence of an increasing sequence is also increasing, since $n_{i+1} > n_{i} \implies x_{n_{i+1}} > x_{n_i}$. Since $x_{n_i}$ is convergent and increasing, it must be bounded. That is, $$\exists M_1 \in \mathbb{R} : \forall n_i, x_{n_i} < M_1$$
   However, since both $n$ and $n_i$ are infinite increasing integer sequences, $\forall n, \exists n_i$ such that $n < n_i \implies x_n < x_{n_i} < M_1$. Which implies that $x_n$ is bounded, and therefore is a contradiction, concluding that no such subsequence $n_i$ exists.
 \end{proof}
