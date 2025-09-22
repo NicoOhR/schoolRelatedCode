@@ -1,0 +1,15 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{    }\PYG{n}{data}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{read.csv}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{./hw2\PYGZus{}systolic\PYGZus{}bp(1).csv\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{    }\PYG{n}{model}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{lm}\PYG{p}{(}\PYG{n}{weight}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{+w}{ }\PYG{n}{sys.bp}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{data}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{)}
+\PYG{+w}{    }\PYG{n}{m}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{summary}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}
+\PYG{+w}{    }\PYG{n}{m}
+\PYG{+w}{    }\PYG{c+c1}{\PYGZsh{}Want to test H\PYGZus{}0 : \PYGZbs{}beta\PYGZus{}1 = \PYGZhy{}50, first we calculate the test statistic}
+\PYG{+w}{    }\PYG{n}{beta\PYGZus{}1\PYGZus{}hat}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{coef}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{]}
+\PYG{+w}{    }\PYG{n}{Sxx}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{sum}\PYG{p}{(}\PYG{p}{(}\PYG{n}{data}\PYG{o}{\PYGZdl{}}\PYG{n}{weight}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{data}\PYG{o}{\PYGZdl{}}\PYG{n}{weight}\PYG{p}{)}\PYG{p}{)}\PYG{o}{\PYGZca{}}\PYG{l+m}{2}\PYG{p}{)}
+\PYG{+w}{    }\PYG{n}{sigma\PYGZus{}hat}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{m}\PYG{o}{\PYGZdl{}}\PYG{n}{sigma}
+\PYG{+w}{    }\PYG{n}{test\PYGZus{}statistic}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{beta\PYGZus{}1\PYGZus{}hat}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{p}{(}\PYG{l+m}{\PYGZhy{}50}\PYG{p}{)}\PYG{p}{)}\PYG{o}{/}\PYG{n+nf}{sqrt}\PYG{p}{(}\PYG{n}{sigma\PYGZus{}hat}\PYG{o}{\PYGZca{}}\PYG{l+m}{2}\PYG{o}{/}\PYG{n}{Sxx}\PYG{p}{)}
+
+\PYG{+w}{    }\PYG{c+c1}{\PYGZsh{}then we can calculate value of the t distribution}
+\PYG{+w}{    }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{nrow}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}
+\PYG{+w}{    }\PYG{n}{t\PYGZus{}critical}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{qt}\PYG{p}{(}\PYG{l+m}{0.975}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{l+m}{\PYGZhy{}2}\PYG{p}{)}
+\end{MintedVerbatim}

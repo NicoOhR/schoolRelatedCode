@@ -1,0 +1,177 @@
+\documentclass[12pt]{article}
+ \usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts, enumitem, derivative, minted}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\begin{document}
+\renewcommand{\epsilon}{\varepsilon}
+ 
+\title{Homework 2}
+\author{N. Ohayon Rozanes}
+\maketitle
+ 
+\begin{problem}{1}
+\end{problem}
+\begin{enumerate}[label=\alph*)]
+  \item Want to solve for $\beta_1$ when $\odv{S}{\beta_1} = 0$ since that is where the least squares criterion is minimized. 
+    \begin{proof}
+      \begin{align*}
+        \odv{S}{\beta_1} &= 0 \\
+        \odv{(\sum (y_i - \beta_1x_i)^2)}{\beta_1}&= 0 \\
+                    \sum 2(y_i - \beta_1x_i)(-x_i)&= 0 \\
+                    \sum -2y_ix_i +2\beta_1x_i^2&=0 \\
+                    -2\sum y_ix_i + 2\beta_1\sum x_i^2&=0\\
+                    \beta_1 &= \frac{\sum y_ix_i}{\sum x_i^2}
+      \end{align*}
+    \end{proof}
+  \item 
+    \begin{proof}
+      $$
+        E[\hat\beta_1] = E\left[ \frac{\sum y_ix_i}{\sum x_i^2}\right]\\
+      $$
+      Since only $y_i$ is a random variable, the above is equivalent to 
+      \[
+        \frac{\sum x_iE[y_i]}{\sum x_i^2}
+      \]
+      And since $y_i = x_i\beta_1 + \epsilon$ and $E[\epsilon] = 0$ then $E[y_i] = x_i\beta_1$. So evidently, get that $E[\hat\beta_1]$ is
+      \begin{align*}
+        \frac{\sum x_iE[y_i]}{\sum x_i^2} &= \frac{\sum x_ix_i\beta_1}{\sum x_i^2} \\
+                                          &= \frac{\beta_1\sum x_i^2}{\sum x_i^2} \\
+                                          &= \beta_1
+      \end{align*}
+    \end{proof}
+    \begin{proof} We follow a very similar reasoning to the derivation of $E[\hat\beta_1]$. We can be sure that the covariate terms of the variance of the sum drop off by the assumption that $\epsilon$ is independent.
+      \begin{align*}
+        Var[\hat\beta_1] &= Var\left[\frac{\sum y_ix_i}{\sum x_i^2}\right] \\
+                         &= \frac{Var\left[\sum y_ix_i\right]}{(\sum x_i^2)^2} \\ 
+                         &= \frac{\sum x_i^2Var[y_i]}{(\sum x_i^2)^2} \\ 
+                         &= \frac{\sum x_i^2\sigma^2}{(\sum x_i^2)^2} \\ 
+                         &= \frac{\sigma^2}{\sum x_i^2} \\ 
+      \end{align*}
+    \end{proof}
+  \item Under the null hypothesis $\beta_1 = \beta_{10}$, we can take $\hat\sigma^2 \approx \sigma^2$, yieldign the test statistic of the form \[
+      \frac{\text{observed} - \text{hypothesized}}{\text{standard error}} = \frac{\hat\beta_1 - \beta_{10}}{\sqrt{\frac{\hat\sigma^2}{S_{xx}}}} = \frac{\hat\beta_1 - \beta_{10}}{\sqrt{\frac{SSE}{(n-1)S_{xx}}}} 
+  \]
+\item Since $\hat\beta_1$ is a sum of scaled normally distributed $y_i$, it too follows a normal distribution, and $\hat\sigma^2$ is the sum of $n$ square normally distributed $y_i$, divided by $n-1$, it is known to follow a $\chi^2$ distribution with $n-1$ degree's of freedom, divided by $n-1$. Therefore our test statistic follows a distribution $$T \sim \frac{\mathcal{N}}{\sqrt{\chi^2_{n-1}/n-1}}$$ 
+  Which is exactly the definition of the t distribution with $n-1$ degrees of freedom.
+\item 
+  Looking for the values between which the test statistic distribution has a $95\%$ chance of falling between:
+  \[
+    P\left\{ -t_{0.025, n-1} \le \frac{\hat\beta_1 - \beta_{10}}{se(\hat\beta_1)} \le t_{0.025, n-1}\right\} = 0.95
+  \]
+  Manipulating internally we get 
+  \begin{align*}
+  P\left\{ -t_{0.025, n-1}se(\hat\beta_1) \le \hat\beta_1 - \beta_{10} \le t_{0.025, n-1}se(\hat\beta_1)\right\} &= 0.95\\
+  P\left\{ -t_{0.025, n-1}se(\hat\beta_1) - \beta_1 \le \hat- \beta_{10} \le t_{0.025, n-1}se(\hat\beta_1) - \beta_1\right\} &= 0.95 \\
+  P\left\{ t_{0.025, n-1}se(\hat\beta_1)  + \beta_1 \ge \hat- \beta_{10} \ge -t_{0.025, n-1}se(\hat\beta_1) + \beta_1\right\} &= 0.95
+  \end{align*}
+  So finally, we get the $95\%$ confidence interval of: 
+  \[
+    \beta_1 \pm t_{0.025, n-1}\sqrt{\frac{\hat\sigma^2}{(n-1)S_{xx}}}
+  \]
+\item
+  Simply evaluating the expected value of $E[E[y|x]] = E[\hat\beta_1x] = \beta_1x$. Further $$Var(E[y|x]) = Var(\hat\beta_1x_0) = Var(\frac{\sum x_iy_i}{\sum x_i^2}x_0)$$
+  Which simplifies down to 
+  \[
+    x_0^2\frac{\sigma^2}{\sum x_i^2}
+  \]
+  Because of the results in part $b$. Now that we have the mean and variance of random variable that is a linear combiniation of normally distributed random variables, and therefore is itself a normally distributed random variable, we can construct the test statistic: 
+  \[
+    t_{n-1} \sim \frac{\widehat{E(y|x_0)} - E(y|x_0)}{\sqrt{\frac{x_0^2\hat\sigma^2}{\sum x_i^2}}}
+  \]
+  By evaluating the expected values, we can get a slightly simpler expression:
+  \[
+    t_{n-1} \sim \frac{\hat\beta_1x_0 - \beta_1x_0}{\sqrt{\frac{x_0^2\hat\sigma^2}{\sum x_i^2}}}
+  \]
+  Allowing us to construct the $100(1 - \alpha)\%$ confidence interval: 
+  \[
+    P\left\{ -t_{\alpha/2, n-1} \le \frac{\hat\beta_1x_0 - \beta_1x_0}{\sqrt{\frac{x_0^2\hat\sigma^2}{\sum x_i^2}}} \le t_{\alpha/2 , n-1}\right\}
+  \]
+  Finally, solving for the $E(y|x_0) = \beta_1x_0$ we get the confidence intervals 
+  \[
+    \hat\beta_1x_0 \pm t_{\alpha/2, n-1}\sqrt{\frac{x^2_0\hat\sigma^2}{\sum x_i^2}}
+  \]
+\item For the prediction interval, we are interested in the difference between the estimate of some future data, $\hat y_0$ and the actual observation $y_0$. \[
+    E[y_0 - \hat y_0] = \beta_1x_0 - \beta_1x_0 = 0
+\]
+And since the covariance terms drop off
+\[
+  Var[ y_0 -  \hat y_0] = Var[(\beta_1 -\hat\beta_1)x_0 + \epsilon_0] = x^2_0Var[\hat\beta_1] + Var[\epsilon_0]
+\]
+using the results from part $(b)$, the above evaluates to 
+\[
+  \sigma^2+ \frac{x_0^2\sigma^2}{\sum x_i^2} = \sigma^2(1 + \frac{x_0^2}{\sum x_i^2})
+\]
+Thus we can construct the predicition interval as such, substituting $\hat\sigma$ for $\sigma$:
+\[
+  P\left\{-t_{\alpha/2, n-1} \le \frac{y_0 - \hat y_0}{\sqrt{\hat\sigma^2(1 + \frac{x^2_0}{\sum x_i^2})}} \le t_{\alpha/2, n-1}\right\}
+\]
+  And we get prediction intervals:
+  \[
+    \hat y_0 \pm t_{\alpha/2, n-1}\sqrt{\hat\sigma^2(1+\frac{x^2_0}{\sum{x_i^2}})}
+  \]
+  as desired.
+\end{enumerate}
+\begin{problem}{2}
+\end{problem}
+\begin{enumerate}[label=\alph*)]
+    \item  In the classic linear regression problem, $\hat\beta_0$ is given by the solution to the least squares normal equations, given by $\hat\beta_0 = \bar y - \hat\beta_1 \bar x$. Enumerating the means, and plugging in the solution for $\hat\beta_1$, we get
+      \begin{align*}
+        \hat\beta_0 &= \bar y - \hat\beta_1 \bar x \\
+                    &= \frac1n (\sum y_i - \frac{\sum y_ix_i - \frac1n\sum y_i \sum x_i}{\sum x_i^2 - \frac1n (\sum x_i)^2} \sum x_i) \\
+                    &= \frac1n (\sum y_i - \frac{\sum(x_i - \bar x)y_i}{s_{xx}}\sum x_i)\\
+                    &= \frac1n (\sum y_i - \frac{\sum x_i}{S_{xx}}(\sum(x_i - \bar x)y_i)\\
+                    &= \frac1n (\sum (1 - \frac{x_i}{S_{xx}}(x_i - \bar x))y_i)\\
+                    &= \sum \frac1n (1 - \frac{x_i}{S_{xx}}(x_i - \bar x))y_i
+      \end{align*}
+      The above expresses $\hat\beta_0$ in the form of linear combinations of $y_i$, that is $$\hat\beta_0 = \sum \omega_i y_i$$ Where $$\omega_i = \frac1n(1 - \frac{x_i}{S_{xx}}(x_i -\bar x))$$
+    \item notably, since $\omega_i$ is comprised of deterministic variables, it can be treated as a constant for variance calculations. 
+      \begin{align*}
+        Cov(\hat\beta_0, y_0) &= E[\hat\beta_0y_0] -  E[\hat\beta_0]E[y_0] \\
+                              &= E[\sum \omega_i y_iy_0] - E[\sum \omega_i y_i]E[y_0] \\
+                              &= \sum \omega_i E[y_iy_0] - (\sum \omega_i E[y_i])(\beta_1x_0 + \beta_0) \\
+                              &= \smash{\sum \omega_i E[(\beta_1x_i + \beta_0 + \epsilon_i)(\beta_1x_0 + \beta_0 + \epsilon_0)] - (\sum \omega_i E[\beta_1x_i + \beta_0 + \epsilon_0])(\beta_1x_0 + \beta_0)}\\
+                              &= \sum \omega_i (\beta_1x_i + \beta_0)(\beta_1x_0 + \beta_0) - \sum \omega_i (\beta_1x_i + \beta_0)(\beta_1x_0 + \beta_0) \\
+                              &= 0
+      \end{align*}
+      As desired. Of course, the above algebra could have probably been avoided by recognizing that since $\hat\beta_0$ is a linear combination of $y_i$ of which the only random component is $\epsilon_i$, and we take it on assumption that $cov(\epsilon_i, \epsilon_j) = 0$ for $ i \neq j$, then it's natural that $Cov(\hat\beta_0, y_0) = 0$ 
+  \end{enumerate}
+  \begin{problem}{3}
+  \end{problem}
+  \begin{enumerate}[label=\alph*)]
+  \item  
+    \[
+      \hat y  = 1.4265x - 25.2943
+    \]
+  \item There is a positive relationship between weight and the systolic blood pressure, as indicated by the positive slope of the linear regression. However the somewhat large negative intercept indicates that systolic blood pressure is typically smaller in maginitude than weight.
+  \item The null and alternative hypothesis for the slope in the default summary of a linear model in R is 
+    \[
+      H_0 : \beta_1 = 0 \quad H-1 : \beta_1 \ne 0
+    \]
+    Which has a calcualted p-score of $3.59e-06$, well below the typically chosen significance threshold $0.05$, we can reject the null hypothesis in this case, meaning that the weight regressor contributes meaninfully to the regression.
+  \item The estimated $\hat\sigma$ is captured by the residual standard error which comes out to $16.01$, so the estimated variance is $\hat\sigma^2 = 256.3201$.
+  \item The test statistic $t_0$ for the null hypothesis $H_0 : \beta_1 = -50$ comes out to be $397$, where as the critical value $t_{0.025, n-2} = 2.0639$. Therefore, since $\lvert t_0 \rvert  < t_{0.025, n-2}$ then we can reject the null hypothesis, concluding that the $\beta_1$ is very unlikely to be equal to $-50$.
+    \\ 
+    \it{code is attached on next page}
+  \pagebreak
+  \item \begin{minted}{R}
+    data = read.csv("./hw2_systolic_bp(1).csv")
+    model <- lm(weight ~ sys.bp, data = data)
+    m <- summary(model)
+    m
+    #Want to test H_0 : \beta_1 = -50, first we calculate the test statistic
+    beta_1_hat <- coef(model)[2]
+    Sxx <- sum((data$weight - mean(data$weight))^2)
+    sigma_hat <- m$sigma
+    test_statistic <- (beta_1_hat - (-50))/sqrt(sigma_hat^2/Sxx)
+
+    #then we can calculate value of the t distribution 
+    n <- nrow(data)
+    t_critical <- qt(0.975, n -2)
+  \end{minted}
+  \end{enumerate}
+\end{document}
