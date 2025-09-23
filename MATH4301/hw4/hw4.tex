@@ -1,0 +1,57 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,enumi, amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+
+
+\title{Math 333 Weekly Homework X}
+\author{Your Name Here}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+\begin{enumerate}[label = \alph*)]
+  \item $\Sup A \in \mathbb{R} \leftrightarrow A$ is bounded, and $A \ne \varnothing$. Since the sequence converges, we can say that the sequence is Cauchy. Since every Cauchy sequence is bounded, and $A$ obviously is not empty, it must have $\sup A \in \mathbb{R}$ 
+  \item \begin{proof}
+    For increasing converging sequence $a_n$, the following conditions hold by definition:
+    \begin{align}
+      a_{n+1} \ge a_n \quad& \forall n \in \mathbb{N}\\ 
+      \exists N \in \mathbb{N}: \lvert a - a_n \rvert \le \epsilon \quad \forall n \ge N \epsilon > 0
+    \end{align}
+     By definition, $\forall \delta > 0$ then $\exists a_N \in A : \sup A - \delta < a_N \implies \sup A - a_n < \delta$. Since the element $a_N \in A$ is the $N$th element of the sequence $a_n$, and $a_n$ is increasing, we can say $\sup A - a_m < \sup A - a_N < \delta \forall m > N$. This is exactly the definition of $\lim a_n = \sup A$
+  \end{proof}
+\end{enumerate}
+
+\subsection*{Exercise 2}
+The sequence can be defined recursively as 
+\[
+  a_1 = \sqrt{2} \quad a_{n+1} = \sqrt{2\a_n}
+\]
+\begin{proof}
+(Type your proof here.)
+\end{proof}
+
+\vspace{2in} %Leave more space for comments!
+
+
+
+
+
+
+
+\end{document}
+
