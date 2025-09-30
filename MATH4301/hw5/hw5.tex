@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,enumerate, enumitem, amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+
+
+\title{Homework 5}
+\author{N. Ohayon Rozanes}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+\begin{proof}
+  The necessary condition, given that $||x|| \le ||x + cy||~\forall c \in \mathbb{R}$:
+  \begin{align*}
+    ||x|| &\le  ||x+cy||\\
+    \sqrt{\langle x, x\rangle} &\le \sqrt{\langle x + cy,  x + cy\rangle} \\
+                               &\le \sqrt{\langle x,x\rangle + 2\langle x, cy \rangle + \langle cy, cy \rangle}\\
+                               &\le \sqrt{\langle x,x\rangle + 2c\langle x, y \rangle + c^2\langle y, y \rangle}\\
+    \langle x,x \rangle &\le \langle x,x \rangle  + 2c \langle x,y\rangle + c^2\langle y,y\rangle \\ 
+    0 &\le 2c\langle x,y \rangle  + c^2\langle y,y \rangle \\
+  \end{align*}
+Solving for $c$, the two intervals of solutions will be 
+
+\begin{align*}
+  \frac{-\langle x, y\rangle - \sqrt{\langle x,y \rangle^2}}{2\langle y, y\rangle} \le c \le \frac{-\langle x, y\rangle + \sqrt{\langle{x,y}\rangle^2}}{2\langle y, y\rangle}
+\end{align*}
+
+  However since we require that $||x|| \le ||x + cy||$ be valid $\forall c \in \mathbb{R}$, then it must be that
+  \begin{align*}
+    -\langle x, y \rangle - \sqrt{\langle x, y\rangle^2} &= -\langle x , y \rangle + \sqrt{\langle x, y\rangle^2} \\
+    -\sqrt{\langle x, y\rangle^2}  &= \sqrt{\langle x, y\rangle^2} 
+  \end{align*}
+  Which can only happen when $\langle x, y \rangle = 0$.
+
+  Now the sufficient condition, verify that $||x|| \le ||x + cy||$ given that $\langle x, y\rangle = 0$:
+  \begin{align*}
+    ||x|| &\le  ||x+cy||\\
+    \sqrt{\langle x, x\rangle} &\le \sqrt{\langle x + cy,  x + cy\rangle} \\
+                               &\le \sqrt{\langle x,x\rangle + 2\langle x, cy \rangle + \langle cy, cy \rangle}\\
+                               &\le \sqrt{\langle x,x\rangle + 2c\langle x, y \rangle + c^2\langle y, y \rangle}\\
+    \langle x,x \rangle &\le \langle x,x \rangle  + 2c \langle x,y\rangle + c^2\langle y,y\rangle \\ 
+    \langle x,x \rangle &\le \langle x,x \rangle  + c^2\langle y,y\rangle \\ 
+  \end{align*}
+  and since $\langle y, y\rangle \ge 0$, we have verified that the inequality holds for all $c$.
+\end{proof}
+
+\subsection*{Exercise 2}
+
+\begin{proof}
+  \begin{enumerate}[label=\roman*)]
+    \item Since $\lvert r \rvert \ge 0 \forall r \in \mathbb{R}$, and the sum of positive numbers in $\mathbb{R}$ is positive. $\sum \lvert x_i \rvert \ge 0 \implies ||x||_1 \ge 0$
+    \item $\sum |x_i| = 0 \implies |x_1| + |x_2| ...  + |x_n| = 0$. Since the summands are all $\ge 0$, none can be the additive inverses of any of the others, so they must all be equal to $0$.
+    \item Becuase scalar multiplication applies element-wise in $\mathbb{R}^n$, then $||\alpha x||_1 = \sum |\alpha x_i| = \sum |\alpha||x_i|$ and because $\alpha$ is not indexed by $i$ at all. $\sum |\alpha||x_i| = |\alpha| \sum |x_i| = |\alpha|||x_i||_1$
+    \item 
+    \begin{align*}
+      ||x+y||_1 &= \sum |x_i + y_i| \\
+                &\le \sum (|x_i| + |y_i|) \quad \text{(by the triangle inequality in $\mathbb{R}$)}
+    \end{align*}
+    Since addition is commutitive, 
+    \begin{align*}
+      \sum (|x_i| + |y_i|) &=  |x_1| + |y_1| ... + |x_n| +|y_n|\\
+                           &= |x_1| + |x_2| ... |x_n| + |y_1| + ... |y_n| \\
+                           &= \sum |x_i| + \sum |y_i| \\
+                           &= ||x||_1 + ||y||_1
+    \end{align*}
+    therefore  $$||x+y||_1 \le ||x||_1 + ||y||_1$$
+  \end{enumerate}
+\end{proof}
+\subsection*{Exercise 3}
+Upper bound:
+\begin{align*}
+  ||x|| &\le ||x||_1 \\
+  \sqrt{\sum{x_i^2}} &\le \sum |x_i| \\
+  \sum x_i^2 &\le (\sum |x_i|)^2 \\
+  x_1^2 + x_2^2 + ...+ x_n^2 &\le |x_1|^2 + |x_2|^2 + ... |x_n|^2 + 2|x_1||x_2| + 2|x_1||x_3|... 2|x_{n-1}||x_n|\\
+  0 &\le 2\sum_{1 \le i < j \le n}^n |x_i||x_j|
+\end{align*}
+Because of the absolute value, the cross terms of the right hand side are all strictly positive, and therefore the inequality holds. \\
+
+Lower bound:
+\begin{align*} 
+  ||x||_1 &= \sum |x_i| \\
+          &= \sum |x_i \cdot 1| \\
+          &= |\langle x_i , \mathbf{1} \rangle| \\
+          &\le ||x_i||_2||\mathbf{1}||_2 \quad \text{(By Cauchy-Swhartz)}  \\
+          &\le \sqrt{n}||x_i||_2 \\
+  \frac{1}{\sqrt{n}}||x||_1&\le ||x_i||_2
+\end{align*}
+Where $\mathbf{1}$ is the all $1$ vector in $\mathbb{R}^n$
+\subsection*{Exercise 4}
+\begin{enumerate}[label=\alph*)]
+  \item Since every $f \in \mathcal{F}$ is bounded between $[-M, M]$,  
+  the absolute difference between any two functions in $\mathcal{F}$ is bounded by
+  \[
+    0 \leq |f(x)-g(x)| \leq 2M.
+  \]
+  So the set $\{|f(x) - g(x)| : x \in [a,b]\}$ is bounded above by $2M$.  
+  By the completeness of the real numbers, the supremum must exist.
+  \item 
+  \begin{proof}
+    To show that $d$ is a metric:
+    \begin{enumerate}[label=\alph*)]
+      \item 
+      $\forall x \in [a,b],\ f(x) = f(x) \implies |f(x)-f(x)| = 0$.  
+      Thus, 
+      \[
+        d(f,f) = \sup_{x \in [a,b]} |f(x)-f(x)| = 0.
+      \]
+
+      \item
+      For $g \neq f$ on $[a,b]$, there must exist a point $x \in [a,b]$ such that $g(x) \neq f(x)$.  
+      This implies
+      \[
+        |g(x)-f(x)| > 0,
+      \]
+      and therefore $d(f,g) > 0$.  
+      In other words, $d(f,g)=0 \iff f=g$.
+
+      \item
+      \[
+        \displaystyle d(f,g) = \sup_{x \in [a,b]} |f(x)-g(x)| 
+        = \sup_{x \in [a,b]} |-(g(x)-f(x))|
+        = \sup_{x \in [a,b]} |g(x)-f(x)| = d(g,f).
+      \]
+
+      \item 
+      For any $x \in [a,b]$,
+      \[
+        |f(x)-g(x)| = |f(x)-h(x) + h(x)-g(x)|
+        \leq |f(x)-h(x)| + |h(x)-g(x)|.
+      \]
+      Taking suprema on both sides,
+      \[
+        \displaystyle d(f,g) = \sup_{x \in [a,b]} |f(x)-g(x)|
+        \leq \sup_{x \in [a,b]} |f(x)-h(x)| + \sup_{x \in [a,b]} |h(x)-g(x)|
+        = d(f,h) + d(h,g).
+      \]
+      Equality occurs when the same $x$ simultaneously maximizes each term;  
+      otherwise, the inequality is strict because of the definition of the supremum.
+    \end{enumerate}
+  \end{proof}
+\end{enumerate}
+\subsection*{Exercise 5}
+\enumerate
+\end{document}
+
