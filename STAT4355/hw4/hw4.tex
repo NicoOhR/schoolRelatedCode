@@ -1,0 +1,56 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+
+
+\title{Homework 4}
+\author{N. Ohayon Rozanes}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+\begin{proof}
+  multiplying out the terms and simplifying we get that
+  \begin{align*}
+    (I - H)(I - H) &= I - 2H + HH 
+  \end{align*}
+  However, since $H$ is a project matrix and therefore idempotent, we can say that $HH = H$ so: 
+  \begin{align*}
+    I - 2H + HH &= I - 2H + H\\
+                &= I - H
+  \end{align*}
+  Thererfore we have proven that $(I - H)^2 = (I - H)$ is idempotent
+\end{proof}
+\subsection*{Exercise 2}
+\begin{proof}
+  Clearly
+  \begin{align*}
+    Var(Ay) &= E[Ay - E(Ay)](Ay - E[Ay]))' \\
+            &= E[A(y - E(y))](A(y - E[y])) \\
+            &= AE[(y - E(y))](y - E[y]))'A' \\
+            &= AVar(y)A' \\
+  \end{align*}
+\end{proof}
+\subsection*{Exercise 3}
+\begin{enumerate}
+  \item 
+\begin{proof}
+\end{proof}
+\end{enumerate}
+\end{document}
+
