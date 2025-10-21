@@ -40,17 +40,59 @@
 \begin{proof}
   Clearly
   \begin{align*}
-    Var(Ay) &= E[Ay - E(Ay)](Ay - E[Ay]))' \\
-            &= E[A(y - E(y))](A(y - E[y])) \\
-            &= AE[(y - E(y))](y - E[y]))'A' \\
-            &= AVar(y)A' \\
+    \operatorname{Var}(\mathbf{A}y) &= \operatorname{E}[\mathbf{A}y - \operatorname{E}(\mathbf{A}y)](\mathbf{A}y - \operatorname{E}[\mathbf{A}y]))' \\
+            &= \operatorname{E}[\mathbf{A}(y - \operatorname{E}(y))](\mathbf{A}(y - \operatorname{E}[y])) \\
+            &= \mathbf{A}\operatorname{E}[(y - \operatorname{E}(y))](y - \operatorname{E}[y]))'\mathbf{A}' \\
+            &= \mathbf{A}\operatorname{Var}(y)\mathbf{A}' \\
   \end{align*}
 \end{proof}
-\subsection*{Exercise 3}
-\begin{enumerate}
-  \item 
-\begin{proof}
-\end{proof}
-\end{enumerate}
-\end{document}
+\subsection*{Exercise 4}
+This intuitvely makes sense, since the true $y$ can be decomposed to the parallel component $X\beta$ and the orthogonal component $\varepsilon$, regardless, notice that:
+\begin{align*}
+  \hat\beta &= \beta + (X'X)^{-1}X'\varepsilon \\
+  (X'X)^{-1}X'y &= \beta + (X'X)^{-1}X'\varepsilon \\
+  (X'X)(X'X)^{-1}X'y &= (X'X)\beta + (X'X)(X'X)^{-1}X'\varepsilon \\
+  X'y &= (X'X)\beta + X'\varepsilon\\
+  (X')^{-1}X'y &= (X')^{-1})(X'X)\beta + (X')^{-1}X'\varepsilon \\
+  y &= X\beta + \varepsilon
+\end{align*}
+Which is true by the definition of the linear regression problem statement.
+\subsection*{Exercise 5}
+\begin{align*}
+  e  &= (I - H)\varepsilon  \\
+  (I - H)y &= (I - H)\varepsilon \\
+  (I - H)(X\beta + \varepsilon) &= (I - H)\varepsilon \\
+  IX\beta - HX\beta + (I - H)\varepsilon &= (I - H)\varepsilon \\
+  X\beta - X\beta + (I - H)\varepsilon &= (I - H)\varepsilon \\
+  (I - H)\varepsilon &= (I - H)\varepsilon
+\end{align*}
+\subsection*{Exercise 6}
+\begin{align*}
+  E[\hat\beta_1] &= E[(X_1'X_1)^{-1}X_1'y] \\ 
+                 &= E[(X_1'X_1)^{-1}X_1'(X_1\beta_1 + X_2\beta_2 + \varepsilon)] \\
+                 &= E[(X_1'X_1)^{-1}X_1'X_1\beta_1 + (X'_1X_1)^{-1}X'_1X_2\beta_2 + (X'_1X_1)^{-1}X'_1\varepsilon] \\ 
+                 &= E[(X_1'X_1)^{-1}X_1'X_1\beta_1] + E[(X'_1X_1)^{-1}X'_1X_2\beta_2] + E[(X'_1X_1)^{-1}X'_1\varepsilon] \\ 
+                 &= \beta_1 + (X_1'X_1)^{-1}(X'_1)X_2\beta_2 + 0
+\end{align*}
 
+Clearly, this estimator is ubiased only when $\beta_2$ is in the null space of $(X_1'X_1)^{-1}X_1'X_2$, although since $(X_1'X_1)^{-1}$ is obviously invertable, it has a trivial null space so the estimator is unbiased when $X_1'X_2\beta_2 = 0$. Since both $X_1$ and $X_2$ are assumed to be full rank (no colinearity), then the null space is only non-trivial when the columns of $X_1$ are orthogonal to the columns of $X_2$, in which case the null space is the all of $\mathbb{R}^n$. Therefore, the only time the estimator is unbiased is when $X_1$ and $X_2$ have orthogonal columns.
+
+\subsection*{Exercise 7}
+\begin{align*}
+  \sum Var(\hat y_i) &= tr(Var(\hat y))\\
+  &= tr(Var(Hy)) \\ 
+  &= tr(H'Var(y)H) \\
+  &= tr(H'(\sigma^2I)H) \\
+  &= \sigma^2tr(H'H) \\
+  &= \sigma^2tr(H) \\ 
+  &= \sigma^2tr(X(X'X)^{-1}X') \\ 
+\end{align*}
+since the trace of a product of matricies commutes, that is $tr(AB) = tr(BA)$, we get that 
+\[
+  \sigma^2tr(X(X'X)^{-1}X') = \sigma^2tr(X'X(X'X)^{-1})
+\]
+$X'X$ is a square matrix with dimensionality of the number of columns (predictors) of the $X$ matrix, so the product in the trace comes out to $I_p$
+\[
+  \sigma^2tr(X'X(X'X)^{-1}) = \sigma^2tr(I_p) = \sigma^2p
+\]
+\end{document}
