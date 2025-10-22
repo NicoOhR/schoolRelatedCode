@@ -19,9 +19,6 @@
 
 \maketitle
 
-\vspace{0.5in}
-
-
 
 \subsection*{Exercise 1}
 \begin{proof}
@@ -46,6 +43,96 @@
             &= \mathbf{A}\operatorname{Var}(y)\mathbf{A}' \\
   \end{align*}
 \end{proof}
+\subsection*{Exercise 3}
+\begin{enumerate}
+  \item For the simple regression case, $\mathbf{X}$ is given by: 
+    \[
+      \mathbf{X} = 
+      \begin{bmatrix}
+        1 & x_{1} \\
+        1 & x_{2} \\ 
+        1 & x_{3} \\ 
+        \vdots & \vdots \\
+        1 & x_n
+      \end{bmatrix}
+    \]
+    So clearly: 
+    \[
+      \mathbf{X'X} = \begin{bmatrix} \mathbf{1}'\cdot\mathbf{1}  & \mathbf{1}'\cdot\mathbf{x}\\
+        \mathbf{x}'\cdot\mathbf{1} & \mathbf{x}'\cdot\mathbf{x}
+      \end{bmatrix}
+    \]
+    Expressed using summations we get that 
+      
+    \[
+      \mathbf{X'X} = \begin{bmatrix} n  & \sum x_i\\
+        \sum x_i & \sum x_i^2 
+      \end{bmatrix}
+    \]
+    Using the standard inversion formula for a $2\times 2$ matrix,
+    \[
+      (\mathbf{X'X})^{-1} = \frac{1}{n\sum x_i^2 - (\sum x_i)^2}
+      \begin{bmatrix}
+        \sum x_i^2 & \sum x_i \\ \sum x_i & n
+      \end{bmatrix}
+    \]
+    To simplify the fraction a little 
+    \begin{align*}
+      \frac{1}{n\sum x_i^2 - (\sum x_i)^2} &= \frac{1}{n\sum x_i^2 - (n\bar x)^2} \\
+                                           &= \frac{1}{n(\sum x_i^2 - n(\bar x)^2)} \\
+                                           &= \frac{1}{nS_{xx}}
+    \end{align*}
+    Then multiply by the right and left by $\mathbf{X'}$ and $\mathbf{X}$ to get the hat matrix $\mathbf{H}$. It's a bit easier to express in vector form, take $\mathbf{x}$ to be the data vector and $\mathbf{1}$ to be the all $1$ vector
+\begin{align*}
+\mathbf{X(X'X)^{-1}X'} 
+&= 
+\begin{bmatrix}\mathbf{1} & \mathbf{x}\end{bmatrix}
+\left(
+\frac{1}{nS_{xx}}
+\begin{bmatrix}
+\mathbf{x'x} & -\mathbf{1'x}\\[2pt]
+-\mathbf{1'x} & n
+\end{bmatrix}
+\right)
+\begin{bmatrix}\mathbf{1}\\ \mathbf{x}\end{bmatrix}
+\\[6pt]
+&= \frac{1}{nS_{xx}}
+\begin{bmatrix}
+\mathbf{1} & \mathbf{x}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{x'x} & -\mathbf{1'x}\\[2pt]
+-\mathbf{1'x} & n
+\end{bmatrix}
+\begin{bmatrix}\mathbf{1}\\ \mathbf{x}\end{bmatrix}
+\\[6pt]
+&= \frac{1}{nS_{xx}}
+\Big(
+(\mathbf{x'x})\,\mathbf{1}\mathbf{1}'
+-(\mathbf{1'x})\,\mathbf{x}\mathbf{1}'
+-(\mathbf{1'x})\,\mathbf{1}\mathbf{x}'
++ n\,\mathbf{x}\mathbf{x}'
+\Big)
+\\[6pt]
+&= \frac{1}{nS_{xx}}
+\Big(
+(n\bar{x}^2+S_{xx})\,\mathbf{1}\mathbf{1}'
+- n\bar{x}\,\mathbf{x}\mathbf{1}'
+- n\bar{x}\,\mathbf{1}\mathbf{x}'
++ n\,\mathbf{x}\mathbf{x}'
+\Big)\\
+&= \frac{1}{S_{xx}}
+\Big(
+\mathbf{x}\mathbf{x}' - \bar{x}\,\mathbf{x}\mathbf{1}' - \bar{x}\,\mathbf{1}\mathbf{x}' + \bar{x}^2\,\mathbf{1}\mathbf{1}'
+\Big)
+\;+\;
+\frac{1}{n}\,\mathbf{1}\mathbf{1}'
+\\[6pt]
+&= \frac{1}{n}\, \;+\; 
+\frac{(\mathbf{x}-\bar{x}\mathbf{1})\,(\mathbf{x}-\bar{x}\mathbf{1})'}{S_{xx}}.
+\end{align*}
+\item The more extreme values of the data vector $\mathbf{x}$, the values further from $\bar x$ will yield a value larger in magnitude in the numerator. That is to say, that the data pints further from the mean will exert a larger influence on the projection.
+\end{enumerate}
 \subsection*{Exercise 4}
 This intuitvely makes sense, since the true $y$ can be decomposed to the parallel component $X\beta$ and the orthogonal component $\varepsilon$, regardless, notice that:
 \begin{align*}
@@ -58,6 +145,7 @@ This intuitvely makes sense, since the true $y$ can be decomposed to the paralle
 \end{align*}
 Which is true by the definition of the linear regression problem statement.
 \subsection*{Exercise 5}
+
 \begin{align*}
   e  &= (I - H)\varepsilon  \\
   (I - H)y &= (I - H)\varepsilon \\
@@ -67,6 +155,7 @@ Which is true by the definition of the linear regression problem statement.
   (I - H)\varepsilon &= (I - H)\varepsilon
 \end{align*}
 \subsection*{Exercise 6}
+
 \begin{align*}
   E[\hat\beta_1] &= E[(X_1'X_1)^{-1}X_1'y] \\ 
                  &= E[(X_1'X_1)^{-1}X_1'(X_1\beta_1 + X_2\beta_2 + \varepsilon)] \\
@@ -75,7 +164,7 @@ Which is true by the definition of the linear regression problem statement.
                  &= \beta_1 + (X_1'X_1)^{-1}(X'_1)X_2\beta_2 + 0
 \end{align*}
 
-Clearly, this estimator is ubiased only when $\beta_2$ is in the null space of $(X_1'X_1)^{-1}X_1'X_2$, although since $(X_1'X_1)^{-1}$ is obviously invertable, it has a trivial null space so the estimator is unbiased when $X_1'X_2\beta_2 = 0$. Since both $X_1$ and $X_2$ are assumed to be full rank (no colinearity), then the null space is only non-trivial when the columns of $X_1$ are orthogonal to the columns of $X_2$, in which case the null space is the all of $\mathbb{R}^n$. Therefore, the only time the estimator is unbiased is when $X_1$ and $X_2$ have orthogonal columns.
+Clearly, this estimator is unbiased only when $\beta_2$ is in the null space of $(X_1'X_1)^{-1}X_1'X_2$, although since $(X_1'X_1)^{-1}$ is obviously invertible, it has a trivial null space so the estimator is unbiased when $X_1'X_2\beta_2 = 0$. Since both $X_1$ and $X_2$ are assumed to be full rank (no co-linearity), then the null space is only non-trivial when the columns of $X_1$ are orthogonal to the columns of $X_2$, in which case the null space is the all of $\mathbb{R}^n$. Therefore, the only time the estimator is unbiased is when $X_1$ and $X_2$ have orthogonal columns.
 
 \subsection*{Exercise 7}
 \begin{align*}
@@ -87,7 +176,7 @@ Clearly, this estimator is ubiased only when $\beta_2$ is in the null space of $
   &= \sigma^2tr(H) \\ 
   &= \sigma^2tr(X(X'X)^{-1}X') \\ 
 \end{align*}
-since the trace of a product of matricies commutes, that is $tr(AB) = tr(BA)$, we get that 
+since the trace of a product of matrices commutes, that is $tr(AB) = tr(BA)$, we get that 
 \[
   \sigma^2tr(X(X'X)^{-1}X') = \sigma^2tr(X'X(X'X)^{-1})
 \]
