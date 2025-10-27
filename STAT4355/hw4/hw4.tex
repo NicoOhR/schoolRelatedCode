@@ -184,4 +184,44 @@ $X'X$ is a square matrix with dimensionality of the number of columns (predictor
 \[
   \sigma^2tr(X'X(X'X)^{-1}) = \sigma^2tr(I_p) = \sigma^2p
 \]
+\subsection*{Bonus}
+Q: Show that $E[MSE] = \sigma^2$ and $E[MSR] = \sigma^2 + \beta'S_{xx}$ for the multiple linear regression
+(I only attempted the first half)
+\begin{align*}
+  E[MSE] &= \frac{E[SSE]}{(n - p - 1)} \\
+  E[MSE](n - p - 1) &= E[y'y - \hat\beta'X'y] \\
+                             &= E[y'y] - E[(X\hat\beta)'y] \\
+                             &= E[y'y] - E[(Hy)'y] \\
+                             &= E[y'y] - E[y'Hy] \\
+\end{align*}
+Evaluating the first expected variable
+\begin{align*}
+  E[y'y]  &= E[y'y] \\ 
+          &= E[(X\beta + \varepsilon)'(X\beta + \varepsilon)] \\
+          &= E[(\beta'X'X\beta + \beta'X\varepsilon + \varepsilon'X\beta +\varepsilon'\varepsilon)]\\
+          &= \beta'X'X\beta + E[\varepsilon'\varepsilon] \\
+          &= \beta'X'X\beta + n\sigma^2
+\end{align*}
+Since $\varepsilon'\varepsilon$ is a scalar, $tr(\varepsilon'\varepsilon) = \varepsilon'\varepsilon$, and $tr(\varepsilon'\varepsilon) = tr(\varepsilon\varepsilon') = tr(\sigma^2I) = n\sigma^2$. 
+
+Applying the trace trick to evaluate the expected value of the quadratic form $y'Hy$
+\begin{align*}
+  E[y'Hy] &= E[y]'HE[y] + tr(HVar(y)) \\
+          &= \beta'X'HX\beta + tr(H\sigma^2I) \\
+          &= \beta'X'X\beta + \sigma^2(tr(H)) \\ 
+          &= \beta'X'X\beta + \sigma^2(tr(X(X'X)^{-1})X')) \\ 
+          &= \beta'X'X\beta + \sigma^2(tr(X'X(X'X)^{-1}))) \\ 
+          &= \beta'X'X\beta + \sigma^2(tr(I_{p+1})) \\ 
+          &= \beta'X'X\beta + \sigma^2(p+1) \\ 
+\end{align*}
+Putting them together
+\begin{align*}
+  E[y'y] - E[y'Hy] &= \beta'X'X\beta + n\sigma^2  -  \beta'X'X\beta - \sigma^2(p+1) \\
+                   &= \sigma^2(n - p - 1)
+\end{align*}
+So 
+\[
+  E[MSE] = \frac{\sigma^2(n-p-1)}{n-p-1} = \sigma^2
+\]
+as desired
 \end{document}
