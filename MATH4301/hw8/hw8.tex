@@ -40,7 +40,7 @@ True
 \end{proof}
 \subsection*{Exercise 3}
 \begin{proof}
-  $\partial(\partial A) = \overline {\partial A} \cup \text{Int}(\partial A)$, however since $\partial A$ is closed, and the closure of a closed set is itsefl, $\overline{\partial A} = \partial A$. Therefore $$\partial(\partial A) = \partial A \cup \text{Int}(\partial A) \implies \partial(\partial A) \subseteq \partial A$$
+  $\partial(\partial A) = \overline {\partial A} \setminus \text{Int}(\partial A)$, however since $\partial A$ is closed, and the closure of a closed set is itsefl, $\overline{\partial A} = \partial A$. Therefore $$\partial(\partial A) = \partial A \setminus \text{Int}(\partial A) \implies \partial(\partial A) \subseteq \partial A$$
 \end{proof}
 
 \subsection*{Exericse 4}
@@ -65,6 +65,46 @@ and that $x^m := \max\{x^1, x^2, x^3... x^n\} \ge x^i, \forall i$,
 \]
 so we get that $||x|| \le \sqrt{n}|x^m|$ as desired.
 \end{proof}
+\item 
+  \begin{proof}
+    \begin{enumerate}
+      \item $(\implies)$Assume that for all $i$, $x^i_k \to x^i ~ k\to\infty$. Want to show that there exists and $N \in \mathbb{N}$ such that $$|| x_k - x || < \varepsilon \quad \forall k \ge N$$
+    expanding the vectors into their individual elements
+    \[
+      ||(x_k^1, x_k^2...x_k^n) - (x^1, x^2, ... x^n)|| = ||(x_k^1 - x^1), (x_k^2 - x^2),... (x_k^n - x^n)||
+    \]
+    Which is evaluated as 
+    \[
+      \sqrt{\sum_{i=1}^n\left( x_k^i - x^i\right)^2} 
+    \]
+    By assumption $x^i_k \to x^i$, which is to say that $\forall \varepsilon$ there exists $N^i$ such that $|x^i_k - x^i| < \frac{\varepsilon}{\sqrt{n}}$ for all $k > N^i$. Define $N := \max\{ N^1, ,N^2 ... N^n\}$. For all $k > N$ 
+    \[
+      \sqrt{\sum_{i=1}^n\left( x_k^i - x^i\right)^2}  \le \sqrt{\sum_{i=1}^n (\frac\varepsilon{\sqrt{n}})^2} = \varepsilon
+    \] So for any $\varepsilon$, we can choose an $N$ large enough such that $||x_k - x|| < \varepsilon$ as desired.\\ 
+    \item 
+    $(\Longleftarrow)$ Assume that for arbitrary $\varepsilon > 0 ~ \exists N \in \mathbb{N}$ such that $||x_k - x|| < \varepsilon ~ \forall k > N$. Using the fact that for any vector $x$, the norm of the vector is at least as large as the absolute value of any element of that vector
+    $$|x^i_k - x^i| \le ||x_k-x|| < \epsilon$$
+    That is to say that any $x^i_k$, the same $N$ for which $||x_k - x|| < \epsilon ~ \forall k > N$ can be chosen such that $|x^i_k - x^i| < \epsilon ~ \forall k > N$
+    \end{enumerate}
+  \end{proof}
+  \subsection*{Exercise 5}
+  \begin{enumerate}
+    \item Assume that $x_k \to x$ as $k \to \infty$, so $\forall \varepsilon > 0, \exists N \in \mathbb{N}$ such that $||x_k - x|| < \varepsilon$, for $||x_k|| \to ||x||$. Using the reverse triangle inequality, we find that
+      \[
+        |||x_k|| - ||x||| \le ||x_k - x|| \le \varepsilon
+      \]
+      So for any $\varepsilon > 0$, choosing the same $N$ for which $||x_k - x|| \le \varepsilon$ will lead to $|||x_k|| - ||x||| \le \varepsilon$, hence $||x_k|| \to ||x||$
+    \item A set $F$ is closed if for every convergent sequence $x_k$ defined inside the set, the limit of the sequence $x \in F$. Want to show that $||x|| \le 1$
+    Let $\{x_k\} \subset \bar{\mathbb{B}}_1(0)$, and $x_k \to x$. Then by definition $\forall \varepsilon > 0, \exists N \in \mathbb{N}$ such that $$||x_k - x|| < \varepsilon \quad \forall k > N$$
+    Since $\forall k, x_k \in \bar{\mathbb{B}}_1(0) \implies ||x_k|| \le 1$, and that $||x|| \to ||x_k||$
+    \begin{align*}
+      ||x|| &= ||x - x_k + x_k|| \\
+            &\le ||x - x_k|| + ||x_k|| \\
+            &\le \varepsilon + ||x_k|| \\ 
+            &\le \varepsilon + 1
+    \end{align*}      
+    And since $\varepsilon$ is arbitrary, $||x||\le 1$ so $x$ lies in $\bar{\mathbb{B}}_{1}(0)$
+  \end{enumerate}
 \end{enumerate}
 \end{document}
 
