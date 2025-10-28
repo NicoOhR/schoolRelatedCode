@@ -1,0 +1,70 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+
+
+\title{Math 333 Weekly Homework X}
+\author{Your Name Here}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+True
+\begin{proof}
+  Since $A$ is bounded above, there must exist a $\sup A$. Using the approximation characteritic of the supremum, we can say that $\forall \varepsilon > 0, \exists a \in A$ such that $$\sup - \varepsilon < a$$, so within every $\varepsilon$ ball around $\sup A$, we can find a point in $A$ within the $\varepsilon$ ball of $\sup A$. If this point $a \neq \sup A$ then $\sup A$ is a point in the closure of $A$ not in $A$ and therefore not in the interior of $A$, so $\sup A \in \partial A$. However if $\sup A \in A$, since $\forall a \in A$ and $\forall \varepsilon > 0$  $$\sup A \geq a \implies \sup A + \varepsilon > a$$ then there is always a point in the $\varepsilon$ ball around $\sup A$ is not in $A$. If $\sup A$ is in $A$, then it must be in $\bar A$, but it cannot be in the interior of $A$ since there is a point not in $A$ in an arbitrary $\varepsilon$-ball about it, so it must be in $\partial A$
+\end{proof}
+
+\subsection*{Exercise 2}
+\begin{proof}
+  Let $x \in \bar A$, if $x \in A$, then $x \in A \cup \partial A$ and we're done. Otherwise, $x \notin A$, then $x$ must be an accumulation point of $A$, and by definition 
+  $$\mathbb{B}_\varepsilon(x)/\{x\} \cap A \neq \emptyset \implies \mathbb{B}_\varepsilon(x) \cap A \neq \emptyset$$ Further since $x \notin A$, then at least
+  \[
+    \{x\} \subseteq \mathbb{B}_\varepsilon(x) \cap A^c \implies \mathbb{B}_\varepsilon(x) \cap A^c \neq \emptyset
+  \]
+  Therefore for a point $x \in \bar A$ not in $A$, $\forall \epsilon > 0, \mathbb{B}_\varepsilon(x)\cap A \neq \emptyset$ and also $\mathbb{B}_\varepsilon \cap A^c \neq \emptyset$ so $x \in \partial A$
+\end{proof}
+\subsection*{Exercise 3}
+\begin{proof}
+  $\partial(\partial A) = \overline {\partial A} \cup \text{Int}(\partial A)$, however since $\partial A$ is closed, and the closure of a closed set is itsefl, $\overline{\partial A} = \partial A$. Therefore $$\partial(\partial A) = \partial A \cup \text{Int}(\partial A) \implies \partial(\partial A) \subseteq \partial A$$
+\end{proof}
+
+\subsection*{Exericse 4}
+\begin{enumerate}
+  \item 
+\begin{proof}
+  Using the fact that the square root function is strictly increasing, that is $\forall \delta > 0$, then 
+  \[
+    \sqrt{x} < \sqrt{x + \delta}
+  \]
+  and that $|x| = \sqrt{x^2}$, we get that
+  \[
+    |x^i| = \sqrt{(x^i)^2} \le \sqrt{(x^i)^2 + \delta} \le \sqrt{(x^1)^2 + (x^2)^2... (x^n)^2} = ||x||
+  \]
+  so $|x^i| \le ||x||$ as desired. For the upper bound, again using the fact that the square root function is strictly increasing, for $x,y,z \in \mathbb{R}, y > z$ 
+\[
+  \sqrt{x + y} > \sqrt{x + z}
+\]
+and that $x^m := \max\{x^1, x^2, x^3... x^n\} \ge x^i, \forall i$,
+\[
+  \sqrt{(x^1)^2 + (x^2)^2 ... + (x^n)^2} \le \sqrt{(x^m)^2 + (x^m)^2 ... (x^m)^2} = \sqrt{n(x^m)^2}  = \sqrt{n}\sqrt{(x^m)^2}
+\]
+so we get that $||x|| \le \sqrt{n}|x^m|$ as desired.
+\end{proof}
+\end{enumerate}
+\end{document}
+
