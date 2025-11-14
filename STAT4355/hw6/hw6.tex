@@ -1,0 +1,55 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+
+
+\title{Stat 4355}
+\author{N. Ohayon Rozanes}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+\begin{proof}
+  \begin{align*}
+    E[\hat y_0] &= E[x_0'\hat\beta] \\
+                &= E[x_0'(X'X)^{-1}X'y] \\
+                &= x_0'(X'X)^{-1}X'E[y] \\
+                &= x_0'(X'X)^{-1}X'E[X\beta + \epsilon] \\
+                &= x_0'(X'X)^{-1}X'X\beta \\
+                &= x_0'\beta
+  \end{align*}
+  And variance: 
+  \begin{align*}
+    Var(\hat y_0) &= Var(x_0'\beta) \\
+                  &= Var(x_0'(X'X)^{-1}X'y) \\
+                  &= (x_0'(X'X)^{-1}X)Var(y)(x_0'(X'X)^{-1}X)'\\
+                  &= (x_0'(X'X)^{-1}X)Var(y)X(X'X)^{-1}x_0'\\
+                  &= \sigma^2x_0'(X'X)^{-1}(X'X)(X'X)^{-1}x_0' \\ 
+                  &= \sigma^2x_0'(X'X)^{-1}x_0'
+  \end{align*}
+\end{proof}
+
+\vspace{2in} %Leave space for comments!
+
+
+\subsection*{Exercise 2}
+\begin{proof}
+\end{proof}
+
+\end{document}
+

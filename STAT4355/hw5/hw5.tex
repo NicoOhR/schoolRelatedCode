@@ -1,0 +1,89 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+
+
+\title{Homework 5}
+\author{N. Ohayon Rozanes}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+
+
+\subsection*{Exercise 1}
+\begin{enumerate}
+  \item $H_0 = \beta_1 + 2\beta_2 = 3$ 
+    \begin{align*}
+      \mathbf{D} = \begin{bmatrix}
+      1 & 2 & 0 & 0
+    \end{bmatrix} 
+    \quad 
+    \mathbf{d} = \begin{bmatrix}
+     3 
+    \end{bmatrix}
+    \end{align*}
+  \item $H_0: \frac{\beta_1 + \beta_2}{2} = \beta_3 \implies H_0: \frac{\beta_1 + \beta_2}{2} - \beta_3 = 0$ 
+
+  \[
+      \mathbf{d} = \begin{bmatrix}
+      \frac12 & \frac12 & -1 & 0
+    \end{bmatrix} 
+    \quad 
+    \mathbf{d} = \begin{bmatrix}
+     0 
+    \end{bmatrix}
+  \]
+\item $H_0: \beta_1  = \beta_2, \beta_3 = \beta_4 \implies \beta_1 - \beta_2 = 0, \beta_3- \beta_4$ 
+  \[
+    \mathbf{d} = \begin{bmatrix}
+      1 & -1 &0&0  \\
+      0 & 0 & 1 & - 1
+    \end{bmatrix} 
+    \quad 
+    \mathbf{d} = \begin{bmatrix}
+     0 \\ 
+     0
+    \end{bmatrix}
+  \]
+\item $H_0: \beta_1 - 2\beta_2 - 4\beta_3 = 0, \beta_1 + 2\beta_2 = 0$
+\[
+    \mathbf{d} = \begin{bmatrix}
+      1 & -2 &-4&0  \\
+      1& 2 & 0 &0
+    \end{bmatrix} 
+    \quad 
+    \mathbf{d} = \begin{bmatrix}
+     0 \\ 
+     0
+    \end{bmatrix}
+\]
+\item $H_0: \beta_1 -\beta_2 = 0, \beta_2 - \beta_3 = 0, \beta_3 - \beta_4 = 0$
+\[
+    \mathbf{d} = \begin{bmatrix}
+      1 & -1 &0&0  \\
+      0& 1 & -1 &0 \\ 
+      0& 0& 1& -1 \\
+    \end{bmatrix} 
+    \quad 
+    \mathbf{d} = \begin{bmatrix}
+     0 \\ 
+     0 \\ 
+     0
+    \end{bmatrix}
+\]
+\end{enumerate}
+\end{document}
+

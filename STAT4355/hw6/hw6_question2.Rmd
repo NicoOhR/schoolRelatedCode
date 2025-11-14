@@ -1,0 +1,101 @@
+---
+title: "hw6_question2"
+output:
+  pdf_document: default
+  html_document: default
+---
+## Question 2)
+### a) 
+```{r}
+df <- read.csv("football.csv")
+model <- lm(y ~ x2 + x7 + x8, data=df)
+summary(model)
+```
+Fitted model = $$\hat y = -1.808 + 0.0036x_2 + 0.194x_7 + 0.0048x_8$$
+variance estimate = $$(1.706)^2 = 2.9106$$ 
+$R^2$ = $$ 0.7863$$
+adjusted $R^2$ = $$0.7596$$
+
+### b)
+
+#### i)
+
+$$
+H_0: \beta_2 + \beta_8 = 0 
+$$
+$$
+H_1: \beta_2 + \beta_8 \neq 0
+$$
+
+#### ii)
+
+$$
+D = \begin{bmatrix} 0 & 1 & 0 & 1 \end{bmatrix} \quad d = 0
+$$
+
+#### iii)
+
+Since both $\hat\beta$ and $D\hat\beta$ are linear combinations on a normally distributed random variable, they themselves follow a normal distribution. Since $\hat\beta$ is known to be an unbiased estimator, it has mean $\beta$, variance of $\hat\beta$ has been shown in class, so:
+
+$$
+\hat\beta \sim \mathcal{N}(\beta, \sigma^2(X'X)^{-1})
+$$
+
+Using the fact that $E[cX] = cE[X]$ and $Var[cX] = cVar[X]c'$, we get that:
+$$
+D\hat\beta \sim \mathcal{N}(D\beta, \sigma^2D(X'X)^{-1}D')
+$$
+
+#### iv)
+
+The $F_0$ statistic for a GLH is:
+
+$$
+\frac{(D\hat\beta-d)'(D(X'X)^{-1}D')(D\hat\beta -d)}{\hat\sigma^2}
+$$
+
+
+#### v)
+
+As stated, the above follows an $F$ distribution, since only one linear restriction is being tested, $d_1 = 1$ and the full model has degrees of freedom $n - p$, in this case $d_2 = 24$. So the above statistic follows $F(1, 24)$ under the null hypothesis. 
+
+#### vi)
+
+```{r}
+library(multcomp)
+D <- matrix(c(0,1,0,1),1,4)
+d <- 0
+test <- glht(model, linfct=D, rhs=d)
+summary(test, test=Ftest())
+``` 
+clearly, the $p$ value is much smaller than the chosen tolerance level $0.05$, so we reject the null hypothesis
+
+### d)
+
+```{r}
+confint(model, level=0.99)
+```
+
+### e)
+
+```{r}
+x_1_pred = data.frame(x2=2300, x7=56, x8=2100)
+x_2_pred = data.frame(x2=2900, x7=61, x8=1900)
+predict(model, x_1_pred, interval="confidence", level=0.99)
+```
+```{r}
+predict(model, x_2_pred, interval = "confidence", level=0.99)
+```
+
+### f)
+
+```{r}
+predict(model, x_1_pred, interval="predict", level=0.99)
+```
+```{r}
+predict(model, x_2_pred, interval="predict", level=0.99)
+```
+
+### g)
+
+Since the PI depends on unseen $\epsilon$ which we cannot account for in the model, it has a higher irreducible error than the CI, which only has to account for the error in the model for previously seen before samples.

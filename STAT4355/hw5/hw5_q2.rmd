@@ -1,0 +1,68 @@
+---
+title: "Homework 5 Question 2"
+output: pdf_document
+date: "2025-10-30"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### a)
+```{r}
+df <- read.csv("football.csv")
+op <- par(no.readonly = TRUE)
+on.exit(par(op), add = TRUE)
+par(mfrow = c(3, 3), mar = c(3.5, 3.5, 2, 1))
+
+for (j in paste0("x", 1:9)) {
+  plot(df[[j]], df[["y"]],
+       xlab = j, ylab = "Games won (y)",
+       main = paste(j, "vs y"),
+       pch = 20, cex = 0.8)
+}
+```
+
+### b)
+```{r}
+fit <- lm("y ~ x1 + x2 + x5 + x7 + x8", data=df)
+summary(fit)
+```
+The final linear model turns out to be
+$$
+\hat y = -0.0516532 + 0.0008480x_1+0.0034689x_2+ 0.0103765x_5 + 0.1336928x_7 - 0.0047048x_8
+$$
+with $\hat\sigma^2=3.126$, an $R^2=0.7896$ and adjusted $R^2=0.7418$
+### c)
+Due to the small magnitude of each $\beta$, We can say that there are no overwhelmingly strong predictors of success. It does seem that $x_8$ is negatively correlated with success, which makes sense as it is a measure of how good the opponent is. Many of the slopes are statistically indistinguishable from $0$. The $\hat\sigma^2$ tells that the data is rather noisy, showing that there is a irreducible error of about $2$ wins. 
+### d)
+```{r}
+anova(fit)
+```
+### e)
+```{r}
+fit0<-lm(y~1, data=df)
+anova(fit, fit0)
+```
+### f)
+It is clear that the total SSR in the first ANOVA table is the same as the difference between RSS of the full model and the trivial model in the second ANOVA table. The $F$ statistic of the second anova table has a p value of $8.363e-07 < 0.05$, so we can conclude that the model is statistically significant.
+
+### g)
+$H_0:  \beta_2 = 0 ~ H_1: \beta_2 \neq 0$
+
+The $x_2$ regressor had a significance level of $3.557e-05$ which is clearly much less than the desired significance level of $0.05$. Under the null hypothesis, the test statistic follows a t-distribution. The t-value follows:
+```{r}
+0.0034689/0.0007673
+```
+
+### h)
+```{r}
+fit_reduced <- lm("y ~ x2 + x8", data = df)
+anova(fit, fit_reduced)
+```
+$H_0: \beta_1 = \beta_5 + \beta_7 = 0 ~ H_1: \text{at least one regressor is} \neq 0$
+
+The distribution of the test statistics follows a F distribution under the null hypothesis. We can see that the p-value of the observed F statistic is well above the required $0.05$ threshold so we fail to reject the null hypothesis.
+
+### i)
+The additional covariates do not improve the model accuracy, that is, they do not explain any additional variation in the data, so we can prefer the simpler model as it adequately explains the trends in the data.

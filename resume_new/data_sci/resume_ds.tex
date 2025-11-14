@@ -1,0 +1,103 @@
+%-------------------------
+% Rover Resume - Base Template
+% Link: https://github.com/subidit/rover-resume
+%
+% Shows code for various formatting options for different resume sections.
+% Education and Projects have single-line headers; while Experience uses double-line.
+% Some formatting codes are kept inline; consider \newcommand{cmd}{def}.
+% Excludes hyperref and icons for readability; MVP version.
+% Explore other templates for more options.
+% Mix and match as desired. Be consistent with headers and sub-headers.
+%------------------------
+
+\documentclass[11pt]{article} % fontsize 10pt/11pt/12pt
+
+\usepackage[margin=1in, a4paper]{geometry}
+\setcounter{secnumdepth}{0} % remove section numbering
+\usepackage{titlesec}
+\titlespacing{\subsection}{0pt}{*0}{*0} % remove vertical spacing above and below
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
+\titleformat{\section}{\large\bfseries\uppercase}{}{}{}[\titlerule]
+\titleformat*{\subsubsection}{\large\itshape}
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep,left=0pt .. \parindent}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue,citecolor=blue]{hyperref}
+\pagestyle{empty} % remove page number
+
+\begin{document}
+
+\begin{center}
+	\begin{minipage}{0.5\textwidth}
+		{\Huge\bfseries
+			Nico Ohayon
+		} \\ \medskip
+	\end{minipage} \hfill
+	\begin{minipage}{0.4\textwidth}
+		\raggedleft
+		Email: nohayonr@gmail.com \\
+		Mobile: 469 560 0141 \\
+		\href{https://www.linkedin.com/in/nico-ohayon-rozanes-085762366/}{LinkedIn}\\
+		\href{https://github.com/NicoOhR}{GitHub} \\
+		\href{https://nicoohr.github.io/Sicarii/index.html}{Portfolio Website}
+	\end{minipage}
+\end{center}
+
+\section{Education}
+%=================%
+\subsection{University of Texas at Dallas, Richardson $|$ {\normalfont\itshape Mathematics (B.s.) and Data Science (B.s.)} \hfill Graduating May 2027}
+\begin{itemize}
+	\item Cumulative GPA: 3.45
+\end{itemize}
+\section{Experience}
+%=================%
+\subsection{Exolambda, Richardson}
+\subsubsection{Software Engineering Intern \hfill  May 2025 - Aug 2025}
+\begin{itemize}
+    \item Supported the bring-up and validation of custom embedded avionics platforms, including board-level diagnostics, firmware initialization, and integration of sensing and compute modules.
+    \item Implemented data acquisition and preprocessing pipelines for onboard IMU, GPS, and environmental sensors, enabling downstream statistical analysis and control-loop tuning.
+    \item Developed and profiled real-time control and signal-processing routines, emphasizing numerical stability, latency bounds, and deterministic behavior under flight-critical constraints.
+    \item Contributed to the design of internal monitoring and telemetry tooling used to inspect system performance, analyze failure modes, and quantify reliability metrics across development iterations.
+    \item Built scalable build, test, and deployment workflows that automated integration of embedded software, simulation outputs, and hardware-in-the-loop testing artifacts.
+    \item Collaborated with cross-disciplinary engineers to prototype algorithms linking sensor fusion, state estimation, and fault detection, with a focus on quantitative validation using collected flight-test data.
+\end{itemize}
+\section{Research}
+%===============================%
+\subsection{Ganglia Guardian | Dr. Gu}
+\subsubsection{Statistics and Bioinformatics Research \hfill August 2025 - Current}
+\noindent
+Worked with Dr. Gu and graduate students to optimize clustering algorithms created
+to analyze behaviors of mice by way of IMU measurements in order to probe for early
+somatic signs of degenerative diseases. Project revolves around unsupervized affinety
+propogation, gpu programming, and documentation infrastructure.
+\subsection{Undergraduate Research Scholar Award | Prof. Bereg}
+\subsubsection{Mathematics and Computer Science \hfill Fall 2024}
+\noindent
+Worked with Professor Bereg to analyze transversals over latin squares. The research
+aimed to numerically verify and expand on the results of Wanless’s ”Transversals in Latin Squares” (2009), my work was mostly in creating effective and effecient algorithms on large matrices in C++.
+\subsection{\href{https://github.com/ACM-TradeX/TradeX}{ACM Research Trade X} | Prof. Smiley}
+\subsubsection{Statistics \hfill Spring 2024}
+\noindent
+Semester long research project with Professor Smiley, applying the \href{https://sites.google.com/a/channing.harvard.edu/kimberlyglass/tools/panda}{PANDA} algorithm by
+Professor Glass to financial markets to find assets which are most correlated in move-
+ment, for use in a pairwise trading algorithm.
+\section{Clubs and Organizations}
+\subsection{FSAE Embedded lead}
+\noindent Embedded devices sub team lead at the UT Dallas SAE chapter. Responsible for programming and organizing the Data Acquisition System and Driver Dashboard projects.
+Specific experience with the STM32 family of microcontrollers, arm build tools, and CI/CD pipelines.
+\section{Skills \& Interests}
+%===========================%
+\begin{description}[itemsep=0pt]
+	\item[Technical] C/C++, Rust, Python, \LaTeX, Linux, BusyBox, Kafka, SQL, Nix, Vim, Docker and k8s, Git
+	\item[Language] English, Spanish, Hebrew
+\end{description}
+
+\section{Projects}
+%=================
+\subsection{Project Neme $|$ \normalfont\textit{github.com/project-link} \hfill 2019}
+\begin{itemize}
+  \item Tech used, Language, Frameworks etc.
+  \item Implemented ABC feature
+  \item Optimised XYZ by 50\%
+\end{itemize}
+
+\end{document}
