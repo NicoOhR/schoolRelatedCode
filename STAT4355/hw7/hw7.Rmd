@@ -1,0 +1,67 @@
+---
+title: "hw7"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Question 1
+
+### a)
+
+```{r}
+df <- read.csv("football.csv")
+model <- lm(y ~ x2 + x7 + x8, data = df)
+```
+
+Standardized residuals: 
+```{r, warning=FALSE}
+library(MASS)
+library(knitr)
+stand_res <- matrix(stdres(model), ncol = 2, byrow=TRUE)
+knitr::kable(stand_res, caption="standardized residuals")
+```
+```{r, warning=FALSE}
+stud_res <- matrix(studres(model), ncol = 2)
+knitr::kable(stud_res, caption="studentized residuals")
+```
+```{r, warning=FALSE}
+r_student_res <- matrix(rstudent(model), ncol = 2)
+knitr::kable(stud_res, caption="R-studentized residuals")
+```
+
+```{r, warning=FALSE}
+par(mfrow = c(1,3))
+barplot(stdres(model), main = "standardized residuals")
+barplot(studres(model), main = "studentized residualsd")
+barplot(rstudent(model), main = "R studentized residuals")
+```
+
+### b)
+
+```{r, warning=FALSE, message=FALSE}
+library(car)
+knitr::kable(summary(influence.measures(model)))
+dfbetasPlots(model, intercept = T)
+influenceIndexPlot(model)
+```
+
+### c)
+
+```{r, warning=FALSE}
+knitr::kable(vif(model))
+```
+
+### d)
+
+```{r}
+par(mfrow=c(1,2))
+hist(studres(model), breaks=10, freq=F)
+qqPlot(model)
+```
+
+### e) 
+
+```{r}
+residualPlot(model, type="rstudent", quadratic=F)
+```
