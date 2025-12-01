@@ -1,0 +1,126 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym,amsfonts,amssymb,amsthm,amsmath}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+\title{MATH 4301}
+\author{N. Ohayon Rozanes}
+
+\begin{document}
+
+\maketitle
+
+\vspace{0.5in}
+
+\subsection*{Exercise 1}
+\begin{proof}
+  \begin{enumerate}
+    \item A geometric series converges as such:
+      \[
+        \sum r^n = \frac{1}{1-r}
+      \]
+      For $|r| < 1$, then for
+      \[
+        \sum r^n = \frac{1}{1-r} = \frac1{1+x^2}
+      \]
+      It must be the case that $r = -(x^2)$. To show that the series
+      \[
+        \sum (-x^2)^n
+      \]
+      Indeed converges, it suffices to show that $|-x^2| = |x^2| <
+      1$. Of course,
+
+      \[
+        -1 < x < 1 \implies |x| < 1 \implies |x^2| < 1
+      \]
+      Thus the series of functions desired is
+      \[
+        \sum f_n(x) = \sum (-x^2)^n = \frac{1}{1+x^2}
+      \]
+    \item
+      \begin{align*}
+        \left |f(x) -f_k(x) \right | &= \left |\sum_{n=k+1}^\infty
+        \frac{(-1)^n}{2n+1}x^{2n+1}\right| \\
+        &\le \sum_{n=k+1}^\infty \frac{x^{2n+1}}{2n+1} \\
+      \end{align*}
+      Using the ratio test.
+      \[
+        a_{n} := \frac{x^{2n+1}}{2n+1}
+      \]
+      taking the limit of the ratio
+      \[
+        \lim_{n\to\infty}\left | \frac{a_{n+1}}{a_n} \right | =
+        \lim_{n\to\infty}|x|^2\frac{2n+1}{2n+3} = |x|^2
+      \]
+      Since $|x| < 1 \implies |x|^2 < 1$, so by the ratio test, the
+      series converges, then there exists an $N \in \mathbb{N}$ such that
+      \[
+        \left|\frac{(-1)^n}{2n+1}x^{2n+1}\right|
+        \le \sum_{n=k+1}^\infty \frac{x^{2n+1}}{2n+1} < \varepsilon
+      \]
+      whenever $k \geq N$, so whenever $k \geq N$
+      \[
+        |f(x) - f_k(x)| < \varepsilon \quad \forall x \in (-1,1)
+      \]
+      Which is exactly pointwise convergance.
+      % Not sure how to show convergance to arctan though?
+  \end{enumerate}
+\end{proof}
+\subsection*{Exercise 2}
+\begin{proof}
+  We are given that $f_n \to 0$ pointwise, but for interchange of
+  limit and integration, we would like the funtion to be uniformly
+  convergent. To demonstrate this: $\exists N \in \mathbb{N}$ such
+  that, when $n > N$
+  \[
+    |f_n(x) - f(x)| < \varepsilon
+  \]
+
+  $\forall x \in [0,1]$. Since we know that the function converges
+  pointwise to $0$
+  \begin{align*}
+    |f_n(x) - f(x)| &= |f_n(x) -0|\\
+    &= |nx(1-x^2)^n| \\
+    &= |nx(1+x)^n(1-x)^n| \\
+  \end{align*}
+  Since for any limits $a_n \to a$ and $b_n \to b$, $a_nb_n \to ab$,
+  it suffices to show that
+  \[
+    nx(1-x^2)^n \le n(1 - x^2)^n
+  \]
+  \[
+    nx(1-x^2)^n \le \varepsilon
+  \]
+
+  By theorem 5.4.2:
+  \[
+    \lim_{n\to\infty}\int_0^1 nx(1-x^2)^n dx = \int_0^1 f
+  \]
+
+\end{proof}
+\subsection*{Exercise 3}
+\begin{proof}
+  \begin{enumerate}
+    \item consider the residual of the partial sum and total sum:
+      \[
+        \left|\sum_{n=1}^\infty \frac{x}{(1+x)^n} - \sum_{n=1}^k
+        \frac{x}{(1+x)^n}\right| =
+        \left|\sum_{n=k+1}^\infty \frac{x}{(1+x)^n}\right|
+      \]
+      Which by the ratio test:
+  \end{enumerate}
+\end{proof}
+\subsection*{Exericse 4}
+\begin{proof}
+\end{proof}
+\subsection*{Exercise 5}
+\begin{proof}
+\end{proof}
+\end{document}
