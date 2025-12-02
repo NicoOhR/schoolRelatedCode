@@ -10,8 +10,6 @@
 \setlength{\topmargin}{0in}
 \setlength{\headheight}{18pt}
 
-
-
 \title{MATH 4301}
 \author{N. Ohayon Rozanes}
 
@@ -21,150 +19,194 @@
 
 \vspace{0.5in}
 
-
-
 \subsection*{Exercise 1}
 \begin{proof}
   \begin{enumerate}
-    \item 
-  On the interval $[0, a]$, the function $f(x) = x^2$ is strictly increasing, so every subinterval $i$ of the partition $P$, we have that 
-  \[
-    m_i := \inf_{[x_{i-1}, x_i]} f = f(x_{i-1})
-  \]
-  and 
-  \[
-    M_i := \sup_{[x_{i-1}, x_i]} f = f(x_i)
-  \]
-  Therefore:
-  \begin{align*}
-    U(f,P) - L(f,P) &= \sum_{i=1}^n (f(x_i)-f(x_{i-1}))(x_i - x_{i-1}) \\
-                    &= \sum_{i=1}^n (x_i^2 - x_{i-1}^2)(x_i - x_{i-1}) \\
-                    &= \sum_{i=1}^n (x_i - x_{i-1})(x_i + x_{i-1})(x_i - x_{i-1}) \\
-                    &= \sum_{i=1}^n (x_i - x_{i-1})^2(x_i + x_{i-1}) \\
-  \end{align*}
-  the sum $x_i + x_{i-1}$ is bounded by $2a$, further, since we are free to choose the partition, we are free to define a $\delta > 0$ such that $\forall i, x_i - x_{i-1} < \delta$. 
-  \begin{align*}
-    U(f,P) - L(f,P) &\leq \sum_{i=1}^n \delta^2 2a \\
-                    &\leq n\delta^22a
-  \end{align*}
-  So, for $$U(f, P) - L(f,P) < \epsilon$$ choose a $P$ such that $\forall i$ 
+    \item
+      On the interval $[0, a]$, the function $f(x) = x^2$ is strictly
+      increasing, so every subinterval $i$ of the partition $P$, we have that
+      \[
+        m_i := \inf_{[x_{i-1}, x_i]} f = f(x_{i-1})
+      \]
+      and
+      \[
+        M_i := \sup_{[x_{i-1}, x_i]} f = f(x_i)
+      \]
+      Therefore:
+      \begin{align*}
+        U(f,P) - L(f,P) &= \sum_{i=1}^n (f(x_i)-f(x_{i-1}))(x_i - x_{i-1}) \\
+        &= \sum_{i=1}^n (x_i^2 - x_{i-1}^2)(x_i - x_{i-1}) \\
+        &= \sum_{i=1}^n (x_i - x_{i-1})(x_i + x_{i-1})(x_i - x_{i-1}) \\
+        &= \sum_{i=1}^n (x_i - x_{i-1})^2(x_i + x_{i-1}) \\
+      \end{align*}
+      the sum $x_i + x_{i-1}$ is bounded by $2a$, further, since we
+      are free to choose the partition, we are free to define a
+      $\delta > 0$ such that $\forall i, x_i - x_{i-1} < \delta$.
+      \begin{align*}
+        U(f,P) - L(f,P) &\leq \sum_{i=1}^n \delta^2 2a \\
+        &\leq n\delta^22a
+      \end{align*}
+      So, for $$U(f, P) - L(f,P) < \epsilon$$ choose a $P$ such that $\forall i$
 
-  $$x_i - x_{i-1} < \sqrt{\frac{\varepsilon}{2an}}$$
+      $$x_i - x_{i-1} < \sqrt{\frac{\varepsilon}{2an}}$$
 
-\item by the previous part and proposition 4.6.10, we know that $f: [0, a]$ is Darboux integrable. That is the upper and lower Darboux integrals coincide, and are equal to the integral. We want to show that they coincide to $\frac{a^3}{3}$, so it suffices to show that $\sup \mathcal{L}(f) = \frac{a^3}{3}$. Set $P_n = \{\frac{ia}n\}$ for $i = \{0, 1, ... n\}$. 
-  \begin{align*}
-    L(f, P_n) &= \sum_{i=0}^{n} (\frac{ai}{n})^2(\frac{ai - ai + a}{n}) \\
-              &= \sum_{i=0}^{n} (\frac{ai}{n})^2(\frac{a}{n}) \\
-              &= \frac{a^3}{n^3}\sum_{i=0}^{n} i^2 \\
-              &= \frac{a^3}{n^3}\frac{n(n+1)(2n+1)}{6} \\ 
-              &= \frac{2a^3}{6} + \frac{3a^3}{6n} + \frac{a^3}{6n^2}
-  \end{align*}
-  as $n \to \infty$ 
-  \[
-    L(f, P_n)  = \frac{a^3}{3} = \int_0^a f
-  \]
+    \item by the previous part and proposition 4.6.10, we know that
+      $f: [0, a]$ is Darboux integrable. That is the upper and lower
+      Darboux integrals coincide, and are equal to the integral. We
+      want to show that they coincide to $\frac{a^3}{3}$, so it
+      suffices to show that $\sup \mathcal{L}(f) = \frac{a^3}{3}$.
+      Set $P_n = \{\frac{ia}n\}$ for $i = \{0, 1, ... n\}$.
+      \begin{align*}
+        L(f, P_n) &= \sum_{i=0}^{n} (\frac{ai}{n})^2(\frac{ai - ai + a}{n}) \\
+        &= \sum_{i=0}^{n} (\frac{ai}{n})^2(\frac{a}{n}) \\
+        &= \frac{a^3}{n^3}\sum_{i=0}^{n} i^2 \\
+        &= \frac{a^3}{n^3}\frac{n(n+1)(2n+1)}{6} \\
+        &= \frac{2a^3}{6} + \frac{3a^3}{6n} + \frac{a^3}{6n^2}
+      \end{align*}
+      as $n \to \infty$
+      \[
+        L(f, P_n)  = \frac{a^3}{3} = \int_0^a f
+      \]
   \end{enumerate}
 \end{proof}
 \subsection*{Exercise 2}
 \begin{proof}
-  Want to show that $\sup\mathcal{L}(f) = \inf\mathcal{U}(f)$. It suffices to show that for all $\varepsilon > 0$ there exists a partition $P$ such that $$U(f, P) - L(f, P)< \varepsilon$$
-  For a strictly increasing function $f$, the infimum and supremum of the function over the interval $[x_{i-1}, x_i]$ is $f(x_{i-1})$ and $f(x_{i})$ respectively. So for any partition of $[a,b]$, $P$, 
+  Want to show that $\sup\mathcal{L}(f) = \inf\mathcal{U}(f)$. It
+  suffices to show that for all $\varepsilon > 0$ there exists a
+  partition $P$ such that $$U(f, P) - L(f, P)< \varepsilon$$
+  For a strictly increasing function $f$, the infimum and supremum of
+  the function over the interval $[x_{i-1}, x_i]$ is $f(x_{i-1})$ and
+  $f(x_{i})$ respectively. So for any partition of $[a,b]$, $P$,
   \[
     L(f, P) =  \sum  f(x_{i-1})(x_i - x_{i-1})
   \]
-  And 
+  And
   \[
     U(f, P) =  \sum  f(x_{i})(x_i - x_{i-1})
   \]
-  so 
+  so
   \[
     U(f, P) - L(f, P) =  \sum  (f(x_{i}) - f(x_{i-1})(x_i - x_{i-1})
-  \]
-  Since $x_i > x_{i-1}$, and that $f$ is an increasing function, we have that $f(x_i) - f(x_{i-1}) > 0$. Further, since closed intervals in $\mathbb{R}$ are compact, by the maximum-minimum principle $f([x_{i-1}, x_i])$ is bounded, therefore there must exist an $M$ such that 
-  \[
-    f(x_i) < M \implies \sum (f(x_i) - f(x_{i-1})(x_i - x_{i-1}) < \sum M(x_i - x_{i-1}) \quad \forall i
-  \]
-  Which means that for $U(f,P) - L(f, P) < \varepsilon$ to be true, $P$ must be selected such that 
-  \[
-    x_i - x_{i-1} < \frac{\varepsilon}{Mn} \quad \forall i
-  \]
-  So for any $\varepsilon$ we can choose the partition \[
-    P = \left\{a + i\frac{b\varepsilon}{M}\right\}_{i=0}^M
-  \]
-\end{proof}
-\subsection*{Exercise 3}
-\begin{proof}
-  $f$ is continuous, non-negative over the interval $[a,b]$, and strictly positive at at least one point $c$. By continuity, there exists a $\delta > 0$ such that
-  \[
-    |x - c| < \delta \implies |f(x) - f(c)| < \varepsilon
-  \]
-  $\forall \varepsilon > 0$, by setting $\varepsilon := \frac{f(c)}{2}$, we get that there must exist a $\delta > 0$ such that 
-  \[
-    |x - c| < \delta \implies |f(x) - f(c)| < \frac{f(c)}{2}
-  \]
-  Expanding the absolute value we get that 
-  \[
-    -\frac{f(c)}{2} < f(x) - f(c) < \frac{f(c)}{2} \implies \frac{f(c)}{2} < f(x) < \frac{3f(c)}{2}
     \]
-    That is, $\forall x \in$ the $\delta$ neighborhood of $c$, $f(x) > \frac{f(c)}2$. The integral over that range $[c -\delta, c+\delta]$ is bounded above and below:
-  \[
-    \delta f(c) \le \int_{c-\delta}^{c+\delta} f \le 3\delta f(c)
-  \]
-  Also, the integral over the ranges to either side of the strictly positive range:
-  \[
-    (c - \delta - a) \inf f(x) \le \int_a^{c-\delta} f \le (c - \delta - a)\sup f(x)
-  \]
-  And since $f(x) \ge 0 \implies \inf f(x) \ge 0$, and $a < c - \delta \implies c - \delta - a > 0$. We get that 
-  \[
-     0 \le (c - \delta - a) \inf f(x) \le \int_a^{c-\delta} f 
-  \]
-  Similarily, for the interval $[c+\delta, b]$. 
-  \[
-    (b - c - \delta) \inf f(x) \le \int_{c+\delta}^b f \le (b - c - \delta)\sup f(x)
-  \]
-  And since $f(x) \ge 0 \implies \inf f(x) \ge 0$, and $b > c + \delta \implies b - c - \delta > 0$. We get that 
-  \[
-  0 \le (b - c - \delta) \inf f(x) \le \int_{c+\delta}^b f 
-  \]
-  Using property (iv) from theorem 4.6.13: 
-  \[
-  \int_a^b f = \int_a^{c-\delta} f + \int_{c-\delta}^{c+\delta} f + \int_{c+\delta}^b f \ge 0 + \delta f(c) + 0 > 0
-  \]
-  As desired.
-\end{proof}
-\subsection*{Exericse 4}
-  \begin{proof}
-  \end{proof}
-\subsection*{Exercise 5}
-\begin{proof}
-  For a fixed $x \in [0, \infty]$, the sequence 
-  \[
-    \frac{nx}{1 + nx^2}
-  \]
-  is bounded because, $\forall n$, 
-  \[
-    \frac{nx}{1 + nx^2} = \frac{1}{x}\frac{nx^2}{1+nx^2} 
-  \]
-  Since $nx^2 < 1 + nx^2 \implies \frac{nx^2}{1+nx^2} < 1$ 
-  \[
-    \frac{nx}{1 + nx^2} < \frac{1}{x}
-  \]
-  It is also monotone, because, $\forall n$ 
-  \begin{align*}
-    \frac{nx}{1 + nx^2} &= \frac{1}{x}\frac{nx^2}{1+nx^2} \\
-                        &=  \frac{1}{x}\frac{nx^2 + 1 - 1}{1+nx^2} \\
-                        &= \frac{1}{x}(1 - \frac{1}{1+nx^2})
-  \end{align*}
-  \begin{align*}
-    \frac{(n+1)x}{1+(n+1)x^2} &= \frac{nx + x}{1+ nx^2 + x^2} \\
-                              &= \frac{1}x\frac{nx^2 + x^2 + 1 - 1}{1 + nx^2 + x^2} \\
-                              &= \frac{1}x(1 - \frac{1}{1 + nx^2 + x^2})
-  \end{align*}
-  and since $1 + nx^2 + x^2 \geq 1 + nx^2$ 
-  \[
-    \frac{nx}{1+nx^2} \leq \frac{(n+1)x}{1 + (n+1)x^2}   
-  \]
-  So the sequence is bounded and monotone increasing, therefore it is convergent $\forall x \in (0, \infty)$ so the family of functions are piecewise continuous.
-\end{proof}
-\end{document}
-
+    Since $x_i > x_{i-1}$, and that $f$ is an increasing function, we
+    have that $f(x_i) - f(x_{i-1}) > 0$. Further, since closed
+    intervals in $\mathbb{R}$ are compact, by the maximum-minimum
+    principle $f([x_{i-1}, x_i])$ is bounded, therefore there must
+    exist an $M$ such that
+    \[
+      f(x_i) < M \implies \sum (f(x_i) - f(x_{i-1})(x_i - x_{i-1}) <
+        \sum M(x_i - x_{i-1}) \quad \forall i
+      \]
+      Which means that for $U(f,P) - L(f, P) < \varepsilon$ to be
+      true, $P$ must be selected such that
+      \[
+        x_i - x_{i-1} < \frac{\varepsilon}{Mn} \quad \forall i
+      \]
+      So for any $\varepsilon$ we can choose the partition \[
+        P = \left\{a + i\frac{b\varepsilon}{M}\right\}_{i=0}^M
+      \]
+    \end{proof}
+    \subsection*{Exercise 3}
+    \begin{proof}
+      $f$ is continuous, non-negative over the interval $[a,b]$, and
+      strictly positive at at least one point $c$. By continuity,
+      there exists a $\delta > 0$ such that
+      \[
+        |x - c| < \delta \implies |f(x) - f(c)| < \varepsilon
+      \]
+      $\forall \varepsilon > 0$, by setting $\varepsilon :=
+      \frac{f(c)}{2}$, we get that there must exist a $\delta > 0$ such that
+      \[
+        |x - c| < \delta \implies |f(x) - f(c)| < \frac{f(c)}{2}
+      \]
+      Expanding the absolute value we get that
+      \[
+        -\frac{f(c)}{2} < f(x) - f(c) < \frac{f(c)}{2} \implies
+        \frac{f(c)}{2} < f(x) < \frac{3f(c)}{2}
+      \]
+      That is, $\forall x \in$ the $\delta$ neighborhood of $c$,
+      $f(x) > \frac{f(c)}2$. The integral over that range $[c
+      -\delta, c+\delta]$ is bounded above and below:
+      \[
+        \delta f(c) \le \int_{c-\delta}^{c+\delta} f \le 3\delta f(c)
+      \]
+      Also, the integral over the ranges to either side of the
+      strictly positive range:
+      \[
+        (c - \delta - a) \inf f(x) \le \int_a^{c-\delta} f \le (c -
+        \delta - a)\sup f(x)
+      \]
+      And since $f(x) \ge 0 \implies \inf f(x) \ge 0$, and $a < c -
+      \delta \implies c - \delta - a > 0$. We get that
+      \[
+        0 \le (c - \delta - a) \inf f(x) \le \int_a^{c-\delta} f
+      \]
+      Similarily, for the interval $[c+\delta, b]$.
+      \[
+        (b - c - \delta) \inf f(x) \le \int_{c+\delta}^b f \le (b - c
+        - \delta)\sup f(x)
+      \]
+      And since $f(x) \ge 0 \implies \inf f(x) \ge 0$, and $b > c +
+      \delta \implies b - c - \delta > 0$. We get that
+      \[
+        0 \le (b - c - \delta) \inf f(x) \le \int_{c+\delta}^b f
+      \]
+      Using property (iv) from theorem 4.6.13:
+      \[
+        \int_a^b f = \int_a^{c-\delta} f + \int_{c-\delta}^{c+\delta}
+        f + \int_{c+\delta}^b f \ge 0 + \delta f(c) + 0 > 0
+      \]
+      As desired.
+    \end{proof}
+    \subsection*{Exericse 4}
+    \begin{proof}
+      Define $G: [a,b] \to \mathbb{R}$ such that $G' = g$. Then by
+      the fundamental theorem of Caclulus I,
+      \[
+        \int_a^b g = G(b) - G(a)
+      \]
+      Then dividing by $\frac{1}{b-a}$
+      \[
+        \frac{1}{b-a}\int_a^b g = \frac{G(b) - G(a)}{b-a}
+      \]
+      By application of the mean value theorem, $\exists c \in [a,b]$ such that
+      \begin{align*}
+        G'(c) &=  \frac{G(b) - G(a)}{b-a} \\
+        g(c) &=  \frac{G(b) - G(a)}{b-a} \\
+        g(c) &= \frac1{b-a}\int_a^b g
+      \end{align*}
+    \end{proof}
+    \subsection*{Exercise 5}
+    \begin{proof}
+      For a fixed $x \in [0, \infty]$, the sequence
+      \[
+        \frac{nx}{1 + nx^2}
+      \]
+      is bounded because, $\forall n$,
+      \[
+        \frac{nx}{1 + nx^2} = \frac{1}{x}\frac{nx^2}{1+nx^2}
+      \]
+      Since $nx^2 < 1 + nx^2 \implies \frac{nx^2}{1+nx^2} < 1$
+      \[
+        \frac{nx}{1 + nx^2} < \frac{1}{x}
+      \]
+      It is also monotone, because, $\forall n$
+      \begin{align*}
+        \frac{nx}{1 + nx^2} &= \frac{1}{x}\frac{nx^2}{1+nx^2} \\
+        &=  \frac{1}{x}\frac{nx^2 + 1 - 1}{1+nx^2} \\
+        &= \frac{1}{x}(1 - \frac{1}{1+nx^2})
+      \end{align*}
+      \begin{align*}
+        \frac{(n+1)x}{1+(n+1)x^2} &= \frac{nx + x}{1+ nx^2 + x^2} \\
+        &= \frac{1}x\frac{nx^2 + x^2 + 1 - 1}{1 + nx^2 + x^2} \\
+        &= \frac{1}x(1 - \frac{1}{1 + nx^2 + x^2})
+      \end{align*}
+      and since $1 + nx^2 + x^2 \geq 1 + nx^2$
+      \[
+        \frac{nx}{1+nx^2} \leq \frac{(n+1)x}{1 + (n+1)x^2}
+      \]
+      So the sequence is bounded and monotone increasing, therefore
+      it is convergent $\forall x \in (0, \infty)$ so the family of
+      functions are piecewise continuous.
+    \end{proof}
+    \end{document}
