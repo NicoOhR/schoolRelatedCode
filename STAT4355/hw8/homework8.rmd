@@ -1,0 +1,95 @@
+---
+title: "Homework 8"
+output: pdf_document
+date: "2025-12-03"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+df <- read.csv("./football.csv")
+lm <-lm(y ~ . - Team, data = df)
+```
+
+# Question 1)
+
+## a)
+
+```{r}
+library("car")
+qq <- qqPlot(residuals(lm))
+```
+
+Firstly, looking at the Q-Q plot of the residuals,we can see that some of the data points fall outside of the confidence intervals for them to be perfectly normal. 
+
+```{r}
+histogram <- hist(residuals(lm))
+```
+
+The histogram seems to confirm this, as there is a right skew to the histogram when compared to a normal distribution. This means that the model is less likely to estimate a team to be under performing, in a sense being an optimistic model.  
+
+```{r}
+residuals_scatter <- plot(residuals(lm))
+```
+
+When inspecting the scatterplot of residuals, we can see a good spread of both positive and negative residuals, and no obvious pattern, at least not against the index, which is not exactly meaningful but included for completeness sake.
+
+```{r}
+residuals_against_reg <- plot(df$y, predict(lm))
+abline(0,1)
+```
+
+Finally, plotting the model prediction against the actual $y$ values, we can see that most of the data points stay in the general vaccinity of the perfect model (the straight ab line). We can also see that there is a marginal amount more data points which the model predicted to win more than they did, which fits with our earlier analysis.
+
+## b) 
+
+```{r, results='hide'}
+model.full <- lm
+model.null <- lm(y ~ 1, data=df)
+step(model.null, direction="forward", scope=list(lower=model.null, upper=model.full))
+```
+
+
+## c)
+
+```{r, results='hide'}
+model.full <- lm
+model.null <- lm(y ~ 1, data=df)
+step(model.full, direction="backward", scope=list(lower=model.null, upper=model.full))
+```
+
+## d)
+
+```{r, results='hide'}
+model.full <- lm
+model.null <- lm(y ~ 1, data=df)
+step(model.full, direction="both", scope=list(lower=model.null, upper=model.full))
+```
+The model selected by forward AIC, as well as by backwards AIC and stepwise AIC, is comprised of a negative coefficient for opponents' passing and rushing yards, and a positive coefficient for passing yards and percent rushing, it is given by the following formula
+
+$$
+y = 0.003819x_2 + 0.216894x_7    -0.004015x_8    -0.001635x_9  
+$$
+
+
+The larger value for the coefficient for percent rushing makes sense as it is restricted to the values $(0, 1)$, while the other numbers are unbounded integer values. An interesting property of this model is the intercept being negative, which of course is a statistical artifact considering that games one is a strictly positive number, but indicates that the teams in this data set are not winning by default, which makes sense. The fact that all three, backwards, forwards, and stepwise, all converged to the same model implies that at least according to AIC, that the this is the least information losing model. It is likely that if percent passing yards was given, as well as percent opponent rushing and passing, those variables would be used instead. 
+
+## e) 
+
+```{r}
+library(glmnet)
+lambda_seq <- 10^seq(2,-2, by=-0.1)
+x <- df[,3:11]
+x <- as.matrix(x)
+y <- df[2]; y <- as.matrix(y)
+lasso_reg <- cv.glmnet(x,y, alpha=1, lambda=lambda_seq, standardize = TRUE, nfolds=5)
+lambda_best <- lasso_reg$lambda.min
+lasso_model <- glmnet(x,y, alpha=1, lambda=lambda_best,
+                      standardize=TRUE)
+lasso_model$beta
+```
+
+The Lasso regression selects the same variables as the AIC model selection methods, with the additional rushing yards and turn over differential predictors added to the model. As one would expect from a Lasso regression, the coefficients are all noticeably much smaller in magnitude, compared to the AIC selected models. 
