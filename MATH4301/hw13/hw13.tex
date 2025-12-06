@@ -9,7 +9,6 @@
 \setlength{\textheight}{8.8in}
 \setlength{\topmargin}{0in}
 \setlength{\headheight}{18pt}
-
 \title{MATH 4301}
 \author{N. Ohayon Rozanes}
 
@@ -45,80 +44,147 @@
         \sum f_n(x) = \sum (-x^2)^n = \frac{1}{1+x^2}
       \]
     \item
-      \begin{align*}
-        \left |f(x) -f_k(x) \right | &= \left |\sum_{n=k+1}^\infty
-        \frac{(-1)^n}{2n+1}x^{2n+1}\right| \\
-        &\le \sum_{n=k+1}^\infty \frac{x^{2n+1}}{2n+1} \\
-      \end{align*}
-      Using the ratio test.
+      recall that $$\arctan(x) = \int_0^x \frac{1}{1+t^2} = \int_0^x f(t)$$
+      As was shown in the previous part
       \[
-        a_{n} := \frac{x^{2n+1}}{2n+1}
+        f(x) = \sum (-x^2)^n \implies \int_0^x f(t) = \int_0^x \sum (-t^2)^n
       \]
-      taking the limit of the ratio
+      We now show the integrand converges uniformly such that the sum
+      and integral can be interchanged. Define $t \in [-x,x]$ for any
+      $x \in [-1,1]$
+      and $$ g_n(t) = | (-1)^nt^{2n}| = |t^{2n}|$$.
+      Define $M_n = |x^{2n}|$ and notice that $\forall n,t, g_n <
+      M_n$
+      By the $p$-test for convergance, the series $M_n$ converges
+      since $|x| < 1$. So by the Weirstress $M$ test, the series
+      $g_n$ converges uniformly. So
       \[
-        \lim_{n\to\infty}\left | \frac{a_{n+1}}{a_n} \right | =
-        \lim_{n\to\infty}|x|^2\frac{2n+1}{2n+3} = |x|^2
+        \int_0^x \sum_0^\infty (-t^2)^n = \sum_0^\infty \int_0^x (-t^2)^n
       \]
-      Since $|x| < 1 \implies |x|^2 < 1$, so by the ratio test, the
-      series converges, then there exists an $N \in \mathbb{N}$ such that
+      By standard integration
       \[
-        \left|\frac{(-1)^n}{2n+1}x^{2n+1}\right|
-        \le \sum_{n=k+1}^\infty \frac{x^{2n+1}}{2n+1} < \varepsilon
+        \sum_0^\infty \int_0^x (-t^2)^n = \sum_0^\infty
+        \frac{-x^{2n+1}}{2n+1} = \sum_0^\infty \frac{(-1)^{n}}{2n+1}x^{2n+1}
       \]
-      whenever $k \geq N$, so whenever $k \geq N$
-      \[
-        |f(x) - f_k(x)| < \varepsilon \quad \forall x \in (-1,1)
-      \]
-      Which is exactly pointwise convergance.
-      % Not sure how to show convergance to arctan though?
+      As desired.
   \end{enumerate}
 \end{proof}
 \subsection*{Exercise 2}
 \begin{proof}
-  We are given that $f_n \to 0$ pointwise, but for interchange of
-  limit and integration, we would like the funtion to be uniformly
-  convergent. To demonstrate this: $\exists N \in \mathbb{N}$ such
-  that, when $n > N$
-  \[
-    |f_n(x) - f(x)| < \varepsilon
-  \]
-
-  $\forall x \in [0,1]$. Since we know that the function converges
-  pointwise to $0$
-  \begin{align*}
-    |f_n(x) - f(x)| &= |f_n(x) -0|\\
-    &= |nx(1-x^2)^n| \\
-    &= |nx(1+x)^n(1-x)^n| \\
-  \end{align*}
-  Since for any limits $a_n \to a$ and $b_n \to b$, $a_nb_n \to ab$,
-  it suffices to show that
-  \[
-    nx(1-x^2)^n \le n(1 - x^2)^n
-  \]
-  \[
-    nx(1-x^2)^n \le \varepsilon
-  \]
-
-  By theorem 5.4.2:
-  \[
-    \lim_{n\to\infty}\int_0^1 nx(1-x^2)^n dx = \int_0^1 f
-  \]
-
 \end{proof}
 \subsection*{Exercise 3}
 \begin{proof}
   \begin{enumerate}
-    \item consider the residual of the partial sum and total sum:
+    \item
+      $\forall n \in \mathbb{N}$ and $x\in [1,2]$
       \[
-        \left|\sum_{n=1}^\infty \frac{x}{(1+x)^n} - \sum_{n=1}^k
-        \frac{x}{(1+x)^n}\right| =
-        \left|\sum_{n=k+1}^\infty \frac{x}{(1+x)^n}\right|
+        g_n(x) = \frac{x}{(1+x)^{n}}\le
+        \frac{2}{(1+1)^{n}} = \frac{1}{2^{n-1}} := M_n
       \]
-      Which by the ratio test:
+      Evaluating the convergance of the series of $M_n$ by the ratio test
+      \[
+        \lim_{n\to\infty}\frac{M_{n+1}}{M_n} =
+        \lim_{n\to\infty}\frac{2^{n-1}}{2^{n}}= \frac{1}{2}
+      \]
+      Hence, since $\sum_0^\infty M_n$ converges in $\mathbb{R}$, by
+      the Weirstress $M$ test, $\sum_0^\infty g_n(x)$ converges uniformly.
+    \item We have that $\sum g_n$ is uniformly convergant on the
+      range $[1,2]$, which implies that the series is pointwise
+      convergant. It remains to be proven that $g_n$ is
+      differentiable, $g_n'$ is continuous, and that the series
+      $g_n'$ converges uniformly. Clearly, both $f(x) = x$ and $h(x)
+      = (x+1)^{n}$ are differentiable, thus $g_n = \frac{f}{h}$ is also
+      differentiable, and also:
+      \begin{align*}
+        \left(\frac{f(x)}{h(x)}\right)' &=
+        \left(\frac{x}{(1+x)^{n}}\right)' \\
+        &= \frac{(1+x)^{n} - n(x+1)^{n-1}}{(1+x)^{2n}} \\
+        &= \frac{1}{(1+x)^n} - \frac{n}{(1+x)^{n+1}}
+      \end{align*}
+      Since $1+x$ is continuous and never $0$ on $[1, 2]$, then
+      $(1-x)^{-n}$ is contintuous and so is $(1-x)^{n+1}$, and the
+      sum of continuous function is also continuous, so $g_n'$ is
+      continuous for all $n$.
+
+      Now we evaluate that the series converges uniformly:
+      \begin{align*}
+        \sum_{n=0}^\infty \left(\frac{1}{(1+x)^n} -
+        \frac{n}{(1+x)^{n+1}}\right) \le
+        \sum_{n=0}^\infty \left(\frac{1}{2^n} -
+        \frac{n}{2^{n+1}}\right) := \sum_{n=0}^\infty M_n
+      \end{align*}
+      To show that the above series is convergant:
+      \[
+        \sum_{n=0}^\infty M_n = \sum_{n=0}^\infty \frac{1}{2^n} -
+        \sum_{n=1}^\infty
+        \frac{n}{2^n}
+      \]
+      The first sum converges by the geometric series test. The
+      second sum converges by the ratio test
+      \begin{align*}
+        \lim_{n\to\infty} \frac{(n+1)2^{n}}{2^{n+1}n} &=
+        \lim_{n\to\infty} \frac{n+1}{2n} \\
+        &= \lim_{n\to\infty} \left(\frac{1}{2} + \frac{1}{2n}\right) \\
+        &= \frac12
+      \end{align*}
+      Thus $\sum M_n$ converges, so $\sum g'_n$
+      converges uniformly. All conditions have been verified for
+      \[
+        \left(\sum g_n\right)' = \sum g_n'
+      \]
   \end{enumerate}
 \end{proof}
 \subsection*{Exericse 4}
 \begin{proof}
+  \begin{enumerate}
+    \item Fix an $x \in \mathbb{R}$, then
+      $$
+      |g_n| = \left|\frac{x\sin(nx)}{n^3}\right| \le
+      \frac{|x|}{n^3}
+      $$
+      The series
+      \[
+        \sum_{n=0}^\infty \frac{|x|}{n^3} = |x|\sum_{n=0}^\infty \frac{1}{n^3}
+      \]
+      Converges by the $p$ series test. Thus for any fixed $x$, the
+      series converges pointwise to a function $f$.
+    \item From the above, we already have that $\sum g_n$ converges pointwise,
+      to show that $f$ is differentiable, we have to show that $g_n$
+      is differentiable and that $g'_n$ is continuous, and that
+      $\sum g'_n$ converges uniformly. Both $x$ and $sin(nx)$ are
+      differentiable $\forall x \in \mathbb{R}$, so their product is
+      as well, and is equal to:
+      \[
+        (x\sin(nx))' = \sin(nx) + xn\cos(nx)
+      \]
+      Thus $g'_n = \frac1{n^3}(\sin(nx) + nx\cos(nx))$, clearly,
+      $\sin(nx), x, \cos(nx)$ are all continuous, thus their
+      combinations are continuous as well. Finally, we show that
+      \[
+        \sum_{n=0}^\infty g'_n
+      \]
+      converges uniformly. Notice that
+      $$
+      g'_n = \frac1{n^3} (\sin(nx) + xn\cos(nx)) \le \frac1{n^3}(1 + xn)
+      $$
+      So for the restricted domain $[-R, R]$, then
+      \[
+        g'_n \le \frac{1}{n^3}(1+ Rn) := M_n
+      \]
+      The series $\sum M_n$ converges by the $p$ test:
+      \begin{align*}
+        \sum_{n=0}^\infty M_n &= \sum_{n=0}^\infty \left(\frac1{n^3}
+        + \frac{R}{n^2}\right)\\
+        &=  \sum_{n=0}^\infty \frac1{n^3}
+        + R\sum_{n=0}^\infty\frac{1}{n^2}\\
+      \end{align*}
+      So $g'_n$ converges uniformly for $x \in [-R, R]$, since $R$ is
+      arbitrary, we can conclude that $\sum g'_n$ converges uniformly
+      on $\mathbb{R}$. To find $f'$
+      \begin{align*}
+        f' &= \left(\sum_{n=0}^\infty g'_n \right) \\
+      \end{align*}
+  \end{enumerate}
 \end{proof}
 \subsection*{Exercise 5}
 \begin{proof}
