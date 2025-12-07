@@ -74,110 +74,107 @@
   Want to show that $\sup\mathcal{L}(f) = \inf\mathcal{U}(f)$. It
   suffices to show that for all $\varepsilon > 0$ there exists a
   partition $P$ such that $$U(f, P) - L(f, P)< \varepsilon$$
-  For a strictly increasing function $f$, the infimum and supremum of
-  the function over the interval $[x_{i-1}, x_i]$ is $f(x_{i-1})$ and
-  $f(x_{i})$ respectively. So for any partition of $[a,b]$, $P$,
+  Notice that, because $f$ is increasing,
   \[
-    L(f, P) =  \sum  f(x_{i-1})(x_i - x_{i-1})
+    U(f,P) = \sum f(x_{i+1})(x_{i+1} - x_i) \quad L(f,P) = \sum
+    f(x_i)(x_{i+1} - x_i)
   \]
-  And
+  For any partition $P$. Thus
   \[
-    U(f, P) =  \sum  f(x_{i})(x_i - x_{i-1})
+    U(f,P) - L(f,P) = \sum (f(x_{i+1}) - f(x_i))(x_{i+1} - x_i)
   \]
-  so
+  Set the partition to be equally spaced, such that $\forall i, c:=
+  x_{i+1} - x_i$ for some constant $c$. So the above sume becomes
   \[
-    U(f, P) - L(f, P) =  \sum  (f(x_{i}) - f(x_{i-1})(x_i - x_{i-1})
-    \]
-    Since $x_i > x_{i-1}$, and that $f$ is an increasing function, we
-    have that $f(x_i) - f(x_{i-1}) > 0$. Further, since closed
-    intervals in $\mathbb{R}$ are compact, by the maximum-minimum
-    principle $f([x_{i-1}, x_i])$ is bounded, therefore there must
-    exist an $M$ such that
-    \[
-      f(x_i) < M \implies \sum (f(x_i) - f(x_{i-1})(x_i - x_{i-1}) <
-        \sum M(x_i - x_{i-1}) \quad \forall i
-      \]
-      Which means that for $U(f,P) - L(f, P) < \varepsilon$ to be
-      true, $P$ must be selected such that
-      \[
-        x_i - x_{i-1} < \frac{\varepsilon}{Mn} \quad \forall i
-      \]
-      So for any $\varepsilon$ we can choose the partition \[
-        P = \left\{a + i\frac{b\varepsilon}{M}\right\}_{i=0}^M
-      \]
-    \end{proof}
-    \subsection*{Exercise 3}
-    \begin{proof}
-      $f$ is continuous, non-negative over the interval $[a,b]$, and
-      strictly positive at at least one point $c$. By continuity,
-      there exists a $\delta > 0$ such that
-      \[
-        |x - c| < \delta \implies |f(x) - f(c)| < \varepsilon
-      \]
-      $\forall \varepsilon > 0$, by setting $\varepsilon :=
-      \frac{f(c)}{2}$, we get that there must exist a $\delta > 0$ such that
-      \[
-        |x - c| < \delta \implies |f(x) - f(c)| < \frac{f(c)}{2}
-      \]
-      Expanding the absolute value we get that
-      \[
-        -\frac{f(c)}{2} < f(x) - f(c) < \frac{f(c)}{2} \implies
-        \frac{f(c)}{2} < f(x) < \frac{3f(c)}{2}
-      \]
-      That is, $\forall x \in$ the $\delta$ neighborhood of $c$,
-      $f(x) > \frac{f(c)}2$. The integral over that range $[c
-      -\delta, c+\delta]$ is bounded above and below:
-      \[
-        \delta f(c) \le \int_{c-\delta}^{c+\delta} f \le 3\delta f(c)
-      \]
-      Also, the integral over the ranges to either side of the
-      strictly positive range:
-      \[
-        (c - \delta - a) \inf f(x) \le \int_a^{c-\delta} f \le (c -
-        \delta - a)\sup f(x)
-      \]
-      And since $f(x) \ge 0 \implies \inf f(x) \ge 0$, and $a < c -
-      \delta \implies c - \delta - a > 0$. We get that
-      \[
-        0 \le (c - \delta - a) \inf f(x) \le \int_a^{c-\delta} f
-      \]
-      Similarily, for the interval $[c+\delta, b]$.
-      \[
-        (b - c - \delta) \inf f(x) \le \int_{c+\delta}^b f \le (b - c
-        - \delta)\sup f(x)
-      \]
-      And since $f(x) \ge 0 \implies \inf f(x) \ge 0$, and $b > c +
-      \delta \implies b - c - \delta > 0$. We get that
-      \[
-        0 \le (b - c - \delta) \inf f(x) \le \int_{c+\delta}^b f
-      \]
-      Using property (iv) from theorem 4.6.13:
-      \[
-        \int_a^b f = \int_a^{c-\delta} f + \int_{c-\delta}^{c+\delta}
-        f + \int_{c+\delta}^b f \ge 0 + \delta f(c) + 0 > 0
-      \]
-      As desired.
-    \end{proof}
-    \subsection*{Exericse 4}
-    \begin{proof}
-      Define $G: [a,b] \to \mathbb{R}$ such that $G' = g$. Then by
-      the fundamental theorem of Caclulus I,
-      \[
-        \int_a^b g = G(b) - G(a)
-      \]
-      Then dividing by $\frac{1}{b-a}$
-      \[
-        \frac{1}{b-a}\int_a^b g = \frac{G(b) - G(a)}{b-a}
-      \]
-      By application of the mean value theorem, $\exists c \in [a,b]$ such that
-      \begin{align*}
-        G'(c) &=  \frac{G(b) - G(a)}{b-a} \\
-        g(c) &=  \frac{G(b) - G(a)}{b-a} \\
-        g(c) &= \frac1{b-a}\int_a^b g
-      \end{align*}
-    \end{proof}
-    \subsection*{Exercise 5}
-    \begin{proof}
+    U(f,P) - L(f,P) = \sum (f(x_{i+1}) - f(x_i))c
+  \]
+  Clearly, successive terms cancel, so
+  \[
+    U(f,P) - L(f,P) = (f(b) - f(a))c
+  \]
+  So for $c < \frac{\varepsilon}{f(b) - f(a)}$, which we can always
+  set, we get that:
+  $$
+  U(f, P) - L(f,P) =(f(b) - f(a))c < (f(b) -
+  f(a))\frac{\varepsilon}{f(b) - f(a)} = \varepsilon
+  $$
+
+\end{proof}
+
+\subsection*{Exercise 3}
+\begin{proof}
+  $f$ is continuous, non-negative over the interval $[a,b]$, and
+  strictly positive at at least one point $c$. By continuity,
+  there exists a $\delta > 0$ such that
+  \[
+    |x - c| < \delta \implies |f(x) - f(c)| < \varepsilon
+  \]
+  $\forall \varepsilon > 0$, by setting $\varepsilon :=
+  \frac{f(c)}{2}$, we get that there must exist a $\delta > 0$ such that
+  \[
+    |x - c| < \delta \implies |f(x) - f(c)| < \frac{f(c)}{2}
+  \]
+  Expanding the absolute value we get that
+  \[
+    -\frac{f(c)}{2} < f(x) - f(c) < \frac{f(c)}{2} \implies
+    \frac{f(c)}{2} < f(x) < \frac{3f(c)}{2}
+  \]
+  That is, $\forall x \in$ the $\delta$ neighborhood of $c$,
+  $f(x) > \frac{f(c)}2$. The integral over that range $[c
+  -\delta, c+\delta]$ is bounded above and below:
+  \[
+    \delta f(c) \le \int_{c-\delta}^{c+\delta} f \le 3\delta f(c)
+  \]
+  Also, the integral over the ranges to either side of the
+  strictly positive range:
+  \[
+    (c - \delta - a) \inf f(x) \le \int_a^{c-\delta} f \le (c -
+    \delta - a)\sup f(x)
+  \]
+  And since $f(x) \ge 0 \implies \inf f(x) \ge 0$, and $a < c -
+  \delta \implies c - \delta - a > 0$. We get that
+  \[
+    0 \le (c - \delta - a) \inf f(x) \le \int_a^{c-\delta} f
+  \]
+  Similarily, for the interval $[c+\delta, b]$.
+  \[
+    (b - c - \delta) \inf f(x) \le \int_{c+\delta}^b f \le (b - c
+    - \delta)\sup f(x)
+  \]
+  And since $f(x) \ge 0 \implies \inf f(x) \ge 0$, and $b > c +
+  \delta \implies b - c - \delta > 0$. We get that
+  \[
+    0 \le (b - c - \delta) \inf f(x) \le \int_{c+\delta}^b f
+  \]
+  Using property (iv) from theorem 4.6.13:
+  \[
+    \int_a^b f = \int_a^{c-\delta} f + \int_{c-\delta}^{c+\delta}
+    f + \int_{c+\delta}^b f \ge 0 + \delta f(c) + 0 > 0
+  \]
+  As desired.
+\end{proof}
+\subsection*{Exericse 4}
+\begin{proof}
+  Define $G: [a,b] \to \mathbb{R}$ such that $G' = g$. Then by
+  the fundamental theorem of Caclulus I,
+  \[
+    \int_a^b g = G(b) - G(a)
+  \]
+  Then dividing by $\frac{1}{b-a}$
+  \[
+    \frac{1}{b-a}\int_a^b g = \frac{G(b) - G(a)}{b-a}
+  \]
+  By application of the mean value theorem, $\exists c \in [a,b]$ such that
+  \begin{align*}
+    G'(c) &=  \frac{G(b) - G(a)}{b-a} \\
+    g(c) &=  \frac{G(b) - G(a)}{b-a} \\
+    g(c) &= \frac1{b-a}\int_a^b g
+  \end{align*}
+\end{proof}
+\subsection*{Exercise 5}
+\begin{proof}
+  \begin{enumerate}
+    \item
       For a fixed $x \in [0, \infty]$, the sequence
       \[
         \frac{nx}{1 + nx^2}
@@ -208,5 +205,35 @@
       So the sequence is bounded and monotone increasing, therefore
       it is convergent $\forall x \in (0, \infty)$ so the family of
       functions are piecewise continuous.
-    \end{proof}
-    \end{document}
+    \item
+      \begin{align*}
+        |f_k(x) - f(x)| &= \left | \sum_{n=k}^\infty f_n \right | \\
+        &= \left | \sum_{n=k}^\infty \frac{nx}{1+nx^2} \right | \\
+      \end{align*}
+      So, if $\forall \varepsilon > 0, \exists k$ such that
+      \[
+        \left | \sum_{n=k}^\infty \frac{nx}{1+nx^2} \right | <
+        \varepsilon \implies |f_k(x) - f(x)| < \varepsilon
+      \]
+      This is of course just the cauchy criterion for convergence, so
+      it is sufficient to show that $\forall x \in (1, \infty0)$
+      \[
+        \sum \frac{nx}{1+nx^2}
+      \]
+      Is convergent. By the ratio test:
+      \begin{align*}
+        \frac{\frac{(n+1)x}{1+(n+1)x^2}}{\frac{nx}{1+nx^2}} &=
+        \frac{((n+1)x)(1+nx^2)}{nx(1+(n+1)x^2)} \\
+        &= \frac{n+1}{n}\frac{1+nx^2}{1+nx^2+x^2}
+      \end{align*}
+      As $n \to \infty$ then
+      \[
+        \frac{n+1}{n}\frac{1+nx^2}{1+nx^2+x^2} \to \frac{1}{x^2}
+      \]
+      Which, for $x > 1$, is smaller than $1$, thus the function
+      uniformly converges for $x \in (1, \infty)$
+    \item Following from the last part, for $x < 1 \implies
+      \frac{1}{x^2} > 1$, so by the ratio test, the function diverges.
+  \end{enumerate}
+\end{proof}
+\end{document}

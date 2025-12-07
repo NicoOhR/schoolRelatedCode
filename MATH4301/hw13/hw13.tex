@@ -71,6 +71,46 @@
 \end{proof}
 \subsection*{Exercise 2}
 \begin{proof}
+  First we calcualte the intergral with respect to $x$
+  \begin{align*}
+    \int f_n(x) &= \int nx(1-x^2)^n \\
+    &= - \frac{n(1-x^2)^{n+1}}{2(n+1)}
+  \end{align*}
+  When evaluated on the range $0$ to $1$:
+  \[
+    \int_0^1 f_n = \frac{n}{2(n+1)}
+  \]
+  Then taking the limit, notice that, $\forall n$
+  \begin{align*}
+    \frac{n+1}{2(n+1)} \leq \frac{n}{2(n+1)} \leq \frac{n}{2n}\\
+    \frac12 \leq \frac{n}{2(n+1)} \leq \frac{1}{2}
+  \end{align*}
+  so by the squeeze theorem, the sequence converges to $\frac12$. Thus
+  \[
+    \lim_{n\to\infty}\int_0^1 f_n  = \frac12
+  \]
+  To check if the sequence conveges uniformly, notice that for any
+  fixed $x  \in (0, 1)$
+  \[
+    0 < (1-x^2)^n < 1
+  \]
+  and using the standard limit, that for $|a| < 1$,
+  $$
+  \lim_{n\to\infty} na^n = 0
+  $$
+  we get that
+  \[
+    \lim_{n\to\infty}  nx(1 - x^2)^n = 0
+  \]
+  Thus
+  \[
+    \int^1_0 \lim_{n\to\infty} f_n = \int^1_0 0 = 0
+  \]
+  Since
+  \[
+    \lim_{n\to\infty} \int_0^1 f_n \neq \int^1_0 f_n
+  \]
+  By theorem 5.4.2, we get that the sequence does not converge uniformly.
 \end{proof}
 \subsection*{Exercise 3}
 \begin{proof}
@@ -188,5 +228,18 @@
 \end{proof}
 \subsection*{Exercise 5}
 \begin{proof}
+  Firstly, computing the $f'_n$ we find that
+  \begin{align*}
+    f_n'(x) &= \frac{2nx(1+nx^2) - 2nx(nx^2)}{(1+nx^2)^2}\\
+    &=  \frac{2nx(1+nx^2 - nx^2)}{(1+nx^2)^2} \\
+    &=  \frac{2nx}{(1+nx^2)^2} \\
+  \end{align*}
+  Fix $x \in (-1, 1)$, then $\forall n \in \mathbb{N}$
+  \begin{align*}
+    \frac{1}{(1+nx^2)^2} &< \frac{2nx}{(1+nx^2)^2} <
+    \frac{2nx}{n^2x^4} = \frac{2}{x^3}\frac{1}n
+  \end{align*}
+  Since both sequences bounding $f_n'$ converge to $0$, by the squeeze
+  theorem, $f_n'$ converges to $0$ as well, proving pointwise convergance.
 \end{proof}
 \end{document}
