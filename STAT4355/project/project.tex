@@ -1,0 +1,123 @@
+\documentclass[11pt]{report}
+
+% Basic packages you probably want
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\title{Linear Legands Project Report}
+\author{
+  N. Ohayon Rozanes \and
+  Daisy Rueda  \and
+  Minh Huy Nguyen \and
+  Illia Myronov
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\clearpage
+
+\section{Introduction}
+Every college student faces the same challenges: how to divide
+limited hours between studying, sleeping, socializing, job searching
+and everything in between. Some can manage balanced routines with
+ease, while the others struggle to keep up. But how do these everyday
+habits shape success and stress?
+This project explores that question through a data-driven analysis of
+student lifestyle patterns. Using linear modeling, we examine how
+variables exercise influence GPA and stress levels.
+Ultimately, this study seeks to translate everyday student
+experiences into measurable insights that reveal how balance, effort,
+and rest define the path to academic success and personal well-being.
+
+\subsection{Background}
+This dataset contains 8 columns and 2,000 observations. Every row
+is a student with a unique ID, 5 observations about the student’s
+habits, the student’s GPA, and the student’s stress level. The row
+values are listed below.
+\begin{enumerate}
+  \item \textbf{ID}: Unique ID assigned to every student. Ranges 1-2000
+  \item \textbf{Study Hours Per Day} : Average number of hours a student
+    spends studying every day. Ranges 5:10
+  \item \textbf{Extracurricular Hours Per Day} : Average number of hours a
+    student spends on non:study activities (i.e., clubs) every day. Ranges 0-4
+  \item \textbf{Sleep Hours Per Day} : Average number of hours a student
+    spends sleeping every day. Ranges 5:10
+  \item \textbf{Social Hours Per Day} : Average number of hours a student
+    spends socializing every day. Ranges 0:6
+  \item \textbf{Physical Activity Hours Per Day} : Average number of hours a
+    student spends exercising every day. Ranges 0:13
+  \item \textbf{GPA} : Student’s GPA
+  \item \textbf{Stress Level} : Reported stress of a student, categorical.
+    Obtains values: Low, Moderate, High.
+\end{enumerate}
+
+\subsection{Goals}
+
+Firstly, we would like to be able to analyze how a students daily
+habits effect their academic performance, as measure by their GPA. We
+would also like to analyze the relationship between stress other variables.
+
+\section{Methods}
+\subsection{Preprocessing}
+Firstly, we drop the ID column, as it does not aid in the analysis.
+The data set does not have any missing or censored data so no rows
+need to be removed on the basis of missing values. The stress level
+variable is categorical, with values low, moderate and high, which we
+use ordinal encoding, transforming it into $1,2$ and $3$ respectively.
+\subsection{Exploratry Data Analysis}
+\begin{center}
+  \includegraphics[scale=0.15]{histograms.png}
+\end{center}
+From the above figure, showing the histograms of the quantitative
+variables of the data set, we can see that study hours are fairly
+uniform, ranging between $5$ and $10$ hours, extracurricular
+involvement ranges from $0$ to $4$ hours without a clear skew in
+either direction, sleep hours similarily varies between $5$ and $10$
+hours with a similar shape, as does social time, which varied between
+$0$ and $6$ hours. Physical activity does exhibit a definite right
+bias, and ranges between $0$ to $6$ hours. Notably, extracuricular
+activity does have several students far away from the mean, which
+could be explained by student atheletes, for example. Lastly, GPA
+exhibits a bell curve distribution, perhaps individual classes grade
+to a curve, or that is simply the natural distribution of the data.
+
+\begin{center}
+  \includegraphics[scale=0.4]{stress.png}
+\end{center}
+
+Next, looking at the distribution of stress level, we see that by far, the
+largest group is the high stress group, with more than one thousand
+students reporting high levels of stress, indicating that stress is a
+widespread issue in this student population. This prompts further
+investigation on the effects of stress and the other variables.
+
+\begin{center}
+  \includegraphics[scale=0.2]{stressagainstvariables.png}
+\end{center}
+
+Strikingly, every student that studies more than $8$ hours a day
+reports high stress level, but is also more positevly correlated with
+a higher GPA. Additionaly, every student that sleeps less than $6$
+hours reports high stress, but there is not as clear an indication of
+an increase in GPA. Another interesting observation is that the high
+stress group has the most varied GPA distribution, but does have the
+highest mean compared to the other groups.
+\section{Results}
+\subsection{Main result}
+Some text.
+
+\subsection{Conclusion}
+Some text.
+
+\end{document}
