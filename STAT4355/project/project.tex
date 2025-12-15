@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
+\usepackage{float}
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -83,12 +84,12 @@ From the above figure, showing the histograms of the quantitative
 variables of the data set, we can see that study hours are fairly
 uniform, ranging between $5$ and $10$ hours, extracurricular
 involvement ranges from $0$ to $4$ hours without a clear skew in
-either direction, sleep hours similarily varies between $5$ and $10$
+either direction, sleep hours similarly varies between $5$ and $10$
 hours with a similar shape, as does social time, which varied between
 $0$ and $6$ hours. Physical activity does exhibit a definite right
-bias, and ranges between $0$ to $6$ hours. Notably, extracuricular
+bias, and ranges between $0$ to $6$ hours. Notably, extracurricular
 activity does have several students far away from the mean, which
-could be explained by student atheletes, for example. Lastly, GPA
+could be explained by student athletes, for example. Lastly, GPA
 exhibits a bell curve distribution, perhaps individual classes grade
 to a curve, or that is simply the natural distribution of the data.
 
@@ -107,17 +108,232 @@ investigation on the effects of stress and the other variables.
 \end{center}
 
 Strikingly, every student that studies more than $8$ hours a day
-reports high stress level, but is also more positevly correlated with
-a higher GPA. Additionaly, every student that sleeps less than $6$
+reports high stress level, but is also more positively correlated with
+a higher GPA. Additionally, every student that sleeps less than $6$
 hours reports high stress, but there is not as clear an indication of
 an increase in GPA. Another interesting observation is that the high
 stress group has the most varied GPA distribution, but does have the
 highest mean compared to the other groups.
+
+\section{Model Selection}
+
+\subsection{Predictor Selection}
+
+An interesting feature of this data set is that the hours columns
+always add up to $24$, which causes perfect colinearity with the all
+$1$ column added to the data matrix for the intercept. Since the
+model would not be interpretable if it was forced to go through the
+origin (a student cannot spend time doing nothing), removing the
+intercept does not make sense. To avoid colinearity, we have to drop
+one of the hours columns. Removing one of the columns changes the
+interpretation of the model slightly, and makes it so you have to
+interpret the coefficients in reference to the dropped column. Put
+concretely, a coefficient of $\beta$ for the study hours predictors,
+with the extracurricular hours dropped, should be interpreted as
+"spending an hour more on studying than extracurriculars increases
+GPA by $\beta$".
+
+We chose to drop the extracurricular columns since, as shown by the
+table below, it had the lowest variance out the hours columns, so
+students have the most consistent extracurriculars as a baseline.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l c}
+    \hline
+    Variable & Variance \\
+    \hline
+    \textbf{Study Hours Per Day} & 2.02746 \\
+    \textbf{Extracurricular Hours Per Day} & 1.33600 \\
+    \textbf{Sleep Hours Per Day} & 2.13437 \\
+    \textbf{Social Hours Per Day} & 2.85108 \\
+    \textbf{Physical Activity Hours Per Day} & 6.32075 \\
+    \hline
+  \end{tabular}
+  \caption{Sample variances of daily hour-allocation variables.}
+\end{table}
+
+Then, to select the predictors which were most effective, we used
+backwards and forwards stepwise selection, using MSE and explained
+variance as the selection criterion. All four stepwise selection
+methods, backwards with MSE, backwards with explain variance,
+forwards with MSE, and forward with explained variance, concluded
+that the model which maximizes the metrics is
+
+$$
+\text{GPA} \sim \text{Hours Studied} +  \text{Hours Slept}
+$$
+
+The criterion of MSE and explained variance was used because, across
+the board, the AIC and BIC were very similar. This model has the
+following summary
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l c c c c}
+    \hline
+    Variable & Estimate & Std. Error & $t$-value & $p$-value \\
+    \hline
+    Intercept & 1.9999 & 0.0331 & 60.31 & $<0.001$ \\
+    Study Hours & 0.1542 & 0.0032 & 48.42 & $<0.001$ \\
+    Sleep Hours & $-0.0049$ & 0.0031 & $-1.58$ & 0.115 \\
+    \hline
+  \end{tabular}
+  \caption{OLS regression results for GPA on study and sleep hours ($n=2000$).}
+\end{table}
+
+We can see that the $p$ value of the sleep hours predictor is
+much higher than the typical $0.05$ significance threshold. We
+investigate this further by using a partial F-test to compare the
+model using only study hours and the model using study hours and
+sleep hours, which yields the following results:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l c c c c}
+    \hline
+    Model & Residual df & Residual SS & $F$ & $p$-value \\
+    \hline
+    GPA $\sim$ Study & 1998 & 82.1277 &  &  \\
+    GPA $\sim$ Study + Sleep & 1997 & 82.0257 & 2.4819 & 0.1153 \\
+    \hline
+  \end{tabular}
+  \caption{ANOVA comparison of nested linear models for GPA.}
+\end{table}
+
+Clearly, sleep hours do not provide any statistically significant
+improvement in explanatory power beyond study hours alone. This is
+further confirmed by the fact that the adjusted $R^2$ is the same for
+both models, at $\approx 0.54$. Thus, we come to a final model:
+
+$$
+\text{GPA} = 1.964228 + 0.154061\cdot\text{Hours Studied Per Day}
+$$
+
+\subsection{Model Summary}
+
+For the final model above, we have the following model fit statistics:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l c}
+    \hline
+    Statistic & Value \\
+    \hline
+    Residual Standard Error & 0.2027 \\
+    $R^2$ & 0.5394 \\
+    Adjusted $R^2$ & 0.5392 \\
+    F-statistic & 2340 \\
+    $p$-value & $< 0.001$ \\
+    \hline
+  \end{tabular}
+  \caption{Model fit statistics for the GPA regression model.}
+\end{table}
+
+The incredibly small $p$ value indicates that the model is
+statistically significant. The coefficient of determination indicates
+that approximately $54\%$ of the variability in GPA is accounted for
+by the hours studied. Further, the very similar adjusted $R^2$
+indicates that the explanatory power of the model is not a result of
+overfitting. Further the residual standard error of $0.2027$ suggests
+that the on average, the model deviates from the actual values by
+about $0.2$ GPA points, which, as a percentage of the overall scale,
+is only $0.05\%$.
+
+\subsection{Residual Analysis}
+
+Using the model found above, we plot the histogram and QQ plot of the
+residuals to verify that the errors of the data is roughly normally distributed.
+
+\begin{center}
+  \includegraphics[scale=0.25]{residualHistogram.png}
+  \includegraphics[scale=0.25]{residualQQ.png}
+\end{center}
+
+There is a slight left skew to the histogram, indicating that the
+model is more likely to underestimate a student's GPA rather than
+overestimate it. However, the residuals are centered at around zero
+and are in the range of $-1$ to $1$, verifying that the normality
+assumptions are well satisfied. The QQ plot further reinforces this,
+and shows that the residuals lie very close to the normal reference
+line, with only minor deviations towards the extremes. Together,
+these plots show that the model errors are approximately normally
+distributed with constant variance and no systematic structure which
+is unexplained.
+
+\subsection{Prediction and Confidence Intervals}
+
+text
+
+\subsection{Influential Data Points}
+
+We now inspect our data for possibly influential data points. To
+start with, we graph the residuals of each data point using the selected model
+
+\begin{center}
+  \includegraphics[scale=0.5]{residual_bars.png}
+\end{center}
+
+The high number of data points above the cutoffs for the studentized
+residuals, with very few standardized or R-student exceedances
+indicate mild, leverage-adjusted deviations, and do not indicate, on
+their own at least, outliers or model failure. A point of interest is
+indexed 702, which has a residual higher than standardized residual
+and studentized residual. This point comes up again when we plot the
+various influential matrices.
+
+\begin{center}
+  \includegraphics[scale=0.5]{influence.png}
+\end{center}
+
+Pulling out this specific student, we see that the student's GPA is
+much higher than what the model would predict. The point has ordinary
+leverage, as indicated by the hat value, but a large residual, which
+produces the high Bonferroni-significant R-student residual and a
+moderate Cook's distance. This suggests the presence of unmodeled
+factors which effect GPA for this individual specifically, than a
+structural problem with the model. Additionally, due to the very high
+$n$, the rule of thumb bands used for the points that need to be
+inspected is very small. For example, the cutoff for Cook's distance
+is $4/n = 0.002$, and the maximum value observed for Cook's distance
+is $0.0096$, corresponding to observation $702$, which exceeds the
+screening line, but is still tiny in absolute terms. Similarly, the
+COVRATIO has the band $1 \pm 3p/n = 1 \pm 0.0075$, with the minimum
+and maximum points $0.96807$ and $1.00860$, which only very narrowly
+exceeds the cutoff. The number of points which are considered extreme
+by the diagnostic measure is presented by the table below:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l c}
+    \hline
+    \textbf{Diagnostic} & \textbf{Count (Percent)} \\
+    \hline
+    High leverage $(>2p/n)$ & 24 (1.20\%) \\
+    High leverage $(>3p/n)$ & 1 (0.05\%) \\
+    High Cook's distance $(>4/n)$ & 92 (4.60\%) \\
+    High leverage and high Cook's D & 3 (0.15\%) \\
+    Standardized residuals $(|r_i| > 3)$ & 3 (0.15\%) \\
+    \hline
+  \end{tabular}
+  \caption{Leverage, influence, and residual diagnostics for the GPA
+  regression model.}
+\end{table}
+
+Largely, no values need to be removed since using leverage, Cook's
+distance, DFBETAS, and COVRATIO, we found no evidence of undue
+influence, as all values are relatively small in absolute terms.
+
+\section{Analysing Stress Level}
+
 \section{Results}
 \subsection{Main result}
 Some text.
 
 \subsection{Conclusion}
+
 Some text.
+
+\subsection{Future Plans}
 
 \end{document}
