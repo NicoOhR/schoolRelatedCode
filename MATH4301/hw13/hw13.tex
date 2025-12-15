@@ -236,10 +236,28 @@
   \end{align*}
   Fix $x \in (-1, 1)$, then $\forall n \in \mathbb{N}$
   \begin{align*}
-    \frac{1}{(1+nx^2)^2} &< \frac{2nx}{(1+nx^2)^2} <
-    \frac{2nx}{n^2x^4} = \frac{2}{x^3}\frac{1}n
+    \left|\frac{2nx}{(1+nx^2)^2}\right| < \left|\frac{2nx}{n^2x^4}\right| =
+    \left|\frac{2}{x^3}\frac{1}n\right|
   \end{align*}
-  Since both sequences bounding $f_n'$ converge to $0$, by the squeeze
-  theorem, $f_n'$ converges to $0$ as well, proving pointwise convergance.
+  Clearly, the above bounding sequence covnerges to $0$ as $n$ goes
+  to infinity, therefore the sequence converges pointwise to $0$. To
+  show that the sequence does not converge to $0$ uniformly, we want
+  to find an $x$ such that
+  \[
+    \left|\frac{2nx}{(1+nx^2)^2}\right| \geq \varepsilon
+  \]
+  For all $n$. Consider $x = \frac{1}n$
+  \[
+    \left|\frac{2}{(1+\frac{1}{n})^2}\right| \geq \varepsilon
+  \]
+  Notice that $1 + \frac1{n} \leq 2, \forall n \in \mathbb{N}$
+  $$
+  \left|f'(\frac1n)\right| = \left|\frac{2}{(1+\frac{1}n)^2}\right|
+  \geq \frac{2}{2^2}
+  $$
+  So for any $\varepsilon < \frac{1}2$ we get that
+  \[
+    \left|f'(\frac1n)\right| > \varepsilon
+  \]
 \end{proof}
 \end{document}
