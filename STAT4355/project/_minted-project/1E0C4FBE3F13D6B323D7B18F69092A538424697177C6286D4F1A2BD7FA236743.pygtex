@@ -1,0 +1,105 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}Load Dataset}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}data/student\PYGZus{}lifestyle\PYGZus{}dataset.csv\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Distribution plots}
+\PYG{n}{df}\PYG{o}{.}\PYG{n}{hist}\PYG{p}{(}\PYG{n}{bins}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{15}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Distribution of All Variables\PYGZsq{}}\PYG{p}{,} \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{16}\PYG{p}{,} \PYG{n}{y}\PYG{o}{=}\PYG{l+m+mf}{1.02}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} Visualize stress level counts}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{))}
+\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Stress\PYGZus{}Level\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{value\PYGZus{}counts}\PYG{p}{()}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{kind}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}bar\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}green\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}orange\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}red\PYGZsq{}}\PYG{p}{])}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Stress Level Counts\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Stress Level\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Count\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xticks}\PYG{p}{(}\PYG{n}{rotation}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.3}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} Prepare data for ANOVA (use original data with Stress\PYGZus{}Level as categorical)}
+\PYG{n}{df\PYGZus{}anova} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} Group GPA by Stress\PYGZus{}Level}
+\PYG{n}{stress\PYGZus{}groups} \PYG{o}{=} \PYG{p}{[}\PYG{n}{df\PYGZus{}anova}\PYG{p}{[}\PYG{n}{df\PYGZus{}anova}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Stress\PYGZus{}Level\PYGZsq{}}\PYG{p}{]} \PYG{o}{==} \PYG{n}{level}\PYG{p}{][}\PYG{l+s+s1}{\PYGZsq{}GPA\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{values}
+                 \PYG{k}{for} \PYG{n}{level} \PYG{o+ow}{in} \PYG{n}{df\PYGZus{}anova}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Stress\PYGZus{}Level\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{unique}\PYG{p}{()]}
+
+\PYG{c+c1}{\PYGZsh{} Perform one\PYGZhy{}way ANOVA}
+\PYG{n}{f\PYGZus{}statistic}\PYG{p}{,} \PYG{n}{p\PYGZus{}value} \PYG{o}{=} \PYG{n}{stats}\PYG{o}{.}\PYG{n}{f\PYGZus{}oneway}\PYG{p}{(}\PYG{o}{*}\PYG{n}{stress\PYGZus{}groups}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Box plot}
+\PYG{n}{df\PYGZus{}anova}\PYG{o}{.}\PYG{n}{boxplot}\PYG{p}{(}\PYG{n}{column}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}GPA\PYGZsq{}}\PYG{p}{,} \PYG{n}{by}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Stress\PYGZus{}Level\PYGZsq{}}\PYG{p}{,} \PYG{n}{ax}\PYG{o}{=}\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}GPA Distribution by Stress Level (Box Plot)\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Stress Level\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}GPA\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{axes}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.3}\PYG{p}{)}
+
+\PYG{n}{predictors} \PYG{o}{=} \PYG{p}{[}
+    \PYG{l+s+s2}{\PYGZdq{}Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}Extracurricular\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}Sleep\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}Social\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}Physical\PYGZus{}Activity\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{,}
+\PYG{p}{]}
+
+\PYG{n}{stress\PYGZus{}colors} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+    \PYG{l+s+s2}{\PYGZdq{}low\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}tab:red\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}moderate\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}tab:orange\PYGZdq{}}\PYG{p}{,}
+    \PYG{l+s+s2}{\PYGZdq{}high\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}tab:green\PYGZdq{}}\PYG{p}{,}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{\PYGZsh{} Create a 2x3 grid of subplots: 5 scatter plots + 1 boxplot}
+\PYG{n}{fig}\PYG{p}{,} \PYG{n}{axes} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{18}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{))}
+\PYG{n}{axes} \PYG{o}{=} \PYG{n}{axes}\PYG{o}{.}\PYG{n}{ravel}\PYG{p}{()}  \PYG{c+c1}{\PYGZsh{} flatten to 1D array for easy indexing}
+
+\PYG{c+c1}{\PYGZsh{} Scatter plots: GPA vs each predictor}
+\PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{col} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{predictors}\PYG{p}{):}
+    \PYG{n}{ax} \PYG{o}{=} \PYG{n}{axes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{level}\PYG{p}{,} \PYG{n}{color} \PYG{o+ow}{in} \PYG{n}{stress\PYGZus{}colors}\PYG{o}{.}\PYG{n}{items}\PYG{p}{():}
+        \PYG{n}{mask} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Stress\PYGZus{}Level\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{lower}\PYG{p}{()} \PYG{o}{==} \PYG{n}{level}
+        \PYG{n}{subset} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{n}{mask}\PYG{p}{]}
+
+        \PYG{n}{ax}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}
+            \PYG{n}{subset}\PYG{p}{[}\PYG{n}{col}\PYG{p}{],}
+            \PYG{n}{subset}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{],}
+            \PYG{n}{label}\PYG{o}{=}\PYG{n}{level}\PYG{o}{.}\PYG{n}{capitalize}\PYG{p}{(),}
+            \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.7}\PYG{p}{,}
+            \PYG{n}{s}\PYG{o}{=}\PYG{l+m+mi}{25}\PYG{p}{,}
+            \PYG{n}{c}\PYG{o}{=}\PYG{n}{color}\PYG{p}{,}
+        \PYG{p}{)}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{n}{col}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}\PYGZus{}\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{} \PYGZdq{}}\PYG{p}{))}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}GPA vs }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{col}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZus{}\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}}\PYG{p}{)}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Only show legend on the first subplot to avoid clutter}
+    \PYG{k}{if} \PYG{n}{i} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+        \PYG{n}{ax}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{title}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Stress Level\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Boxplot of GPA by stress level in the last subplot}
+\PYG{n}{ax\PYGZus{}box} \PYG{o}{=} \PYG{n}{axes}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+\PYG{n}{order} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}low\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}moderate\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}high\PYGZdq{}}\PYG{p}{]}
+\PYG{n}{data\PYGZus{}to\PYGZus{}plot} \PYG{o}{=} \PYG{p}{[}
+    \PYG{n}{df}\PYG{p}{[}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Stress\PYGZus{}Level\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{str}\PYG{o}{.}\PYG{n}{lower}\PYG{p}{()} \PYG{o}{==} \PYG{n}{lvl}\PYG{p}{][}\PYG{l+s+s2}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{()}
+    \PYG{k}{for} \PYG{n}{lvl} \PYG{o+ow}{in} \PYG{n}{order}
+\PYG{p}{]}
+
+\PYG{n}{ax\PYGZus{}box}\PYG{o}{.}\PYG{n}{boxplot}\PYG{p}{(}
+    \PYG{n}{data\PYGZus{}to\PYGZus{}plot}\PYG{p}{,}
+    \PYG{n}{labels}\PYG{o}{=}\PYG{p}{[}\PYG{n}{lvl}\PYG{o}{.}\PYG{n}{capitalize}\PYG{p}{()} \PYG{k}{for} \PYG{n}{lvl} \PYG{o+ow}{in} \PYG{n}{order}\PYG{p}{],}
+    \PYG{n}{showmeans}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,}
+\PYG{p}{)}
+\PYG{n}{ax\PYGZus{}box}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Stress Level\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{ax\PYGZus{}box}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{ax\PYGZus{}box}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}GPA Distribution by Stress Level\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Hide any unused subplots (in case of layout changes)}
+\PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{predictors}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{axes}\PYG{p}{)):}
+    \PYG{n}{fig}\PYG{o}{.}\PYG{n}{delaxes}\PYG{p}{(}\PYG{n}{axes}\PYG{p}{[}\PYG{n}{j}\PYG{p}{])}
+
+\PYG{n}{fig}\PYG{o}{.}\PYG{n}{suptitle}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}GPA Relationships and Stress Levels\PYGZdq{}}\PYG{p}{,} \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{16}\PYG{p}{)}
+\PYG{n}{fig}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{(}\PYG{n}{rect}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mf}{0.03}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mf}{0.95}\PYG{p}{])}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\end{Verbatim}

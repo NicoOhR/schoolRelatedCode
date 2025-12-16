@@ -1,0 +1,227 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{+w}{  }\PYG{n}{df}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{read.csv}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}student\PYGZus{}lifestyle\PYGZus{}dataset.csv\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{stress\PYGZus{}numeric}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{as.numeric}\PYG{p}{(}\PYG{n+nf}{factor}\PYG{p}{(}\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{Stress\PYGZus{}Level}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{levels}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Low\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Moderate\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}High\PYGZdq{}}\PYG{p}{)))}
+
+\PYG{n}{fit}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{lm}\PYG{p}{(}\PYG{n}{GPA}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{+w}{ }\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{data}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{df}\PYG{p}{)}
+
+\PYG{n+nf}{anova}\PYG{p}{(}\PYG{n}{fit}\PYG{p}{)}
+\PYG{n+nf}{summary}\PYG{p}{(}\PYG{n}{fit}\PYG{p}{)}
+
+\PYG{n+nf}{set.seed}\PYG{p}{(}\PYG{l+m}{10}\PYG{p}{)}
+\PYG{n}{res\PYGZus{}sum}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{0}
+
+\PYG{n+nf}{for}\PYG{p}{(}\PYG{n}{k}\PYG{+w}{ }\PYG{n}{in}\PYG{+w}{ }\PYG{l+m}{1}\PYG{o}{:}\PYG{l+m}{5}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{sample}\PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}\PYG{n+nf}{nrow}\PYG{p}{(}\PYG{n}{df}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n}{row\PYGZus{}i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{df}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{]}
+
+\PYG{+w}{  }\PYG{n}{newdata}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{data.frame}\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{row\PYGZus{}i}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}
+\PYG{+w}{  }\PYG{p}{)}
+
+\PYG{+w}{  }\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{predict}\PYG{p}{(}\PYG{n}{fit}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{newdata}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}prediction\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{level}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.95}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n}{in\PYGZus{}interval}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{row\PYGZus{}i}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{row\PYGZus{}i}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{]}
+
+\PYG{+w}{  }\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Row:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{i}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Fit:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}95\PYGZpc{} PI:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}to\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Actual GPA:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{row\PYGZus{}i}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Is actual GPA in interval? \PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{in\PYGZus{}interval}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Residual value: \PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{row\PYGZus{}i}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n}{res\PYGZus{}sum}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{res\PYGZus{}sum}\PYG{+w}{ }\PYG{o}{+}\PYG{p}{(}\PYG{n}{row\PYGZus{}i}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{])}\PYG{o}{\PYGZca{}}\PYG{l+m}{2}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{MSE\PYGZus{}}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{res\PYGZus{}sum}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m}{5}
+\PYG{n}{MSE\PYGZus{}}
+
+\PYG{c+c1}{\PYGZsh{}CI stuff}
+\PYG{n+nf}{set.seed}\PYG{p}{(}\PYG{l+m}{3}\PYG{p}{)}
+
+\PYG{n}{avg\PYGZus{}study\PYGZus{}hours}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{0}
+\PYG{n}{avg\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{0}
+
+\PYG{n+nf}{for}\PYG{p}{(}\PYG{n}{j}\PYG{+w}{ }\PYG{n}{in}\PYG{+w}{ }\PYG{l+m}{1}\PYG{o}{:}\PYG{l+m}{100}\PYG{p}{)}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n}{i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{sample}\PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}\PYG{n+nf}{nrow}\PYG{p}{(}\PYG{n}{df}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n}{row\PYGZus{}i}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{df}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{]}
+
+\PYG{+w}{  }\PYG{n}{avg\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{avg\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{row\PYGZus{}i}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}
+\PYG{+w}{  }\PYG{n}{avg\PYGZus{}study\PYGZus{}hours}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{avg\PYGZus{}study\PYGZus{}hours}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{row\PYGZus{}i}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{avg\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{avg\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m}{100}
+\PYG{n}{avg\PYGZus{}study\PYGZus{}hours}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{avg\PYGZus{}study\PYGZus{}hours}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m}{100}
+\PYG{n}{data}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{data.frame}\PYG{p}{(}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{avg\PYGZus{}study\PYGZus{}hours}\PYG{p}{)}
+
+\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{predict}\PYG{p}{(}\PYG{n}{fit}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}confidence\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{level}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.95}\PYG{p}{)}
+
+\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Fit:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}95\PYGZpc{} CI:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}to\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}average time studied:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{avg\PYGZus{}study\PYGZus{}hours}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}average GPA:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{avg\PYGZus{}GPA}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} PI stuff}
+
+\PYG{n}{student1\PYGZus{}data}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{data.frame}\PYG{p}{(}
+\PYG{+w}{  }\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{7.5}
+\PYG{p}{)}
+
+\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{predict}\PYG{p}{(}\PYG{n}{fit}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{student1\PYGZus{}data}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}prediction\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{level}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.95}\PYG{p}{)}
+
+\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Fit:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nf}{cat}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}95\PYGZpc{} PI:\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}to\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{p}{[,}\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}\PYGZbs{}n\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Model analysis:}
+\PYG{n+nf}{summary}\PYG{p}{(}\PYG{n}{fit}\PYG{p}{)}
+\PYG{n+nf}{anova}\PYG{p}{(}\PYG{n}{fit}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Fit model}
+\PYG{n}{model}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{lm}\PYG{p}{(}\PYG{n}{GPA}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{+w}{ }\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{data}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{df}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Build a sequence of study\PYGZhy{}hour values}
+\PYG{n}{x\PYGZus{}seq}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{seq}\PYG{p}{(}\PYG{n+nf}{min}\PYG{p}{(}\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{),}
+\PYG{+w}{             }\PYG{n+nf}{max}\PYG{p}{(}\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{),}
+\PYG{+w}{             }\PYG{n}{length.out}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{200}\PYG{p}{)}
+
+\PYG{n}{newdata}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{data.frame}\PYG{p}{(}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{x\PYGZus{}seq}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Get confidence interval for the MEAN (not prediction)}
+\PYG{n}{ci}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{predict}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{newdata}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}confidence\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Start empty plot}
+\PYG{n+nf}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{type}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}n\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{xlab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Study Hours Per Day\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{ylab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Mean GPA\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Regression Line With 95\PYGZpc{} Confidence Band\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Add CI band}
+\PYG{n+nf}{polygon}\PYG{p}{(}
+\PYG{+w}{  }\PYG{n+nf}{c}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nf}{rev}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{)),}
+\PYG{+w}{  }\PYG{n+nf}{c}\PYG{p}{(}\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n+nf}{rev}\PYG{p}{(}\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{])),}
+\PYG{+w}{  }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{adjustcolor}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}lightblue\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{alpha.f}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.4}\PYG{p}{),}
+\PYG{+w}{  }\PYG{n}{border}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{NA}
+\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Add fitted regression line}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}blue\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}red\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} lower bound}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}red\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} upper bound}
+
+\PYG{n+nf}{library}\PYG{p}{(}\PYG{n}{dplyr}\PYG{p}{)}
+
+\PYG{n}{means}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{df}\PYG{+w}{ }\PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+\PYG{+w}{  }\PYG{n+nf}{group\PYGZus{}by}\PYG{p}{(}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+\PYG{+w}{  }\PYG{n+nf}{summarise}\PYG{p}{(}\PYG{n}{mean\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{GPA}\PYG{p}{))}
+
+\PYG{n+nf}{points}\PYG{p}{(}\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{,}
+\PYG{+w}{       }\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{mean\PYGZus{}GPA}\PYG{p}{,}
+\PYG{+w}{       }\PYG{n}{pch}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{19}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}black\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} how accurate is CI}
+
+\PYG{n}{ci\PYGZus{}means}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{predict}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,}
+\PYG{+w}{                    }\PYG{n}{newdata}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{data.frame}\PYG{p}{(}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{),}
+\PYG{+w}{                    }\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}confidence\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{inside}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{mean\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{n}{ci\PYGZus{}means}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZam{}}
+\PYG{+w}{  }\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{mean\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{ci\PYGZus{}means}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{]}
+
+\PYG{n}{percent\PYGZus{}inside}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{inside}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{100}
+\PYG{n}{percent\PYGZus{}inside}
+
+\PYG{c+c1}{\PYGZsh{} each hour CI}
+
+\PYG{n}{group\PYGZus{}stats}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{df}\PYG{+w}{ }\PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+\PYG{+w}{  }\PYG{n+nf}{group\PYGZus{}by}\PYG{p}{(}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+\PYG{+w}{  }\PYG{n+nf}{summarise}\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{n}\PYG{p}{(),}
+\PYG{+w}{    }\PYG{n}{mean\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{GPA}\PYG{p}{),}
+\PYG{+w}{    }\PYG{n}{sd\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{sd}\PYG{p}{(}\PYG{n}{GPA}\PYG{p}{)}
+\PYG{+w}{  }\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+\PYG{+w}{  }\PYG{n+nf}{mutate}\PYG{p}{(}
+\PYG{+w}{    }\PYG{n}{se}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{sd\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n+nf}{sqrt}\PYG{p}{(}\PYG{n}{n}\PYG{p}{),}
+\PYG{+w}{    }\PYG{n}{t\PYGZus{}crit}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{qt}\PYG{p}{(}\PYG{l+m}{0.975}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{df}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{),}
+\PYG{+w}{    }\PYG{n}{lwr}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mean\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{t\PYGZus{}crit}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{se}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n}{upr}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mean\PYGZus{}GPA}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{t\PYGZus{}crit}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{se}
+\PYG{+w}{  }\PYG{p}{)}
+
+\PYG{n+nf}{summary}\PYG{p}{(}\PYG{n}{fit}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}CI band}
+
+\PYG{n+nf}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{type}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}n\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{xlab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Study Hours Per Day\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{ylab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Mean GPA\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Regression Line With 95\PYGZpc{} Confidence Band\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Add CI band}
+\PYG{n+nf}{polygon}\PYG{p}{(}
+\PYG{+w}{  }\PYG{n+nf}{c}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nf}{rev}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{)),}
+\PYG{+w}{  }\PYG{n+nf}{c}\PYG{p}{(}\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n+nf}{rev}\PYG{p}{(}\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{])),}
+\PYG{+w}{  }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{adjustcolor}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}lightblue\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{alpha.f}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.4}\PYG{p}{),}
+\PYG{+w}{  }\PYG{n}{border}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{NA}
+\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Add fitted regression line}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}blue\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}red\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} lower bound}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}red\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}\PYG{+w}{  }\PYG{c+c1}{\PYGZsh{} upper bound}
+
+\PYG{n+nf}{points}\PYG{p}{(}\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{,}
+\PYG{+w}{       }\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{mean\PYGZus{}GPA}\PYG{p}{,}
+\PYG{+w}{       }\PYG{n}{pch}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{19}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}black\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} CIs for each mean}
+\PYG{n+nf}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{type}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}n\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{xlab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Study Hours Per Day\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{ylab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Mean GPA\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Mean GPA vs Study Hours\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{points}\PYG{p}{(}\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{,}
+\PYG{+w}{       }\PYG{n}{means}\PYG{o}{\PYGZdl{}}\PYG{n}{mean\PYGZus{}GPA}\PYG{p}{,}
+\PYG{+w}{       }\PYG{n}{pch}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{19}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}black\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ci}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}blue\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{arrows}\PYG{p}{(}
+\PYG{+w}{  }\PYG{n}{x0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{group\PYGZus{}stats}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{,}
+\PYG{+w}{  }\PYG{n}{y0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{group\PYGZus{}stats}\PYG{o}{\PYGZdl{}}\PYG{n}{lwr}\PYG{p}{,}
+\PYG{+w}{  }\PYG{n}{x1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{group\PYGZus{}stats}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{,}
+\PYG{+w}{  }\PYG{n}{y1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{group\PYGZus{}stats}\PYG{o}{\PYGZdl{}}\PYG{n}{upr}\PYG{p}{,}
+\PYG{+w}{  }\PYG{n}{angle}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{90}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{code}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{3}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{length}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.05}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}darkred\PYGZdq{}}
+\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} PI}
+
+\PYG{c+c1}{\PYGZsh{} Get prediction interval for individual observations}
+\PYG{k+kc}{pi}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{predict}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{newdata}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}prediction\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{level}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.95}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Start plot with actual points}
+\PYG{n+nf}{plot}\PYG{p}{(}\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{pch}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{19}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}black\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{xlab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Study Hours per Day\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{ylab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Regression Line with 95\PYGZpc{} Prediction Interval\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Add PI band (shaded)}
+\PYG{n+nf}{polygon}\PYG{p}{(}
+\PYG{+w}{  }\PYG{n+nf}{c}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nf}{rev}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{)),}
+\PYG{+w}{  }\PYG{n+nf}{c}\PYG{p}{(}\PYG{k+kc}{pi}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n+nf}{rev}\PYG{p}{(}\PYG{k+kc}{pi}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{])),}
+\PYG{+w}{  }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{adjustcolor}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}lightblue\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{alpha.f}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.4}\PYG{p}{),}
+\PYG{+w}{  }\PYG{n}{border}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{NA}
+\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Add regression line}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{pi}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}fit\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}blue\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Add dotted red lines for the edges of PI}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{pi}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}red\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}
+\PYG{n+nf}{lines}\PYG{p}{(}\PYG{n}{x\PYGZus{}seq}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{pi}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{],}\PYG{+w}{ }\PYG{n}{col}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}red\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}
+
+\PYG{n}{pi\PYGZus{}all}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{predict}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{interval}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}prediction\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{level}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0.95}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Check if each actual GPA is within its PI}
+\PYG{n}{inside}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{n}{pi\PYGZus{}all}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lwr\PYGZdq{}}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{\PYGZam{}}\PYG{+w}{ }\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{GPA}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{pi\PYGZus{}all}\PYG{p}{[,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}upr\PYGZdq{}}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} Compute percentage}
+\PYG{n}{percent\PYGZus{}inside}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{inside}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m}{100}
+\PYG{n}{percent\PYGZus{}inside}
+\end{Verbatim}

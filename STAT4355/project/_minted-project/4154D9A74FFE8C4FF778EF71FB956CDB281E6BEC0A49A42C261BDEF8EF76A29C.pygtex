@@ -1,0 +1,83 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{df}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{read.csv}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}./data/student\PYGZus{}lifestyle\PYGZus{}dataset.csv\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{Student\PYGZus{}ID}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{k+kc}{NULL}
+\PYG{n}{df}\PYG{o}{\PYGZdl{}}\PYG{n}{Stress\PYGZus{}Level}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{k+kc}{NULL}
+
+\PYG{n}{df}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{na.omit}\PYG{p}{(}\PYG{n}{df}\PYG{p}{)}
+
+\PYG{n}{hours}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}
+\PYG{+w}{  }\PYG{l+s}{\PYGZdq{}Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{,}
+\PYG{p}{)}
+
+\PYG{n}{X\PYGZus{}hours}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{setdiff}\PYG{p}{(}\PYG{n}{hours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{drop\PYGZus{}hour}\PYG{p}{)}
+
+\PYG{n}{model}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{lm}\PYG{p}{(}
+\PYG{+w}{  }\PYG{n+nf}{as.formula}\PYG{p}{(}\PYG{n+nf}{paste}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}GPA \PYGZti{}\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nf}{paste}\PYG{p}{(}\PYG{n}{X\PYGZus{}hours}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{collapse}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{} + \PYGZdq{}}\PYG{p}{))),}
+\PYG{+w}{  }\PYG{n}{data}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{df}
+\PYG{p}{)}
+
+\PYG{n+nf}{summary}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}
+
+\PYG{n}{std\PYGZus{}res}\PYG{+w}{  }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{stdres}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}
+\PYG{n}{stud\PYGZus{}res}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{studres}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}
+\PYG{n}{rstud}\PYG{+w}{    }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{rstudent}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}
+
+\PYG{n+nf}{kable}\PYG{p}{(}\PYG{n+nf}{head}\PYG{p}{(}\PYG{n+nf}{matrix}\PYG{p}{(}\PYG{n}{std\PYGZus{}res}\PYG{p}{,}\PYG{+w}{  }\PYG{n}{ncol}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{byrow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{TRUE}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m}{10}\PYG{p}{),}
+\PYG{+w}{      }\PYG{n}{caption}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}First 20 standardized residuals (shown as 10 rows x 2 cols)\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{kable}\PYG{p}{(}\PYG{n+nf}{head}\PYG{p}{(}\PYG{n+nf}{matrix}\PYG{p}{(}\PYG{n}{stud\PYGZus{}res}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ncol}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{byrow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{TRUE}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m}{10}\PYG{p}{),}
+\PYG{+w}{      }\PYG{n}{caption}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}First 20 studentized residuals (shown as 10 rows x 2 cols)\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{kable}\PYG{p}{(}\PYG{n+nf}{head}\PYG{p}{(}\PYG{n+nf}{matrix}\PYG{p}{(}\PYG{n}{rstud}\PYG{p}{,}\PYG{+w}{    }\PYG{n}{ncol}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{byrow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{TRUE}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m}{10}\PYG{p}{),}
+\PYG{+w}{      }\PYG{n}{caption}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}First 20 R\PYGZhy{}student residuals (shown as 10 rows x 2 cols)\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{png}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}residual\PYGZus{}bars.png\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1800}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{700}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{res}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{150}\PYG{p}{)}
+\PYG{n+nf}{par}\PYG{p}{(}\PYG{n}{mfrow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{3}\PYG{p}{))}
+
+\PYG{n+nf}{barplot}\PYG{p}{(}\PYG{n}{std\PYGZus{}res}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Standardized residuals\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{ylim}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{\PYGZhy{}5}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{5}\PYG{p}{))}
+\PYG{n+nf}{abline}\PYG{p}{(}\PYG{n}{h}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}
+\PYG{n+nf}{abline}\PYG{p}{(}\PYG{n}{h}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{\PYGZhy{}3}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{3}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}
+
+\PYG{n+nf}{barplot}\PYG{p}{(}\PYG{n}{stud\PYGZus{}res}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Studentized residuals\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{ylim}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{\PYGZhy{}5}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{5}\PYG{p}{))}
+\PYG{n+nf}{abline}\PYG{p}{(}\PYG{n}{h}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}
+\PYG{n+nf}{abline}\PYG{p}{(}\PYG{n}{h}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{\PYGZhy{}2}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}
+
+\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{nobs}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}
+
+\PYG{n}{alpha}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{l+m}{0.05}
+\PYG{n}{qt\PYGZus{}cut}\PYG{+w}{ }\PYG{o}{\PYGZlt{}\PYGZhy{}}\PYG{+w}{ }\PYG{n+nf}{qt}\PYG{p}{(}\PYG{l+m}{1}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{alpha}\PYG{o}{/}\PYG{p}{(}\PYG{l+m}{2}\PYG{o}{*}\PYG{n}{n}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{df}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{df\PYGZus{}resid}\PYG{p}{)}
+
+\PYG{n+nf}{barplot}\PYG{p}{(}\PYG{n}{rstud}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{paste0}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}R\PYGZhy{}student residuals (Bonferroni α=\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{alpha}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{})\PYGZdq{}}\PYG{p}{),}
+\PYG{+w}{        }\PYG{n}{ylim}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{\PYGZhy{}5}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{5}\PYG{p}{))}
+\PYG{n+nf}{abline}\PYG{p}{(}\PYG{n}{h}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{lwd}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}
+\PYG{n+nf}{abline}\PYG{p}{(}\PYG{n}{h}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{qt\PYGZus{}cut}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{qt\PYGZus{}cut}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{lty}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{)}
+
+\PYG{n+nf}{par}\PYG{p}{(}\PYG{n}{mfrow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{))}
+\PYG{n+nf}{dev.off}\PYG{p}{()}
+
+\PYG{n+nf}{kable}\PYG{p}{(}\PYG{n+nf}{summary}\PYG{p}{(}\PYG{n+nf}{influence.measures}\PYG{p}{(}\PYG{n}{model}\PYG{p}{))}\PYG{o}{\PYGZdl{}}\PYG{n}{infmat}\PYG{p}{,}
+\PYG{+w}{      }\PYG{n}{caption}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Influence measures (car::influence.measures)\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{dfbetasPlots}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{intercept}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{TRUE}\PYG{p}{)}
+
+\PYG{n+nf}{influenceIndexPlot}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Influence index plot (car)\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{kable}\PYG{p}{(}\PYG{n+nf}{vif}\PYG{p}{(}\PYG{n}{model}\PYG{p}{),}\PYG{+w}{ }\PYG{n}{caption}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Variance Inflation Factors (VIF)\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n+nf}{png}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}hist\PYGZus{}and\PYGZus{}qq.png\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1600}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{700}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{res}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{150}\PYG{p}{)}
+\PYG{n+nf}{par}\PYG{p}{(}\PYG{n}{mfrow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{2}\PYG{p}{))}
+\PYG{n+nf}{hist}\PYG{p}{(}\PYG{n}{stud\PYGZus{}res}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{breaks}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{30}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{freq}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{FALSE}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Histogram of studentized residuals\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{     }\PYG{n}{xlab}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Studentized residuals\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nf}{qqPlot}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{main}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}QQ Plot (car::qqPlot)\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nf}{par}\PYG{p}{(}\PYG{n}{mfrow}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m}{1}\PYG{p}{))}
+\PYG{n+nf}{dev.off}\PYG{p}{()}
+
+\PYG{n+nf}{png}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}residualPlot\PYGZus{}rstudent.png\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{width}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{1200}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{height}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{900}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{res}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m}{150}\PYG{p}{)}
+\PYG{n+nf}{residualPlot}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{type}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}rstudent\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{quadratic}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{FALSE}\PYG{p}{)}
+\end{Verbatim}

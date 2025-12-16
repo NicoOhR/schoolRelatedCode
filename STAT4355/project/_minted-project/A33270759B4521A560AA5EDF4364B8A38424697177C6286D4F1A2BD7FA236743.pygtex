@@ -1,0 +1,67 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}evaluating the full model}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.metrics} \PYG{k+kn}{import} \PYG{n}{r2\PYGZus{}score}\PYG{p}{,} \PYG{n}{mean\PYGZus{}squared\PYGZus{}error}\PYG{p}{,} \PYG{n}{mean\PYGZus{}absolute\PYGZus{}error}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.model\PYGZus{}selection} \PYG{k+kn}{import} \PYG{n}{train\PYGZus{}test\PYGZus{}split}
+
+\PYG{n}{y\PYGZus{}pred} \PYG{o}{=} \PYG{n}{full\PYGZus{}reg}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+
+\PYG{n}{n} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{n}{p} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+\PYG{n}{r2} \PYG{o}{=} \PYG{n}{r2\PYGZus{}score}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred}\PYG{p}{)}
+\PYG{n}{mse} \PYG{o}{=} \PYG{n}{mean\PYGZus{}squared\PYGZus{}error}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred}\PYG{p}{)}
+\PYG{n}{rmse} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{mse}\PYG{p}{)}
+
+\PYG{n}{adj\PYGZus{}r2} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{r2}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{n}{n} \PYG{o}{\PYGZhy{}} \PYG{n}{p} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}R2: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{r2}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, adjR2: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{adj\PYGZus{}r2}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, MSE: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{mse}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{, RMSE: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{rmse}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+
+\PYG{k+kn}{from}  \PYG{n+nn}{sklearn.feature\PYGZus{}selection} \PYG{k+kn}{import} \PYG{n}{SequentialFeatureSelector}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{labels} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}Student\PYGZus{}ID\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}Extracurricular\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{],} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{]}
+
+\PYG{n}{forward\PYGZus{}sfs} \PYG{o}{=} \PYG{n}{SequentialFeatureSelector}\PYG{p}{(}\PYG{n}{LinearRegression}\PYG{p}{(),}\PYG{n}{n\PYGZus{}features\PYGZus{}to\PYGZus{}select}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}auto\PYGZdq{}}\PYG{p}{,}\PYG{n}{direction}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}forward\PYGZdq{}}\PYG{p}{,}\PYG{n}{scoring}\PYG{o}{=}\PYG{n}{bic}\PYG{p}{)}
+\PYG{n}{forward\PYGZus{}sfs}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{y}\PYG{p}{)}
+\PYG{n}{selected\PYGZus{}mask} \PYG{o}{=} \PYG{n}{forward\PYGZus{}sfs}\PYG{o}{.}\PYG{n}{get\PYGZus{}support}\PYG{p}{()}
+\PYG{n}{selected\PYGZus{}features} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{selected\PYGZus{}mask}\PYG{p}{]}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{selected\PYGZus{}features}\PYG{p}{)}
+
+\PYG{n}{backward} \PYG{o}{=} \PYG{n}{SequentialFeatureSelector}\PYG{p}{(}\PYG{n}{LinearRegression}\PYG{p}{(),}\PYG{n}{n\PYGZus{}features\PYGZus{}to\PYGZus{}select}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}auto\PYGZdq{}}\PYG{p}{,}\PYG{n}{direction}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}backward\PYGZdq{}}\PYG{p}{,}\PYG{n}{scoring}\PYG{o}{=}\PYG{n}{bic}\PYG{p}{)}
+\PYG{n}{backward\PYGZus{}sfs}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{y}\PYG{p}{)}
+\PYG{n}{selected\PYGZus{}mask} \PYG{o}{=} \PYG{n}{backward\PYGZus{}sfs}\PYG{o}{.}\PYG{n}{get\PYGZus{}support}\PYG{p}{()}
+\PYG{n}{selected\PYGZus{}features} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{selected\PYGZus{}mask}\PYG{p}{]}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{selected\PYGZus{}features}\PYG{p}{)}
+
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{from}  \PYG{n+nn}{sklearn.feature\PYGZus{}selection} \PYG{k+kn}{import} \PYG{n}{SequentialFeatureSelector}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}./data/student\PYGZus{}lifestyle\PYGZus{}dataset.csv\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Stress\PYGZus{}Level\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Stress\PYGZus{}Level\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{map}\PYG{p}{(\PYGZob{}}
+    \PYG{l+s+s1}{\PYGZsq{}Low\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{1}\PYG{p}{,}
+    \PYG{l+s+s1}{\PYGZsq{}Moderate\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{2}\PYG{p}{,}
+    \PYG{l+s+s1}{\PYGZsq{}High\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mi}{3}
+\PYG{p}{\PYGZcb{})}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{n}{labels} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}Student\PYGZus{}ID\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}Extracurricular\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{],} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}GPA\PYGZdq{}}\PYG{p}{]}
+
+\PYG{n}{forward\PYGZus{}sfs} \PYG{o}{=} \PYG{n}{SequentialFeatureSelector}\PYG{p}{(}\PYG{n}{LinearRegression}\PYG{p}{(),}\PYG{n}{n\PYGZus{}features\PYGZus{}to\PYGZus{}select}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}auto\PYGZdq{}}\PYG{p}{,}\PYG{n}{direction}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}forward\PYGZdq{}}\PYG{p}{,}\PYG{n}{scoring}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}explained\PYGZus{}variance\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{forward\PYGZus{}sfs}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{y}\PYG{p}{)}
+\PYG{n}{selected\PYGZus{}mask} \PYG{o}{=} \PYG{n}{forward\PYGZus{}sfs}\PYG{o}{.}\PYG{n}{get\PYGZus{}support}\PYG{p}{()}
+\PYG{n}{selected\PYGZus{}features} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{n}{selected\PYGZus{}mask}\PYG{p}{]}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{selected\PYGZus{}features}\PYG{p}{)}
+
+\PYG{k+kn}{import} \PYG{n+nn}{statsmodels.formula.api} \PYG{k}{as} \PYG{n+nn}{smf}
+\PYG{k+kn}{from} \PYG{n+nn}{statsmodels.stats.anova} \PYG{k+kn}{import} \PYG{n}{anova\PYGZus{}lm}
+\PYG{n}{m\PYGZus{}full} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}
+    \PYG{l+s+s2}{\PYGZdq{}GPA \PYGZti{} Study\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day + Extracurricular\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day \PYGZdq{}}
+    \PYG{l+s+s2}{\PYGZdq{}+ Sleep\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day + Social\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day \PYGZdq{}}
+    \PYG{l+s+s2}{\PYGZdq{}+ Physical\PYGZus{}Activity\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}
+\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{m\PYGZus{}full}\PYG{o}{.}\PYG{n}{rsquared}\PYG{p}{)}
+\PYG{n}{m\PYGZus{}restricted} \PYG{o}{=} \PYG{n}{smf}\PYG{o}{.}\PYG{n}{ols}\PYG{p}{(}
+    \PYG{l+s+s2}{\PYGZdq{}GPA \PYGZti{} Sleep\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day + Social\PYGZus{}Hours\PYGZus{}Per\PYGZus{}Day\PYGZdq{}}\PYG{p}{,}
+    \PYG{n}{data}\PYG{o}{=}\PYG{n}{df}
+\PYG{p}{)}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{()}
+\PYG{n}{anova\PYGZus{}results} \PYG{o}{=} \PYG{n}{anova\PYGZus{}lm}\PYG{p}{(}\PYG{n}{m\PYGZus{}restricted}\PYG{p}{,} \PYG{n}{m\PYGZus{}full}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{anova\PYGZus{}results}\PYG{p}{)}
+\end{Verbatim}

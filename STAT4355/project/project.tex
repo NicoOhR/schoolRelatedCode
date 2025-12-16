@@ -3,6 +3,8 @@
 % Basic packages you probably want
 \usepackage[margin=1in]{geometry}
 \usepackage[T1]{fontenc}
+\usepackage{minted}
+\usepackage{hyperref}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{float}
@@ -10,9 +12,12 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{titlesec}
+\usepackage{indentfirst}
+\setlength{\parindent}{1.5em}
+
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
-\title{Linear Legands Project Report}
+\title{Linear Legends Project Report}
 \author{
   N. Ohayon Rozanes \and
   Daisy Rueda  \and
@@ -32,11 +37,11 @@
 Every college student faces the same challenges: how to divide
 limited hours between studying, sleeping, socializing, job searching
 and everything in between. Some can manage balanced routines with
-ease, while the others struggle to keep up. But how do these everyday
+ease, while others struggle to keep up. But how do these everyday
 habits shape success and stress?
 This project explores that question through a data-driven analysis of
 student lifestyle patterns. Using linear modeling, we examine how
-variables exercise influence GPA and stress levels.
+variables exercise influence on GPA and stress levels.
 Ultimately, this study seeks to translate everyday student
 experiences into measurable insights that reveal how balance, effort,
 and rest define the path to academic success and personal well-being.
@@ -65,18 +70,19 @@ values are listed below.
 
 \subsection{Goals}
 
-Firstly, we would like to be able to analyze how a students daily
-habits effect their academic performance, as measure by their GPA. We
+Firstly, we would like to be able to analyze how a student's daily
+habits effect their academic performance, as measured by their GPA. We
 would also like to analyze the relationship between stress other variables.
 
 \section{Methods}
 \subsection{Preprocessing}
-Firstly, we drop the ID column, as it does not aid in the analysis.
+We drop the ID column, as it does not aid in the analysis.
 The data set does not have any missing or censored data so no rows
 need to be removed on the basis of missing values. The stress level
-variable is categorical, with values low, moderate and high, which we
-use ordinal encoding, transforming it into $1,2$ and $3$ respectively.
-\subsection{Exploratry Data Analysis}
+variable is categorical, and takes the values low, moderate, and high, which we
+use ordinal encoding on, transforming the column into $1,2$ and $3$
+respectively.
+\subsection{Exploratory Data Analysis}
 \begin{center}
   \includegraphics[scale=0.15]{histograms.png}
 \end{center}
@@ -100,8 +106,8 @@ to a curve, or that is simply the natural distribution of the data.
 Next, looking at the distribution of stress level, we see that by far, the
 largest group is the high stress group, with more than one thousand
 students reporting high levels of stress, indicating that stress is a
-widespread issue in this student population. This prompts further
-investigation on the effects of stress and the other variables.
+widespread issue in this student population. This motivates further
+investigation on the effects of stress.
 
 \begin{center}
   \includegraphics[scale=0.2]{stressagainstvariables.png}
@@ -114,6 +120,33 @@ hours reports high stress, but there is not as clear an indication of
 an increase in GPA. Another interesting observation is that the high
 stress group has the most varied GPA distribution, but does have the
 highest mean compared to the other groups.
+
+We can further verify the effect of stress level on the GPA of the
+student by performing a one-way partial F-test comparing the groups
+of the stress level. We have the null hypothesis $$H_0:
+\mu_{\text{high}} = \mu_{\text{medium}} = \mu_{\text{low}}$$ Where
+each $\mu$ is the mean GPA of students who reported that stress
+level. The results of the test follow:
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{lccccc}
+    \hline
+    Source of Variation & Sum of Squares & df & Mean Square & F & p-value \\
+    \hline
+    Between Groups (Stress\_Level) & 54.1028 & 2    & 27.0514 &
+    434.8882 & 0.000000 \\
+    Within Groups (Residual)      & 124.2197 & 1997 & 0.0622  &
+    &          \\
+    Total                          & 178.3226 & 1999 &         &
+    &          \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Since the $p$-value is significantly smaller than $0.05$, we can
+reject the null hypothesis, and conclude that there is a
+statistically significant difference in GPA between the stress levels.
 
 \section{Model Selection}
 
@@ -156,7 +189,7 @@ students have the most consistent extracurriculars as a baseline.
 Then, to select the predictors which were most effective, we used
 backwards and forwards stepwise selection, using MSE and explained
 variance as the selection criterion. All four stepwise selection
-methods, backwards with MSE, backwards with explain variance,
+methods, backwards with MSE, backwards with explained variance,
 forwards with MSE, and forward with explained variance, concluded
 that the model which maximizes the metrics is
 
@@ -184,7 +217,7 @@ following summary
 
 We can see that the $p$ value of the sleep hours predictor is
 much higher than the typical $0.05$ significance threshold. We
-investigate this further by using a partial F-test to compare the
+investigate this further by using a one-way partial F-test to compare the
 model using only study hours and the model using study hours and
 sleep hours, which yields the following results:
 
@@ -263,7 +296,61 @@ is unexplained.
 
 \subsection{Prediction and Confidence Intervals}
 
-text
+To further test our model, we made prediction and confidence
+intervals. Confidence interval to test if our model does a good job
+in predicting the mean GPA, and prediction interval to test our model
+on an individual’s GPA.
+
+\begin{center}
+  \includegraphics[scale=0.375]{CI1.png}
+\end{center}
+Above is the regression line with a 95\% confidence band. Points on the
+graph represent the mean GPA for students studying that number of
+hours. Blue line is our regression line, blue region with dotted red
+border is a confidence interval.
+
+Important things to notice about this graph are how narrow the band
+is and how few points actually fall inside the region.
+Our confidence band is very narrow (it is 0.018 in the narrowest
+point), which happens due to the amount of data we have. We have 2000
+observations, making our model very confident about the true mean.
+However, when we take the unique hours studied (rounded to 1 decimal
+point), we only have about 39 observations. This huge difference in
+the total number of observations and the number of observations for
+each study hour causes the observed mean to often fall beyond the
+confidence interval. Even considering this, about 30\% of individuals
+fall in a confidence band.
+
+An interesting observation to make about this graph is that more
+observed means fall in a confidence interval with a low GPA. This
+suggests that when student studies enough hours, other variables
+become more influential than for students who don’t study enough.
+Meaning, when you don’t study enough, it doesn’t really matter what
+you do for your GPA; it will be low either way, but if you study
+enough, it becomes important how you spend the rest of your day.
+
+\begin{center}
+  \includegraphics[scale=0.375]{CI2.png}
+\end{center}
+
+Here, we added 95\% confidence intervals to each observed study hour.
+This graph shows that every (but one) individual mean contains our
+predicted GPA. This shows that our model is good at predicting GPA.
+
+\begin{center}
+  \includegraphics[scale=0.375]{PI.png}
+\end{center}
+
+This is a graph of the regression line with a 95\% prediction
+interval of GPA vs study hours per day. It contains a point for each
+of 2000 observations. This graph provides even more support to our
+model’s accuracy, as around 95\% of individuals fall inside the
+prediction interval band.
+
+After seeing how accurate our model is, we decided to test
+information about us. We tested three of us; two landed right in the
+prediction interval given to us based on our study hours, and one was
+just above the interval.
 
 \subsection{Influential Data Points}
 
@@ -326,14 +413,710 @@ influence, as all values are relatively small in absolute terms.
 
 \section{Analysing Stress Level}
 
+\subsection{Modeling Stress Level}
+We extend our analysis by considering a reversed causality, where we
+use the ordinal variable \textbf{Stress Level} as the target variable
+and the rest, including \textbf{GPA} being predictor variables. Stress
+level, originally recorded as a categorical variable with levels
+\textit{Low, Moderate, and High}, was converted into a numeric
+ordinal variable to enable regression-based modeling. Specifically,
+stress levels were mapped to integer values (Low = 1, Moderate = 2, High = 3),
+preserving the inherent ordering of the response variable.
+
+\begin{center}
+  \includegraphics[scale=0.5]{heatmap.png}
+\end{center}
+
+An Ordinary Least Squares (OLS) regression model was fit using, GPA,
+hours of sleep, study, physical activity, extracurriculars, and
+social activity. Philosophically, we defend our choice to use the OLS
+model since, practically, there is no qualitative reason or the
+stress level variable to not be a continuous variable, i.e. a
+student's stress could range freely between any two levels. This
+model, presented as a heat map, showed
+significant findings relating hours of sleep, stress, and the
+students’ GPA whilst also providing coefficient estimates, t-tests,
+p-values, confidence intervals, and more model fit statistics. This
+allowed us to dive deeper into these predictors and evaluate the
+individual contribution of each, in comparison to the full model.
+
+\begin{center}
+  \includegraphics[scale=0.5]{confusionmatrix.png}
+\end{center}
+
+To assess multicollinearity among the explanatory variables, Variance
+Inflation Factors (VIFs) were computed for each predictor. The VIF
+analysis revealed substantial multicollinearity between hours of
+sleep and study, both exceeding commonly accepted thresholds for
+moderate to high collinearity.  In contrast, hours of physical
+activity, extracurricular involvement, and social hours exhibited
+acceptable VIF values, indicating limited collinearity with other predictors.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{lc}
+    \hline
+    Feature & VIF \\
+    \hline
+    Sleep               & 25.454476 \\
+    Study               & 97.244827 \\
+    Physical Activity   & 7.313372  \\
+    Extracurricular     & 4.593235  \\
+    Social              & 4.973264  \\
+    GPA                 & 2.178496  \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Given the presence of multicollinearity and the potential redundancy
+of certain predictors, a formal model comparison was conducted. The
+full OLS model with all variables, the reduced OLS model with only
+hours of sleep and study as predictors, and an OLS model with stress
+level turned into numbers rather than their categorical values. An
+ANOVA f-test was then performed to compare the reduced model against
+the full model.
+
+Based on these results, the reduced model was favored for its
+interpretability and parsimony. The findings suggest that sleep and
+study habits are the primary lifestyle factors associated with
+student stress levels in this dataset, while the remaining variables
+do not provide meaningful additional predictive value.
+
+\subsection{Influential Point Analysis}
+
+A similar analysis of influential data points was done for this model
+as well. We used deviance residuals in an analogous formula to obtain
+an approximate Cook’s distance. A conventional threshold of 4/n =
+0.002 was used to flag potentially influential points. In the GPA
+model, the mean Cook’s distance was very small (~ 0.00045) and only
+92 observations (4.60\%) exceeded the 4/n cutoff. In the Stress
+model, the mean Cook’s distance was ~ 0.00031, with 41 observations
+(2.05\%) above the threshold. When combining criteria (high leverage
+more than 2p/n and Cook’s distance more than 4/n), only 3
+observations (0.15\%) in the GPA model and 1 observation (0.05\%) in
+the Stress model were classified as truly influential.
+
+We also compared leverage values computed on scaled versus unscaled
+predictors to evaluate the impact of scaling. For the GPA model,
+scaling produced similar average leverage but slightly changed the
+number of points above the 2p/n threshold (24 vs. 19). The effect was
+much more dramatic in the Stress model: with unscaled predictors, 306
+observations (15.30\%) exceeded the 2p/n cutoff, compared to only 11
+(0.55\%) after scaling. This confirms that scaling stabilizes
+leverage calculations and reduces spurious detection of high-leverage
+points that are driven purely by differences in units rather than
+genuinely unusual predictor combinations.
+
+In summary, leverage and Cook’s distance diagnostics indicate that
+only a very small fraction of observations exert substantial
+influence on either model. Most high-leverage points do not have
+large Cook’s distances and therefore appear to follow the general
+pattern of the data, even though their predictor combinations are unusual.
+Based on these results, We do not recommend automatically removing
+high-leverage observations. Instead, the few truly influential cases
+(high leverage and high Cook’s distance) can be inspected
+individually during the modeling stage, while the full dataset is
+retained for fitting the GPA and Stress Level models.
+
 \section{Results}
 \subsection{Main result}
-Some text.
 
-\subsection{Conclusion}
+Our model has shown that the primary predictor of GPA is the
+amount of hours studied. However, a further investigation has shown
+that when a student studies enough, it becomes more important how
+these student's spend the rest of their day; which seems very
+reasonable. When you study enough, and participate in extracurricular
+activities, you will have a higher GPA than someone who studies
+enough but sleeps the rest of the day. However, when you don’t study
+enough, other activities will not affect your GPA as much.
 
-Some text.
+Although there definitely was a relationship between stress and GPA,
+as indicated by the ANOVA test, its effect was marginal compared to
+the hours studied. The very wide range of possible GPAs in each
+stress level grouping could also indicate a relationship which is not
+strictly linear, and thus not able to be captured in an OLS model.
+
+When evaluating stress level as the predicted variable, we modeled
+student stress as an ordinal outcome and, after diagnosing
+multicolinearity and comparing nested OLS models via ANOVA, we found
+that hours of sleep and study alone explained stress levels, with
+additional lifestyle variables providing no significant improvement
+in model fit.
 
 \subsection{Future Plans}
 
+An additional possible strategy to further explain the relationship
+between stress and other lifestyle choices would be to partition the
+data by the stress level column, and analysing each one
+independently. It might be the case that, in the high stress group
+for example, a different set of predictor variables have a more
+meaningful relationship with GPA.
+
+Also, it is very likely that some of the predictor terms have a high
+level of interaction with one another. For example, it would make
+sense for hours slept and physical activity hours to have interaction
+with one another, since a student athlete is more likely to
+prioritize sleep, for example.
+
+We prioritized interpretability and inference in this study, but
+extending this analysis to prediction could also reveal some
+interesting results. We would do this by introducing train/testing
+splits in the data and regularizing the model with ridge or lasso.
+
+\newpage
+\section{Code}
+\textit{Note:} certain sections of the code have been abridged
+significantly, to make the document reasonably lengthed. A full
+version of the code can be found on the
+\href{git@github.com:mhuy26/LinearLegends.git}{GitHub repository}.
+\subsection{exploratory data analysis}
+\begin{minted}{python}
+#Load Dataset
+df = pd.read_csv("data/student_lifestyle_dataset.csv")
+
+# Distribution plots
+df.hist(bins=30, figsize=(20, 15))
+plt.suptitle('Distribution of All Variables', fontsize=16, y=1.02)
+plt.tight_layout()
+plt.show()
+
+# Visualize stress level counts
+plt.figure(figsize=(10, 6))
+df['Stress_Level'].value_counts().plot(kind='bar', color=['green', 'orange', 'red'])
+plt.title('Stress Level Counts')
+plt.xlabel('Stress Level')
+plt.ylabel('Count')
+plt.xticks(rotation=0)
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Prepare data for ANOVA (use original data with Stress_Level as categorical)
+df_anova = df.copy()
+
+# Group GPA by Stress_Level
+stress_groups = [df_anova[df_anova['Stress_Level'] == level]['GPA'].values
+                 for level in df_anova['Stress_Level'].unique()]
+
+# Perform one-way ANOVA
+f_statistic, p_value = stats.f_oneway(*stress_groups)
+
+# Box plot
+df_anova.boxplot(column='GPA', by='Stress_Level', ax=axes[0])
+axes[0].set_title('GPA Distribution by Stress Level (Box Plot)')
+axes[0].set_xlabel('Stress Level')
+axes[0].set_ylabel('GPA')
+axes[0].grid(True, alpha=0.3)
+
+predictors = [
+    "Study_Hours_Per_Day",
+    "Extracurricular_Hours_Per_Day",
+    "Sleep_Hours_Per_Day",
+    "Social_Hours_Per_Day",
+    "Physical_Activity_Hours_Per_Day",
+]
+
+stress_colors = {
+    "low": "tab:red",
+    "moderate": "tab:orange",
+    "high": "tab:green",
+}
+
+# Create a 2x3 grid of subplots: 5 scatter plots + 1 boxplot
+fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+axes = axes.ravel()  # flatten to 1D array for easy indexing
+
+# Scatter plots: GPA vs each predictor
+for i, col in enumerate(predictors):
+    ax = axes[i]
+    for level, color in stress_colors.items():
+        mask = df["Stress_Level"].str.lower() == level
+        subset = df[mask]
+
+        ax.scatter(
+            subset[col],
+            subset["GPA"],
+            label=level.capitalize(),
+            alpha=0.7,
+            s=25,
+            c=color,
+        )
+
+    ax.set_xlabel(col.replace("_", " "))
+    ax.set_ylabel("GPA")
+    ax.set_title(f"GPA vs {col.replace('_', ' ')}")
+
+    # Only show legend on the first subplot to avoid clutter
+    if i == 0:
+        ax.legend(title="Stress Level")
+
+# Boxplot of GPA by stress level in the last subplot
+ax_box = axes[-1]
+order = ["low", "moderate", "high"]
+data_to_plot = [
+    df[df["Stress_Level"].str.lower() == lvl]["GPA"].dropna()
+    for lvl in order
+]
+
+ax_box.boxplot(
+    data_to_plot,
+    labels=[lvl.capitalize() for lvl in order],
+    showmeans=True,
+)
+ax_box.set_xlabel("Stress Level")
+ax_box.set_ylabel("GPA")
+ax_box.set_title("GPA Distribution by Stress Level")
+
+# Hide any unused subplots (in case of layout changes)
+for j in range(len(predictors) + 1, len(axes)):
+    fig.delaxes(axes[j])
+
+fig.suptitle("GPA Relationships and Stress Levels", fontsize=16)
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+plt.show()
+\end{minted}
+\subsection{Model Selection for the GPA}
+\begin{minted}{python}
+#evaluating the full model
+from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+from sklearn.model_selection import train_test_split
+
+y_pred = full_reg.predict(X)
+
+n = X.shape[0]
+p = X.shape[1]
+
+r2 = r2_score(y, y_pred)
+mse = mean_squared_error(y, y_pred)
+rmse = np.sqrt(mse)
+
+adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
+
+print(f"R2: {r2}, adjR2: {adj_r2}, MSE: {mse}, RMSE: {rmse}")
+
+from  sklearn.feature_selection import SequentialFeatureSelector
+X = df.drop(labels = ["GPA", "Student_ID", "Extracurricular_Hours_Per_Day"], axis=1)
+y = df["GPA"]
+
+forward_sfs = SequentialFeatureSelector(LinearRegression(),n_features_to_select="auto",direction="forward",scoring=bic)
+forward_sfs.fit(X,y)
+selected_mask = forward_sfs.get_support()
+selected_features = X.columns[selected_mask]
+print(selected_features)
+
+backward = SequentialFeatureSelector(LinearRegression(),n_features_to_select="auto",direction="backward",scoring=bic)
+backward_sfs.fit(X,y)
+selected_mask = backward_sfs.get_support()
+selected_features = X.columns[selected_mask]
+print(selected_features)
+
+import pandas as pd
+from  sklearn.feature_selection import SequentialFeatureSelector
+df = pd.read_csv("./data/student_lifestyle_dataset.csv")
+df['Stress_Level'] = df['Stress_Level'].map({
+    'Low': 1,
+    'Moderate': 2,
+    'High': 3
+})
+X = df.drop(labels = ["GPA", "Student_ID", "Extracurricular_Hours_Per_Day"], axis=1)
+y = df["GPA"]
+
+forward_sfs = SequentialFeatureSelector(LinearRegression(),n_features_to_select="auto",direction="forward",scoring="explained_variance")
+forward_sfs.fit(X,y)
+selected_mask = forward_sfs.get_support()
+selected_features = X.columns[selected_mask]
+print(selected_features)
+
+import statsmodels.formula.api as smf
+from statsmodels.stats.anova import anova_lm
+m_full = smf.ols(
+    "GPA ~ Study_Hours_Per_Day + Extracurricular_Hours_Per_Day "
+    "+ Sleep_Hours_Per_Day + Social_Hours_Per_Day "
+    "+ Physical_Activity_Hours_Per_Day",
+    data=df
+).fit()
+print(m_full.rsquared)
+m_restricted = smf.ols(
+    "GPA ~ Sleep_Hours_Per_Day + Social_Hours_Per_Day",
+    data=df
+).fit()
+anova_results = anova_lm(m_restricted, m_full)
+print(anova_results)
+\end{minted}
+\subsection{Model Selection for Stress}
+\begin{minted}{python}
+import pandas as pd
+
+df = pd.read_csv("./stress_project/student_lifestyle_dataset.csv")
+df.head()
+df.shape
+
+df['Stress_Level_Num'] = df['Stress_Level'].map({
+    'Low': 1,
+    'Moderate': 2,
+    'High': 3
+})
+
+#check
+df[['Stress_Level', 'Stress_Level_Num']].head()
+import statsmodels.api as sm
+
+X = df[['Sleep_Hours_Per_Day', 'Study_Hours_Per_Day', 'Physical_Activity_Hours_Per_Day', 'Extracurricular_Hours_Per_Day', 'Social_Hours_Per_Day']]
+y = df['Stress_Level_Num']
+
+model = sm.OLS(y, X).fit()
+print(model.summary())
+
+#Here we are shown the results for the t-tests, p-values, R squared, and confidence intervals
+
+#Now we check for collinearity using VIF
+
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+vif_data = pd.DataFrame()
+vif_data["Feature"] = X.columns
+vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+vif_data
+
+# VIF > 5 = MODERATE. IF VIF > 10, SERIOUS
+# SLEEP -> HIGH
+# STUDY -> HIGH
+# PHYS, EXT, SOC, -> acpt.
+#SLEEP AND STUDY ARE STRONGLY RELATED
+
+#MUST USE TWO OLS
+import statsmodels.api as sm
+X_full = df[['Sleep_Hours_Per_Day',
+             'Study_Hours_Per_Day',
+             'Physical_Activity_Hours_Per_Day',
+             'Extracurricular_Hours_Per_Day',
+             'Social_Hours_Per_Day']]
+X_full = sm.add_constant(X_full)
+full = sm.OLS(y, X_full).fit()
+
+X_reduced = df[['Sleep_Hours_Per_Day','Study_Hours_Per_Day']]
+X_reduced = sm.add_constant(X_reduced)
+reduced = sm.OLS(y, X_reduced).fit()
+
+from statsmodels.stats.anova import anova_lm
+anova_lm(reduced, full)
+
+# SSR = 372.7586
+# RM SSR 372.9720, DIFF = 0.2133
+# FSTAT = 0.5707
+# PVAL = 0.5652
+# Therefore, exercise, extracurriculars, and social hours do NOT improve prediction, indicating they are NOT statistically significant.
+\end{minted}
+\subsection{PI and CI}
+\begin{minted}{r}
+  df <- read.csv("student_lifestyle_dataset.csv")
+df$stress_numeric <- as.numeric(factor(df$Stress_Level, levels = c("Low", "Moderate", "High")))
+
+fit <- lm(GPA ~ Study_Hours_Per_Day, data = df)
+
+anova(fit)
+summary(fit)
+
+set.seed(10)
+res_sum <- 0
+
+for(k in 1:5)
+{
+  i <- sample(1:nrow(df), 1)
+  row_i <- df[i, ]
+
+  newdata <- data.frame(
+    Study_Hours_Per_Day = row_i$Study_Hours_Per_Day
+  )
+
+  interval <- predict(fit, newdata, interval = "prediction", level = 0.95)
+  in_interval <- row_i$GPA >= interval[,"lwr"] & row_i$GPA <= interval[,"upr"]
+
+  cat("Row:", i, "\n")
+  cat("Fit:", interval[,"fit"], "\n")
+  cat("95% PI:", interval[,"lwr"], "to", interval[,"upr"], "\n")
+  cat("Actual GPA:", row_i$GPA, "\n")
+  cat("Is actual GPA in interval? ", in_interval, "\n")
+  cat("Residual value: ", row_i$GPA - interval[,"fit"], "\n\n")
+  res_sum <- res_sum +(row_i$GPA - interval[,"fit"])^2
+}
+
+MSE_ <- res_sum / 5
+MSE_
+
+#CI stuff
+set.seed(3)
+
+avg_study_hours <- 0
+avg_GPA <- 0
+
+for(j in 1:100)
+{
+  i <- sample(1:nrow(df), 1)
+  row_i <- df[i, ]
+
+  avg_GPA <- avg_GPA + row_i$GPA
+  avg_study_hours <- avg_study_hours + row_i$Study_Hours_Per_Day
+}
+
+avg_GPA <- avg_GPA / 100
+avg_study_hours <- avg_study_hours / 100
+data <- data.frame(Study_Hours_Per_Day = avg_study_hours)
+
+interval <- predict(fit, data, interval = "confidence", level = 0.95)
+
+cat("Fit:", interval[,"fit"], "\n")
+cat("95% CI:", interval[,"lwr"], "to", interval[,"upr"], "\n")
+cat("average time studied:", avg_study_hours, "\n")
+cat("average GPA:", avg_GPA, "\n")
+
+# PI stuff
+
+student1_data <- data.frame(
+  Study_Hours_Per_Day = 7.5
+)
+
+interval <- predict(fit, student1_data, interval = "prediction", level = 0.95)
+
+cat("Fit:", interval[,"fit"], "\n")
+cat("95% PI:", interval[,"lwr"], "to", interval[,"upr"], "\n")
+
+#Model analysis:
+summary(fit)
+anova(fit)
+# Fit model
+model <- lm(GPA ~ Study_Hours_Per_Day, data = df)
+
+# Build a sequence of study-hour values
+x_seq <- seq(min(df$Study_Hours_Per_Day),
+             max(df$Study_Hours_Per_Day),
+             length.out = 200)
+
+newdata <- data.frame(Study_Hours_Per_Day = x_seq)
+
+# Get confidence interval for the MEAN (not prediction)
+ci <- predict(model, newdata, interval = "confidence")
+
+# Start empty plot
+plot(x_seq, ci[, "fit"], type = "n",
+     xlab = "Study Hours Per Day",
+     ylab = "Mean GPA",
+     main = "Regression Line With 95% Confidence Band")
+
+# Add CI band
+polygon(
+  c(x_seq, rev(x_seq)),
+  c(ci[, "lwr"], rev(ci[, "upr"])),
+  col = adjustcolor("lightblue", alpha.f = 0.4),
+  border = NA
+)
+
+# Add fitted regression line
+lines(x_seq, ci[, "fit"], lwd = 2, col = "blue")
+lines(x_seq, ci[, "lwr"], lwd = 2, col = "red", lty = 2)  # lower bound
+lines(x_seq, ci[, "upr"], lwd = 2, col = "red", lty = 2)  # upper bound
+
+library(dplyr)
+
+means <- df %>%
+  group_by(Study_Hours_Per_Day) %>%
+  summarise(mean_GPA = mean(GPA))
+
+points(means$Study_Hours_Per_Day,
+       means$mean_GPA,
+       pch = 19, col = "black")
+
+# how accurate is CI
+
+ci_means <- predict(model,
+                    newdata = data.frame(Study_Hours_Per_Day = means$Study_Hours_Per_Day),
+                    interval = "confidence")
+inside <- means$mean_GPA >= ci_means[, "lwr"] &
+  means$mean_GPA <= ci_means[, "upr"]
+
+percent_inside <- mean(inside) * 100
+percent_inside
+
+# each hour CI
+
+group_stats <- df %>%
+  group_by(Study_Hours_Per_Day) %>%
+  summarise(
+    n = n(),
+    mean_GPA = mean(GPA),
+    sd_GPA = sd(GPA)
+  ) %>%
+  mutate(
+    se = sd_GPA / sqrt(n),
+    t_crit = qt(0.975, df = n - 1),
+    lwr = mean_GPA - t_crit * se,
+    upr = mean_GPA + t_crit * se
+  )
+
+summary(fit)
+
+#CI band
+
+plot(x_seq, ci[, "fit"], type = "n",
+     xlab = "Study Hours Per Day",
+     ylab = "Mean GPA",
+     main = "Regression Line With 95% Confidence Band")
+
+# Add CI band
+polygon(
+  c(x_seq, rev(x_seq)),
+  c(ci[, "lwr"], rev(ci[, "upr"])),
+  col = adjustcolor("lightblue", alpha.f = 0.4),
+  border = NA
+)
+
+# Add fitted regression line
+lines(x_seq, ci[, "fit"], lwd = 2, col = "blue")
+lines(x_seq, ci[, "lwr"], lwd = 2, col = "red", lty = 2)  # lower bound
+lines(x_seq, ci[, "upr"], lwd = 2, col = "red", lty = 2)  # upper bound
+
+points(means$Study_Hours_Per_Day,
+       means$mean_GPA,
+       pch = 19, col = "black")
+
+# CIs for each mean
+plot(x_seq, ci[, "fit"], type = "n",
+     xlab = "Study Hours Per Day",
+     ylab = "Mean GPA",
+     main = "Mean GPA vs Study Hours")
+
+points(means$Study_Hours_Per_Day,
+       means$mean_GPA,
+       pch = 19, col = "black")
+
+lines(x_seq, ci[, "fit"], lwd = 2, col = "blue")
+
+arrows(
+  x0 = group_stats$Study_Hours_Per_Day,
+  y0 = group_stats$lwr,
+  x1 = group_stats$Study_Hours_Per_Day,
+  y1 = group_stats$upr,
+  angle = 90, code = 3, length = 0.05, col = "darkred"
+)
+
+# PI
+
+# Get prediction interval for individual observations
+pi <- predict(model, newdata, interval = "prediction", level = 0.95)
+
+# Start plot with actual points
+plot(df$Study_Hours_Per_Day, df$GPA,
+     pch = 19, col = "black",
+     xlab = "Study Hours per Day",
+     ylab = "GPA",
+     main = "Regression Line with 95% Prediction Interval")
+
+# Add PI band (shaded)
+polygon(
+  c(x_seq, rev(x_seq)),
+  c(pi[, "lwr"], rev(pi[, "upr"])),
+  col = adjustcolor("lightblue", alpha.f = 0.4),
+  border = NA
+)
+
+# Add regression line
+lines(x_seq, pi[, "fit"], lwd = 2, col = "blue")
+
+# Add dotted red lines for the edges of PI
+lines(x_seq, pi[, "lwr"], col = "red", lty = 2, lwd = 2)
+lines(x_seq, pi[, "upr"], col = "red", lty = 2, lwd = 2)
+
+pi_all <- predict(model, interval = "prediction", level = 0.95)
+
+# Check if each actual GPA is within its PI
+inside <- df$GPA >= pi_all[, "lwr"] & df$GPA <= pi_all[, "upr"]
+
+# Compute percentage
+percent_inside <- mean(inside) * 100
+percent_inside
+\end{minted}
+\subsection{Influence Plots and Analysis}
+\begin{minted}{r}
+df <- read.csv("./data/student_lifestyle_dataset.csv")
+
+df$Student_ID <- NULL
+df$Stress_Level <- NULL
+
+df <- na.omit(df)
+
+hours <- c(
+  "Study_Hours_Per_Day",
+)
+
+X_hours <- setdiff(hours, drop_hour)
+
+model <- lm(
+  as.formula(paste("GPA ~", paste(X_hours, collapse = " + "))),
+  data = df
+)
+
+summary(model)
+
+std_res  <- stdres(model)
+stud_res <- studres(model)
+rstud    <- rstudent(model)
+
+kable(head(matrix(std_res,  ncol = 2, byrow = TRUE), 10),
+      caption = "First 20 standardized residuals (shown as 10 rows x 2 cols)")
+
+kable(head(matrix(stud_res, ncol = 2, byrow = TRUE), 10),
+      caption = "First 20 studentized residuals (shown as 10 rows x 2 cols)")
+
+kable(head(matrix(rstud,    ncol = 2, byrow = TRUE), 10),
+      caption = "First 20 R-student residuals (shown as 10 rows x 2 cols)")
+
+png("residual_bars.png", width = 1800, height = 700, res = 150)
+par(mfrow = c(1, 3))
+
+barplot(std_res,
+        main = "Standardized residuals",
+        ylim = c(-5, 5))
+abline(h = 0, lwd = 2)
+abline(h = c(-3, 3), lty = 2)
+
+barplot(stud_res,
+        main = "Studentized residuals",
+        ylim = c(-5, 5))
+abline(h = 0, lwd = 2)
+abline(h = c(-2, 2), lty = 2)
+
+n <- nobs(model)
+
+alpha <- 0.05
+qt_cut <- qt(1 - alpha/(2*n), df = df_resid)
+
+barplot(rstud,
+        main = paste0("R-student residuals (Bonferroni α=", alpha, ")"),
+        ylim = c(-5, 5))
+abline(h = 0, lwd = 2)
+abline(h = c(-qt_cut, qt_cut), lty = 2)
+
+par(mfrow = c(1, 1))
+dev.off()
+
+kable(summary(influence.measures(model))$infmat,
+      caption = "Influence measures (car::influence.measures)")
+
+dfbetasPlots(model, intercept = TRUE)
+
+influenceIndexPlot(model, main = "Influence index plot (car)")
+
+kable(vif(model), caption = "Variance Inflation Factors (VIF)")
+
+png("hist_and_qq.png", width = 1600, height = 700, res = 150)
+par(mfrow = c(1, 2))
+hist(stud_res, breaks = 30, freq = FALSE, main = "Histogram of studentized residuals",
+     xlab = "Studentized residuals")
+qqPlot(model, main = "QQ Plot (car::qqPlot)")
+par(mfrow = c(1, 1))
+dev.off()
+
+png("residualPlot_rstudent.png", width = 1200, height = 900, res = 150)
+residualPlot(model, type = "rstudent", quadratic = FALSE)
+\end{minted}
 \end{document}
