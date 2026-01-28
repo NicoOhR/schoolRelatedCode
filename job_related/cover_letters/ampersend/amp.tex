@@ -1,0 +1,80 @@
+% Cover letter using letter.cls
+\documentclass{letter}
+%\usepackage{helvetica} % uses helvetica postscript font (download
+% helvetica.sty)
+%\usepackage{newcent}   % uses new century schoolbook postscript font
+% the following commands control the margins:
+\topmargin=-1in    % Make letterhead start about 1 inch from top of page
+\textheight=10in    % text height can be bigger for a longer letter
+\oddsidemargin=0pt % leftmargin is 1 inch
+\textwidth=6.5in   % textwidth of 6.5in leaves 1 inch for right margin
+
+\begin{document}
+
+\signature{N. Ohayon Rozanes}                  % name for signature
+\longindentation=0pt                     % needed to get closing flush left
+\let\raggedleft\raggedright              % needed to get date flush left
+
+\begin{letter}{}
+
+  \begin{center}
+    {\large\bf N. Ohayon Rozanes} \\
+    {611 Granbury Dr. \\ Allen, Texas, 75013  \\ 469-560-0141}
+  \end{center} \vfill % forces letterhead to top of page
+
+  \opening{Dear Hiring Manager:}
+
+  \noindent
+  I am applying for the Software Developer Intern role at Amperesand.
+  I am currently pursuing a double major in Data Science and
+  Mathematics, with a strong focus on systems programming, real-time
+  software, and hardware–software integration. Amperesand’s work on
+  solid-state transformer platforms directly aligns with my interests
+  in embedded control, power-adjacent systems, and software that must
+  perform correctly under physical and timing constraints.
+
+  \noindent
+  I have substantial experience developing software for
+  embedded targets, both in a professional and amateur environment,
+  as well as in a team oriented and independent project contexts. My
+  work frequently involved C and C++ development, reading and
+  applying datasheets and protocol specs, and debugging failures that
+  span the hardware/software boundary. I am most at home working in
+  Linux environments. In addition to coursework in numerical
+  analysis, computer architecture and data structures, I continuously
+  pursue hands-on projects outside of the classroom to sharpen my
+  abilities in these domains. At the UTD FSAE club, Dallas Formula
+  Racing, I headed the embedded team for about a year before stepping
+  down, but I still contribute to firmware development, PCB design,
+  and composites manufacturing. I am particularly drawn to flight
+  software because of the demands made on software: interfaces must
+  be explicit, failure modes well understood, and even in
+  extraordinary circumstances, the software must continue to function
+  correctly, which pushes me to engineer better solutions. Also, I really
+  enjoyed working with people in
+  the necessarily cross-disciplinary start up during my
+  internship at Exolambda.
+
+  \noindent I am comfortable working in lab  environments,
+  validating software against real hardware, and iterating quickly
+  when theory meets physical reality. I value clear interface
+  definitions, disciplined architecture, and testing that reflects
+  real operating conditions rather than idealized assumptions. I also
+  actively contribute to and maintain personal and academic projects,
+  several of which are open-source and focused on systems-level
+  correctness and performance.
+
+  \noindent Amperesand’s mission to rethink grid infrastructure
+  through solid-state power platforms is technically ambitious and
+  operationally grounded. I am motivated by environments where
+  software quality directly impacts safety, reliability, and system
+  performance, and where engineers are expected to take ownership
+  from design through deployment.
+  I would welcome the opportunity to contribute to Amperesand’s
+  embedded and edge software efforts and to learn from a team
+  operating at the intersection of power electronics and real-time systems.
+
+  \closing{Sincerely yours,}
+\end{letter}
+
+\end{document}

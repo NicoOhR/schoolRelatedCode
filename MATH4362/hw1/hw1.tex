@@ -1,0 +1,157 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[lmargin=1in,rmargin=1in,tmargin=1in,bmargin=1in]{geometry}
+
+% -------------------
+% Packages
+% -------------------
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+
+% -------------------
+% Font
+% -------------------
+\usepackage[T1]{fontenc}
+\usepackage{charter}
+
+% -------------------
+% Commands
+% -------------------
+\newcommand{\prob}{\noindent\textbf{Problem. }}
+\newcounter{problem}
+\newcommand{\problem}{
+  \stepcounter{problem}%
+  \noindent \textbf{Problem \theproblem. }%
+}
+\newcommand{\pointproblem}[1]{
+  \stepcounter{problem}%
+  \noindent \textbf{Problem \theproblem.} (#1 points)\,%
+}
+\newcommand{\pspace}{\par\vspace{\baselineskip}}
+\newcommand{\ds}{\displaystyle}
+
+% -------------------
+% Header & Footer
+% -------------------
+\usepackage{fancyhdr}
+
+\fancypagestyle{doc}{
+  %Headers
+  \fancyhead[L]{}
+  \fancyhead[C]{}
+  \fancyhead[R]{}
+  \renewcommand{\headrulewidth}{0pt}
+  %Footers
+  \fancyfoot[L]{}
+  \fancyfoot[C]{}
+  \renewcommand{\footrulewidth}{0.0pt}
+  \headheight=14pt
+  \footskip=14pt
+}
+\pagestyle{doc}
+
+% First Page Style
+\newcommand{\homework}[1]{
+  \fancypagestyle{first}{
+    %Headers
+    \fancyhead[L]{\large\bfseries Name: Nico Ohayon Rozanes }
+    \fancyhead[C]{\bfseries MATH 4362}
+    \fancyhead[R]{\bfseries HW #1}
+    \renewcommand{\headrulewidth}{1pt}
+    %Footers
+    \fancyfoot[L]{}
+    \fancyfoot[C]{}
+    \renewcommand{\footrulewidth}{0.0pt}
+  }
+  \thispagestyle{first}
+}
+
+% -------------------
+% Content
+% -------------------
+\begin{document}
+\homework{\#}
+
+% Question 1
+\problem \vspace{0.25cm}
+
+I decided to take this course a bit earlier than I would have
+otherwise because I have recently taken up studying optimal
+transport, which has application in the analysis of certain classes of PDEs.
+
+% Question 2
+\problem Exercise 1.27\vspace{0.25cm}
+
+\begin{enumerate}[(a)]
+  \item $$u' - 4u = x - 3$$
+    Assume the existence of a function $\mu(x)$ such that $-4\mu(x) =
+    \mu'(x)$ and multipy the equation through.
+    \begin{align*}
+      u'\mu(x) - 4u\mu(x) &= \mu(x)(x-3) \\
+      u'\mu(x) + \mu'(x) &= \mu(x)(x-3) \\
+      (u\mu(x))' &= \mu(x)(x-3) \\
+      \int (u\mu(x))'dx &=\int \mu(x)(x-3)dx \\
+      u\mu(x) + c &= \int \mu(x)(x-3)dx \\
+      u &= \left(\frac1{\mu(x)}\right)\left(\int \mu(x)(x-3)dx - c\right) \\
+    \end{align*}
+    $4\mu(x) = \mu'(x)$ has a trivial solution $\mu(x) = e^{-4x}$,
+    which when substituted to the above yields
+    \begin{align*}
+      u &= \left(\frac1{e^{-4x}}\right)\left(\int e^{-4x}(x-3)dx - c\right) \\
+      u &= \left(e^{4x}\right)\left(\int e^{-4x}(x-3)dx - c\right) \\
+    \end{align*}
+    The integral on the right hand side can be solved by integration
+    by parts, picking $u = x-3$ and $dv = e^{-4x} \implies v =
+    -\frac{1}4e^{-4x}$.
+    \begin{align*}
+      u &= \left(e^{4x}\right)\left(\int e^{-4x}(x-3)dx - c\right) \\
+      u &= e^{4x}\left(\frac{-(x-3)e^{-4x}}{4} - \int \frac{e^{-4x}}{4}
+      dx - c\right) \\
+      u &= -\frac14e^{4x}\left((x-3)e^{-4x} - \int e^{-4x} dx + c\right) \\
+      u &= -\frac14e^{4x}\left((x-3)e^{-4x} +  \frac14e^{-4x} dx + c\right) \\
+      u &= -\frac14(x-3) - \frac1{16} + e^{4x}c \\
+      u &= -\frac{x}4 + \frac{11}{16} + e^{4x}c
+    \end{align*}
+  \item $$5u''  - 4u' + 4u = e^x \cos x$$
+    Can be rewritten as
+    \[
+      u'' - \frac45u' + \frac45u = \frac15e^x \cos x
+    \]
+    First we solve for the complementary solution:
+    \begin{align*}
+      u'' - \frac45u'  + \frac45u &= 0 \implies \\
+      r^2 - \frac45r  + \frac45 &= 0 \\
+    \end{align*}
+    Which has roots $\frac4{10} - \frac8{10}i$ and $\frac4{10} +
+    \frac8{10}i$. Thus the complimentary solution is
+    \begin{align*}
+      y_c(x) &= c_1e^{(\frac4{10} - \frac8{10}i)x}  + c_2 e^{(\frac4{10}
+      + \frac{8}{10}i)x} \\
+      &= c_1(e^{\frac4{10}x}e^{-\frac8{10}xi}) +
+      c_2(e^{\frac4{10}x}e^{\frac8{10}xi}) \\
+      &= e^{\frac4{10}x}\left[(c_1 + c_2)\cos(\frac8{10}x) + i(c_2 -
+      c_1)\sin(\frac8{10}x)\right] \\
+      &= e^{\frac4{10}x}\left[C_1\cos(\frac8{10}x) +
+      C_2\sin(\frac8{10}x)\right] \\
+    \end{align*}
+    Solving for the particular solution:
+\end{enumerate}
+
+\problem solve $u_t = x$
+
+Fixing $x$ and integrating with respect to $t$, we get that
+\begin{align*}
+  \int u_t dt &= \int x dt \\
+  u + c(x) &= xt \\
+  u &= xt + c(x)
+\end{align*}
+For any function of $x$, $c(x)$
+\newpage
+
+\end{document}

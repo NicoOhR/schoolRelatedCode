@@ -564,6 +564,48 @@ interesting results. We would do this by introducing train/testing
 splits in the data and regularizing the model with ridge or lasso.
 
 \newpage
+\section{References}
+Afnan, Saif Afnan. "Study Habits and Activities of Students:
+Exploring lifestyle patterns,GPA, and stress levels."
+\textit{Kaggle}, Oct. 2025,
+\href{https://www.kaggle.com/datasets/afnansaifafnan/study-habits-and-activities-of-students}{https://www.kaggle.com/datasets/afnansaifafnan/study-habits-and-activities-of-students}
+
+\section{Team Member Responsability}
+\begin{enumerate}
+  \item \textbf{Preprocessing} (Huy)
+    \begin{enumerate}
+      \item Ordinal Encoding of the \texttt{stress\_level} column
+      \item Outlier and leverage analysis
+      \item Model transformation
+    \end{enumerate}
+
+  \item \textbf{Model Fitting} (Daisy \& Nico)
+    \begin{enumerate}
+      \item Fit two models:
+        \begin{enumerate}
+          \item GPA as the response variable
+          \item \texttt{stress\_level} as the response variable
+        \end{enumerate}
+      \item Evaluation of collinearity
+      \item Selection of optimal model parameters (ANOVA,
+        \(t\)-tests, subset selection)
+    \end{enumerate}
+
+  \item \textbf{Model Evaluation} (Illia)
+    \begin{enumerate}
+      \item Confidence intervals and prediction intervals
+      \item ANOVA
+      \item Residual analysis
+      \item Model comparison metrics: adjusted \(R^2\), AIC, BIC
+    \end{enumerate}
+
+  \item \textbf{Conclusion} (Team Effort)
+    \begin{enumerate}
+      \item Summary of results
+      \item Report writing
+    \end{enumerate}
+\end{enumerate}
+
 \section{Code}
 \textit{Note:} certain sections of the code have been abridged
 significantly, to make the document reasonably lengthed. A full
