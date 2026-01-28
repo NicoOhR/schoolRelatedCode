@@ -1,0 +1,308 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[lmargin=1in,rmargin=1in,tmargin=1in,bmargin=1in]{geometry}
+
+% -------------------
+% Packages
+% -------------------
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+
+% -------------------
+% Font
+% -------------------
+\usepackage[T1]{fontenc}
+\usepackage{charter}
+
+% -------------------
+% Commands
+% -------------------
+\newcommand{\prob}{\noindent\textbf{Problem. }}
+\newcounter{problem}
+\newcommand{\problem}{
+  \stepcounter{problem}%
+  \noindent \textbf{Problem \theproblem. }%
+}
+\newcommand{\pointproblem}[1]{
+  \stepcounter{problem}%
+  \noindent \textbf{Problem \theproblem.} (#1 points)\,%
+}
+\newcommand{\pspace}{\par\vspace{\baselineskip}}
+\newcommand{\ds}{\displaystyle}
+
+% -------------------
+% Header & Footer
+% -------------------
+\usepackage{fancyhdr}
+
+\fancypagestyle{doc}{
+  %Headers
+  \fancyhead[L]{}
+  \fancyhead[C]{}
+  \fancyhead[R]{}
+  \renewcommand{\headrulewidth}{0pt}
+  %Footers
+  \fancyfoot[L]{}
+  \fancyfoot[C]{}
+  \renewcommand{\footrulewidth}{0.0pt}
+  \headheight=14pt
+  \footskip=14pt
+}
+\pagestyle{doc}
+
+% First Page Style
+\newcommand{\homework}[1]{
+  \fancypagestyle{first}{
+    %Headers
+    \fancyhead[L]{\large\bfseries Name: N. Ohayon Rozanes}
+    \fancyhead[C]{\bfseries MATH 4302}
+    \fancyhead[R]{\bfseries HW #1}
+    \renewcommand{\headrulewidth}{1pt}
+    %Footers
+    \fancyfoot[L]{}
+    \fancyfoot[C]{}
+    \renewcommand{\footrulewidth}{0.0pt}
+  }
+  \thispagestyle{first}
+}
+
+% -------------------
+% Content
+% -------------------
+\begin{document}
+\homework{\#}
+
+% Question 2
+\problem
+
+\begin{enumerate}[(a)]
+  \item $$\int_0^\infty e^{-ax} dx$$
+    For $f(x) := e^{-ax}$, which has a domain over the entire real
+    number line, we have that the improper integral is equal to
+    \[
+      \int_0^\infty e^{-ax} = \lim_{b\to\infty}\int_0^b e^{-ax}
+    \]
+    The integral on the right hand side evaluates to:
+    \begin{align*}
+      \lim_{b\to\infty}\int_0^b e^{-ax} &= \lim_{b\to\infty}
+      \frac{-1}{a}e^{-ax}\Big|_0^b \\
+      &= \lim_{b\to\infty}\left(\frac{-1}{a}(e^{-ab} - 1)\right) \\
+      &= \left(\frac{-1}{a}(-1)\right) \\
+      &= \frac{1}{a}
+    \end{align*}
+  \item
+    Define:
+    \[
+      I(a,b)\;:=\;\int_{0}^{\infty} e^{-ax}\cos(bx)\,dx,\qquad a>0.
+    \]
+    Let
+    \[
+      u=\cos(bx),\qquad dv=e^{-ax}\,dx.
+    \]
+    Then
+    \[
+      du=-b\sin(bx)\,dx,\qquad v=-\frac1a e^{-ax}.
+    \]
+    Using integration by parts
+    \begin{align*}
+      I(a,b)
+      &=\int_{0}^{\infty} u\,dv \\
+      &=\Big[u\,v\Big]_{0}^{\infty}-\int_{0}^{\infty} v\,du \\
+      &=\Big[-\frac1a
+      e^{-ax}\cos(bx)\Big]_{0}^{\infty}-\int_{0}^{\infty}\Big(-\frac1a
+      e^{-ax}\Big)\big(-b\sin(bx)\big)\,dx \\
+      &=\Big[-\frac1a
+      e^{-ax}\cos(bx)\Big]_{0}^{\infty}-\frac{b}{a}\int_{0}^{\infty}
+      e^{-ax}\sin(bx)\,dx.
+    \end{align*}
+    Evaluating the first term:
+    \[
+      \lim_{x\to\infty}\left(-\frac1a e^{-ax}\cos(bx)\right)=0
+      \quad\text{(since \(a>0\))},\qquad
+      -\frac1a e^{-a\cdot 0}\cos(0)=-\frac1a.
+    \]
+    Hence
+    \[
+      \Big[-\frac1a e^{-ax}\cos(bx)\Big]_{0}^{\infty}=0-(-\tfrac1a)=\frac1a,
+    \]
+    and therefore
+    \[
+      I(a,b)=\frac1a-\frac{b}{a}J(a,b),
+      \qquad
+      J(a,b):=\int_{0}^{\infty} e^{-ax}\sin(bx)\,dx.
+    \]
+
+    Compute \(J(a,b)\) by parts with
+    \[
+      u=\sin(bx),\qquad dv=e^{-ax}\,dx,
+    \]
+    so
+    \[
+      du=b\cos(bx)\,dx,\qquad v=-\frac1a e^{-ax}.
+    \]
+    Then
+    \begin{align*}
+      J(a,b)
+      &=\int_{0}^{\infty} u\,dv \\
+      &=\Big[u\,v\Big]_{0}^{\infty}-\int_{0}^{\infty} v\,du \\
+      &=\Big[-\frac1a
+      e^{-ax}\sin(bx)\Big]_{0}^{\infty}-\int_{0}^{\infty}\Big(-\frac1a
+      e^{-ax}\Big)\big(b\cos(bx)\big)\,dx \\
+      &=\Big[-\frac1a
+      e^{-ax}\sin(bx)\Big]_{0}^{\infty}+\frac{b}{a}\int_{0}^{\infty}
+      e^{-ax}\cos(bx)\,dx \\
+      &=\Big[-\frac1a e^{-ax}\sin(bx)\Big]_{0}^{\infty}+\frac{b}{a}I(a,b).
+    \end{align*}
+    Evaluate the boundary term:
+    \[
+      \lim_{x\to\infty}\left(-\frac1a e^{-ax}\sin(bx)\right)=0,\qquad
+      -\frac1a e^{-a\cdot 0}\sin(0)=0,
+    \]
+    so the boundary contribution is \(0-0=0\). Hence
+    \[
+      J(a,b)=\frac{b}{a}I(a,b).
+    \]
+
+    \bigskip
+    \[
+      I(a,b)=\frac1a-\frac{b}{a}J(a,b).
+    \]
+    Insert \(J(a,b)=\frac{b}{a}I(a,b)\):
+    \begin{align*}
+      I(a,b)
+      &=\frac1a-\frac{b}{a}\left(\frac{b}{a}I(a,b)\right) \\
+      &=\frac1a-\frac{b^{2}}{a^{2}}I(a,b).
+    \end{align*}
+    Bring the \(I\)-terms together:
+    \begin{align*}
+      I(a,b)+\frac{b^{2}}{a^{2}}I(a,b)
+      &=\frac1a \\
+      I(a,b)\left(1+\frac{b^{2}}{a^{2}}\right)
+      &=\frac1a \\
+      I(a,b)\left(\frac{a^{2}+b^{2}}{a^{2}}\right)
+      &=\frac1a.
+    \end{align*}
+    Therefore
+    \[
+      I(a,b)=\frac1a\cdot \frac{a^{2}}{a^{2}+b^{2}}
+      =\frac{a}{a^{2}+b^{2}}.
+    \]
+
+    \bigskip
+
+    \[
+      \boxed{\displaystyle \int_{0}^{\infty}
+      e^{-ax}\cos(bx)\,dx=\frac{a}{a^{2}+b^{2}}\qquad (a>0).}
+    \]
+
+\end{enumerate} \vspace{6cm}
+
+\vfill
+\problem
+\[
+  \int_0^\infty \frac{\sin x}{x}dx = \frac\pi2
+\]
+\begin{enumerate}[(a)]
+  \item
+    \begin{align*}
+      \int_0^\infty \frac{\sin{ax}}{x}dx  &= I \\
+      \frac1a\int_0^\infty \frac{\sin{ax}}{x}dx  &= \frac Ia \\
+      \int_0^\infty \frac{\sin{ax}}{ax}dx  &= \frac Ia \\
+    \end{align*}
+    let $u = ax$ then $du = a dx$, also at $x=0 \implies u = 0$ and
+    as $x\to\infty \implies u \to \infty$ thus
+    \begin{align*}
+      \frac{1}a\int_0^\infty \frac{\sin{ax}}{ax}adx  &= \frac Ia \\
+      \frac{1}a\int_0^\infty\frac{\sin{ax}}{ax}adx  &= \frac Ia \\
+      \int_0^\infty\frac{\sin{u}}{u}du  &= I \\
+      \frac{\pi}2  &= I
+    \end{align*}
+  \item using the identity that $\sin\alpha\cos\beta =
+  \frac12(\sin(\alpha + \beta)) + \sin(\alpha - \beta))$, we can
+  rewrite the integrand as
+  \[
+    \frac{\sin{ax}\cos{bx}}{x} = \frac{\sin(x(a+b)) + \sin(x(a-b))}{2x}
+  \]
+  Thus the integral becomes:
+  \begin{align*}
+    \int_0^\infty \frac{\sin{ax}\cos{bx}}{x} &=
+    \int_0^\infty\frac{\sin(x(a+b)) + \sin(x(a-b))}{2x} \\
+    &=
+    \int_0^\infty\frac{\sin(x(a+b))}{2x} + \int^\infty_0
+    \frac{\sin(x(a-b))}{2x} \\
+    &=
+    \frac12\left(\int_0^\infty\frac{\sin(x(a+b))}{x} + \int^\infty_0
+    \frac{\sin(x(a-b))}{x}\right)
+  \end{align*}
+  Define $u_1 = a + b$ and $u_2 = a - b$
+  \[
+    \frac12\left(\int_0^\infty\frac{\sin(xu_1)}{x} + \int^\infty_0
+    \frac{\sin(xu_2)}{x}\right)
+  \]
+  Apply the result from part (a)
+  \[
+    \frac12\left(\int_0^\infty\frac{\sin(xu_1)}{x} + \int^\infty_0
+    \frac{\sin(xu_2)}{x}\right) = \frac{1}2\left(\frac\pi2 +
+    \frac\pi2\right) = \frac\pi2
+  \]
+\end{enumerate} \vspace{6cm}
+\problem
+\begin{enumerate}
+\item
+  \[
+    \int_2^\infty \frac{dx}{x^k\ln x} = \int_2^\infty \frac{x^{-k}}{\ln x} dx
+  \]
+  Notice that $\frac{1}{\ln x} \le 1$ is satisified for $x \ge e$, thus
+  for $f(x) := \frac{x^{-k}}{\ln x}$ and $g(x) := x^{-k}$, then
+  \[
+    0 \le f(x) \le g(x)
+  \]
+  $\forall x \ge e \ge 2$. Using the comparison test, if we can find
+  the values of $k$ for which
+  $\int_2^\infty g(x) dx$ converges, then $\int_2^\infty f(x) dx$ will
+  converge for those values.
+
+  It is known from lecture that $\int_1^\infty g(x) dx$
+  will diverge for any $k\le1$, a similar proof can be repeated for
+  $\int_2^\infty g(x) dx$: assume that $k > 1$, then
+  \begin{align*}
+    \int_2^\infty x^{-k} &= \lim_{b\to\infty}\int_2^b x^{-k}  =
+    \lim_{b\to\infty} \frac{1}{1 - k}x^{-k + 1}\Big|_2^b \\
+    &= -\frac{2^{-k+1}}{1-k}
+  \end{align*}
+  If $k = 1$
+  \begin{align*}
+    \int_2^\infty x^{-1} = \lim_{b\to\infty}\int_2^b x^{-1} dx =
+    \lim_{b\to\infty} \ln b - \ln 2 = \infty
+  \end{align*}
+  Finally if $k < 1$:
+  \begin{align*}
+    \int_2^\infty x^{-k} &= \lim_{b\to\infty}\int_2^b x^{-k}  =
+    \lim_{b\to\infty} \frac{1}{1 - k}x^{-k + 1}\Big|_2^b \\
+    &= +\infty
+  \end{align*}
+  Therefore, $\int_2^\infty f(x)dx$  will converge for $k < 1$.
+\item Since $\forall x \in [1, \infty) : e^{-x} \l 1 \implies
+  x^pe^{-x} < x^p$ then the integral:
+  \[
+    \int_1^\infty x^pe^{-x} dx
+  \]
+  since $\int_1^\infty x^p dx$ converges for any $p < -1$, then by
+  the comparison test so too does $\int_1^\infty x^pe^{-x} dx$. For
+  $p \ge -1$ we can use successive integration by parts, set
+  \[
+    u = x^p, dv = e^{-x} dx \implies du = px^{p-1}dx, v = -e^{-x}
+  \]
+  \[
+    \int_1^\infty x^pe^{-x} dx = -e^{-x}x^p + p\int_1^\infty x^{p-1}e^{-x}dx
+  \]
+  The integration can be repeated $n$ times, where $p - n < - 1$
+\end{enumerate}
+
+\end{document}
