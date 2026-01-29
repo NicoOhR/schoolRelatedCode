@@ -372,38 +372,209 @@
 \end{enumerate}
 \problem
 \begin{enumerate}[(a)]
-  %% need to actually show that f^+ and f^- are the ones diverging
+  %% Goal: make the contradiction proof “honestly improper-integral” by
+  %% writing everything in terms of the positive/negative parts f^+, f^-.
+
 \item
-  Assume for the sake of contradiction that $\alpha > 0$, set
-  $\varepsilon := \frac\alpha2$ then $\exists M \in \mathbb{R}$ such
-  that for $x > M$:
+  Assume $\displaystyle \int_a^\infty f(x)\,dx$ converges (as an
+  improper integral)
+  and that $\lim_{x\to\infty} f(x)=\alpha$ exists. We show $\alpha=0$
+  by contradiction.
+
+  Recall the positive and negative parts:
   \[
-    |f(x) - \alpha| < \frac\alpha2 \implies \frac{\alpha}2 < f(x) <
-    \frac{3\alpha}2
+    f^+(x):=\max\{f(x),0\},\qquad f^-(x):=\max\{-f(x),0\},
   \]
-  holds.
-  Define the function $g(x) = \frac\alpha2$, clearly $0 < g(x)
-  < f(x)$. However, when we evaluate the integral:
-  \begin{align*}
-    \int_a^\infty g(x) dx &= \lim_{b\to\infty}\int_M^b g(x) dx \\
-    &= \lim_{b\to\infty} \frac\alpha2(b - M) = +\infty
-  \end{align*}
-  So by the comparison test, $\int_a^\infty f(x) dx$ must diverge,
-  which contradicts our assumptions. Now assume that $\alpha < 0$,
-  then set $\varepsilon := -\frac\alpha2$, then similarily, $\exists
-  x > M$ such that:
+  so that
   \[
-    |f(x) - \alpha| < -\frac\alpha2 \implies \frac{3\alpha}2 < f(x) <
-    \frac{\alpha}2
+    f(x)=f^+(x)-f^-(x),\qquad |f(x)|=f^+(x)+f^-(x).
   \]
-  Define the function $g(x) = \frac\alpha2$, clearly, for $x > M$, $f(x)
-  < g(x) < 0$. However, when we evaluate the integral:
+
+  \medskip
+  Assume that $\alpha > 0$ and set $\varepsilon:=\alpha/2$. Then
+  $\exists\,M$ such that for all $x>M$,
+  \[
+    |f(x)-\alpha|<\frac{\alpha}{2}
+    \quad\Longrightarrow\quad
+    \frac{\alpha}{2}<f(x)<\frac{3\alpha}{2}.
+  \]
+  In particular, for $x>M$ we have $f(x)>0$, hence
+  \[
+    f^+(x)=f(x)\ge \frac{\alpha}{2},
+    \qquad
+    f^-(x)=0
+    \qquad (x>M).
+  \]
+  Define $g(x):=\alpha/2$. Then for $x>M$,
+  \[
+    0<g(x)\le f^+(x).
+  \]
+  Now compute:
+  \[
+    \int_M^\infty g(x)\,dx
+    =\lim_{b\to\infty}\int_M^b \frac{\alpha}{2}\,dx
+    =\lim_{b\to\infty}\frac{\alpha}{2}(b-M)
+    =+\infty.
+  \]
+  By comparison on $[M,\infty)$,
+  \[
+    \int_M^\infty f^+(x)\,dx=+\infty.
+  \]
+  But since $f^-(x)\ge 0$, for every $b>M$,
+  \[
+    \int_M^b f(x)\,dx=\int_M^b f^+(x)\,dx-\int_M^b f^-(x)\,dx
+    \ge \int_M^b f^+(x)\,dx-\int_M^b 0\,dx
+    =\int_M^b f^+(x)\,dx.
+  \]
+  Letting $b\to\infty$ forces $\int_M^\infty f(x)\,dx=+\infty$, contradicting
+  convergence. Hence $\alpha\not>0$.
+
+  \medskip
+  Now assume $\alpha < 0$ and set $\varepsilon:=-\alpha/2>0$. Then
+  $\exists\,M$ such that for all $x>M$,
+  \[
+    |f(x)-\alpha|<-\frac{\alpha}{2}
+    \quad\Longrightarrow\quad
+    \frac{3\alpha}{2}<f(x)<\frac{\alpha}{2}<0.
+  \]
+  So for $x>M$ we have $f(x)<0$, hence
+  \[
+    f^+(x)=0,\qquad
+    f^-(x)=-f(x)\ge -\frac{\alpha}{2}
+    \qquad (x>M).
+  \]
+  Define $h(x):=-\alpha/2>0$. Then for $x>M$,
+  \[
+    0<h(x)\le f^-(x).
+  \]
+  Compute:
+  \[
+    \int_M^\infty h(x)\,dx
+    =\lim_{b\to\infty}\int_M^b \left(-\frac{\alpha}{2}\right)\,dx
+    =\lim_{b\to\infty}\left(-\frac{\alpha}{2}\right)(b-M)
+    =+\infty,
+  \]
+  so by comparison,
+  \[
+    \int_M^\infty f^-(x)\,dx=+\infty.
+  \]
+  But then for every $b>M$,
+  \[
+    \int_M^b f(x)\,dx
+    =\int_M^b 0\,dx-\int_M^b f^-(x)\,dx
+    =-\int_M^b f^-(x)\,dx,
+  \]
+  and letting $b\to\infty$ gives $\int_M^\infty f(x)\,dx=-\infty$,
+  again contradicting convergence. Hence $\alpha\not<0$.
+  \medskip
+  Therefore $\alpha=0$.
+\item Using the FTC
+  \[
+    \int_a^\infty f'(x)dx = \lim_{b\to\infty}\int_a^b f'(x)dx =
+    \lim_{b\to\infty}f(b) - f(a)
+  \]
+  By assumption $\int_a^\infty f'(x)dx$ converges, so the limit
+  converges to some finite $\alpha$:
+  \[
+    \lim_{b\to\infty}f(b) = \alpha
+  \]
+  From part (a), we know that $\alpha = 0$ then:
+  \[
+    \lim_{x\to\infty}f(x) = 0
+  \]
+\end{enumerate}
+
+\problem
+\begin{enumerate}[(a)]
+\item
+  \[
+    \int_0^a x^pe^{1/x}dx
+  \]
+  Notice that $\forall x \in (0, \infty)$
+  \[
+    e^{1/x} > 1
+  \]
+  Therefore $x^pe^{1/x} > x^p,~\forall x \in (0, a]$. For $p \le -1$,
+  integrating $x^p$ directly yields:
+  \[
+    \int_0^a x^p dx = \lim_{\varepsilon\to0^+}
+    \frac{x^{p+1}}{p+1}\Big|_\varepsilon^a
+  \]
+  At $p = -1$, the  limit diverges because of $\frac{1}{p+1}$, for
+  $p < -1$ as  $x\to0,~x^{p+1} \to \infty$, so the limit diverges. By
+  the comparison test,
+  \[
+    \int_0^a e^{1/x}x^p dx
+  \]
+  diverges for $p \le -1$. Assuming that $p > -1$, by the archimedian
+  property, there exists an integer such that $n > p + 1 \implies p -
+  n < -1$. Further, recall that by Taylor's theorem:
+  \[
+    e^{\frac1x} = \sum_{k=0}^\infty \frac{1}{k!x^k} > \frac{1}{n!x^n}
+  \]
+  for any $n \in \mathbb{N}$. Therefore:
+  \[
+    x^pe^{1/x} > \frac{x^{p-n}}{n!}
+  \]
+  Further, since $p - n < -1$, and we've already shown that the integral
+  \[
+    \frac{1}{n!}\int_0^a x^{p-n} dx
+  \]
+  diverges, then by the comparison test, the integral
+  \[
+    \int_0^a x^pe^{1/x} dx
+  \]
+  also diverges for $p > -1$, and thus diverges for all $p$.
+\item
+  \[
+    \int_0^a \ln x dx
+  \]
+  This integral is improper since as $x\to0, \ln x \to \infty$.
+  The proper integral can be evaluated directly by integration by
+  parts, let $u = \ln x$ and $dv = 1$, $du = 1/x$ and $v = x$
   \begin{align*}
-    \int_a^\infty g(x) dx &= \lim_{b\to\infty}\int_M^b g(x) dx \\
-    &= \lim_{b\to\infty} \frac\alpha2(b - M) = -\infty
+    \int_\varepsilon^a \ln x dx &= x\ln x - \int 1 dx\\
+    &= x\ln x - x\Big|_\varepsilon^a \\
+    &= (a \ln a - a) - (\varepsilon \ln \varepsilon - \varepsilon)
   \end{align*}
-  So by the comparison test $\int_a^\infty f(x) dx$ must diverge,
-  which again contradicts our assumptions, thus, $\alpha = 0$.
+
+  Evaluating the limit as $\varepsilon \to 0$:
+  $$
+  \lim_{\varepsilon\to0^+} \varepsilon\ln\varepsilon =
+  \lim_{\varepsilon\to0^+} \frac{\ln\varepsilon}{\frac1\varepsilon}
+  $$
+  Which by L'Hospital's theorem:
+  \[
+    \lim_{\varepsilon\to0^+} \frac{\ln\varepsilon}{\frac1\varepsilon} =
+    \lim_{\varepsilon\to0^+}
+    \frac{\frac{1}\varepsilon}{\frac{-1}{\varepsilon^2}} =
+    \lim_{\varepsilon\to0^+} -\varepsilon = 0
+  \]
+  Thus, the integral becomes:
+  \[
+    \lim_{\varepsilon\to0^+} \int_\varepsilon^a \ln x dx = a \ln a - a
+  \]
+  For all $a$.
+\item The integral is improper on both ends, as $x \to 1$
+  $\frac{1}{\ln x}\to \infty$. First, notice who, for $x\in (1,
+  \infty)$ $\frac{1}{x\ln x} < \frac{1}{\ln x}$, thus by the
+  comparison test, if we can show that the integral
+  \[
+    \int_1^\infty \frac{1}{x\ln x} dx
+  \]
+  diverges, so too does the original integral. The Integral above can
+  be evaluated directly through $u$ substitution, let $u = \ln x, du
+  =\frac1x dx$
+  \begin{align*}
+    \lim_{(\varepsilon, b)\to(0,\infty)}\int_{1+\varepsilon}^b
+    \frac{1}{x\ln x} dx &= \int \frac{1}{u} du \\
+    &= \ln u \\
+    &= \lim_{(\varepsilon, b) \to (0,
+    \infty)}\ln(\ln(x))\Big|_{1+\varepsilon}^b \\
+    &= \lim_{(\varepsilon, b) \to (0, \infty)}\ln\ln(b) - \ln\ln(1+\epsilon)
+  \end{align*}
+  Both terms tend to infinity as $(\varepsilon, b) \to (0, \infty)$,
+  clearly the integral diverges, and thus so too does the original integral.
 \end{enumerate}
 
 \end{document}
