@@ -140,7 +140,36 @@ transport, which has application in the analysis of certain classes of PDEs.
       &= e^{\frac4{10}x}\left[C_1\cos(\frac8{10}x) +
       C_2\sin(\frac8{10}x)\right] \\
     \end{align*}
-    Solving for the particular solution:
+    Solving for the particular solution we use the anstaz:
+    \begin{align*}
+      U_p(x)&= e^x(A\cos(x) + B\sin(x)) \\
+      U_p(x)' &=  e^x(A\cos(x) + B\sin(x)) + e^x(B\cos(x) - A\sin(x))
+      = e^x((A+B)\cos(x) + (B-A)\sin(x)) \\
+      U_p(x)'' &= e^x((A+B)\cos(x) + (B-A)\sin(x) - (A+B)\sin(x) +
+      (B-A)\cos(x)) \\
+      &= e^x(2B\cos(x) - 2A\sin(x))
+    \end{align*}
+    returning to the original equation:
+    \begin{align*}
+      e^x(2B\cos(x) - 2A\sin(x) - \frac{4}5(A+B)\cos(x) -
+      \frac45(B-A)\sin(x) + \frac45A\cos(x) +\frac45B\sin(x)) &= e^x\cos(x) \\
+      2B\cos(x) - 2A\sin(x) - \frac{4}5(A+B)\cos(x) -
+      \frac45(B-A)\sin(x) + \frac45A\cos(x) +\frac45B\sin(x) &= \cos(x) \\
+    \end{align*}
+    The $\sin$ coeffecient
+    \[
+      -2A - \frac45(B-A) + \frac45B = -\frac65A = 0 \implies A = 0
+    \]
+    The $\cos$ coefficient:
+    \[
+      2B -\frac45(A+B)+ \frac45A = \frac6{5}B = 1 \implies B = \frac56
+    \]
+    Thus the final answer is:
+    \[
+      u = u_p + u_c =  e^x\frac56\sin(x) +
+      e^{\frac4{10}x}\left[C_1\cos(\frac8{10}x) +
+      C_2\sin(\frac8{10}x)\right]
+    \]
 \end{enumerate}
 
 \problem solve $u_t = x$
