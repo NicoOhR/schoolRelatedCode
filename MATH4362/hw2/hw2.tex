@@ -1,0 +1,92 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Course Title} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{Matthew Frenkel  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[2]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[2.2.20]{ }
+
+\[
+  u_t + (1+x^2)u_x = 0
+\]
+\begin{enumerate}[(a)]
+  \item In this problem, $c(t) = 1 + t^2$, thus the characteristic
+    curve solves the ODE:
+    $$
+    \frac{d\mathbf{x}}{dt} = c(\mathbf{x}(t)) = 1 + \mathbf{x}(t)^2
+    $$
+    Which is a first order seperable differential equation:
+    \[
+      \frac{d\mathbf{x}}{dt}\frac{1}{1 + \mathbf{x}(t)^2} = 1
+    \]
+    let $y = x(t)$ thus $dy = \frac{d\mathbf{x}}{dt} dx$
+    \begin{align*}
+      \frac{1}{1 + y(t)^2} dy&= 1 \\
+      \arctan(y(t)) &= t + C \\
+      \arctan(y(t)) - t &= C \\
+    \end{align*}
+    Thus the characterisitic variable is $$\beta(t) = \arctan(t) - t$$
+    Fully solving the above, get that the characteristic curve $$x(t)
+    = \tan(C +t)$$ for some constant $C$
+  \item  Thus the solutions to the PDE are any function $v$ such that
+    $u(t,x) = v(\arctan(x) - t)$
+  \item For initial condition $u(0, x) = f(x)$, consider that the
+    solution at $t = 0$ would be a function of only $\arctan(x)$ that is
+    \[
+      u(0, x) = v(\arctan(x)) = f(x)
+    \]
+    Notice that $v(x) := \tan(x)$ gives $v(\arctan(x)) =
+    x$, therefore:
+    \[
+      v(x) := f(\tan(x)) \implies u(t, x) = v(\arctan(x) - t) =
+      f(\tan(\arctan(x) - t))
+    \]
+    will solve the initial value problem. As $t$ increases,
+    $\tan(\arctan(x) - t)$ will change much more with $t$ than with
+    $x$, which is to say that the solution to the PDE is more
+    sensitive to chnanges in time than in position.
+\end{enumerate}
+
+\question[2.2.23]{ }
+
+YOUR SOLUTION HERE
+
+\question[2.2.26]{ }
+
+YOUR SOLUTION HERE
+
+\end{document}
