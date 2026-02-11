@@ -1,1 +1,0 @@
-{"cmd": "\nblood_melted = pd.melt(blood, var_name=\"Variable\", value_name=\"Value\")\n\n# Creating box plots using Seaborn\nsns.boxplot(x=\"Variable\", y=\"Value\", data=blood_melted)\nplt.title(\"Box Plots of All Columns\")\nplt.show()", "cmd_opts": "", "import_complete": 1, "terminal": "nvimterm"}
