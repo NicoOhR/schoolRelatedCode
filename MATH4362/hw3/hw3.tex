@@ -1,0 +1,94 @@
+% This is a template for doing homework assignments in LaTeX
+
+\documentclass{article} % This command is used to set the type of document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+\newcommand{\question}[2][]{\begin{flushleft}
+        \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{\begin{center}
+        \Large{\textbf{Assignment #1}
+            
+            Course Title} % Name of course here
+        \vspace{5pt}
+        
+        \normalsize{Matthew Frenkel  % Your name here
+        
+        \today}        % Change to due date if preferred
+        \vspace{15pt}
+        
+\end{center}}
+\begin{document}
+    \maketitletwo[2]  % Optional argument is assignment number
+    %Keep a blank space between maketitletwo and \question[1]
+    
+    \question[1]{ } 
+    Solve 
+    \[
+      u_{tt} = u_{xx}
+    \]
+    Subject to 
+    $$
+        u(0,x) = 
+    \begin{cases}
+        1, \quad 1 < x < 2 \\ 
+        0 \quad \text{otherwise}
+    \end{cases}
+    $$
+    and 
+
+    \[
+        u_t(0, x)  = 0 
+    \]
+
+    The general solution to the wave equation is given by solving theorem 2.14 
+    \[
+    u(t,x) = p(x - t) + q(x+t)
+    \]
+    Subject to the above contraint, we have that 
+    \begin{align}
+        u(0, x)& = p(x) + q(x) = 1 \quad 1 < x < 2 \\
+        u_t(t, x) &= (-1)p'(x - t) + q'(x +t) = 0 \\
+        u_t(0,x) &= q'(x) - p'(x) = 0 \implies q'(x) = p'(x)
+    \end{align}
+    Which means that 
+    \[
+        \int q'(x) dx = \int p'(x) dx \implies q(x) = p(x) + C \implies q(x) - p(x) = C_p
+    \]
+
+    Thus, combining with condition $1$, we have that 
+    \[
+    2q(x) = 1 + C_p \implies
+    q(x) = \frac{1+C_p}{2} 
+    \]
+    Solving for $p$
+    $$
+    \frac{1+C}{2} + q(x) = 1
+    $$
+
+    \question[2]{Here is my second question}
+    
+    YOUR SOLUTION HERE
+    
+    \question[3]{What is the \Large{$\int_0^2 x^2 \, dx $}\normalsize{. Show all steps}}
+    
+    \begin{align*}
+    \int_0^2 x^2 &= \left. \frac{x^3}{3} \right|_0^2 \\
+                 &= \frac{2^3}{3}-\frac{0^3}{3}\\
+                 &= \frac{8}{3}
+    \end{align*}
+\end{document}
