@@ -1,10 +1,14 @@
 % This is a template for doing homework assignments in LaTeX
 
-\documentclass{article} % This command is used to set the type of document you are working on such as an article, book, or presenation
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
 
 \usepackage{geometry} % This package allows the editing of the page layout
-\usepackage{amsmath}  % This package allows the use of a large range of mathematical formula, commands, and symbols
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
 \usepackage{graphicx}  % This package allows the importing of images
+\usepackage{float}  % This package allows precise figure placement
+\usepackage{subcaption}  % This package allows subfigure captions
 
 \usepackage{
   amsmath,      % Math Environments
@@ -15,80 +19,229 @@
   multicol,      % Use Multi-columns
   multirow      % Use Multi-rows
 }
-\newcommand{\question}[2][]{\begin{flushleft}
-        \textbf{Question #1}: \textit{#2}
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
 
 \end{flushleft}}
 \newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
-\newcommand{\maketitletwo}[2][]{\begin{center}
-        \Large{\textbf{Assignment #1}
-            
-            Course Title} % Name of course here
-        \vspace{5pt}
-        
-        \normalsize{Matthew Frenkel  % Your name here
-        
-        \today}        % Change to due date if preferred
-        \vspace{15pt}
-        
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    PDE} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
 \end{center}}
 \begin{document}
-    \maketitletwo[2]  % Optional argument is assignment number
-    %Keep a blank space between maketitletwo and \question[1]
-    
-    \question[1]{ } 
-    Solve 
-    \[
-      u_{tt} = u_{xx}
-    \]
-    Subject to 
-    $$
-        u(0,x) = 
-    \begin{cases}
-        1, \quad 1 < x < 2 \\ 
-        0 \quad \text{otherwise}
-    \end{cases}
-    $$
-    and 
+\maketitletwo[3]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
 
-    \[
-        u_t(0, x)  = 0 
-    \]
+\question[1]{ }
+Solve
+\[
+  u_{tt} = u_{xx}
+\]
+Subject to
+$$
+u(0,x) = f(x) =
+\begin{cases}
+  1, \quad 1 < x < 2 \\
+  0 \quad \text{otherwise}
+\end{cases}
+$$
+and
 
-    The general solution to the wave equation is given by solving theorem 2.14 
-    \[
-    u(t,x) = p(x - t) + q(x+t)
-    \]
-    Subject to the above contraint, we have that 
-    \begin{align}
-        u(0, x)& = p(x) + q(x) = 1 \quad 1 < x < 2 \\
-        u_t(t, x) &= (-1)p'(x - t) + q'(x +t) = 0 \\
-        u_t(0,x) &= q'(x) - p'(x) = 0 \implies q'(x) = p'(x)
-    \end{align}
-    Which means that 
-    \[
-        \int q'(x) dx = \int p'(x) dx \implies q(x) = p(x) + C \implies q(x) - p(x) = C_p
-    \]
+\[
+  u_t(0, x) = g(x) =  0
+\]
 
-    Thus, combining with condition $1$, we have that 
-    \[
-    2q(x) = 1 + C_p \implies
-    q(x) = \frac{1+C_p}{2} 
-    \]
-    Solving for $p$
-    $$
-    \frac{1+C}{2} + q(x) = 1
-    $$
+The general solution to the wave equation is given by solving theorem 2.15
+\[
+  u(t,x) = \frac{f(x-ct) + f(x+ct)}{2} + \frac1{2c}\int_{x-ct}^{x+ct} g(x)
+  = \frac{f(x-t) + f(x+t)}{2}
+\]
+Subject to the above contraint, we have that
+\begin{align*}
+  f(x-t) &=
+  \begin{cases}
+    1, \quad 1 + t < x  < 2 + t\\
+    0 \quad \text{otherwise}
+  \end{cases}\\
+  f(x+t) &=
+  \begin{cases}
+    1, \quad 1 - t< x < 2 - t \\
+    0 \quad \text{otherwise}
+  \end{cases} \\
+  f(x-t) + f(x+t) &=
+  \begin{cases}
+    1, \quad 1 + t < x < 2 + t \\
+    0, \quad \text{otherwise}
+  \end{cases}
+  +
+  \begin{cases}
+    1, \quad 1 - t< x < 2 - t \\
+    0 \quad \text{otherwise}
+  \end{cases} \\
+  \frac{f(x-t) + f(x+t)}{2} &=
+  \begin{cases}
+    \frac{1}{2}, \quad 1 + t < x < 2 + t \\
+    0, \quad \text{otherwise}
+  \end{cases}
+  +
+  \begin{cases}
+    \frac{1}{2}, \quad 1 - t< x < 2 - t \\
+    0 \quad \text{otherwise}
+  \end{cases} \\
+\end{align*}
 
-    \question[2]{Here is my second question}
-    
-    YOUR SOLUTION HERE
-    
-    \question[3]{What is the \Large{$\int_0^2 x^2 \, dx $}\normalsize{. Show all steps}}
-    
+Therefore, the solution to this PDE is a square at time $0$ with
+height $1$, as expected from the initial condition, which splits into
+two squares traveling in opposite directions as t increases, an
+illustration of the wave at $t=0, 0.25, 0.5,0.75$, is shown below:
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{t=0.png}
+    \caption{$t = 0$}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{t25.png}
+    \caption{$t = 0.25$}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{t5.png}
+    \caption{$t = 0.5$}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{t75.png}
+    \caption{$t = 0.75$}
+  \end{subfigure}
+\end{figure}
+
+\question[2]{ }
+
+Solve
+$$
+u_{tt} - u_{xx} - \frac{2}{x}u_x = 0
+$$
+
+Subject to:
+\[
+  u(0, x) = 0 \quad u_t(0,x)= g(x) \quad g(x) = g(-x)
+\]
+
+First, set $w(t, x) = xu(t,x)$, which as derivatives:
+\[
+  w_t = xu_t \quad w_x = xu_x + u \quad w_{tt} = xu_{tt} \quad w_{xx}
+  = xu_{xx} + 2u_x
+\]
+
+Adding select terms:
+$$
+w_{tt} - w_{xx} = x(u_{tt} - u_{xx} - \frac{2}{x}u_x)
+$$
+
+Thus we can solve the wave equation:
+
+\[
+  w_{tt} - w_{xx} = 0
+\]
+
+Subject to $w_t = xg(x)$ and $w(0, x) = xu(0,x) = 0$, because the
+initial position of the wave is $0$, the first term of d'Almberts
+solution disappears, leaving only the integral:
+\[
+  w(t,x) = \frac{1}{2}\int_{x-t}^{x+t} zg(z) dz = \int_0^{x+t} zg(z)dz
+\]
+
+Then, returning to $u$, we get the final solution:
+\[
+  u(t,x) = \frac{1}{x}w(t,x) =
+  \frac{1}{x}\int_0^{x+t} zg(z)dz
+\]
+\pagebreak
+\question[3]{ }
+\begin{enumerate}
+  \item Find fourier series of $f(x) = |x|$, the function is even,
+    and therefore the $b_n$ coefficients vanish.
     \begin{align*}
-    \int_0^2 x^2 &= \left. \frac{x^3}{3} \right|_0^2 \\
-                 &= \frac{2^3}{3}-\frac{0^3}{3}\\
-                 &= \frac{8}{3}
+      a_0 &= \frac{1}{2\pi}\int_{-\pi}^\pi |x|dx \\
+      &= \frac{1}{2\pi}\left(\int_{-\pi}^0 -x dx + \int_0^\pi x dx\right)\\
+      &= \frac{1}{2\pi}(\frac{\pi^2}{2} + \frac{\pi^2}{2}) \\
+      &= \frac{\pi}{2}
     \end{align*}
+    Since $|x|$ and $\cos$ are even functions, their product is even
+    as well, so we can change the bounds of the integration to be a
+    little simpler:
+    \begin{align*}
+      a_n &= \frac{1}{\pi}\left(\int_{-\pi}^{\pi} |x|\cos(nx)dx\right) \\
+      &= \frac{2}{\pi}\left(
+      \int_0^\pi x\cos(nx) dx\right) \\
+      &= \frac{2}{\pi}\left(
+      \int_0^\pi x\cos(nx) dx\right)
+    \end{align*}
+    Evaluating the integral of $x\cos(nx)$ seperately by integration
+    by parts, let $u = x, du = dx, dv = cos(nx), v = \frac{1}{n}sin(nx)$
+    \begin{align*}
+      \int x\cos(nx)dx &= \frac{x\sin(nx)}{n} - \frac{1}{n}\int \sin(nx)dx \\
+      &= \frac{x\sin(nx)}{n} + \frac{1}{n^2}\cos(nx) \\
+    \end{align*}
+    Then evaluating in the original:
+    \[
+      a_n = \frac{1}{\pi}(\frac{1}{n^2}(\cos(n\pi)-1)) = \frac{(-1)^n
+      - 1}{\pi{n^2}}
+    \]
+    Thus the fourier series becomes:
+
+    \[
+      |x|\sim \frac{\pi}{2}  + \sum_{n\text{ odd}} \frac{-4}{\pi{n^2}}\cos(nx)
+    \]
+
+  \item $f(x) = 3x - 1$
+    \begin{align*}
+      a_0 &= \frac{1}{2\pi} \int_{-\pi}{\pi}3x-1dx \\
+      &= \frac{1}{2\pi}\left(\frac{3}{2}x^2 - x\right)\Big|_{-\pi}^\pi\\
+      &= \frac{1}{2\pi}(-2\pi) \\
+      &= -1
+    \end{align*}
+    \begin{align*}
+      a_n &= \frac{1}{\pi}\int_{-\pi}^\pi \cos(nx)(3x-1)dx \\
+      &= \frac{1}{\pi}\left(\int 3x\cos(nx)dx - \int_{-\pi}^\pi
+      \cos(nx)dx\right)
+    \end{align*}
+    Since $3x$ is odd and $\cos(nx)$ is even, their product is odd,
+    and therefore the integral over a symmetric domain of
+    $3x\cos(nx)$ is equal to $0$. Thus
+    \[
+      a_n = \frac{-1}{n\pi}\sin(nx)\Big|_{-\pi}^\pi = 0
+    \]
+
+    let $u = 3x - 1, du = 3, dv = \sin(nx), v = \frac{-1}{n}\cos(nx)$
+    \begin{align*}
+      b_n &= \frac{1}{\pi} \int_{-\pi}^{\pi} \sin(nx)(3x-1) dx\\
+      &= \frac{1}{\pi}\left(\frac{-(3x-1)\cos(nx)}{n} +
+      \frac{3}{n}\int \cos(nx) dx\right) \\
+      &= \frac{1}{\pi}\left(\frac{-(3x-1)}{n}\cos(nx) +
+      \frac{3}{n^2}\sin(nx) dx\right)\Big|_{-\pi}^{\pi} \\
+      &= \frac{1}{\pi}\left(\frac{-(3\pi-1)}{n} -
+      \frac{-(-3\pi-1)}{n}\right)(-1)^n \\
+      &= \frac{6(-1)^{n+1}}{n} \\
+    \end{align*}
+    Thus
+    \[
+      3x - 1 \sim -1 + \sum_n \frac{6}{n}(-1)^{n+1}\sin(nx)
+    \]
+\end{enumerate}
 \end{document}
