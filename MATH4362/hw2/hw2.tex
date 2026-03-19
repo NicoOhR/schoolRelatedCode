@@ -25,10 +25,10 @@
   \begin{center}
     \Large{\textbf{Assignment #1}
 
-    Course Title} % Name of course here
+    PDE} % Name of course here
     \vspace{5pt}
 
-    \normalsize{Matthew Frenkel  % Your name here
+    \normalsize{N. Ohayon Rozanes  % Your name here
 
     \today}        % Change to due date if preferred
     \vspace{15pt}
@@ -83,10 +83,157 @@
 
 \question[2.2.23]{ }
 
-YOUR SOLUTION HERE
+For the equation
+\[
+  u_t + (x^2 - 1)u_x = 0
+\]
+
+Subject to initial condition
+\[
+  u(0, x) = e^{-x^2}
+\]
+
+Derive that the general solution is
+\[
+  u(t,x) =
+  \begin{cases}
+    0 &\text{for } x \le \frac{1+e^{2t}}{1-e^{2t}} \\
+    \exp\left[-\left(\frac{x+1 +(x-1)e^{-2t}}{x+1 -
+    (x-1)e^{-2t}}\right)^2 \right] &\text{otherwise}
+  \end{cases}
+\]
+
+The characteristic curves are also given
+\[
+  \beta(x) = \frac{1}{2}\log\left|\frac{x-1}{x+1}\right|
+\]
+
+Thus all solutions (barring the initial condition) are given by any
+function $v$ such that
+
+\[
+  u(t,x)  = v\left(\frac{1}{2}\log\left|\frac{x-1}{x+1}\right| - t \right)
+\]
+Consider that
+\begin{align*}
+  \frac{1}{2}\log\left|\frac{x-1}{x+1}\right| &= C \\
+  \log\left|\frac{x-1}{x+1}\right| &= 2C \\
+  \exp\left(\log\left|\frac{x-1}{x+1}\right|\right) &= e^{2C} \\
+  \left|\frac{x-1}{x+1}\right| = e^{2C}
+\end{align*}
+
+For $x > 1$, its obvious that $\frac{x-1}{x+1} > 0$, further, for $x
+< -1$, both $x - 1 < 0$ and $x + 1 < 0$ thus $\frac{x-1}{x+1} > 0$, so for
+$x \in (-\infty, -1) \cup (1, \infty)$ we can remove the absolute
+value and explore further:
+\begin{align*}
+  \frac{x-1}{x+1} &= e^{2C} \\
+  1 - \frac{2}{x+1} &= e^{2C} \\
+  \frac{2}{x+1} &= 1 - e^{2C} \\
+  \frac{2}{1-e^{2C}} &= x + 1 \\
+  \frac{2}{1-e^{2C}} - 1 &= x \\
+  \frac{1+e^{2C}}{1-e^{2C}} &= x \\
+\end{align*}
+
+Thus, for
+
+\[
+  \beta^{-1} = \frac{1+e^{2x}}{1-e^{2x}}
+\]
+The problem is solved by
+\begin{align*}
+  v(f(x - t)) &= e^{-(\beta^{-1}(\beta(x) - t))^2} \\
+  &= \exp\left[-\frac{1+e^{2(\beta(x) - t)}}{1-e^{2(\beta(x) -t)}}\right]^2 \\
+  &= \exp\left[-\frac{1+e^{2(\frac{1}{2}\log\frac{x-1}{x+1} -
+  t)}}{1-e^{2(\frac{1}{2}\log\frac{x-1}{x+1} -t)}}\right]^2 \\
+  &= \exp\left[-\frac{1+e^{\log\frac{x-1}{x+1} -
+  2t}}{1-e^{\log\frac{x-1}{x+1} -2t}}\right]^2 \\
+  &= \exp\left[-\left(\frac{x+1 +(x-1)e^{-2t}}{x+1 -
+  (x-1)e^{-2t}}\right)^2 \right]
+\end{align*}
+
+As desired. For, $x \in (-1, 1)$, then $\frac{x-1}{x+1} < 0$, so
+$\left|\frac{x-1}{x+1}\right| = \frac{1-x}{x+1}$, and the analysis is similar
+\begin{align*}
+  \frac{1-x}{x+1} &= e^{2C} \\
+  x &= \frac{1-e^{2C}}{1+e^{2C}} \\
+  \beta^{-1} &= \frac{1-e^{2C}}{1+e^{2C}}
+\end{align*}
+Then:
+\begin{align*}
+  v(f(x - t)) &= e^{-(\beta^{-1}(\beta(x) - t))^2} \\
+  &= \exp\left[-\frac{1-e^{2(\beta(x) - t)}}{1+e^{2(\beta(x) -t)}}\right]^2 \\
+  &= \exp\left[-\frac{1-e^{2(\frac{1}{2}\log\frac{x-1}{x+1} -
+  t)}}{1+e^{2(\frac{1}{2}\log\frac{x-1}{x+1} -t)}}\right]^2 \\
+  &= \exp\left[-\frac{1-e^{\log\frac{x-1}{x+1} -
+  2t}}{1+e^{\log\frac{x-1}{x+1} -2t}}\right]^2 \\
+  &=
+  \exp\left[-\frac{1-\frac{x-1}{x+1}e^{-2t}}{1+\frac{x-1}{x+1}e^{-2t}}\right] \\
+  &= \exp\left[-\frac{\frac{x + 1 - (x -
+  1)e^{-2t}}{x+1}}{\frac{(x+1) + (x-1)e^{-2t}}{x+1}}\right] \\
+  &= \exp\left[-\left(\frac{x+1 +(x-1)e^{-2t}}{x+1 -
+  (x-1)e^{-2t}}\right)^2 \right]
+\end{align*}
+
+For $x = \pm 1$, both values are thrown out by the restrictions:
+\[
+  x \le \frac{1 + e^{2t}}{1-e^{2t}} \quad 0 < t
+\]
+Because for $t > 0 \implies e^{2t} > 1$, thus $1 + e^{2t} > 0$ and $1
+- e^{2t} < 0$, therefore $\frac{1 + e^{2t}}{1-e^{2t}} < 0$, meaning
+$x = 1$ is excluded. To show that $x =-1$ is excluded, notice that:
+\begin{align*}
+  \frac{1+e^{2t}}{1-e^{2t}} &= \frac{1 - e^{2t} + 2e^{2t}}{1 - e^{2t}} \\
+  &= 1 + 2\frac{e^{2t}}{1-e^{2t}}
+\end{align*}
+Then by the previous inequalities, $\frac{e^2t}{1-e^{2t}} < -1$ therefore,
+\[
+  \frac{1+e^{2t}}{1-e^{2t}} < -1
+\]
+Thus $x=-1$ is excluded as well.
 
 \question[2.2.26]{ }
+For the transport equation of the form
+\[
+  u_t + c(t,x)u_x = 0
+\]
+With the characteristic solution $x(t)$, which solves the ordinary
+differential equation:
+\[
+  \frac{dx}{dt} = c(t,x)
+\]
 
-YOUR SOLUTION HERE
-
+\begin{enumerate}[(a)]
+  \item To show that $u(t,x)$ is constant on $u(t,x(t))$, it suffices
+    to show that:
+    $$\frac{d}{dt} u\Big|_{h(t)} = 0$$
+    Where $h(t) = (t, x(t))$
+    \begin{align*}
+      \frac{d}{dt} u(t, x(t)) &=
+      \frac{d}{dt}(u \circ h(t)) \\
+      &= \nabla u(t, x(t)) \cdot h'(t) \\
+      &= \nabla u(t, x(t)) \cdot [1~ x'(t)] \\
+      &= [u_t~u_x] \cdot [1~ x'(t)] \\
+      &= u_t + x'(t)u_x
+    \end{align*}
+    However, $x'(t) = c(t, x)$, thus
+    \[
+      \nabla u(t, x(t)) = u_t + c(t,x)u_x = 0
+    \]
+  \item $\xi(t, x) = k$ and $u(t, x) = f(\xi(t,x))$, then the first
+    partial derivatives of $u$ become
+    \begin{align*}
+      u_t = \frac{d}{dt}f(\xi(t,x)) &= f'(\xi(t,x))\xi_t(t,x)\\
+      &= f'(\xi(t,x)) \cdot 0 \\
+      &= 0\\
+      u_x = \frac{d}{dx}f(\xi(t,x)) &= f'(\xi(t,x))\xi_x(t,x) \\
+      &= f'(\xi(t,x))\cdot 0 \\
+      &= 0
+    \end{align*}
+    Thus
+    \[
+      u_t + c(t,x)u_x = 0 + c(t,x)\cdot 0 = 0
+    \]
+    Which satisfies the PDE.
+\end{enumerate}
 \end{document}

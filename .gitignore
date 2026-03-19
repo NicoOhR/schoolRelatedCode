@@ -52,6 +52,7 @@ latexmkrc
 *.bbl
 *.blg
 
-
+.jukit*
+_minted*
 .ipynb_checkpoints/
 .Rproj.user

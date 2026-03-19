@@ -1,0 +1,390 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow,      % Use Multi-rows
+  cases,
+}
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Mathematical Statistics} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[2]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{ }
+
+\begin{enumerate}[(a)]
+  \item $Y = X_1 + X_2$ Since $X_1$ and $X_2$ are independent, we can
+    use the formula
+    \[
+      P(Y = y) = \sum_{k=-\infty}^\infty P(X_1 = k)P(X_2 = y - k)
+    \]
+    Since the support of a poisson distribution is $k \ge 0$ this
+    forces $y \ge k$, thus the sum becomes and evaluates to
+    \begin{align*}
+      P(Y = y) &= \sum_{k=0}^y P(X_1 = k)P(X_2 = y - k)\\
+      &= \sum_{k=0}^y
+      \frac{\lambda^k\lambda_2^{y-k}}{k!(y-k)!}e^{-(\lambda_1 + \lambda_2)}\\
+      &= \sum_{k=0}^y \frac{1}{y!}\binom{y}{k}\lambda^k_1
+      \lambda_2^{y-k}e^{-(\lambda_1 + \lambda_2)}\\
+      &= \frac{1}{y!}e^{-(\lambda_1 + \lambda_2)}
+      \sum_{k=0}^y
+      \binom{y}{k}\lambda^k_1
+      \lambda_2^{y-k}\\
+    \end{align*}
+    By way of the binomial theorem
+    \[
+      \sum_{k=0}^y
+      \binom{y}{k}\lambda^k_1
+      \lambda_2^{y-k} =
+      (\lambda_1 + \lambda_2)^y
+    \]
+    Thus
+    \[
+      P(Y = y) = \frac{(\lambda_1 + \lambda_2)^y}{y!}e^{-(\lambda_1 +
+      \lambda_2)}
+    \]
+  \item The above PMF follows exactly the Poisson$(\lambda_1 +
+    \lambda_2)$ distribution.
+  \item The mgf of $Y = X_1 + X_2$ is
+    $$
+    \text{mgf}_Y(t) = \mathbb{E}(e^{tY}) = \mathbb{E}(e^{tX_1 + tX_2})
+    $$
+
+    Since $X_1$ and $X_2$ are independent we can say that
+    $$
+    \text{mgf}_{X_1}(t)\text{mgf}_{X_2}(s) = \text{mgf}_{X_1, X_2}(t,
+    s) = \mathbb{E}(e^{tX_1 + sX_2})
+    $$
+    Thus
+    \[
+      \text{mgf}_{Y}(t) = \text{mgf}_{X_1, X_2}(t, t)
+    \]
+    However:
+    \[
+      \text{mgf}_{X_1, X_2}(t,t) =
+      \text{mgf}_{X_1}(t)\text{mgf}_{X_2}(t)=
+      \mathbb{E}(e^{tX_1})\mathbb{E}(e^{tX_2})
+    \]
+    The right hand side calculates to
+    $$
+    \mathbb{E}(e^{tX_1})\mathbb{E}(e^{tX_2}) =
+    e^{\lambda_1(e^t-1)}e^{\lambda_2(e^t-1)} = e^{(e^t-1)(\lambda_1 +\lambda_2)}
+    $$
+    Thus,
+    \[
+      \text{mgf}_Y(t) =  e^{(e^t-1)(\lambda_1 +\lambda_2)}
+    \]
+    Which is exactly the MGF of Poisson$(\lambda_1 +\lambda_2)$, thus
+    Y follows a Poisson$(\lambda_1 + \lambda_2)$ distribution.
+
+\end{enumerate}
+
+\question[2]{ }
+\begin{enumerate}[(a)]
+  \item The support of $X$, $\mathbb{X}$ is simply the set $\{(x_1,
+    x_2): 0 < x_1^2 + x_2^2 < 1 \text{ and } x_1\neq0, x_2\neq0\}$ as
+    given by the indicator function. Which is The unit disk, without
+    the unit axis and origin.
+
+    Similarily, the support of $Y_1$ is given almost immediatly by
+    the support of $X$, that is $0 < x_1^2 + x_2^2 < 1 \implies 0 <
+    y_1 < 1$ thus the support of $Y_1$ is $(0,1)$. Given that, it is
+    clear to see that the range of $Y_2$ is also $(0,1)$. Meaning
+    that the support of $Y$, $\mathbb{Y}$ is the unit square in
+    $\mathbb{R}^2$ without the borders.
+  \item
+    \begin{align*}
+      Y_1 = X_1^2 + X_2^2 \implies Y_2 &= \frac{X_1^2}{Y_1} \\
+      Y_2Y_1 &= X_1^2 \\
+      \pm\sqrt{Y_2Y_1} &= X_1
+    \end{align*}
+    Given that
+    \begin{align*}
+      Y_1 &= (\pm\sqrt{Y_2Y_1})^2 + X_2^2 \\
+      Y_1 &= Y_2Y_1 + X_2^2\\
+      \pm\sqrt{Y_1(1 - Y_2)} = X_2
+    \end{align*}
+
+    Yielding the answer
+    \[
+      \begin{pmatrix}
+        X_1 \\ X_2
+      \end{pmatrix}
+      =
+      \begin{pmatrix}
+        \pm\sqrt{Y_2Y_1} \\
+        \pm\sqrt{Y_1(1-Y_2)}
+      \end{pmatrix}
+    \]
+
+    Since for any $(Y_1, Y_2)$, there are four possible $(X_1,
+    X_2)$ vectors which might have produced it, $u$ is a $4$-to-$1$ function.
+  \item Since the magnitude is the same between signs, we can choose
+    one branch and the answer will be the same
+    \[
+      |\text{Det}(u)| =
+      \begin{vmatrix}
+        \dfrac{y_2}{2\sqrt{y_1y_2}} &
+        \dfrac{y_1}{2\sqrt{y_1y_2}}
+        \\[10pt]
+        \dfrac{1-y_2}{2\sqrt{y_1(1-y_2)}} &
+        -\dfrac{y_1}{2\sqrt{y_1(1-y_2)}}
+      \end{vmatrix}
+    \]
+    Which simplifies down to:
+    \[
+      \frac{-y_1}{4\sqrt{y_1y_2}\sqrt{y_1(1-y_2)}} =
+      \frac{1}{4\sqrt{y_2(1-y_2)}}
+    \]
+  \item
+    Using this,we can calculate the joint pdf of $Y$
+    \[
+      f_Y(y_1, y_2) = f_X(\pm\sqrt{y_2y_1},
+      \pm\sqrt{y_1(1-y_2)})\frac{1}{4\sqrt{y_2(1-y_2)}} \cdot 4
+    \]
+    Where the $4$ coefficient comes from the $4$ preimages, Then
+    integrating away the $y_2$ term:
+    \begin{align*}
+      \int_0^1 \frac{1}{\pi} \mathbf{1}_{\{0 < y_2y_1 + y_1(1-y_2) <
+      1\}}\frac{1}{\sqrt{y_2(1-y_2)}} dy_2
+    \end{align*}
+    notice that due to the squaring, we can again ignore the $\pm$
+    branches. We can simplify the range inside the indicator function
+    to just $0 < y_1 < 1$. Thus the indicator function is independent
+    of $y_2$, so we can pull it out of the integral
+    \begin{align*}
+      \frac{1}{\pi} \mathbf{1}_{\{0 < y_1 <1\}}\int_0^1
+      \frac{1}{\sqrt{y_2(1-y_2)}} dy_2 &=
+      \frac{1}{\pi} \mathbf{1}_{\{0 < y_1 <1\}}\int_0^1
+      \frac{1}{}y_2^{-\frac12}(1-y_2)^{-\frac12} dy_2
+    \end{align*}
+    Is the beta integral $B(\frac{1}2, \frac{1}2) = \pi$. Thus:
+    \[
+      f_{Y_1}(y_1) = \mathbf{1}_{\{0 < y_1 < 1\}}
+    \]
+    Which is the uniform distribution from $(0,1)$. A similar for
+    integration for $Y_2$ follows
+    \begin{align*}
+      \int_0^1 \frac{1}{\pi} \mathbf{1}_{\{0 < y_1 <
+      1\}}\frac{1}{\sqrt{y_2(1-y_2)}} dy_1 &=
+      \frac{1}{\pi\sqrt{y_2(1-y_2)}}\int_0^1  \mathbf{1}_{\{0 < y_1 <
+      1\}} dy_1
+      \\
+      &= \frac{1}{\pi}(y_2)^{-\frac{1}2}(1-y_2)^{-\frac{1}{2}}
+    \end{align*}
+    Which is exactly the Beta$(\frac{1}2, \frac{1}2)$.
+\end{enumerate}
+
+\question[3]{ }
+For
+\[
+  Y = u(X) =
+  \begin{pmatrix}
+    X_1/X_2 // X_2
+  \end{pmatrix}
+\]
+The inverse function is
+$$
+Y_2 = X_2 \implies Y_1 = X_1/Y_2 \implies Y_1Y_2 = X_1
+$$
+The Jacobian of the inverse of $u$ is
+$$
+J(u) =
+\begin{pmatrix}
+  y_2 & y_1 \\
+  0 & 1
+\end{pmatrix}
+$$
+\[
+  \left|J(u^{-1})\right| = |y_2|
+\]
+
+Therefore the pdf is
+\[
+  f_Y(y_1, y_2) = f_X(y_1y_2, y_2)y_2 = 8y_2^32y_1\mathbf{1}_{(0 <
+  y_1y_2 < y_2 < 1)}
+\]
+The ranges of the indicator function can be simplified a little bit
+by dividing through by $y_2$ which will yield the seperate ranges $0
+< y_1 < 1$ and $0 < y_2 < 1$, so to integrate away $y_1$ and $y_2$ to
+obtain the respective marginals
+\[
+  f_{Y_1}(y_1)
+  = \int_0^1 f_{Y_1,Y_2}(y_1,y_2)\,dy_2
+  = \int_0^1 8y_1 y_2^3 \, dy_2
+  = 8y_1 \int_0^1 y_2^3 \, dy_2
+  = 8y_1 \left[\frac{y_2^4}{4}\right]_0^1
+  = 2y_1, \quad 0<y_1<1.
+\]
+And
+\[
+  f_{Y_2}(y_2)
+  = \int_0^1 f_{Y_1,Y_2}(y_1,y_2)\,dy_1
+  = \int_0^1 8y_1 y_2^3 \, dy_1
+  = 8y_2^3 \int_0^1 y_1 \, dy_1
+  = 8y_2^3 \left[\frac{y_1^2}{2}\right]_0^1
+  = 4y_2^3, \quad 0<y_2<1.
+\]
+
+\[
+  f_{Y_1}(y_1)f_{Y_2}(y_2)
+  = (2y_1)(4y_2^3)
+  = 8y_1y_2^3.
+\]
+
+Thus the joint pdf is equal to product of the marginals, and we have
+verified that the variables are indpednent.
+
+\question[4]{ }
+\begin{enumerate}
+  \item
+    Given that $f_X(x)$ is location scale and symmetric about $0$, then by
+    problem 2.26, $f$ has median and expected value $0$. Define
+    \[
+      Y = \mu + \sigma X
+    \]
+
+    Since $X$ is location-scale, $Y$ has the pdf
+    \[
+      f_Y = \frac{1}{\sigma}f_X\left(\frac{x-\mu}{\sigma}\right)
+    \]
+    Notice that
+    \begin{align*}
+      E(Y) &= E(\mu + \sigma X) \\
+      &= \mu + \sigma E(X) \\
+      &= \mu + 0 \\
+      &= \mu
+    \end{align*}
+    Thus, again by 2.26,
+    $\frac{1}{\sigma}f_X\left(\frac{x-\mu}{\sigma}\right)$ has a median at $0$
+  \item Compute $P(X\le x_\alpha)$
+    \[
+      P(X \ge x_\alpha)
+      = \int_{x_\alpha}^{\infty}
+      \frac{1}{\sigma}
+      f\!\left(\frac{x-\mu}{\sigma}\right)
+      \,dx.
+    \]
+    let $z = \frac{x-\mu}{\sigma} \implies dz = \frac{1}{\sigma}$ thus:
+    \[
+      P(X \ge x_\alpha)
+      = \int_{z_\alpha}^{\infty}
+      \frac{1}{\sigma} f(z)\,\sigma\,dz
+      = \int_{z_\alpha}^{\infty} f(z)\,dz
+      = \alpha.
+    \]
+    As desired.
+\end{enumerate}
+\question[5] { }
+\begin{enumerate}
+  \item
+    \[
+      P(X \le \mu)
+      = \int_{-\infty}^{\mu}
+      \frac{1}{\sigma\pi\left(1+\left(\frac{x-\mu}{\sigma}\right)^2\right)}\,dx.
+    \]
+    \[
+      \text{Let } z=\frac{x-\mu}{\sigma},\quad dx=\sigma\,dz.
+      \text{ When } x=\mu,\ z=0;\ \text{as } x\to -\infty,\ z\to -\infty.
+    \]
+
+    \[
+      P(X \le \mu)
+      = \int_{-\infty}^{0} \frac{1}{\sigma\pi(1+z^2)}\,\sigma\,dz
+      = \int_{-\infty}^{0} \frac{1}{\pi(1+z^2)}\,dz.
+    \]
+
+    \[
+      \int_{-\infty}^{0} \frac{1}{\pi(1+z^2)}\,dz
+      = \frac{1}{\pi}\Big[\arctan(z)\Big]_{-\infty}^{0}
+      = \frac{1}{\pi}\left(0-\left(-\frac{\pi}{2}\right)\right)
+      = \frac{1}{2}.
+    \]
+
+    \[
+      \Rightarrow\quad P(X\le \mu)=\frac12
+      \quad\text{and hence}\quad
+      P(X\ge \mu)=1-P(X<\mu)=\frac12.
+    \]
+  \item We first calculate the case $\mu = 0$ and $\sigma = 1$
+    \[
+      P(Z \ge 1)
+      = \int_{1}^{\infty} \frac{1}{\pi(1+z^2)}\,dz
+      = \frac{1}{\pi}\Big[\arctan z\Big]_{1}^{\infty}
+      = \frac{1}{\pi}\left(\frac{\pi}{2}-\frac{\pi}{4}\right)
+      = \frac{1}{4}.
+    \]
+
+    \[
+      P(Z \le -1)
+      = \int_{-\infty}^{-1} \frac{1}{\pi(1+z^2)}\,dz
+      = \frac{1}{\pi}\Big[\arctan z\Big]_{-\infty}^{-1}
+      = \frac{1}{\pi}\left(-\frac{\pi}{4}-\left(-\frac{\pi}{2}\right)\right)
+      = \frac{1}{4}.
+    \]
+
+    % Thus, for the standard Cauchy, 1 and -1 are the upper and lower quartiles:
+    \[
+      P(Z \ge 1)=\frac14,
+      \qquad
+      P(Z \le -1)=\frac14.
+    \]
+    From 3.38, we define $Z = (X -\mu)/\sigma$, therefore for any $z_0$
+    $$
+    P(X \ge \mu+\sigma z_0) = P(Z \ge z_0)
+    $$
+    And also
+    $$
+    P(X \le \mu+\sigma z_0) = P(Z \le z_0)
+    $$
+    Therefore:
+    \[
+      P(X \ge \mu+\sigma)
+      = P\!\left(\frac{X-\mu}{\sigma} \ge 1\right)
+      = P(Z \ge 1)
+      = \frac{1}{4}.
+    \]
+
+    \[
+      P(X \le \mu-\sigma)
+      = P\!\left(\frac{X-\mu}{\sigma} \le -1\right)
+      = P(Z \le -1)
+      = \frac{1}{4}.
+    \]
+
+    % Conclusion:
+    \[
+      \,P(X \ge \mu+\sigma)=\frac14,\qquad P(X \le \mu-\sigma)=\frac14\,
+    \]
+\end{enumerate}
+\end{document}

@@ -1,4 +1,5 @@
-\documentclass{article} % This command is used to set the type of document you are working on such as an article, book, or presenation
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
 \usepackage{
   amsmath,      % Math Environments
   amssymb,      % Extended Symbols
@@ -6,43 +7,68 @@
   graphicx,      % Include Images
   lastpage,      % Reference Lastpage
   multicol,      % Use Multi-columns
-  multirow      % Use Multi-rows
+  multirow,     % Use Multi-rows
+  minted
 }
 
-
 \usepackage{geometry} % This package allows the editing of the page layout
-\usepackage{amsmath}  % This package allows the use of a large range of mathematical formula, commands, and symbols
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
 \usepackage{graphicx}  % This package allows the importing of images
 
-\newcommand{\question}[2][]{\begin{flushleft}
-        \textbf{Question #1}: \textit{#2}
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
 
 \end{flushleft}}
 \newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
-\newcommand{\maketitletwo}[2][]{\begin{center}
-        \Large{\textbf{Assignment #1}
-            
-            Machine Learning} % Name of course here
-        \vspace{5pt}
-        
-        \normalsize{N. Ohayon Rozanes  % Your name here
-        
-        \today}        % Change to due date if preferred
-        \vspace{15pt}
-        
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Machine Learning} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
 \end{center}}
 \begin{document}
 \maketitletwo[1]{}
-    \question[1]{ }
-    \begin{enumerate}
-      \item
-        $$
-        L_i(b, w) = |w^Tx + b - y|^3
-        $$
-    A feature of this loss function, which is similar to the square aboslute error loss function, is that any error $> 1$ will be magnified, while error $< 1$ is discounted. That is to say that "large" misses are catastrophic to the loss when compared to absolute or square absolute error. This is sometimes helpful if the data is well normalized, or if the importance of errors does not scale linearly due to some domain specific reasons, but can cause issues, such as two errors which are quite close (for example the error at $x_i = 0.9$ and $x_j = 0.8$) contributing very different amounts to the gradient decent. This can also be an issue when there are outliers present in the data set, causing this loss function to be less robust than the square absolute loss. The absolute cube function maintains a couple of nice properties for a loss function. Namely, it is convex ($L'' \ge 0$), is regular around $0$ (smooth, continuous). 
+\question[1]{ }
+\begin{enumerate}
+  \item
+    $$
+    L_i(b, w) = |w^Tx + b - y|^3
+    $$
+    A feature of this loss function, which is similar to the square
+    aboslute error loss function, is that any error $> 1$ will be
+    magnified, while error $< 1$ is discounted. That is to say that
+    "large" misses are catastrophic to the loss when compared to
+    absolute or square absolute error. This is sometimes helpful if
+    the data is well normalized, or if the importance of errors does
+    not scale linearly due to some domain specific reasons, but can
+    cause issues, such as two errors which are quite close (for
+    example the error at $x_i = 0.9$ and $x_j = 0.8$) contributing
+    very different amounts to the gradient decent. This can also be
+    an issue when there are outliers present in the data set, causing
+    this loss function to be less robust than the square absolute
+    loss. The absolute cube function maintains a couple of nice
+    properties for a loss function. Namely, it is convex ($L'' \ge
+    0$), is regular around $0$ (smooth, continuous).
 
-
-Clearly, $L_i$ is at least $\in C^1[\mathbb{R}^n \times \mathbb{R}^m]$, where $d$ is the dimension of input and $m$ is the dimension of the output, I assume $m = 1$, but the analysis changes only a little in higher dimensions, swapping the absolute value function for the induced norm $|| \cdot ||$ in $\mathbb{R}^m$.The loss function is then continously differentiable twice with respect to both the $w$ and $b$ parameters. We show this by explicitly computing the partial derivatives with resepct to $w$ and $b$, which we can use to compute the gradient for part (b) as well:
+    Clearly, $L_i$ is at least $\in C^1[\mathbb{R}^n \times
+    \mathbb{R}^m]$, where $d$ is the dimension of input and $m$ is
+    the dimension of the output, I assume $m = 1$, but the analysis
+    changes only a little in higher dimensions, swapping the absolute
+    value function for the induced norm $|| \cdot ||$ in
+    $\mathbb{R}^m$.The loss function is then continously
+    differentiable twice with respect to both the $w$ and $b$
+    parameters. We show this by explicitly computing the partial
+    derivatives with resepct to $w$ and $b$, which we can use to
+    compute the gradient for part (b) as well:
 
     \begin{align*}
       L_i &= |w^Tx^i + b - y|^3 \\
@@ -51,64 +77,500 @@ Clearly, $L_i$ is at least $\in C^1[\mathbb{R}^n \times \mathbb{R}^m]$, where $d
 
     Then:
     \begin{align*}
-      \frac{\partial L_i}{\partial w_n} &= \frac{3}{2}\left((w^Tx^i + b - y)^2\right)^\frac{1}{2}2(w^Tx^i+b-y)(x^i_n)\\ 
-                                      &= 3|w^Tx^i+b-y|(w^Tx^i+b-y)(x^i_n) \\ 
+      \frac{\partial L_i}{\partial w_n} &= \frac{3}{2}\left((w^Tx^i +
+      b - y)^2\right)^\frac{1}{2}2(w^Tx^i+b-y)(x^i_n)\\
+      &= 3|w^Tx^i+b-y|(w^Tx^i+b-y)(x^i_n) \\
     \end{align*}
     Similarily
     \begin{align*}
-      \frac{\partial L_i}{\partial b} &= \frac{3}{2}\left((w^Tx + b - y)^2\right)^\frac{1}{2}2(w^Tx+b-y)(1)\\ 
-                                      &= 3|w^Tx+b-y|(w^Tx+b-y)\\ 
+      \frac{\partial L_i}{\partial b} &= \frac{3}{2}\left((w^Tx + b -
+      y)^2\right)^\frac{1}{2}2(w^Tx+b-y)(1)\\
+      &= 3|w^Tx+b-y|(w^Tx+b-y)\\
     \end{align*}
 
-Although not explicitly relevent, because we plan to use gradient decent, there is no closed form optimizer for this loss function due to complications with the absolute value causing the derivatives to depend on the sign of the error. The gradient of this loss function is presented below
-$$
-\nabla L_i = 
-\begin{pmatrix}
-3|w^Tx^i+b-y^i|(w^Tx^i+b-y^i)(x^i_0) \\ 
-3|w^Tx^i+b-y^i|(w^Tx^i+b-y^i)(x^i_1) \\ 
-\hdots\\
-3|w^Tx^i+b-y^i|(w^Tx^i+b-y^i)(x^i_n) \\ 
-3|w^Tx^i+b-y^i|(w^Tx^i+b-y^i)
-\end{pmatrix}
-$$
-
-\item 
-  $$
-  L_i = [w^Tx^i + b - y^i]^3
-  $$
-  This loss function is out of hand unusable because it is not not bounded below. This can be demonstrated trivially by inspecting the behavior of the loss function as $b\to-\infty$
-  \[
-    \lim_{b\to\-\infty} L_i(w, b) = -\infty
-  \]
-
-  A gradient decent algorithm would diverge to $-\infty$ as it would nudge the parameters away from the data points in the negative direction. Although less relevent, there's also the issue that the function is not convex, which means that we can not guratnee a global minimum. A derivation of the gradient of this loss function follows: 
-  \begin{align*}
-    \frac{\partial L_i}{\partial w_n} &= 3(w^Tx^i + b - y_i)^2(x^i_n) \\
-    \frac{\partial L_i}{\partial b} &= 3(w^Tx^i + b - y_i)^2 
-  \end{align*}
-  Thus 
-  \[
-    \nabla L_i = \begin{pmatrix}
-      pmatrix
+    Although not explicitly relevent, because we plan to use gradient
+    decent, there is no closed form optimizer for this loss function
+    due to complications with the absolute value causing the
+    derivatives to depend on the sign of the error. The gradient of
+    this loss function is presented below
+    $$
+    \nabla L_i =
+    \begin{pmatrix}
+      3|w^Tx^i+b-y^i|(w^Tx^i+b-y^i)(x^i_0) \\
+      3|w^Tx^i+b-y^i|(w^Tx^i+b-y^i)(x^i_1) \\
+      \hdots\\
+      3|w^Tx^i+b-y^i|(w^Tx^i+b-y^i)(x^i_n) \\
+      3|w^Tx^i+b-y^i|(w^Tx^i+b-y^i)
     \end{pmatrix}
-  \]
-\item
-  \[
-    L_i(w,b) = \exp[w^Tx^i + b - y^i]
-  \]
+    $$
 
-\end{enumerate}
-    
-    
-    \question[2]{Here is my second question}
-    
-    YOUR SOLUTION HERE
-    
-    \question[3]{What is the \Large{$\int_0^2 x^2 \, dx $}\normalsize{. Show all steps}}
-    
+  \item
+    $$
+    L_i = [w^Tx^i + b - y^i]^3
+    $$
+    This loss function is out of hand unusable because it is not not
+    bounded below. This can be demonstrated trivially by inspecting
+    the behavior of the loss function as $b\to-\infty$
+    \[
+      \lim_{b\to\-\infty} L_i(w, b) = -\infty
+    \]
+
+    A gradient decent algorithm would diverge to $-\infty$ as it
+    would nudge the parameters away from the data points in the
+    negative direction. Although less relevent, there's also the
+    issue that the function is not convex, which means that we can
+    not guratnee a global minimum. A derivation of the gradient of
+    this loss function follows:
     \begin{align*}
-    \int_0^2 x^2 &= \left. \frac{x^3}{3} \right|_0^2 \\
-                 &= \frac{2^3}{3}-\frac{0^3}{3}\\
-                 &= \frac{8}{3}
+      \frac{\partial L_i}{\partial w_n} &= 3(w^Tx^i + b - y^i)^2(x^i_n) \\
+      \frac{\partial L_i}{\partial b} &= 3(w^Tx^i + b - y^i)^2
     \end{align*}
+    Thus
+    \[
+      \nabla L_i =
+      \begin{pmatrix}
+        3(w^Tx^0 + b - y_0)^2 x^0 \\
+        3(w^Tx^1 + b - y_1)^2 x^1 \\
+        \hdots\\
+        3(w^Tx^i + b - y_i)^2
+      \end{pmatrix}
+    \]
+  \item
+    \[
+      L_i(w,b) = \exp[w^Tx^i + b - y^i]
+    \]
+
+    An interesting feature of this loss function is it's asymmetric
+    behavior between negative and positive differences, for $(x_i,
+    y_i)$ such that $w^Tx^i + b - y^i < 0$, the loss function heavily
+    discounts this points contribution to the average, since $e^t <
+    1$ for $t < 0$. Conversly, this loss function heavily punishes any
+    loss which is positive, since $e^t > 1$ for $t > 0$. It's
+    sometimes possible that this is a useful feature, if for example
+    we can somehow gurantee that the difference will only be positive
+    due to some domain specific reason, or if a model being wrong in
+    the "negative" direction is somehow irrelavent. Apart from those
+    reasons, it's likely that this loss function would not produce
+    many useful regressions on most data samples.
+
+    Another, relatively minor, feature of this loss function is that
+    it is $C^\infty(\mathbb{R})$, meaning that in the abstract at
+    least, the gradient decent algorithm will be more stable and
+    effecient. As well as allowing us to directly calculate the gradient.
+
+    A calculation of the gradient follows:
+    \begin{align*}
+      \frac{\partial L_i}{\partial w_n} &= \exp[w^Tx^i + b - y^i](x^i_n) \\
+      \frac{\partial L_i}{\partial b} &= \exp[w^Tx^i + b - y^i]
+    \end{align*}
+    Thus
+    \[
+      \nabla L_i =
+      \begin{pmatrix}
+        \exp[w^Tx^0 + b - y^0]x^0 \\
+        \exp[w^Tx^1 + b - y^1]x^1 \\
+        \hdots\\
+        \exp[w^Tx^i + b - y^i]
+      \end{pmatrix}
+    \]
+  \item This loss function
+    \[
+      \max(0, 1 - y^if(w,b,x^i))
+    \]
+
+    Is exactly the hinge loss for SVMs. The function is convex,
+    allowing us to converge to a global minimum, but is not
+    differentiable with respect to $x^i$, thus we have to use the
+    subgradient to apply gradient decent on this function.
+    Normalization is also required for this loss function, since for
+    unnormalized data of, for example, house prices, will have
+    $y^if(w,b,x^i) > 1$ most if not all the time, leading to a loss
+    function which never penalizes the model.
+
+    Like the exponential loss function above, this loss function is
+    asymetric only in the other direction, with positive values of
+    $y^if(w,b,x^i)$ being penalized more than negative values of
+    $y^if(w,b,x^i)$ which would not be penalized ever. This is very
+    unlikely to be used in a real valued regression problem.
+
+    Computing the subgradient, we split it into two cases
+    \[
+      \frac{\partial L}{\partial w_i} =
+      \begin{cases}
+        -(x^i)y^i  &f(w,b,x^i)y^i < 1\\
+        0  &f(w,b,x^i)y^i > 1
+      \end{cases}
+    \]
+    Similarly:
+    \[
+      \frac{\partial L}{\partial b} =
+      \begin{cases}
+        -y^i  &f(w,b,x^i)y^i < 1\\
+        0  &f(w,b,x^i)y^i > 1
+      \end{cases}
+    \]
+    and at $f(w,b,x^i)y^i = 1$, any subgradient between the two cases
+    is valid.
+\end{enumerate}
+
+\question[2]{ }
+\begin{enumerate}
+  \item
+    \[
+      L_i(w, b) = \max(0, 1 - y^if(w,b,x^i))^2
+    \]
+
+    This loss function has similar behavior to the hinge loss
+    function. It's asymmetric, and penalizes a model only once it is
+    outside of a margin of incorrectness. However, as we will see,
+    the function does become differentiable everywhere with the
+    introduction of the square.
+
+    Squaring the outside does have the effect of minimizing values
+    near the margin and larger penalties for violations far from the
+    margin. In the context of a classification function this
+    is interesting since we already disregard incorrect
+    classifications so long as they are within a margin, so this
+    additional layer can be redundant or slow to correct as the
+    model would not be tweaked by small violations enough, even when
+    it would otherwise benefit the model. This loss function would
+    likely only be used when differentiability is required.
+
+    We now show that this loss function is differentiable everywhere:
+    \[
+      L_i(w,b) =
+      \begin{cases}
+        (1 - y^i(w^Tx +b))^2 &1 > y^if(w,b,x^i)\\
+        0 &\text{otherwise}
+      \end{cases}
+    \]
+    Then, differentiating piecewise, where the $(L_i)_w$ denotes the
+    partial derivative with respect to $w$:
+    \[
+      (L_i)_w =
+      \begin{cases}
+        -2(1 - y^i(w^Tx +b))(y^ix^i) &1 > y^if(w,b,x^i)\\
+        0 &\text{otherwise}
+      \end{cases}
+    \]
+    And:
+    \[
+      (L_i)_b =
+      \begin{cases}
+        -2(1 - y^if(w,b,x^i))y^i &1 > y^if(w,b,x^i)\\
+        0 &\text{otherwise}
+      \end{cases}
+    \]
+    Thus the gradient is:
+    \[
+      \nabla L_i =
+      \begin{cases}
+        -2(1 - y^if(w,b,x^i))y^i
+        \begin{pmatrix}
+          x^i \\
+          1
+        \end{pmatrix}
+        &1 > y^if(w,b,x^i)\\
+        \mathbf{0} &\text{otherwise}
+      \end{cases}
+    \]
+    Notice how as $y^i(w^Tx + b) \to 1^+$ as well as $y^i(w^Tx+b) \to
+    1^-$, then $(L_i)_w \to 0$, meaning the function is
+    differentiable at $(y^i)f(w,b,x^i) = 1$, and thus everywhere
+    since the one sided derivatives match.
+  \item
+    \[
+      L_i(w,b) = [y_i - f(w,b,x_i)]^4
+    \]
+
+    This loss function exhibits intuitive (correct classifications
+      are minimally penalized and incorrect classifications are
+    maximally penalized) and symmetric
+    behavior, that is $y_i = \pm 1, f(x_i) = \pm 1 \implies L_i = 0$
+    and $y_i = \pm 1, f(x_i) = \mp 1 \implies L_i = 16$. The loss
+    function is also differentiable everywhere, as well as being
+    convex, making it ideal for optimization. However, it has a few
+    major drawbacks that make it less ideal for classification.
+    Firstly, this loss function dictates that the model should
+    exactly output $-1$ or $1$, when in reality we're looking for a
+    plane separating the data. Because of this, the optimum that this
+    loss function pushes the model towards does not maximize the
+    margin, and would not generalize well at all to new data.
+    Another, more practical than philosophical problem, is that the
+    gradient is cubic, meaning that even slightly large error explode
+    and dominate the gradient decent algorithm, this decreases the
+    stability of the gradient decent algorithm, and would likely
+    cause a many algorithms to diverge.
+
+    The partial derivatives are:
+    \begin{align*}
+      \frac{\partial L_i}{\partial w_n} &=
+      -4(y_i - f(w,b,x_i))^3(x^i_n)
+      = 4(f(w,b,x_i) - y_i)^3(x^i_n)\\
+      \frac{\partial L_i}{\partial b} &=
+      -4(y_i - f(w,b,x_i))^3
+      = 4(f(w,b,x_i) - y_i)^3
+    \end{align*}
+    Thus
+    \[
+      \nabla L_i =
+      4(f(w,b,x_i) - y_i)^3
+      \begin{pmatrix}
+        x^i \\
+        1
+      \end{pmatrix}
+    \]
+
+  \item
+    \[
+      L_i(w,b) = \exp[f(w,b,x^i) - y^i]
+    \]
+
+    This loss function exhibits the asymmetric and non-negative
+    behavior we typically would expect from a classification loss
+    function. Of note is that $f(w, b, x^i) = y^i$ does not actually
+    minimize the loss function, rather the infimum of the loss
+    function is found at $$f(w, b, x^i) - y^i \to -\infty$$
+    Conversely, for $$f(w, b, x^i) - y^i \to \infty$$
+    the function is maximized, even if the point was correctly
+    classified. This counter intuitive behavior, the loss decreasing
+    monotonically with $f$, makes this loss
+    function unfit for a classification task, since it
+    incentivizes the model always classify the point as negative
+    massively negative.
+
+    The partial derivatives are:
+    \begin{align*}
+      \frac{\partial L_i}{\partial w_n} &=
+      \exp[f(w,b,x^i) - y^i](x^i_n)\\
+      \frac{\partial L_i}{\partial b} &=
+      \exp[f(w,b,x^i) - y^i]
+    \end{align*}
+    Thus
+    \[
+      \nabla L_i =
+      \exp[f(w,b,x^i) - y^i]
+      \begin{pmatrix}
+        x^i \\
+        1
+      \end{pmatrix}
+    \]
+
+  \item
+    \[
+      L_i(w,b) = \exp[-y^if(w,b,x^i)]
+    \]
+
+    When $f$ misclassifies the $y^i$ the product $y^if(w,b, x^i) <
+    0$, thus $-y^if(w,b,x^i) > 0$, meaning that the this loss
+    function correctly penalizes incorrect classifications, while
+    only minimally penalizing incorrect ones. Unlike the previous
+    loss function, this one is not monotonic with $f$, since it's
+    primarily correct classification which will minimize the loss.
+
+    The partial derivatives are:
+    \begin{align*}
+      \frac{\partial L_i}{\partial w_n} &=
+      -y^i\exp[-y^if(w,b,x^i)](x^i_n)\\
+      \frac{\partial L_i}{\partial b} &=
+      -y^i\exp[-y^if(w,b,x^i)]
+    \end{align*}
+    Thus
+    \[
+      \nabla L_i =
+      -y^i\exp[-y^if(w,b,x^i)]
+      \begin{pmatrix}
+        x^i \\
+        1
+      \end{pmatrix}
+    \]
+\end{enumerate}
+
+\question[3]{}
+\begin{enumerate}
+  \item
+    For data that is linear, the linear regression with squared euclidean
+    distance, fit either by the MLE or gradient decent is the best linear
+    unbiased estimator. That is to say that for a relation true relation:
+
+    $$
+    y = x\beta + \varepsilon
+    $$
+
+    We have that the OLS with estimated coefficients $\hat\beta$ will fulfill:
+    \[
+      \mathbb{E}[\hat\beta] = \beta
+    \]
+    That is, on average, we expect the estimated $\hat\beta$ to equal
+    $\beta$ in the long run. This is contingent on the fact that the true
+    relationship is linear. If, like in the example, the true
+    relationship is nonlinear, then we lose the unbiased property, and
+    our linear regression becomes less robust.
+
+    Further, even with an infinite number of data points, a straight line
+    can not accurately estimate a cubic curve, so the true relationship
+    would never be captured. Lastly, the linear regression would do a
+    poor job at generalizing to data outside of the training set,
+    since for large $|x|$, the cubic term will dominate and the line
+    will be very far off there.
+  \item An ideal model would have a feature vector comprised of the
+    orders of $x$ up to $3$, as such
+    $$
+    \begin{pmatrix}
+      1 \\
+      x \\
+      x^2 \\
+      x^3
+    \end{pmatrix}
+    $$
+    Then with weights
+    \[
+      \begin{pmatrix}
+        5\\
+        3 \\
+        -2 \\
+        4
+      \end{pmatrix}
+    \]
+\end{enumerate}
+
+\question[4]{ }
+The full code is attached in the appendix of this document. The
+base and gradient functions for MSE and MAE are implemented as such
+\begin{minted}{python}
+def mse(w, b, x, y):
+    err = w @ x + b - y
+    return np.square(err)
+
+def mae(w, b, x, y):
+    err = w @ x + b - y
+    return np.abs(err)
+
+def grad_mse(w, b, x, y):
+    err = w @ x + b - y
+    return (2 * err * x, 2 * err)
+
+def grad_mae(w, b, x, y):
+    err = w @ x + b - y
+    return (np.sign(err) * x, np.sign(err))
+\end{minted}
+The @ symbol being the infix operation for numpy's dot product
+operation. Gradient decent is then implemented
+
+\begin{minted}{python}
+def grad_descent(grad_loss, train_x, train_y, epochs, eta):
+    w = np.zeros(train_x.shape[1], dtype=float)
+    b = 0.0
+    n = train_x.shape[0]
+    for _ in range(epochs):
+        grad_w = np.zeros(train_x.shape[1], dtype=float)
+        grad_b = 0.0
+        for x, y in zip(train_x, train_y):
+            g_w, g_b = grad_loss(w, b, x, y)
+            grad_w += g_w
+            grad_b += g_b
+        w -= (grad_w / n) * eta
+        b -= (grad_b / n) * eta
+    return w, b
+\end{minted}
+
+We use the entire training data set every iteration, taking the
+average gradient and then subtracting it from the current estimate of
+the parameters. Using an $80\%/20\%$ split between training and
+testing, with $\eta = 0.001$ over $10000$ epochs, the gradient
+decent algorithm converges to similar coefficients and intercept to
+the result in the bench mark, presented below. The learning rate
+$\eta$ was more or less guessed at, though $0.01$ was a little
+unstable with respect to the number of epochs.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{lrr}
+    \hline
+    Feature & Gradient Descent & Sklearn \\
+    \hline
+    Intercept & 22.7965 & 22.7965 \\
+    CRIM & -0.9514 & -1.0021 \\
+    ZN & 0.5851 & 0.6963 \\
+    INDUS & 0.0950 & 0.2781 \\
+    CHAS & 0.7446 & 0.7187 \\
+    NOX & -1.9272 & -2.0223 \\
+    RM & 3.2015 & 3.1452 \\
+    AGE & -0.1933 & -0.1760 \\
+    DIS & -2.9921 & -3.0819 \\
+    RAD & 1.7001 & 2.2514 \\
+    TAX & -1.1781 & -1.7670 \\
+    PTRATIO & -2.0078 & -2.0378 \\
+    B & 1.1290 & 1.1296 \\
+    LSTAT & -3.5897 & -3.6117 \\
+    \hline
+  \end{tabular}
+  \caption{Coefficient comparison between the gradient descent model
+  and sklearn.}
+\end{table}
+\pagebreak
+The two model also have very similar evaluation statistics between
+them as well, in both testing and training data sets:
+\begin{table}[h]
+  \centering
+  \begin{tabular}{lrr}
+    \hline
+    Metric & Gradient Descent & Sklearn \\
+    \hline
+    Train MSE & 21.6885 & 21.6414 \\
+    Test MSE & 24.6917 & 24.2911 \\
+    Train $R^2$ & 0.7503 & 0.7509 \\
+    Test $R^2$ & 0.6633 & 0.6688 \\
+    \hline
+  \end{tabular}
+  \caption{MSE and $R^2$ comparison between the gradient descent model
+  and sklearn.}
+\end{table}
+
+It's not surprising that the implementations would coincide, it's
+very likely that with additional epochs, the gradient decent
+algorithm would come even closer to the sklearn implementation. Not
+shown but in the full implementation is normalization of the data,
+which is z-score normalized, without normalization, the gradient
+would often explode and the algorithm would diverge.
+
+\question[5]{ }
+Implementation of the gradient hinge and precepatron loss functions
+are show below
+\begin{minted}{python}
+def grad_hinge(w, b, x, y):
+    if y * (w @ x + b) < 1:
+        return (-y * x, -y)
+    else:
+        return np.zeros_like(w), 0
+
+def grad_precep(w, b, x, y):
+    if y * (w @ x + b) <= 0:
+        return (-y * x, -y)
+    else:
+        return np.zeros_like(w), 0
+\end{minted}
+
+Notably, the implementation for the precepatron loss requires the
+rule to be $\le$ instead of $<$ since otherwise, points exactly on
+the line would not penalize the model, despite having no clearn
+classification. The implementation for the gradient decent algorithm
+is precisely the same as the one for the linear regression case since
+the update rule
+is the same between all convex functions. Since the data is
+synthetic, and linearly seperable, both models achieve $100\%$
+accuracy over both the training and test set, and a plot of both is included
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.3\textwidth]{code/hinge.png}
+  \includegraphics[width=0.3\textwidth]{code/perceptron.png}
+  \caption{Hinge and perceptron classifier decision boundaries.}
+\end{figure}
+
+\appendix
+\section{Question 4 Code}
+\inputminted{python}{code/q4.py}
+
+\section{Question 5 Code}
+\inputminted{python}{code/q5.py}
 \end{document}
