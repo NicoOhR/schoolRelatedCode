@@ -1,5 +1,7 @@
+from unicodedata import normalize
 import numpy as np
 import pandas as pd
+from pandas._libs.hashtable import value_count
 
 
 class TreeNode:
@@ -40,7 +42,10 @@ def find_split_ig(df, label):
             p_y_right = df.loc[right_mask, label].value_counts(normalize=True)
             h_left = -(p_y_left * np.log2(p_y_left)).sum()
             h_right = -(p_y_right * np.log2(p_y_right)).sum()
-            ig.append(p_left * h_left + p_right * h_right)
+            h_y_x = p_left * h_left + p_right * h_right
+            p_y = (df[label]).value_counts(normalize=True)
+            h_y = -(p_y * np.log2(p_y)).sum()
+            ig.append(h_y - h_y_x)
         best_idx = int(np.argmax(ig))
         candidates.append((midpoints[best_idx], ig[best_idx], col))
     if not candidates:
@@ -57,21 +62,24 @@ def build_tree(df, label, curr):
     else:
         left_subset = df.loc[df[curr.condition_feature] < curr.condition]
         left_cond, _, left_feature = find_split_ig(left_subset, label)
-        if left_cond is not None or left_feature is not None:
+        if left_cond is not None and left_feature is not None:
             curr.left = TreeNode(left_cond, left_feature, curr.level + 1)
             build_tree(left_subset, label, curr.left)
 
         right_subset = df.loc[df[curr.condition_feature] >= curr.condition]
         right_cond, _, right_feature = find_split_ig(right_subset, label)
-        if right_cond is not None or right_feature is not None:
+        if right_cond is not None and right_feature is not None:
             curr.right = TreeNode(right_cond, right_feature, curr.level + 1)
             build_tree(right_subset, label, curr.right)
 
 
 def predict_one(node, x_i):
-    while node.left and node.right:
-        node = node.next(x_i)
-    return node.prediction
+    while node and (node.left or node.right):
+        next_node = node.next(x_i)
+        if next_node is None:
+            break
+        node = next_node
+    return None if node is None else node.prediction
 
 
 def mse_report(root, df, label):
