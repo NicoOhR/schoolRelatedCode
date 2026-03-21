@@ -2,6 +2,7 @@ from unicodedata import normalize
 import numpy as np
 import pandas as pd
 from pandas._libs.hashtable import value_count
+import matplotlib.pyplot as plt
 
 
 class TreeNode:
@@ -106,10 +107,22 @@ def print_conditions(node, indent=""):
 def main():
     rng = np.random.default_rng(0)
     n = 200
-    x1 = rng.normal(loc=-1.5, scale=0.8, size=(n // 2, 2))
-    x2 = rng.normal(loc=1.5, scale=0.8, size=(n // 2, 2))
-    X = np.vstack([x1, x2])
+    x1a = rng.normal(loc=[-1.2, -0.8], scale=0.9, size=(n // 4, 2))
+    x1b = rng.normal(loc=[0.8, -1.1], scale=0.9, size=(n // 4, 2))
+    x2a = rng.normal(loc=[1.2, 1.0], scale=0.9, size=(n // 4, 2))
+    x2b = rng.normal(loc=[-0.9, 1.1], scale=0.9, size=(n // 4, 2))
+    X = np.vstack([x1a, x1b, x2a, x2b])
     y = np.array([0] * (n // 2) + [1] * (n // 2))
+    noise_idx = rng.choice(n, size=int(0.08 * n), replace=False)
+    y[noise_idx] = 1 - y[noise_idx]
+
+    plt.figure(figsize=(5, 4))
+    plt.scatter(X[:, 0], X[:, 1], c=y, cmap="viridis", s=18, alpha=0.85)
+    plt.title("Synthetic 2D data (with noise)")
+    plt.xlabel("x1")
+    plt.ylabel("x2")
+    plt.tight_layout()
+    plt.savefig("decision_tree_data.png", dpi=150)
     df = pd.DataFrame(X, columns=["x1", "x2"])
     df["y"] = y
     label = "y"
