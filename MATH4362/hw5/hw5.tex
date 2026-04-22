@@ -1,0 +1,394 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    MATH 4362} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[5]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+\[
+  \begin{cases}
+    u_{xx} + u_{yy} = 0 \\
+    u(x,0) = \sin^3x\\
+    u(x,\pi) = u(0, y) = u(\pi, y) = 0
+  \end{cases}
+\]
+
+Assuming a seperable ansatz:
+
+$$
+u(x,y) = v(x)w(y)
+$$
+
+It follows from substituting into the original equation that:
+
+\[
+  \frac{v''}{v} = -\frac{w''}{w} = \lambda
+\]
+
+Which yields the two ODEs:
+
+\[
+  v'' - v\lambda = 0
+\]
+and
+\[
+  w'' + w\lambda = 0
+\]
+
+$v$'s ODE is a second order differential equation with imaginary
+roots, and has the solution:
+
+$$
+v(x) = c_1 \cos(\sqrt{-\lambda}x) + c_2\sin(\sqrt{-\lambda}x)
+$$
+
+Conditioned on $u(0,y) = 0$ we have that:
+
+\[
+  v(0) = 0 \implies c_1\cos(0) = 0 \implies c_1 = 0
+\]
+
+similarily, after conditioning on $u(\pi, y) = 0$, we have that
+\[
+  v(\pi) = 0 \implies c_2\sin(\sqrt{-\lambda}\pi) = 0
+\]
+
+Which implies either $c_2 = 0$, which leads to trivial solutions, or
+that $\sqrt{-\lambda} \in \mathbb{N}$, that is $\lambda = -n^2$ for
+any $n \in \mathbb{N}$.
+
+$w$'s ODE is a second order differential equation only with real
+roots, namely: $\sqrt{-\lambda}$ and $-\sqrt{-\lambda}$ and thus has
+the solution:
+
+\[
+  w = c_1 e^{\sqrt{-\lambda}y} + c_2e^{-\sqrt{-\lambda}y}
+\]
+
+Finally conditioning on $u(x,\pi) = 0$ we have that
+\[
+  w(\pi) = c_1 e^{\sqrt{-\lambda}\pi} + c_2e^{-\sqrt{-\lambda}\pi} = 0
+\]
+
+which after some calculations
+
+\[
+  w(y) = c_n \sinh(\sqrt{-\lambda}(\pi-y)) = c_n\sinh(\sqrt{n(\pi-y)})
+\]
+
+Then the function $u$ is, for any $n$
+
+$$
+u = c_n \sinh(n(\pi-y))\sin(nx)
+$$
+
+Since Laplace is linear, we can some any number of such solutions to
+obtain a solution:
+$$
+u = \sum c_n \sinh(n(\pi-y))\sin(nx)
+$$
+
+Finally conditioning on the boundary at $u(x,0) = sin^3x$:
+
+\[
+  u(x,0) = \sin^3x = \sum c_n \sinh(n\pi)\sin(nx)
+\]
+
+Setting $d_n = c_n \sinh(n\pi)$, we use the fourier series to find
+$d_n$, given by the integral:
+
+\[
+  d_n = \frac{2}{\pi}\int_0^\pi \sin^3x\sin(nx)\,dx
+\]
+
+To evaluate the above, first consider the power reduction formula
+\[
+  \sin^3x = \frac{3\sin x - \sin 3x}{4}
+\]
+
+then the integrand becomes
+
+$$
+\sin^3x\sin(nx) = \frac{3\sin(x)\sin(nx) - \sin(3x)\sin(nx)}{4}
+$$
+
+Since trigonometric functions are orthogonal in $L[0,\pi]$, either
+term of the above disappears if the frequencies do not match, that
+is, the only $n$ of interest are $n = 1$ and $n = 3$. With that in
+mind, we solve the following integrals:
+
+\[
+  n = 1:\quad \int_0^\pi \sin^3x\sin(x)\,dx
+  = \frac{1}{4}\left(3\int_0^\pi \sin^2x\,dx
+  - \int_0^\pi \sin(3x)\sin(x)\,dx\right)
+  = \frac{1}{4}\left(3\cdot\frac{\pi}{2}-0\right)
+  = \frac{3\pi}{8}
+\]
+
+\[
+  n = 3:\quad \int_0^\pi \sin^3x\sin(3x)\,dx
+  = \frac{1}{4}\left(3\int_0^\pi \sin(x)\sin(3x)\,dx
+  - \int_0^\pi \sin^2(3x)\,dx\right)
+  = \frac{1}{4}\left(0-\frac{\pi}{2}\right)
+  = -\frac{\pi}{8}
+\]
+
+and for $n \ne 1,3$ the integral is $0$. Therefore
+\[
+  d_n = \frac{2}{\pi}\int_0^\pi \sin^3x\sin(nx)\,dx
+  =
+  \begin{cases}
+    \frac{3}{4}, & n = 1,\\
+    -\frac{1}{4}, & n = 3,\\
+    0, & n \ne 1,3.
+  \end{cases}
+\]
+
+Recalling $d_n = c_n \sinh(n\pi)$, we obtain
+\[
+  c_1 = \frac{3}{4\sinh(\pi)},\quad
+  c_3 = -\frac{1}{4\sinh(3\pi)},\quad
+  c_n = 0\ \text{for}\ n \ne 1,3.
+\]
+Thus the final solution is
+\[
+  u(x,y)
+  = \frac{3}{4\sinh(\pi)}\sinh(\pi-y)\sin x
+  - \frac{1}{4\sinh(3\pi)}\sinh(3(\pi-y))\sin(3x).
+\]
+
+\question[2]{}
+
+The solution to this problem would be the sum of the solution of the
+two Dirichlet problems:
+$$
+\begin{cases}
+  u_{xx} + u_{yy} = 0 \\
+  u(x,0) = \sin\pi x\\
+  u(x,\pi) = u(0, y) = u(\pi, y) = 0
+\end{cases}
+\begin{cases}
+  u_{xx} + u_{yy} = 0 \\
+  u(0,y) = \sin\pi y\\
+  u(x,\pi) = u(x, 0) = u(\pi, y) = 0
+\end{cases}
+$$
+
+By an almost identical analysis to question $1$, in which we utilize
+the seperable anstaz and condition on the boundary functions, the above two
+Dirichlet problems have solutions of the form
+
+$$
+\sum c_n\sinh(n\pi(1-y))\sin(n\pi x)
+$$
+and
+$$
+\sum c_n\sinh(n\pi(1-x))\sin(n\pi y)
+$$
+
+respectively. Focusing on just the first solution and conditioning on
+$u(x,0) = \sin \pi x$
+
+$$
+\sin \pi x = \sum c_n\sinh(n\pi(1-y))\sin(n\pi x)
+$$
+
+which gives
+\[
+  c_1 = \frac{1}{\sinh(\pi)},\quad c_n = 0\ \text{for}\ n \ne 1.
+\]
+Thus the first solution is
+\[
+  u_1(x,y) = \frac{1}{\sinh(\pi)}\sinh(\pi(1-y))\sin(\pi x).
+\]
+
+For the second problem, the same calculation yields
+\[
+  u_2(x,y) = \frac{1}{\sinh(\pi)}\sinh(\pi(1-x))\sin(\pi y).
+\]
+
+Therefore the final solution is
+\[
+  u(x,y) = \frac{1}{\sinh(\pi)}\left[\sinh(\pi(1-y))\sin(\pi x)
+  + \sinh(\pi(1-x))\sin(\pi y)\right].
+\]
+\question[3]{}
+\[
+  \begin{cases}
+    u_{xx} + u_{yy} = 0 \\
+    u = x^3 \quad x^2 + y^2 = 1
+  \end{cases}
+\]
+
+Consider that the general solution for the Laplace equation on a unit disk
+in polar coordinates is:
+
+\[
+  U = \frac{a_0}{2} + \sum a_n r^n \cos(n\theta) + b_n r^n\sin(n\theta)
+\]
+
+The boundary condition in polar coordinates becomes
+
+\[
+  U(1, \theta) = H(\theta)  = \cos^3\theta
+\]
+
+Since each $\cos$ is in itself a $2\pi$ periodic function, $\cos^3$
+is as well. In calculating the fourier coefficients for the solution notice that
+the integrand of $b_n$ is odd:
+$$
+b_n = \frac{1}{\pi}\int_{-\pi}^\pi \cos^3\theta\sin\theta d\theta
+$$
+
+Thus, it disappears over a symmetric domain, and therefore $b_n = 0$
+for all $n$. A similar trick to question $1$ is used to compute the
+values of $a_n$, where first the power reducing identity is used
+then, using orthogonality of trigonmetric functions in $L[-\pi,\pi]$,
+we discard all non matching frequencies
+
+\[
+  \begin{aligned}
+    \cos^3\theta \cos(n\theta)
+    &= \cos\theta\left(\frac{1+\cos(2\theta)}{2}\right)\cos(n\theta) \\
+    &= \frac{\cos\theta+\cos\theta\cos(2\theta)}{2}\cos(n\theta) \\
+    &=
+    \left(\frac{\cos\theta}{2}+\frac{\cos(3\theta)+\cos(-\theta)}{4}\right)\cos(n\theta)
+    \\
+    &=
+    \left(\frac{3\cos\theta}{4}+\frac{\cos(3\theta)}{4}\right)\cos(n\theta) \\
+    &= \frac{3\cos\theta\cos(n\theta)+\cos(3\theta)\cos(n\theta)}{4}
+  \end{aligned}
+\]
+
+Using orthogonality on $[-\pi,\pi]$, only $n=1$ and $n=3$ contribute.
+Thus
+\[
+  a_n = \frac{1}{\pi}\int_{-\pi}^{\pi}\cos^3\theta\cos(n\theta)\,d\theta
+  =
+  \begin{cases}
+    \frac{3}{4}, & n = 1,\\
+    \frac{1}{4}, & n = 3,\\
+    0, & n \ne 1,3,
+  \end{cases}
+\]
+and $a_0 = 0$ while $b_n = 0$ for all $n$. Therefore the harmonic
+solution in the disk is
+\[
+  U(r,\theta) = \frac{3}{4}r\cos\theta + \frac{1}{4}r^3\cos(3\theta).
+\]
+\question[4]{}
+
+\[
+  \begin{cases}
+    u_{xx} + u_{yy} = 0 \\
+    u = x^3 \quad x^2 + y^2 = 4
+  \end{cases}
+\]
+A similar process to question $3$ follows, the above becomes
+$$
+\begin{cases}
+  u_{rr} + u_{\theta\theta} = 0 \\
+  U = H(\theta) \quad r = 4
+\end{cases}
+$$
+
+Which has the following general form:
+
+\[
+  U = \frac{a_0}{2} + \sum a_n r^n \cos(n\theta) + b_n r^n\sin(n\theta)
+\]
+
+The boundary condition, in polar coordinates becomes
+
+\[
+  U(4, \theta) = H(\theta) = 4^4\cos^4\theta = 256 \cos^4\theta
+\]
+
+Then we have that
+
+\[
+  U(4, \theta) = \frac{a_0}{2} + \sum a_n 4^n \cos(n\theta) + b_n
+  4^n\sin(n\theta) = 256\cos^4\theta
+\]
+Setting $c_n = 4^na_n$ and $d_n = 4^nb_n$,
+\[
+  \frac{c_0}{2} + \sum c_n\cos(n\theta) + d_n\sin(n\theta)
+  = 256\cos^4\theta
+\]
+Is just the typical Fourier series set up and clearly $d_n = 0$. Then,
+working the boundary
+condition to an integrable form:
+\[
+  \begin{aligned}
+    \cos^4\theta
+    &= \cos^2\theta\cos^2\theta \\
+    &= \left(\frac{1+\cos 2\theta}{2}\right)\left(\frac{1+\cos
+    2\theta}{2}\right) \\
+    &= \frac{\cos^2 2\theta + 2\cos 2\theta + 1}{4} \\
+    &= \frac{1+\cos 4\theta}{8} + \frac{\cos 2\theta}{2} + \frac{1}{4} \\
+    &= \frac{\cos 4\theta}{8} + \frac{\cos 2\theta}{2} + \frac{3}{8}
+  \end{aligned}
+\]
+Multiplying through by $256\cos n\theta$
+\[
+  \begin{aligned}
+    256(\cos^4\theta)\cos(n\theta)
+    &= 32\cos 4\theta\cos(n\theta)
+    + 128\cos 2\theta\cos(n\theta)
+    + 96\cos(n\theta) \\
+  \end{aligned}
+\]
+
+Since $H(\theta)$ is even, $d_n = 0$. Using orthogonality on
+$[-\pi,\pi]$,
+\[
+  c_n = \frac{1}{\pi}\int_{-\pi}^{\pi}256\cos^4\theta\cos(n\theta)\,d\theta
+  =
+  \begin{cases}
+    192, & n = 0,\\
+    8, & n = 2,\\
+    \frac{1}{8}, & n = 4,\\
+    0, & n \ne 0,2,4.
+  \end{cases}
+\]
+
+Recall that $a_n = \frac{c_n}{4^n}$, and the harmonic solution in the disk is
+\[
+  U(r,\theta) = 96 + 8r^2\cos(2\theta) + \frac{1}{8}r^4\cos(4\theta).
+\]
+
+\end{document}

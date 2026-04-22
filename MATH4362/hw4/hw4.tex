@@ -1,0 +1,270 @@
+\documentclass{article}
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    MATH4362} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes% Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[4]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+$$
+\begin{cases}
+  u_{tt} = 3u_{xx} \\
+  u(t,0) = u(t,\pi) = 0  \\
+  u(0,x) = \sin^3(x) \\
+  u_t(0,x) = 0
+\end{cases}
+$$
+
+From the seperable solutions to the wave equation, we have that $w(t)
+= \cos \omega t$ or $\sin\omega t$ and $v(x) = \cos \omega x/c$ or
+$\sin \omega x/c$, conditioning on the boundary conditions, $u(t,0) =
+u(t, \pi) = 0$ yields that it must be the case that $v(x) = \sin \omega x/c$
+
+Thus we have that:
+
+$$
+u = \sum b_n \cos \left(\frac{\pi nct}{l}\right)\sin\left(\frac{\pi
+nx}{l}\right) + d_n
+\sin\left(\frac{\pi nct}{l}\right)\sin\left(\frac{\pi nx}{l}\right)
+$$
+
+Since $l = \pi$, we can simplify the solution a little to:
+
+$$
+u = \sum b_n \cos \left(nct\right)\sin\left(
+nx\right) + d_n
+\sin\left(nct\right)\sin\left(nx\right)
+$$
+
+Taking the partial derivative with respect to $t$:
+
+\[
+  u_t = \sum -b_nnc\sin(nct)\sin(nx) + d_nnc\cos(nct)\sin(nx)
+\]
+
+conditioning on $u_t(0, x) = 0$ we get that:
+$$
+u_t(0,x) = \sum d_nnc\sin(nx) = 0
+$$
+
+It follows that for all $n$, $d_n = 0$. So the solution becomes
+
+$$
+u = \sum b_n \cos \left(nct\right)\sin\left(nx\right)
+$$
+
+Conditioning on the initial displacement we have that:
+
+$$
+\sin^3(x) = \sum b_n \sin(nx)
+$$
+
+Since $\sin$ is odd, $\sin^2$ is even, and $\sin^3$ is again odd,
+therefore we can use the Fourier Sine coefficients to find $b_n$:
+\begin{align*}
+  b_n &=  \frac{2}{\pi}\int_0^\pi \sin^3(x)\sin(nx) dx \\
+  &=  \frac{2}{\pi}\int_0^\pi \sin^2(x)\sin(x)\sin(nx) dx \\
+  &=  \frac{1}{\pi}\int_0^\pi (1-\cos(2x))\sin(x)\sin(nx) dx \\
+  &=  \frac{1}{\pi}\int_0^\pi (1-\cos(2x))
+  \left(\frac{\cos((n-1)x) - \cos((n+1)x)}{2}\right) dx \\
+  &= \frac{1}{2\pi}\int_0^\pi \Big(\cos((n-1)x) - \cos((n+1)x) \\
+  &\qquad - \cos(2x)\cos((n-1)x) + \cos(2x)\cos((n+1)x)\Big) dx
+\end{align*}
+
+Using $\cos A\cos B = \frac{1}{2}(\cos(A-B)+\cos(A+B))$ and
+$\int_0^\pi \cos(kx)dx = 0$ for $k \ne 0$, the only nonzero cases are
+$n=1$ and $n=3$. This gives
+\[
+  b_n =
+  \begin{cases}
+    \frac{3}{4}, & n=1 \\
+    -\frac{1}{4}, & n=3 \\
+    0, & \text{otherwise}.
+  \end{cases}
+\]
+
+Thus the solution is
+\[
+  u(t,x) = \frac{3}{4}\cos(ct)\sin(x) - \frac{1}{4}\cos(3ct)\sin(3x),
+\]
+with $c=\sqrt{3}$.
+\question[2]{}
+$$
+\begin{cases}
+  u_{tt} = u_{xx} \\
+  u_x(t, 0) = u_x(t, \pi ) = 0
+\end{cases}
+$$
+
+Again, starting from the possible solutions to the seperable
+equations, we have that:
+\begin{align*}
+  u(t,x) &= v(x)w(t)\\
+  u_x(t,x) &= v'(x)w(t) \\
+\end{align*}
+So,
+\[
+  v'(0)w(t) = v'(\pi)w(t) \implies v'(0) = v'(\pi) = 0
+\]
+
+For the sine candidate $v(x)=\sin(\omega x/c)$, we have
+\[
+  v'(x)=\frac{\omega}{c}\cos\left(\frac{\omega x}{c}\right),
+\]
+so $v'(0)=\frac{\omega}{c}\neq 0$ in general, which violates the
+Neumann condition $v'(0)=0$. Thus the sine branch does not work.
+
+However, for the $\cos$ candidate solution for the $v(x) =
+\cos(\omega x/c)$, we have that:
+\[
+  v'(x) = \frac{\omega}{c}\sin\left(\frac{\omega x}{c}\right)
+\]
+plugging into $v'(0) = v'(\pi)$
+\[
+  \frac{\omega}{c}\sin\left(0\right) =
+  \frac{\omega}{c}\sin\left(\frac{\omega \pi}{c}\right)
+\]
+Which simplifies to:
+\[
+  \sin(0) = \sin(\frac{\omega\pi}{c}) = 0
+\]
+
+Which is true for $\frac{\omega}{c} \in \mathbb{N}$, thus $\omega = nc$.
+
+For the case $c^2=1$ (so $c=1$), the separated solutions are
+$v_n(x)=\cos(nx)$ with $n=0,1,2,\dots$. Notice that the Neumann
+conditions do not restrict the solutions of $w(t)$ at all, so the
+total solution is:
+
+$$
+u(t,x) = \sum b_n\cos(nt)\cos(nx) + d_n\sin(nt)\cos(nx)
+$$
+
+\question[3]{}
+\begin{enumerate}[(a)]
+  \item
+    \[
+      \begin{cases}
+        u_{tt} = u_{xx} \\
+        u(t,\pi) = u(t, -\pi) \\
+        u_x(t, \pi) = u_x(t, -\pi) \\
+        u(0, x) = f(x) \\
+        u_t(0, x) = g(x)
+      \end{cases}
+    \]
+  \item From the condition $u(t, -\pi) = u(t, \pi)$, then we have that:
+    \[
+      v(-\pi)w(t) = v(\pi)w(t) \implies v(-\pi) = v(\pi)
+    \]
+    For $v(x) = \cos(\omega x/c)$, since cosine is an even function,
+    the above condition is immediatly satisfied. For the sine
+    candidate solution to $v$, we have that
+    $$
+    \sin(\frac{\omega\pi}{c}) = \sin(-\frac{\omega\pi}{c}) =
+    -\sin(\frac{\omega\pi}{c})
+    $$
+    Which can only happen at $\sin(\frac{\omega\pi}{c}) = 0$,
+    equivalently, when $\omega\pi/c \in \mathbb{N}$ which yields that
+    $\omega_n = nc$. The same restriction follows from the derivative
+    condition $u_x(t,-\pi)=u_x(t,\pi)$: with $u_x=v'(x)w(t)$ we need
+    $v'(-\pi)=v'(\pi)$. For $v(x)=\sin(\omega x/c)$ we get
+    $v'(x)=\frac{\omega}{c}\cos(\omega x/c)$, so
+    \[
+      \cos\left(\frac{\omega\pi}{c}\right)
+      = \cos\left(-\frac{\omega\pi}{c}\right),
+    \]
+    which is automatic, but for $v(x)=\cos(\omega x/c)$ we have
+    $v'(x)=-\frac{\omega}{c}\sin(\omega x/c)$ and the condition
+    \[
+      \sin\left(\frac{\omega\pi}{c}\right)
+      = -\sin\left(\frac{\omega\pi}{c}\right)
+    \]
+    again forces $\sin(\omega\pi/c)=0$, so $\omega=nc$. With $\omega=nc$, the
+    separated factors satisfy
+    \[
+      v_n'' + n^2 v_n = 0, \qquad w_n'' + n^2 c^2 w_n = 0,
+    \]
+    so
+    \[
+      v_n(x) = c_n\sin(nx) + d_n\cos(nx), \qquad
+      w_n(t) = a_n\cos(ntc) + b_n\sin(ntc).
+    \]
+    Thus we get the solution
+    \begin{align*}
+      u(t, x)
+      &= \sum (a_n\cos(ntc) + b_n\sin(ntc))(c_n\sin(nx) + d_n\cos(nx)) \\
+      &= \sum \Big(
+        \big(a_n d_n \cos(ntc) + b_n d_n \sin(ntc)\big)\cos(nx) +
+      \big(a_n c_n \cos(ntc) + b_n c_n \sin(ntc)\big)\sin(nx)\Big)
+    \end{align*}
+    and therefore, with $A_n=a_n d_n$, $B_n=a_n c_n$, $C_n=nc\,b_n d_n$,
+    and $D_n=nc\,b_n c_n$,
+    \begin{align*}
+      f(x) &= u(0,x) = \sum \big(A_n \cos(nx) + B_n \sin(nx)\big), \\
+      g(x) &= u_t(0,x) = \sum \big(C_n \cos(nx) + D_n \sin(nx)\big).
+    \end{align*}
+    Using the Fourier series of $f(x)$ and $g(x)$ on $[-\pi,\pi]$,
+    \begin{align*}
+      f(x) &= \frac{A_0}{2} + \sum_{n=1}^\infty
+      \left(A_n\cos(nx)+B_n\sin(nx)\right), \\
+      g(x) &= \frac{C_0}{2} + \sum_{n=1}^\infty
+      \left(C_n\cos(nx)+D_n\sin(nx)\right),
+    \end{align*}
+    where
+    \begin{align*}
+      A_n &= \frac{1}{\pi}\int_{-\pi}^{\pi} f(x)\cos(nx)\,dx,
+      & B_n &= \frac{1}{\pi}\int_{-\pi}^{\pi} f(x)\sin(nx)\,dx, \\
+      C_n &= \frac{1}{\pi}\int_{-\pi}^{\pi} g(x)\cos(nx)\,dx,
+      & D_n &= \frac{1}{\pi}\int_{-\pi}^{\pi} g(x)\sin(nx)\,dx.
+    \end{align*}
+  \item Holding $x$ constant we have that
+    \[
+      u(t)
+      = \sum (a_n\cos(ntc) + b_n\sin(ntc))K
+    \]
+    inspecting a single term of the sum, we can solve for the period:
+    \begin{align*}
+      u_n(t) &= a_n\cos(ntc) + b_n\sin(ntc), \\
+      u_n(t+p) &= a_n\cos(nc(t+p)) + b_n\sin(nc(t+p)).
+    \end{align*}
+    So we need $nc(t+p)=nct+2\pi k$, hence $p=2\pi k/(nc)$ and the
+    period is $2\pi/c$.
+  \item The solution will behave in a basically similar way,
+    beginning as a peak and splitting into two waves travelling in
+    opposite directions, however, instead of flipping, the two waves
+    "meet" again and eventually form the shape of the initial
+    displacement again, repeating.
+\end{enumerate}
+\end{document}
