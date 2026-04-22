@@ -1,0 +1,148 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    N. Ohayon Rozanes} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[5]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+\begin{enumerate}
+  \item
+    \[
+      \int_1^2 \delta(x)(x-2)dx
+    \]
+    Clearly, since the bounds of integration do not include the point
+    at which $\delta(x)$ is concentrated, $0$, the integrand is $0$
+    at all points on the interval $[1,2]$ so the integral evaluates $0$.
+  \item
+    \[
+      \int_0^3 \delta_1(x)e^x dx
+    \]
+    Since $1 \in [0,3]$ then the $\delta_1$ function serves to
+    "sample" the other function in the integrand $e^x$ at $x = 1$, so
+    the integral evaluates to $e^1$
+\end{enumerate}
+
+\question[2]{}
+
+\begin{enumerate}
+  \item $h(x) = x\delta(x-1) = x\delta_1(x)$
+    However, since $\delta_1$ is only non zero at $x=1$, we can
+    further simplify $h$ to be
+    \[
+      h(x) = \delta_1(x)
+    \]
+    Which we interpret as defining the functional
+    \[
+      L_h[u] = \langle h, u \rangle = \langle \delta_1(x), u \rangle
+      = u(1)
+    \]
+  \item
+    $h(x) = 3\delta_1(x) - 3x\delta_{-1}(x) = 3(\delta_1(x) - x\delta_{-1}(x))$
+    As with the previous question, $\delta_{-1}(x)$ is only non-zero
+    at $x=-1$ so distributionally $x\delta_{-1}(x) = -\delta_{-1}(x)$
+
+    So we simplify the $h$ as
+    \[
+      h(x) = 3(\delta_1(x) + \delta_{-1}(x))
+    \]
+    On a test function $u$
+    \[
+      L_h[u] =
+      \begin{cases}
+        3u(1) & x = 1\\
+        3u(-1) & x = -1
+      \end{cases}
+    \]
+\end{enumerate}
+
+\question[3]{}
+\begin{enumerate}
+  \item We first rewrite the function in terms of $\sigma$ distributions
+    \begin{align*}
+      f(x) = (\sigma(x+1) - \sigma(x))(x+1) + (\sigma(x) - \sigma(x-1))(1-x)
+    \end{align*}
+    then
+    \[
+      f'(x) = (\delta(x+1) - \delta(x))(x+1) + (\sigma(x+1) -
+      \sigma(x)) + (\delta(x) - \delta(x-1))(1-x) - (\sigma(x) - \sigma(x-1))
+    \]
+    The $\delta$ terms vanish, so we can rewrite it more simply as:
+    \[
+      f'(x) =
+      \sigma(x+1) - 2\sigma(x) + \sigma(x-1)
+      =
+      \begin{cases}
+        0 & x < -1 \\
+        1 & -1 < x < 0 \\
+        -1 & 0 < x < 1 \\
+        0 & x > 1
+      \end{cases}
+    \]
+  \item Of course, $k$ can be rewritten as:
+    \[
+      k(x) =
+      \begin{cases}
+        0 & x<-2\\
+        -x &-2<x<0 \\
+        x & 0<x<2\\
+        0 & 2<x
+      \end{cases}
+    \]
+    Clearly, there are jump discontinuities at $x=-2$,$x=2$, so
+    the piecewise derivative is
+    \[
+      \begin{cases}
+        0 & x<-2\\
+        -1 &-2<x<0 \\
+        1 & 0<x<2\\
+        0 & 2<x
+      \end{cases}
+    \]
+    with $\delta$ functions at the jump discontinuities of maginitude
+    $2$, then:
+    \[
+      k'(x) = 2\delta_{-1}(x) + 2\delta_1(x) +
+      \begin{cases}
+        0 & x<-2\\
+        -1 &-2<x<0 \\
+        1 & 0<x<2\\
+        0 & 2<x
+      \end{cases}
+    \]
+\end{enumerate}
+\end{document}
