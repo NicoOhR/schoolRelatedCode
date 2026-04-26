@@ -1,0 +1,153 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+\usepackage{
+  minted,
+  float,
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    CS4375} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\begin{document}
+\maketitletwo[5]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{Naive Bayes}
+\begin{enumerate}
+  \item As in the usual set up for the naive bayes, we have a collection of
+    random variable tuples $(x^i, y^i)$, where each $x^i$ is i.i.d from
+    some unknown underlying distribution $X$, the independent assumption
+    allows us to say that $p(x^i | p^j) = p(x^i)$, that is, observations
+    are pairwise independent. $y^i$ is a discrete random variable,
+    taking on one out of $K$ values, denoted as $C^k$ and has some
+    dependence on $x^i$. Typically, $X$ is a discrete random variable, so
+    it is natural to speak about the probability $p(X = x^i)$. Using a
+    well known fact from probability, if $Z$ is a continuous variables,
+    then $p(Z = z^i) = 0$ almost surely. This presents an issue, in the
+    naive bayes classifier since $(X | Y = C^k)$ is a continuos
+    random variable, so
+    $p(X = x^i | Y = C^k) = 0$  almost surely, causing the likelihood to
+    be $0$ and the classifier to be undefined
+    \begin{align*}
+      \hat y &= \argmax_{k} p(C^k)\prod_i^n p(x^i\vert C_k)\\
+      &= \argmax_{k} \{0, 0 , 0 \hdots\} \\
+    \end{align*}
+
+    We can get around this analytical issue by discretizing the predictor
+    vector:
+    \begin{itemize}
+      \item First we would bin the observed values in whatever method is
+        most representative of the predictor's nature (equal-width, quantile,
+        etc.)
+      \item Then we normalize the histograms by dividing the height of
+        each column by $n$, we get back a discrete random variable
+      \item Repeat this procedure element wise for each entry in the
+        feature vector
+      \item let $x_{ij}$ be the $j$th entry of the $i$th feature vector,
+        we can calculate the likelihood as:
+        \[
+          p(x^i \vert C_k) = \prod p(x_{ij} \vert C_k)
+        \]
+    \end{itemize}
+  \item If instead we insisted on treating the probability
+    distribution of the feature vector as continuous, the other
+    option is to learn the parameters of the predictor variables. To
+    start with, we have to make an additional assumption regarding
+    the distribution of the data; generally, assuming normally
+    distributed data is a good first guess, so from the observed data
+    $x^i$ we would like to find parameters $\mu$ and $\sigma^2$. Since
+    the following procedure can be repeated element wise for each
+    component of the feature vector, we focus on the univariate case:
+    \begin{itemize}
+      \item Group the data set for each class $C^k$ present in the
+        data set, yielding the sets $\{x^i\}_k$
+      \item The likelihood function of the normal distribution is
+        described as follows:
+        \[
+          L(\mu, \sigma^2 \mid \{x^i\}_k) = \prod_{x^i \in \{x^i\}_k}
+          f_X(x^i; \mu, \sigma^2)
+        \]
+        Skipping a few steps:
+        \[
+          L(\mu, \sigma^2 \mid \{x^i\}_k) =
+          \frac{\exp\left(\frac{-1}{2\sigma^2}\sum_{x^i \in
+          \{x^i\}_k}(x^i-\mu)^2\right)}{(2\pi\sigma^2)^{-n_k/2}}
+        \]
+      \item taking the log to obtain the log likelihood
+        \[
+          l(\mu, \sigma^2 \mid \{x^i\}_k) = \frac{-n_k}{2}\ln(2\pi) -
+          \frac{n_k}{2}\ln(\sigma^2) - \frac{1}{2\sigma^2}\sum_{x^i
+          \in \{x^i\}_k} (x^i-\mu)^2
+        \]
+      \item taking partials with respect to $\mu$ and $\sigma^2$, and
+        setting each to zero:
+        \begin{align*}
+          \frac{\partial l}{\partial \mu} &=
+          \frac{1}{\sigma^2}\sum_{x^i \in \{x^i\}_k}
+          (x^i - \mu) = 0 \\
+          &\Rightarrow \hat{\mu}_k = \frac{1}{n_k}\sum_{x^i \in \{x^i\}_k} x^i
+        \end{align*}
+        \begin{align*}
+          \frac{\partial l}{\partial \sigma^2} &= -\frac{n_k}{2\sigma^2} +
+          \frac{1}{2\sigma^4}\sum_{x^i \in \{x^i\}_k} (x^i - \mu)^2 = 0 \\
+          &\Rightarrow \hat{\sigma}^2_k = \frac{1}{n_k}\sum_{x^i \in
+          \{x^i\}_k} (x^i - \hat{\mu}_k)^2
+        \end{align*}
+    \end{itemize}
+    Thus we have obtained the MLE for the parameters of the normal
+    distribution for each class. Using this in place of the
+    likelihood function in the discrete naive bayes classifier:
+    \[
+      \hat y = \argmax_{k} p(C^k)\prod_i^{n_k} f_{X_k}(x^i)\\
+    \]
+    This slightly dubious subtitution is justified as higher density
+    in the distribution conditional on the class $k$ around $x^i$ is
+    roughly equivalent to points around $x^i$ being more likely to be
+    in the class $k$.
+\end{enumerate}
+\question[2]{Here is my second question}
+
+YOUR SOLUTION HERE
+
+\question[3]{What is the \Large{$\int_0^2 x^2 \, dx $}\normalsize{.
+Show all steps}}
+
+\begin{align*}
+  \int_0^2 x^2 &= \left. \frac{x^3}{3} \right|_0^2 \\
+  &= \frac{2^3}{3}-\frac{0^3}{3}\\
+  &= \frac{8}{3}
+\end{align*}
+\end{document}
