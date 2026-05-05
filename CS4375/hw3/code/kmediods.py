@@ -3,6 +3,8 @@ from sklearn.metrics import log_loss as sklearn_log_loss
 from sklearn.decomposition import PCA
 from scipy.spatial import KDTree
 from tqdm import tqdm
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -99,6 +101,7 @@ class kmedioids:
         )
         ax2.set_title("true labels")
         plt.tight_layout()
+        plt.savefig("kmediods_clusters.png", bbox_inches="tight")
         plt.show()
 
     def train(self):
