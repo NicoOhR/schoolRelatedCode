@@ -1,0 +1,396 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[1][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    MATH4362} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[5]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+We solve $u_t = u_{xx}$ on the real line with initial data
+$f(x) = \delta(x-1) + \delta(x+1)$.
+Taking the Fourier transform of the equation gives
+$\frac{\partial\hat{u}}{\partial t} = -k^2\hat{u}$,
+with solution $\hat{u}(t,k) = e^{-k^2 t}\hat{f}(k)$. We compute:
+\[
+  \mathcal{F}[f] = \mathcal{F}[\delta(x-1)] + \mathcal{F}[\delta(x+1)]
+  = \frac{e^{-ik} + e^{ik}}{\sqrt{2\pi}} = \sqrt{\tfrac{2}{\pi}}\cos k
+\]
+Therefore:
+\[
+  u(t,x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{ikx-k^2t}
+  \sqrt{\tfrac{2}{\pi}}\cos k\,dk
+  = \frac{1}{\pi}\int_{-\infty}^{\infty} e^{ikx-k^2t}\cos k\,dk
+\]
+Writing $\cos k = \frac{e^{ik}+e^{-ik}}{2}$ splits this into two
+Gaussian integrals.
+Using $\int_{-\infty}^{\infty}e^{-tk^2+iak}dk =
+\sqrt{\tfrac{\pi}{t}}e^{-a^2/(4t)}$
+(completed square), with $a = x\pm 1$:
+\[
+  u(t,x) = \frac{1}{2\pi}\sqrt{\frac{\pi}{t}}\left[e^{-(x+1)^2/(4t)}
+  + e^{-(x-1)^2/(4t)}\right]
+  = \frac{1}{2\sqrt{\pi t}}\left[e^{-(x+1)^2/(4t)} + e^{-(x-1)^2/(4t)}\right]
+\]
+
+\question[2]{}
+We solve $u_t = u_{xx}$ on $-\infty < x < \infty$, $t > 0$ with
+$u(0,x) = \delta'(x-\xi)$. Taking the Fourier transform of the initial
+data:
+\[
+  \hat{f}(k) =
+  \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}\delta'(x-\xi)e^{ikx}dx
+  = \frac{-ik}{\sqrt{2\pi}}e^{ik\xi}
+\]
+Therefore $\hat{u}(t,k) = \frac{-ik}{\sqrt{2\pi}}e^{ik\xi-k^2t}$, and
+applying the inverse Fourier transform:
+\[
+  u(t,x) = \frac{-i}{2\pi}\int_{-\infty}^{\infty} k\,e^{ik(\xi-x)-k^2t}\,dk
+\]
+
+\question[3]{}
+We solve the following PDE on the rectangle $-1 < x < 1, 0 < y < 1$
+\[
+  \begin{cases}
+    u_t = 2\Delta u\\
+    u(t,-1, y) = u(t, 1, y) = 0 & \forall y \\
+    u_n(t, x,0) = u_n(t,x, 1) = 0 \\
+  \end{cases}
+\]
+With initial distribution:
+\[
+  u(0,x,y) =
+  \begin{cases}
+    -1 & x < 0 \\
+    1 & x > 0
+  \end{cases}
+\]
+Using the seperable anstaz for the above:
+\[
+  u = e^{-\lambda t}p(x)q(y)
+\]
+We calculate partials and substitute into the PDE:
+\[
+  -\lambda pq = 2(p''q + pq'')
+\]
+Which, after some algebra, yeilds the following second order ODEs:
+\[
+  p'' +  \frac{\mu}{2}p = 0
+\]
+\[
+  q'' +  \frac{\lambda-\mu}{2}q = 0
+\]
+
+For some real number $\mu$. Without considering the boundary
+conditions, we have that the possible solutions are:
+
+\[
+  p = \{A\cos\!\left(\sqrt{\tfrac{\mu}{2}}\,x\right),
+  B\sin\!\left(\sqrt{\tfrac{\mu}{2}}\,x\right)\}
+\]
+
+\[
+  q = \{C\cos\!\left(\sqrt{\tfrac{\lambda-\mu}{2}}\,y\right) ,
+  D\sin\!\left(\sqrt{\tfrac{\lambda-\mu}{2}}\,y\right)\}
+\]
+
+Consider that the normal vector at every every point on the top long
+edge is the vector $(0,1)$ and $(0,-1)$ at every point of the bottom
+long edge: Then we can find the equations of the
+insulated condition as follows
+
+\[
+  \nabla u \cdot (0,1)\big|_{y=1} = u_y(t,x,1) = e^{-\lambda
+  t}p(x)q'(1) = 0 \implies q'(1) = 0
+\]
+\[
+  \nabla u \cdot (0,-1)\big|_{y=0} = -u_y(t,x,0) = -e^{-\lambda
+  t}p(x)q'(0) = 0 \implies q'(0) = 0
+\]
+
+Applying this to the possible solutions of $q$, we have that
+
+\[
+  q' =
+  -C\sqrt{\tfrac{\lambda-\mu}{2}}\sin\!\left(\sqrt{\tfrac{\lambda-\mu}{2}}\,y\right)
+  +
+  D\sqrt{\tfrac{\lambda-\mu}{2}}\cos\!\left(\sqrt{\tfrac{\lambda-\mu}{2}}\,y\right)
+\]
+
+At $y=0$, $\sin(0)=0$ and $\cos(0)=1$, so:
+\[
+  q'(0) = D\sqrt{\tfrac{\lambda-\mu}{2}} = 0 \implies D = 0
+\]
+
+With $D=0$, at $y=1$:
+\[
+  q'(1) =
+  -C\sqrt{\tfrac{\lambda-\mu}{2}}\sin\!\left(\sqrt{\tfrac{\lambda-\mu}{2}}\right)
+  = 0
+\]
+
+For a non-trivial solution we need
+$\sin\!\left(\sqrt{\tfrac{\lambda-\mu}{2}}\right) = 0$, so
+$\sqrt{\tfrac{\lambda-\mu}{2}} = n\pi$ for $n = 0, 1, 2, \ldots$,
+giving eigenfunctions:
+\[
+  q_n(y) = \cos(n\pi y)
+\]
+We now condition the Dirichlet conditions on the short edges, which we get
+\begin{align*}
+  p(1) = A\cos\!\left(\sqrt{\frac{\mu}{2}}\right) +
+  B\sin\!\left(\sqrt{\frac{\mu}{2}}\right) &=0 \\
+  p(-1) = A\cos\!\left(\sqrt{\frac{\mu}{2}}\right)
+  -B\sin\!\left(\sqrt{\frac{\mu}{2}}\right) &=0 \\
+\end{align*}
+Adding one to the other we have that
+\[
+  2A\cos\!\left(\sqrt{\frac{\mu}{2}}\right) = 0
+\]
+So either $A$ is trivial or $\sqrt{\frac{\mu}{2}} = \frac{\pi}{2} + n\pi$
+for $n = 0,1,\hdots$
+
+Substracting we get that
+\[
+  2B\sin\!\left(\sqrt{\frac{\mu}{2}}\right) =0
+\]
+So either $B$ is trivial or $\sqrt{\frac{\mu}{2}} = m\pi$ for $m =
+1,2,\hdots$.
+
+Recalling that $\sqrt{\tfrac{\lambda-\mu}{2}} = n\pi$, i.e.\ $\lambda
+= \mu + 2n^2\pi^2$,
+we can solve for $\lambda$ in each family. For the cosine family,
+$\sqrt{\tfrac{\mu}{2}} = \tfrac{(2m-1)\pi}{2}$ gives $\mu =
+\tfrac{(2m-1)^2\pi^2}{2}$, so
+\[
+  \lambda_{mn}^{(c)} = \frac{(2m-1)^2\pi^2}{2} + 2n^2\pi^2
+\]
+For the sine family, $\sqrt{\tfrac{\mu}{2}} = m\pi$ gives $\mu = 2m^2\pi^2$, so
+\[
+  \lambda_{mn}^{(s)} = 2m^2\pi^2 + 2n^2\pi^2 = 2\pi^2(m^2+n^2)
+\]
+Without accounting for the initial data, we get the general solution
+\[
+  u(t,x,y) = \sum_{m=1}^{\infty}\sum_{n=0}^{\infty}
+  e^{-\left(\frac{(2m-1)^2\pi^2}{2} + 2n^2\pi^2\right)t}
+  A_{mn}\cos\!\left(\tfrac{(2m-1)\pi}{2}x\right)\cos(n\pi y)
+  +
+  \sum_{m=1}^{\infty}\sum_{n=0}^{\infty}
+  e^{-2\pi^2(m^2+n^2)t}
+  B_{mn}\sin(m\pi x)\cos(n\pi y)
+\]
+
+Before solving for the coefficients using the initial data, we
+formulate the function $f$ in a more workable manner using $\sigma$
+functions:
+
+\[
+  f = -1 + 2\sigma(x)
+\]
+
+We are now ready to use the initial data to solve for the
+coefficients. Setting $t=0$:
+\[
+  f(x) = \sum_{m=1}^{\infty}\sum_{n=0}^{\infty}
+  A_{mn}\cos\!\left(\tfrac{(2m-1)\pi}{2}x\right)\cos(n\pi y)
+  +
+  \sum_{m=1}^{\infty}\sum_{n=0}^{\infty}
+  B_{mn}\sin(m\pi x)\cos(n\pi y)
+\]
+Since $f$ is independent of $y$, multiplying both sides by $\cos(k\pi
+y)$ and integrating over $[0,1]$ gives zero on the left for any $k\neq
+0$, so orthogonality of $\{\cos(n\pi y)\}$ forces $A_{mn}=B_{mn}=0$
+for all $n\neq 0$. Furthermore, $f$ is odd in $x$ while
+$\cos\!\left(\tfrac{(2m-1)\pi}{2}x\right)$ is even, so orthogonality
+in $x$ forces $A_{m0}=0$ for all $m$. The series collapses to:
+\[
+  f(x) = \sum_{m=1}^{\infty} B_m \sin(m\pi x)
+\]
+
+This is the ordinary sine Fourier series of $f$, with coefficients:
+\[
+  B_m = \int_{-1}^1 f(x)\sin(m\pi x)\,dx
+\]
+Since $f(x)\sin(m\pi x)$ is even, we have that
+\[
+  B_m = 2\int_0^1 \sin(m\pi x)\,dx
+  = \left[-\frac{2\cos(m\pi x)}{m\pi}\right]_0^1
+  = \frac{2(1 - \cos(m\pi))}{m\pi}
+  = \frac{2(1-(-1)^m)}{m\pi}
+\]
+Since $B_m = 0$ for even $m$, substituting $m = 2k-1$ and plugging
+into the collapsed solution gives the final answer
+\[
+  u(t,x) = \frac{4}{\pi}\sum_{k=1}^{\infty}
+  \frac{1}{2k-1}\,e^{-2\pi^2(2k-1)^2 t}\sin\!\left((2k-1)\pi x\right)
+\]
+\question[4]{}
+We now consider the same PDE over the same domain except the
+Dirichlet and Neumann conditions are flipped:
+
+We solve the following PDE on the rectangle $-1 < x < 1, 0 < y < 1$
+\[
+  \begin{cases}
+    u_t = 2\Delta u\\
+    u(t,x,0) = u(t, x, 1) = 0 & \forall y \\
+    u_n(t,-1,y) = u_n(t,1,x) = 0 \\
+  \end{cases}
+\]
+With initial distribution:
+\[
+  u(0,x,y) =
+  \begin{cases}
+    -1 & x < 0 \\
+    1 & x > 0
+  \end{cases}
+\]
+
+We skip to the possible solutions of the seperated ODE:
+
+\[
+  p = \{A\cos\!\left(\sqrt{\tfrac{\mu}{2}}\,x\right),
+  B\sin\!\left(\sqrt{\tfrac{\mu}{2}}\,x\right)\}
+\]
+
+\[
+  q = \{C\cos\!\left(\sqrt{\tfrac{\lambda-\mu}{2}}\,y\right) ,
+  D\sin\!\left(\sqrt{\tfrac{\lambda-\mu}{2}}\,y\right)\}
+\]
+
+Now the normal vectors of the short edges are given by $(1,0)$ and
+$(-1,0)$, so the Neumann conditions are:
+\begin{align*}
+  &\nabla u \cdot (-1,0)\big|_{x=-1} = -u_x(t,-1,y) = -e^{-\lambda
+  t}p'(-1)q(y) = 0 \implies p'(-1) = 0\\
+  &\nabla u \cdot (1,0)\big|_{x=1} = u_x(t,1,y) = e^{-\lambda
+  t}p'(1)q(y) = 0 \implies p'(1) = 0
+\end{align*}
+
+Applying these to $p' =
+-A\sqrt{\tfrac{\mu}{2}}\sin\!\left(\sqrt{\tfrac{\mu}{2}}\,x\right) +
+B\sqrt{\tfrac{\mu}{2}}\cos\!\left(\sqrt{\tfrac{\mu}{2}}\,x\right)$:
+\begin{align*}
+  p'(1)  &=
+  -A\sqrt{\tfrac{\mu}{2}}\sin\!\left(\sqrt{\tfrac{\mu}{2}}\right) +
+  B\sqrt{\tfrac{\mu}{2}}\cos\!\left(\sqrt{\tfrac{\mu}{2}}\right) = 0 \\
+  p'(-1) &=
+  \phantom{-}A\sqrt{\tfrac{\mu}{2}}\sin\!\left(\sqrt{\tfrac{\mu}{2}}\right)
+  + B\sqrt{\tfrac{\mu}{2}}\cos\!\left(\sqrt{\tfrac{\mu}{2}}\right) = 0
+\end{align*}
+Adding gives
+$2B\sqrt{\tfrac{\mu}{2}}\cos\!\left(\sqrt{\tfrac{\mu}{2}}\right) =
+0$, so either $B=0$ or
+$\sqrt{\tfrac{\mu}{2}} = \tfrac{(2m-1)\pi}{2}$, giving $p_m =
+\sin\!\left(\tfrac{(2m-1)\pi}{2}x\right)$. Subtracting gives
+$2A\sqrt{\tfrac{\mu}{2}}\sin\!\left(\sqrt{\tfrac{\mu}{2}}\right) =
+0$, so either $A=0$ or
+$\sqrt{\tfrac{\mu}{2}} = m\pi$, giving $p_m = \cos(m\pi x)$ for $m =
+0,1,2,\ldots$
+
+We now apply the Dirichlet conditions on the long edges:
+\begin{align*}
+  q(0) = C\cos\!\left(0\right) +
+  D\sin\!\left(0\right) &=0 \\
+  q(1) = C\cos\!\left(\sqrt{\frac{\lambda - \mu}{2}}\right)
+  +D\sin\!\left(\sqrt{\frac{\lambda - \mu}{2}}\right) &=0 \\
+\end{align*}
+
+From the first equation we clearly have that $A = 0$, therefore,
+using the second equation we have that
+$$
+\sqrt{\frac{\lambda-\mu}{2}} = n\pi
+$$
+For $n = 1,2,\ldots$, giving eigenfunctions $q_n(y) = \sin(n\pi
+y)$. We can solve for $\mu$ and $\lambda$: $\lambda = \mu + 2n^2\pi^2$: for
+the cosine $p$-family
+$\mu = 2m^2\pi^2$, and for the sine $p$-family $\mu =
+\tfrac{(2m-1)^2\pi^2}{2}$. The general solution is:
+\[
+  u(t,x,y) =
+  \sum_{m=0}^{\infty}\sum_{n=1}^{\infty}
+  e^{-2\pi^2(m^2+n^2)t}
+  A_{mn}\cos(m\pi x)\sin(n\pi y)
+  +
+  \sum_{m=1}^{\infty}\sum_{n=1}^{\infty}
+  e^{-\left(\frac{(2m-1)^2\pi^2}{2} + 2n^2\pi^2\right)t}
+  B_{mn}\sin\!\left(\tfrac{(2m-1)\pi}{2}x\right)\sin(n\pi y)
+\]
+
+At $t = 0$
+
+\[
+  f(x) =
+  \sum_{m=0}^{\infty}\sum_{n=1}^{\infty}
+  A_{mn}\cos(m\pi x)\sin(n\pi y)
+  +
+  \sum_{m=1}^{\infty}\sum_{n=1}^{\infty}
+  B_{mn}\sin\!\left(\tfrac{(2m-1)\pi}{2}x\right)\sin(n\pi y)
+\]
+Since $f$ is odd in $x$ and $\cos(m\pi x)$ is even, orthogonality forces
+$A_{mn}=0$ for all $m,n$.
+\[
+  f(x) =
+  \sum_{m=1}^{\infty}\sum_{n=1}^{\infty}
+  B_{mn}\sin\!\left(\tfrac{(2m-1)\pi}{2}x\right)\sin(n\pi y)
+\]
+
+By a similar exploitation of orthogonality as the prior question, we have that:
+
+\[
+  B_{m,n} = 2\left\langle
+  f,\,\sin\!\left(\tfrac{(2m-1)\pi}{2}x\right)\sin(n\pi y)\right\rangle
+  = 2\!\int_{-1}^{1}\!\int_0^1 f(x)
+  \sin\!\left(\tfrac{(2m-1)\pi}{2}x\right)\sin(n\pi y)\,dy\,dx
+\]
+Since $f$ is independent of $y$ the integrals separate:
+\[
+  B_{m,n} = 2\left(\int_{-1}^1 f(x)
+  \sin\!\left(\tfrac{(2m-1)\pi}{2}x\right)dx\right)
+  \left(\int_0^1\sin(n\pi y)\,dy\right)
+  = \frac{8(1-(-1)^n)}{(2m-1)n\pi^2}
+\]
+Since the exponential factors in $m$ and $n$
+independently, the final solution is:
+\[
+  u(t,x,y) =
+  \left(\frac{4}{\pi}\sum_{m=1}^{\infty}
+    \frac{e^{-\frac{(2m-1)^2\pi^2}{2}t}}{2m-1}
+  \sin\!\left(\tfrac{(2m-1)\pi}{2}x\right)\right)
+  \!\left(\frac{4}{\pi}\sum_{n=1}^{\infty}
+    \frac{e^{-2(2n-1)^2\pi^2 t}}{2n-1}
+  \sin\!\left((2n-1)\pi y\right)\right)
+\]
+
+\end{document}
