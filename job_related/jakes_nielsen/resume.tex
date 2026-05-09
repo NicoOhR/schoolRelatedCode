@@ -1,0 +1,152 @@
+% !TEX program = pdflatex
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+\pdfgentounicode=1
+
+\newcommand{\resumeItem}[1]{
+  \item\small{#1 \vspace{-2pt}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\begin{document}
+
+\begin{center}
+    \textbf{\Huge \scshape Nico Ohayon} \\ \vspace{1pt}
+    \small 469-560-0141 $|$ \href{mailto:nohayonr@gmail.com}{\underline{nohayonr@gmail.com}} $|$
+    \href{https://linkedin.com/in/nico-ohayon-rozanes}{\underline{linkedin.com/in/nico-ohayon-rozanes}} $|$
+    \href{https://github.com/NicoOhR}{\underline{github.com/NicoOhR}} $|$
+    \href{https://nicoohr.github.io/Sicarii}{\underline{Portfolio}}
+\end{center}
+
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of Texas at Dallas}{Richardson, TX}
+      {Bachelor of Science in Data Science, Double Degree in Mathematics}{Aug. 2023 -- May 2027}
+  \resumeSubHeadingListEnd
+
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Bioinformatics Research Assistant}{August 2025 -- Present}
+      {University of Texas at Dallas}{Richardson, TX}
+      \resumeItemListStart
+        \resumeItem{Built automated Python analysis pipelines over large-scale datasets with reproducible tracking and version-controlled experiment configurations enabling full audit trails.}
+        \resumeItem{Designed systematic parameter sweep infrastructure that runs analysis variants automatically, logs results, and enables auditable comparison across configurations.}
+        \resumeItem{Diagnosed and eliminated a class of correctness failures in a legacy pipeline through careful dependency review; integrated GPU-accelerated computation for 4$\times$ throughput improvement.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Engineering Intern}{May 2025 -- Aug 2025}
+      {Exolambda}{Richardson, TX}
+      \resumeItemListStart
+        \resumeItem{Standardized the embedded build system and CI toolchain, introducing reproducible builds and reducing deployment errors and configuration drift across hardware revisions.}
+        \resumeItem{Integrated validation gates into firmware development workflows; automated sensor pipeline bring-up and verification procedures, reducing manual effort and failure rates.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Undergraduate Research Scholar Award}{August 2024 -- December 2024}
+      {University of Texas at Dallas}{Richardson, TX}
+      \resumeItemListStart
+        \resumeItem{Developed automated C++ tooling to programmatically search and analyze large combinatorial spaces, producing structured result inventories cross-referenced against known benchmarks to surface anomalies.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Embedded Subteam Lead}{December 2023 -- December 2024}
+      {Dallas Formula Racing}{Richardson, TX}
+      \resumeItemListStart
+        \resumeItem{Managed software integration and validation across 12 engineers, coordinating weekly reviews to maintain system quality through design and track testing.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+\section{Projects}
+    \resumeSubHeadingListStart
+
+      \resumeProjectHeading
+          {\textbf{FSAEStats} $|$ \emph{Rust, DuckDB, Apache Arrow}}{}
+          \resumeItemListStart
+            \resumeItem{Built an automated pipeline to programmatically extract and structure data from PDF documents --- analogous to repository scanning and dependency inventorying --- loading results into a queryable backend.}
+            \resumeItem{Designed a Rust/DuckDB/Arrow analytical layer supporting fast prioritization queries and aggregations over large structured data inventories.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{Three Body Simulation} $|$ \emph{Rust, Tokio, Python, gRPC, Bevy}}{}
+          \resumeItemListStart
+            \resumeItem{Exposed a gRPC API enabling Python clients to automatically drive large batches of experiments with structured, auditable outputs --- mirroring the pattern of automated scanning pipelines feeding downstream analysis.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{TradeX} $|$ \emph{Python, PyTorch, NumPy, Docker}}{January 2024 -- May 2024}
+          \resumeItemListStart
+            \resumeItem{Built data engineering pipelines to collect, clean, and structure large financial datasets; developed and backtested ML-driven trading strategies, outperforming baseline by 40\%.}
+          \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: Python, C/C++, Rust, Go, \LaTeX} \\
+     \textbf{Tools}{: Git, GitHub Actions, Docker, Linux, Kafka, CMake, BusyBox, Yocto} \\
+     \textbf{Data / ML}{: NumPy, pandas, SQL, DuckDB, Apache Arrow, scikit-learn, PyTorch, CUDA, Matplotlib/Seaborn}
+    }}
+ \end{itemize}
+
+\end{document}

@@ -1,0 +1,70 @@
+% Cover letter using letter.cls
+\documentclass{letter}
+\topmargin=-1in
+\textheight=8in
+\oddsidemargin=0pt
+\textwidth=6.5in
+
+\begin{document}
+
+\signature{N. Ohayon Rozanes}
+\longindentation=0pt
+\let\raggedleft\raggedright
+
+\begin{letter}{}
+
+  \begin{center}
+    {\large\bf N. Ohayon Rozanes} \\
+    {611 Granbury Dr. \\ Allen, Texas, 75013 \\ 469-560-0141}
+  \end{center} \vfill
+
+  \opening{Dear Hiring Manager:}
+
+  \noindent I am writing to apply for the Software Engineering Internship at
+  Twilio for Summer 2026. I am pursuing a double degree in Data Science and
+  Mathematics at the University of Texas at Dallas. Most of my applied work
+  has been at the boundary between systems software and real-time
+  constraints --- first in embedded firmware at Exolambda, and more recently
+  in data pipelines and performance-critical research code --- and I have
+  been looking to take that experience into distributed systems. Twilio's
+  core engineering problems sit right at that intersection.
+
+  \noindent The bulk of my relevant experience comes from two directions. At
+  Exolambda I built an embedded communication stack and sensor pipeline that
+  reduced end-to-end latency by 40\%, wrote real-time signal-processing and
+  control code that had to meet strict latency targets on every run, and
+  generally got comfortable debugging failures at the hardware-software
+  boundary under deadline pressure. That work gave me a concrete sense of
+  what real-time means in practice: not just fast, but deterministically
+  correct within a time budget, where a missed deadline is a functional
+  failure. On the software architecture side, I built a physics simulator
+  with a gRPC service layer so that Python clients could drive and script
+  simulation batches across a distributed boundary, which gave me hands-on
+  experience designing interfaces where correctness and latency are both
+  constraints. I have also spent considerable time squeezing performance out
+  of data pipelines in my bioinformatics research role, where GPU
+  parallelism cut a 12-hour computation down to 3 hours, and I have come to
+  think of performance work as a form of careful reasoning rather than just
+  optimization.
+
+  \noindent What makes Twilio's engineering problems interesting to me is
+  the scale at which real-time constraints have to hold. In embedded work,
+  real-time is hard because the hardware is unforgiving. In a virtualized
+  cloud environment at Twilio's scale, real-time is hard for a completely
+  different set of reasons: distributed coordination, jitter from
+  virtualization, fault tolerance across components that can fail
+  independently. Real-time audio at that scale is a legitimately difficult
+  problem, and the failure modes are immediately visible to end users. I
+  find that kind of accountability clarifying --- it is the same reason I
+  liked working in aerospace, where the software either works or it does not.
+  I would rather work on a constrained, high-stakes systems problem than a
+  more comfortable one with softer requirements.
+
+  \noindent I would welcome the opportunity to work on these problems with
+  the Twilio team.
+
+  \closing{Sincerely yours,}
+
+\end{letter}
+
+\end{document}

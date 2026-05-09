@@ -1,0 +1,174 @@
+% LaTeX template for Stat 4352.002: Mathematical Statistics
+% University of Texas at Dallas, Spring 2026
+% Yun Wei
+
+\documentclass{article}
+\usepackage{scribe} % specifies page and header format
+
+% Useful packages
+
+\RequirePackage{amsthm,amsmath,amsfonts,amssymb}
+\RequirePackage{mathrsfs} % mathscr fonts
+\RequirePackage{color}
+\RequirePackage{enumitem}
+\RequirePackage{mathtools}  % have the second line for subscript
+\RequirePackage{verbatim} % to comment block
+\RequirePackage{bm} % to change font to be both bold and ??it possible
+
+% Theorem type environments
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{assump}[thm]{Assumption}
+\newtheorem{prob}[thm]{Problem}
+\newtheorem{exa}[thm]{Example}
+\newtheorem{definition}[thm]{Definition}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+
+
+% additional package
+
+
+% Useful macros -- you can add your own
+
+\newcommand{\sH}{{\mathcal H}}
+\newcommand{\sX}{{\mathcal X}}
+\newcommand{\sY}{{\mathcal Y}}
+\newcommand{\hnhat}{\widehat{h}_n}
+
+% frequently used symbols
+\newcommand{\bbE}{\mathbb{E}} % use this for expectation
+\newcommand{\bbR}{\mathbb{R}} % real numbers
+
+% operators
+\newcommand{\sign}{\mathop{\mathrm{sign}}}
+\newcommand{\supp}{\mathop{\mathrm{supp}}} % support
+\newcommand{\argmin}{\operatornamewithlimits{arg\ min}}
+\newcommand{\argmax}{\operatornamewithlimits{arg\ max}}
+
+% indicator function
+\newcommand{\ind}[1]{\bm{1}_{\{#1\}}}
+
+% grouping operators
+\newcommand{\brac}[1]{\left[#1\right]}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\paren}[1]{\left(#1\right)}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+
+\begin{document}
+
+% Lecture header format:
+%\lecture{**TOPIC-NUMBER**}{**TITLE**}{**LECTURER**}{**SCRIBE**}
+\lecture{2}{Distributions of Functions of Random Variables}{Yun Wei}{Andon Epp, Leah Sullivan}
+
+\noindent {\bf Disclaimer}: {\it These notes have not been subjected to
+the usual scrutiny reserved for formal publications.  They may be
+distributed outside this class only with the permission of the
+Instructor.} %\vspace*{2mm}
+
+\section{Introduction}
+
+Recall that if $X$ is a continuous random variable and $g$ is a monotone function, we can derive the cumulative distribution function (CDF) of $Y = g(X)$ from the CDF of $X$ using the following:
+
+$$g \text{ increasing } \Rightarrow F_Y(y) = F_X(g^{-1}(y)),$$
+$$g \text{ decreasing } \Rightarrow F_Y(y) = 1-F_X(g^{-1}(y)).$$
+
+In both cases, the probability density (PDF) of $Y$ is 
+
+$$f_Y(y) = f_X(g^{-1}(y)) \left|\frac{d}{dy} g^{-1}(y) \right|.$$
+
+But what if $g$ is not monotone? In such case, it is often true that $g$ will be monotone over certain intervals, which allows us to get an expression for $Y = g(X)$.
+
+\section{Distributions of Non-Monotone Continuous Functions}
+
+\begin{thm} \label{thm:1dchaofvar}
+    Suppose $X$ has PDF $f_X(x)$ and $Y = g(X)$, and $\exists$ a partition of $\mathcal{X}$, $A_0, A_1, \dots, A_k$ such that $\mathbb{P}(x \in A_0) = 0$ and functions $g_1(x), \dots, g_k(x)$ defined on $A_1, \dots, A_k$ satisfy the following: 
+    \begin{enumerate}[label=(\roman*)]
+\item  $\ g(x) = g_i(x) \text{ for } x \in A_i \text{ for } i = 1, 2, \dots, k.$
+\item     $ \ g_i(x) \text{ is monotone on } A_i \text{ for } i = 1, 2, \dots, k.$
+ \item    $ \ \text{the set } \mathcal{Y} = \{y | y=g_i(x) \text{ for some } x \in A_i\} \text{ is the same for } i = 1, 2, \dots, k.$
+ \item    $ \ g^{-1}(y) \text{ has a continuous derivative on } \mathcal{Y} \text{ for } i = 1, 2, \dots, k.$
+\end{enumerate}
+    Then $$f_Y(y) = \begin{cases}  \sum_{i=1}^k f_X(g_i^{-1}(y)) \left|\frac{d}{dy} g_i^{-1}(y) \right|, & \forall y \in \mathcal{Y} \\ 0, & \text{otherwise} \end{cases}  = \sum_{i=1}^k f_X(g_i^{-1}(y)) \left|\frac{d}{dy} g_i^{-1}(y) \right| 1_{\mathcal{Y}}(y)$$ .
+\end{thm}
+
+One of the most common examples of this is the normal chi-square 1 distribution, also referred to as a chi-squared random variable with 1 degree of freedom. 
+
+\begin{exa}[Normal Chi-square 1 distribution]
+    . Suppose $X = N(0,1)$ is the standard normal distribution $$f_X(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2},$$ and $Y = X^2.$
+    In this case, let $A_0 = {0}, A_1 = (-\infty,0), \text{ and } A_2 = (0,\infty)$.
+    Then $\mathbb{P}(x \in A_0) = 0$, $g_1(x) = x^2 $ with domain $A_1$ is decreasing, and $g_2(x) = x^2 $ with domain $A_2$ is increasing. Furthermore, $\mathcal{Y} = (0,\infty)$ for $i = 1, 2$, and $\{g_1^{-1}(y) = -\sqrt{y}, \ g_2^{-1}(y) = \sqrt{y}\}$ are continuous on $\mathcal{Y}.$ Hence conditions $(i)-(iv)$ of Theorem \ref{thm:1dchaofvar} are satisfied, so for any $y\in \mathcal{Y}$,
+   \begin{align*}
+       f_Y(y) = f_X(-\sqrt{y})\left|-\frac{1}{2\sqrt{y}}\right| + f_X(\sqrt{y})\left|\frac{1}{2\sqrt{y}}\right| \\ 
+       = \frac{1}{\sqrt{2\pi y}}e^{-y/2} .
+   \end{align*}
+   Thus $f_Y(y) = \frac{1}{\sqrt{2\pi y}}e^{-y/2} 1_{(0,\infty)}(y) $. 
+\end{exa}
+
+Note that the above example, the distribution of the random variable $X$ can be divided into two intervals that are each strictly monotone. Many distributions require more than two intervals to ensure strict monotonicity for each interval.
+
+
+\begin{thm}
+    (Probability integral transformation). Let $X$ have continuous CDF $F_X(x)$ and define a random variable $$Y = F_X(X).$$ Then $Y \sim Unif(0,1);$ that is, $F_Y(y) = \mathbb{P}(Y \le y) = y, \ 0 \le y \le 1.$
+\end{thm}
+
+\begin{proof}
+    Here we only prove a special case that $F_X(x)$ is invertible. Since $F_X(x)$ is increasing, so is its inverse $F_X^{-1}(x)$. Therefore we have for any $y\in [0,1]$,
+    \begin{align*}
+        \mathbb{P}(Y \le y) = & \mathbb{P}(F_X(X) \le y) \\ 
+        = & \mathbb{P}(F_X^{-1}(F_X(X)) \le F_X^{-1}(y)) \\
+        =& \mathbb{P}(X \le F_X^{-1}(y)) \\
+        = & F_X(F_X^{-1}(y)) \\ 
+        = & y. 
+    \end{align*}
+\end{proof}
+
+One use of the probability integral transformation is when generating random samples. Suppose $X$ has CDF $F_X(x)$. Theorem 2 tells us how to create a random sample of $X$:
+\begin{enumerate}[label=(\arabic*)]
+    \item Generate a random sample
+$ Y \sim \operatorname{Unif}(0,1).$
+\item Then $ X = F_X^{-1}(Y) \text{ has CDF } F_X(x).$
+\end{enumerate}
+For certain distributions (such as normal or gamma) there is a simple procedure to generate random samples directly, but the steps above can apply to any distribution. We will not dive further into random sampling in this class, but suffice to show that theorem 2 is particularly useful in cases such as this one. 
+
+\section{Bivariate Transformations}
+
+So far, we have covered how to find distributions of one-dimension, but what about two-dimensional R.V.s? 
+
+
+Let $(X,Y)$ be a bivariate random vector, and $(U,V)$ be a transformation using $U = g_1(X,Y)$ and $V = g_2(X,Y).$ The goal of this section is to calculate the distribution of $(U,V)$ using $(X,Y)$.
+
+
+\begin{exa}[Sum of Binomial distribution] \quad
+    Let $X_1, X_2$ be independent with $X_1 \sim Bin(n_1,p), X_2 \sim Bin(n_2,p)$, and suppose $U = X_1+X_2$. We know $U$ is a discrete distribution with sample space $$\mathcal{U} = \{0, 1, \dots n_1+n_2\}.$$
+    For $u \in \mathcal{U}$, we have
+    \begin{align*}
+        f_U(u) = & \mathbb{P}(U=u) \\
+        = & \mathbb{P}(X_1+X_2=u) \\
+        = & \sum_{x_1+x_2=u} \mathbb{P}(X_1=x_1,X_2=x_2) \\
+        %= & \sum_{x_1=\max\{0,u-n_2\}}^{\min\{u,n_1\}} \mathbb{P}(X_1=x_1,X_2=u-x_1) \\
+        %= & \sum_{x_1=\max\{0,u-n_2\}}^{\min\{u,n_1\}} \mathbb{P}(X_1=x_1)\cdot\mathbb{P}(X_2=u-x_1) \\
+        %= & \sum_{x_1=\max\{0,u-n_2\}}^{\min\{u,n_1\}} \binom{n_1}{x_1}p^{x_1}(1-p)^{n_1-x_1} \cdot \binom{n_2}{u-x_1}p^{u-x_1}(1-p)^{n_2-(u-x_1)} \\ 
+        %= & p^{u}(1-p)^{n_1+n_2-u} \sum_{x_1=\max\{0,u-n_2\}}^{\min\{u,n_1\}} \binom{n_1}{x_1}  \binom{n_2}{u-x_1} \\
+        %=&p^{u}(1-p)^{n_1+n_2-u} \binom{n_1+n_2}{u} .
+    \end{align*}
+\end{exa}
+
+
+\begin{thebibliography}{10}
+\bibitem{devroye96}
+G. Casella,  and R. Berger,
+{\it Statistical inference}, Chapman and Hall/CRC, 2nd edition, 2024.  Sections 2.1, 4.3
+\end{thebibliography}
+
+
+\end{document}

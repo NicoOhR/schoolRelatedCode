@@ -31,13 +31,13 @@
 \section{Introduction}
 
 This report details the design, implementation, and testing of
-gradient boosting trees. In the first section, the theory of base desicion
+gradient boosting trees. In the first section, the theory of base decision
 trees and gradient trees are detailed, then a description and
 derivation of the XGBoost algorithm is given; in this section, the
 performance and computational cost will also be analyzed. Afterwards, the
 implementation and library design of the the methods is provided,
 with particularly noteworthy code exerpts highlighted. Then, the
-trees and ensamble methods are tested against multiple data sets,
+trees and ensemble methods are tested against multiple data sets,
 three natural and two synthetic, which illustrate the trade offs of
 each algorithm. In the conclusion, the requirements for this report
 are reviewed.
@@ -45,13 +45,13 @@ are reviewed.
 \section{Description and Analysis}
 \subsection{Background}
 
-A descision trees is a non-parametric, supervized model which can be
+A decision trees is a non-parametric, supervised model which can be
 used both as a regressor and as a classifier. In either case, the
 model does not make any assumptions about the basic shape of the
 data, partially because of this, and because of the fact that it is a
 usually very natural thing to think about data being related to it's
 label through the recursive relationship which a tree captures well,
-descision trees are a very popular tool. Descision tree's are also
+decision trees are a very popular tool. Decision tree's are also
 able to handle very high dimensional data sets and multiclass
 problems very well which often make them a more natural model when
 compared to an algorithm like k-NN, which will struggle in higher
@@ -59,7 +59,7 @@ dimensions, or the logistic regression, which has to be retrofitted
 to handle multiclass problems.
 
 Built on top of the basic desicion tree are a variety of techniques
-called ensamble learning methods. Each one addresses a particular
+called ensemble learning methods. Each one addresses a particular
 issue that an analyst might face with a particular data set by
 combining multiple trees in some fashion. A short description of the
 two main families of methods follows:
@@ -69,7 +69,7 @@ two main families of methods follows:
     detail in the following section) by averaging the predictions of
     multiple trees, each trained on a randomized dataset, using a random
     subset of features.
-  \item Boosting methods train trees addatively and sequentially. By
+  \item Boosting methods train trees additively and sequentially. By
     adding together the predictions of multiple trees which are each
     trained based on the results of the last, boosting methods
     address data which is difficult to describe with a tree of
@@ -88,7 +88,7 @@ algorithm which improves boosted trees in basically all accounts, and
 its core is based on utilizing second order information about the
 loss to improve iterations.
 
-\subsection{Descision Trees}
+\subsection{Decision Trees}
 
 \subsubsection{Algorithm}
 
@@ -118,7 +118,7 @@ We now construct the tree in the following manner:
 % \usepackage{algorithm,algorithmicx,algpseudocode}
 \begin{algorithm}
   \floatname{algorithm}{Algorithm}
-  \caption{Descision Tree}\label{alg:}
+  \caption{Decision Tree}\label{alg:}
   \begin{algorithmic}[1]
     \Procedure{BuildTree}{$\mathcal{D},\, d_{\max}$}
     \If{$d_{\max} = 0$ \textbf{or} $|\mathcal{D}| < n_{\min}$
@@ -192,7 +192,7 @@ production implementations.
 \subsubsection{Overfitting and Regularization}
 
 The essential feature of a tree is that, given an unlimited
-$d_{\text{max}}$ a descision tree will always
+$d_{\text{max}}$ a decision tree will always
 overfit. This is because if there is no limit on the number of leaves
 that the tree can create, the tree will happily split the data down
 into individual data points, perfectly classifying each data point in
@@ -256,7 +256,7 @@ of the loss is a steepest-descent step in function space.
 In a more classical set up, gradient descent would be applied to the
 parameters of the model; this approach is difficult to apply to a
 tree due to the number of parameters being often variable. Instead,
-in the graident boosting model, we treat the model $F$ itself as the
+in the gradient boosting model, we treat the model $F$ itself as the
 subject of gradient descent optimization. We are generally not able
 to move freely in function space, that is, it is difficult to
 describe a direction in function space, as such we approximate the
@@ -306,7 +306,7 @@ of gradient boosting relative to bagging methods.
 
 \subsubsection{Bias-Variance Trade-off}
 
-As discusses in the descision tree section, a single deep decision
+As discussed in the decision tree section, a single deep decision
 tree has low bias but very high variance: small changes in the
 training data can produce drastically different
 splits. Gradient boosting addresses this by combining many
@@ -328,7 +328,7 @@ XGBoost is a bit different from the prior two algorithms because XGBoost is,
 in actuality, one specific code base, rather than a generic
 algorithm. As an operational description, XGBoost is an off the shelf
 package which allows an analyst to churn through a lot of data in a
-computationally effecient manner, using domain specific loss
+computationally efficient manner, using domain specific loss
 functions. For the purposes of this report, XGBoost's core identity
 is captured in the following addendums to the gradient boosting algorithm:
 
@@ -602,21 +602,21 @@ def leaf_value(self, df, label):
 \end{figure}
 
 The first data set which we demonstrate in figure 1 the implementations of the
-descision tree, gradient boosting model, and XGBoost model is a
+decision tree, gradient boosting model, and XGBoost model is a
 synthetic one dimensional dataset of a $\sin$ curve with normally
 distributed noise, centered at $\mu = 0$ with $\sigma^2 = 0.5^2$
-standard diviation.
+standard deviation.
 
 Due to the simplicity of this data set, it is easy to see the
 behavior of the custom implementations compared to the standard
-scikit learn. For instance, the custom GBM and sklearn GBM almsot
+scikit learn. For instance, the custom GBM and sklearn GBM almost
 entirely overlap, except for the are of very high noise around $x=0$,
 where our model seems to have less variance. I'm not exactly sure
 what accounts for this difference.
 
 It also demonstrates the relative character of each model, both the
-custom and standard desicison trees exhibit higher variance when the
-data is noiser while the ensamble methods are slightly more unstable
+custom and standard decision trees exhibit higher variance when the
+data is noiser while the ensemble methods are slightly more unstable
 at regions of the data with low noise, but are much more stable
 around the very noisy parts of the data.
 
@@ -776,7 +776,7 @@ opportunities to make spurious splits, making this a controlled setting
 for isolating the effect of each penalty type. We can see the rough
 effects of each type of regularization, $\lambda$ being the most mild
 and forgiving to the model, while $\gamma$ prunes the model most
-extremly. The L1 and L2 regularizations
+extremely. The L1 and L2 regularizations
 that $\lambda$ and $\alpha$ values provide a penalty for large and
 extreme leaf values, while $\gamma$ penalizes complex trees.
 Arguably, the fact that the XGBoost model exposes all three types of

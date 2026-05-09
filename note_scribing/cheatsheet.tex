@@ -1,0 +1,567 @@
+% Stat 4352 Cheat Sheet
+\documentclass[11pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{booktabs,array,multicol}
+\usepackage{enumitem}
+\setlist{nosep}
+
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Bias}{\operatorname{Bias}}
+\newcommand{\MSE}{\operatorname{MSE}}
+\newcommand{\ind}[1]{\bm{1}_{\{#1\}}}
+
+\begin{document}
+
+\begin{center}
+  {\large\textbf{Stat 4352 Cheat Sheet}}
+\end{center}
+
+%%================================================================
+\section*{1.\; Common Distributions}
+%%================================================================
+
+\subsection*{Discrete}
+
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lllll}
+  \toprule
+  \textbf{Distribution} & \textbf{PMF} $f(x;\theta)$ &
+  \textbf{Support} & $\bbE[X]$ & $\Var(X)$ \\
+  \midrule
+  Bernoulli$(p)$ & $p^x(1-p)^{1-x}$ & $\{0,1\}$ & $p$ & $p(1-p)$ \\
+  Binomial$(n,p)$ & $\binom{n}{x}p^x(1-p)^{n-x}$ & $\{0,\ldots,n\}$ &
+  $np$ & $np(1-p)$ \\
+  Geometric$(p)$ & $(1-p)^{x-1}p$ & $\{1,2,\ldots\}$ & $1/p$ & $(1-p)/p^2$ \\
+  Poisson$(\lambda)$ & $e^{-\lambda}\lambda^x/x!$ & $\{0,1,\ldots\}$
+  & $\lambda$ & $\lambda$ \\
+  \bottomrule
+\end{tabular}
+
+\medskip
+\noindent\textbf{Note.} If $X_i \overset{\mathrm{iid}}{\sim}
+\mathrm{Bernoulli}(p)$, then $\sum X_i \sim \mathrm{Bin}(n,p)$.
+
+\subsection*{Continuous}
+
+\begin{tabular}{lllll}
+  \toprule
+  \textbf{Distribution} & \textbf{PDF} $f(x;\theta)$ &
+  \textbf{Support} & $\bbE[X]$ & $\Var(X)$ \\
+  \midrule
+  Uniform$(a,b)$ & $\frac{1}{b-a}$ & $(a,b)$ & $\frac{a+b}{2}$ &
+  $\frac{(b-a)^2}{12}$ \\[4pt]
+  Normal$(\mu,\sigma^2)$ &
+  $\frac{1}{\sqrt{2\pi}\,\sigma}\exp\!\bigl(-\frac{(x-\mu)^2}{2\sigma^2}\bigr)$
+  & $\bbR$ & $\mu$ & $\sigma^2$ \\[4pt]
+  Exponential$(\theta)$ & $\frac{1}{\theta}e^{-x/\theta}$ &
+  $(0,\infty)$ & $\theta$ & $\theta^2$ \\[4pt]
+  Gamma$(\alpha,\beta)$ &
+  $\frac{1}{\Gamma(\alpha)\beta^\alpha}x^{\alpha-1}e^{-x/\beta}$ &
+  $(0,\infty)$ & $\alpha\beta$ & $\alpha\beta^2$ \\[4pt]
+  Beta$(\alpha,\beta)$ &
+  $\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha-1}(1-x)^{\beta-1}$
+  & $(0,1)$ & $\frac{\alpha}{\alpha+\beta}$ &
+  $\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$ \\[4pt]
+  Chi-squared$(\nu)$ & $\mathrm{Gamma}(\nu/2,\,2)$ & $(0,\infty)$ &
+  $\nu$ & $2\nu$ \\[4pt]
+  $t(\nu)$ &
+  $\frac{\Gamma((\nu+1)/2)}{\sqrt{\nu\pi}\,\Gamma(\nu/2)}\bigl(1+\frac{x^2}{\nu}\bigr)^{-(\nu+1)/2}$
+  & $\bbR$ & $0$ & $\frac{\nu}{\nu-2}$ \\[4pt]
+  Pareto$(\theta,\mu)$ &
+  $\frac{\theta\mu^\theta}{x^{\theta+1}}\,\ind{x>\mu}$ &
+  $(\mu,\infty)$ & $\frac{\theta\mu}{\theta-1}$ & --- \\[4pt]
+  \bottomrule
+\end{tabular}
+
+\medskip
+\noindent\textbf{Gamma function.}
+$\Gamma(n)=(n-1)!$;\quad $\Gamma(1/2)=\sqrt{\pi}$;\quad
+$\Gamma(n+1)=n\Gamma(n)$.\\
+\textbf{Beta function.}
+$B(\alpha,\beta)=\int_0^1 u^{\alpha-1}(1-u)^{\beta-1}\,du =
+\dfrac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)}$.
+
+\medskip
+\noindent\textbf{Key relations.}
+$\chi^2(\nu)=\mathrm{Gamma}(\nu/2,2)$.\quad
+If $Z\sim N(0,1)$ then $Z^2\sim\chi^2(1)$.\\
+If $Z_1,\ldots,Z_\nu \overset{\mathrm{iid}}{\sim}N(0,1)$ then $\sum
+Z_i^2\sim\chi^2(\nu)$.\\
+$\mathrm{Gamma}(\alpha_1,\beta)+\mathrm{Gamma}(\alpha_2,\beta) =
+\mathrm{Gamma}(\alpha_1+\alpha_2,\beta)$ (independent sums).\\
+$X\sim\mathrm{Gamma}(\alpha_1,\beta)$,
+$Y\sim\mathrm{Gamma}(\alpha_2,\beta)$ independent
+$\Rightarrow\frac{X}{X+Y}\sim\mathrm{Beta}(\alpha_1,\alpha_2)$.
+
+%%================================================================
+\section*{2.\; Normal Sampling Results}
+%%================================================================
+
+Let $X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}N(\mu,\sigma^2)$.
+Define $\bar X_n=\frac{1}{n}\sum X_i$ and
+$S_n^2=\frac{1}{n-1}\sum(X_i-\bar X_n)^2$.
+\begin{itemize}
+  \item $\bar X_n \sim N(\mu,\,\sigma^2/n)$ and $Z:=\frac{\bar
+    X_n-\mu}{\sigma/\sqrt{n}}\sim N(0,1)$.
+  \item $\frac{(n-1)S_n^2}{\sigma^2}\sim\chi^2(n-1)$. \quad $\bar X_n
+    \perp S_n^2$.
+  \item $W:=\frac{\bar X_n-\mu}{S_n/\sqrt{n}}\sim t(n-1)$.
+  \item $\bbE[\bar X_n]=\mu$, $\Var(\bar X_n)=\sigma^2/n$;\quad
+    $\bbE[S_n^2]=\sigma^2$.
+  \item $\MSE(\bar X_n) = \sigma^2/n$;\quad $\MSE(S_n^2) = 2\sigma^4/(n-1)$.
+  \item MLE of $\sigma^2$: $\hat\sigma^2=\frac{1}{n}\sum(X_i-\bar
+    X_n)^2=\frac{n-1}{n}S_n^2$ (biased).
+    $\MSE(\hat\sigma^2)=\frac{2n-1}{n^2}\sigma^4$.
+\end{itemize}
+
+%%================================================================
+\section*{3.\; Transformations of Random Variables}
+%%================================================================
+
+\subsection*{Univariate --- monotone $g$}
+
+Let $Y=g(X)$, $g$ monotone, $x=g^{-1}(y)$.  Then
+\[
+  f_Y(y) = f_X\!\bigl(g^{-1}(y)\bigr)\,\left|\frac{d}{dy}g^{-1}(y)\right|.
+\]
+
+\subsection*{Univariate --- non-monotone $g$}
+
+Partition $\mathcal{X}=A_0\cup A_1\cup\cdots\cup A_k$ with $P(X\in
+A_0)=0$ and $g$ monotone on each $A_i$:
+\[
+  f_Y(y) = \sum_{i=1}^{k}
+  f_X\!\bigl(g_i^{-1}(y)\bigr)\,\left|\frac{d}{dy}g_i^{-1}(y)\right|\,\mathbf{1}_{\mathcal{Y}}(y).
+\]
+
+\subsection*{Bivariate Jacobian}
+
+Let $U=g_1(X,Y)$, $V=g_2(X,Y)$ with inverse $x=h_1(u,v)$, $y=h_2(u,v)$.
+\[
+  f_{U,V}(u,v) = f_{X,Y}(h_1(u,v),h_2(u,v))\cdot|J|,\qquad
+  J=\det
+  \begin{pmatrix}\partial x/\partial u & \partial x/\partial
+    v\\ \partial y/\partial u & \partial y/\partial v
+  \end{pmatrix}.
+\]
+For non-invertible maps, sum over partitions.
+
+\subsection*{Location-Scale Family}
+
+If $X\sim f_X(x)$ and $Z=\sigma X+\mu$ ($\sigma>0$), then
+\[
+  f_Z(z)=\frac{1}{\sigma}f_X\!\left(\frac{z-\mu}{\sigma}\right).
+\]
+\textbf{Consequence.} $\bbE[Z]=\sigma\bbE[X]+\mu$ and $\Var(Z)=\sigma^2\Var(X)$.
+
+\subsection*{Probability Integral Transform}
+
+If $X$ has continuous CDF $F_X(x)$, then $Y=F_X(X)\sim\mathrm{Unif}(0,1)$.
+
+%%================================================================
+\section*{4.\; Order Statistics}
+%%================================================================
+
+Let $X_1,\ldots,X_n\overset{\mathrm{iid}}{\sim}f_X$, $F_X$ continuous.
+Order statistics: $X_{(1)}\leq X_{(2)}\leq\cdots\leq X_{(n)}$.
+
+\medskip
+\noindent\textbf{Marginal PDFs.}
+\begin{align*}
+  f_{X_{(j)}}(x) &=
+  \frac{n!}{(j-1)!(n-j)!}\,f_X(x)\,[F_X(x)]^{j-1}\,[1-F_X(x)]^{n-j}. \\[4pt]
+  f_{X_{(n)}}(x) &= n\,[F_X(x)]^{n-1}\,f_X(x). \\[4pt]
+  f_{X_{(1)}}(x) &= n\,[1-F_X(x)]^{n-1}\,f_X(x).
+\end{align*}
+
+\noindent\textbf{CDFs.}
+$F_{X_{(n)}}(x)=[F_X(x)]^n$;\quad $F_{X_{(1)}}(x)=1-[1-F_X(x)]^n$.
+
+\medskip
+\noindent\textbf{Joint pdf of all order statistics.}
+\[
+  f_{X_{(1)},\ldots,X_{(n)}}(y_1,\ldots,y_n) = n!\,f_X(y_1)\cdots
+  f_X(y_n)\,\ind{y_1<\cdots<y_n}.
+\]
+
+\noindent\textbf{Joint pdf of $(X_{(i)},X_{(j)})$, $i<j$.}
+\[
+  f_{X_{(i)},X_{(j)}}(u,v)=\frac{n!}{(i-1)!(j-1-i)!(n-j)!}\,f_X(u)f_X(v)\,[F_X(u)]^{i-1}[F_X(v)-F_X(u)]^{j-1-i}[1-F_X(v)]^{n-j}\ind{u<v}.
+\]
+
+%%================================================================
+\section*{5.\; Exponential Family}
+%%================================================================
+
+\subsection*{One-parameter natural exponential family (NEF)}
+
+\[
+  f(x\mid\theta) = \exp\!\bigl(\eta(\theta)\,T(x) - A(\theta) +
+  S(x)\bigr)\,\mathbf{1}_\mathcal{X}(x).
+\]
+Natural parameter $\eta$, sufficient statistic $T$, log-partition $A$.
+
+\subsection*{$k$-parameter exponential family}
+
+\[
+  f(x\mid\boldsymbol\theta) = \exp\!\Biggl(\sum_{j=1}^k
+    g_j(\boldsymbol\theta)\,T_j(x) - A(g_1,\ldots,g_k) +
+  S(x)\Biggr)\,\mathbf{1}_\mathcal{X}(x).
+\]
+Natural parameters $\eta_j=g_j(\boldsymbol\theta)$.
+
+\subsection*{Converting to NEF form (procedure)}
+
+\begin{enumerate}
+  \item Write $f(x;\theta)$ and absorb all constants/functions of
+    $\theta$ into the exponential using $c = e^{\log c}$.
+  \item Expand and group: collect terms of the form $[\text{fn of
+    }\theta]\times[\text{fn of }x]$.
+  \item Read off $\eta_j$, $T_j$, $A$, $S$.
+\end{enumerate}
+
+\subsection*{Common NEF forms}
+
+\begin{tabular}{llll}
+  \toprule
+  Distribution & $\eta(\theta)$ & $T(x)$ & $A(\theta)$ \\
+  \midrule
+  Bernoulli$(p)$ & $\log\frac{p}{1-p}$ & $x$ & $\log(1+e^\eta)$ \\
+  Binomial$(n,p)$ & $\log\frac{p}{1-p}$ & $x$ & $n\log(1+e^\eta)$ \\
+  Poisson$(\lambda)$ & $\log\lambda$ & $x$ & $e^\eta$ \\
+  Geometric$(p)$ & $\log(1-p)$ & $x$ & $\eta-\log(1-e^\eta)$\\
+  Exponential$(\theta)$ & $-1/\theta$ & $x$ & $-\log(-\eta)$ \\
+  Normal$(\mu,1)$ & $\mu$ & $x$ & $\eta^2/2$ \\
+  \bottomrule
+\end{tabular}
+
+\medskip
+\noindent For $N(\mu,\sigma^2)$ (two-parameter):
+$\eta_1=\mu/\sigma^2$, $T_1=x$; $\eta_2=-1/(2\sigma^2)$, $T_2=x^2$.
+
+\subsection*{MLE via exponential family}
+
+If $X\sim$ NEF with natural parameter $\eta(\theta)$ and $T=T(X)$,
+the MLE satisfies:
+\[
+  \bbE_\theta[T(X)] = \frac{1}{n}\sum_{i=1}^n T(x_i).
+\]
+Solve for $\hat\theta$.
+
+%%================================================================
+\section*{6.\; Sufficient Statistics}
+%%================================================================
+
+\textbf{Definition.} $Y=u(X_1,\ldots,X_n)$ is \emph{sufficient} for
+$\theta$ if the conditional distribution of $(X_1,\ldots,X_n)\mid
+Y=y$ does not depend on $\theta$.
+
+\medskip
+\textbf{Theorem (Fisher--Neyman Factorization).}
+$Y=u(\mathbf{X})$ is sufficient for $\theta$ if and only if
+\[
+  L(\theta\mid x_1,\ldots,x_n)=\prod_{i=1}^n f(x_i\mid\theta) =
+  k_1(u(\mathbf{x}),\theta)\cdot k_2(\mathbf{x}).
+\]
+
+\textbf{Non-uniqueness.} If $Y$ is sufficient and $h$ is one-to-one,
+then $h(Y)$ is also sufficient.
+
+\medskip
+\textbf{Theorem (Sufficient Statistic for Exponential Family).}
+For iid data from a $k$-parameter exponential family,
+\[
+  \Bigl(\textstyle\sum_{i=1}^n T_1(X_i),\;\ldots,\;\sum_{i=1}^n T_k(X_i)\Bigr)
+\]
+is a sufficient statistic.
+
+\medskip
+\noindent\textbf{Key sufficient statistics.}
+\begin{itemize}
+  \item Bernoulli/Binomial: $T=\sum X_i$
+  \item Poisson: $T=\sum X_i$
+  \item Normal$(\mu,\sigma^2)$: $T=(\sum X_i,\,\sum X_i^2)$,
+    equivalently $(\bar X_n, S_n^2)$
+  \item Uniform$(0,\theta)$: $T=X_{(n)}$ (support depends on $\theta$!)
+  \item Gamma$(\alpha,\beta)$ (both unknown): $T=(\sum\log X_i,\,\sum X_i)$
+\end{itemize}
+
+\textbf{Caution.} When the support depends on $\theta$, use the
+indicator function in the factorization.
+
+%%================================================================
+\section*{7.\; Estimator Quality: Bias, MSE, UMVUE}
+%%================================================================
+
+\[
+  \Bias_\theta W = \bbE_\theta W - \theta, \qquad
+  \MSE(W,\theta) = \Var_\theta(W) + (\Bias_\theta W)^2.
+\]
+For an unbiased estimator: $\MSE = \Var$.
+
+\medskip
+\textbf{UMVUE.} $W^*$ is the \emph{uniformly minimum variance
+unbiased estimator} of $\tau(\theta)$ if
+(1) $\bbE_\theta[W^*]=\tau(\theta)$ for all $\theta$, and (2)
+$\Var_\theta(W^*)\leq\Var_\theta(W)$ for all unbiased $W$ and all $\theta$.
+
+%%================================================================
+\section*{8.\; Fisher Information \& Cramér--Rao Bound}
+%%================================================================
+
+\textbf{Fisher Information.}
+By additivity, $I_n(\theta)=nI_1(\theta)$, where
+\[
+  I_1(\theta)
+  = -\bbE\!\left[\frac{\partial^2}{\partial\theta^2}\log
+  f_{X_1\hdots X_n}(\mathbf{x}\mid\theta)\right]
+  = -\bbE\!\left[\frac{\partial^2}{\partial\theta^2}\ell(\theta)\right].
+\]
+Equivalently, $I_1(\theta)=\bbE_\theta\!\bigl[(\ell_1'(\theta))^2\bigr]$
+where $\ell_1(\theta)=\log f(x_1\mid\theta)$ is the
+single-observation log-likelihood.
+
+\medskip
+\textbf{Theorem (Cramér--Rao Inequality).}
+If $W$ is unbiased for $\tau(\theta)$ and regularity holds:
+\[
+  \Var_\theta(W) \;\geq\; \frac{(\tau'(\theta))^2}{I_n(\theta)}.
+\]
+In particular, if $W$ is unbiased for $\theta$ itself:
+$\Var_\theta(W)\geq 1/I_n(\theta)$.
+
+\medskip
+\noindent\textbf{Procedure to find CRLB.}
+(1) Compute $\ell_1(\theta) = \log f(x\mid\theta)$.
+(2) Find $\ell_1''(\theta)$; take $I_1(\theta)=-\bbE[\ell_1''(\theta)]$.
+(3) Set $I_n(\theta)=nI_1(\theta)$.
+(4) $\mathrm{CRLB} = (\tau'(\theta))^2/I_n(\theta)$.
+
+\medskip
+\noindent\textbf{Common Fisher information numbers.}
+\begin{tabular}{ll}
+  \toprule
+  Distribution & $I_1(\theta)$ \\
+  \midrule
+  Bernoulli$(p)$ & $1/(p(1-p))$ \\
+  Poisson$(\lambda)$ & $1/\lambda$ \\
+  Normal$(\theta,\sigma^2)$ (known $\sigma^2$) & $1/\sigma^2$ \\
+  Exponential$(\theta)$ & $1/\theta^2$ \\
+  \bottomrule
+\end{tabular}
+
+%%================================================================
+\section*{9.\; Rao--Blackwell \& Lehmann--Scheff\'e (UMVUE)}
+%%================================================================
+
+\textbf{Theorem (Rao--Blackwell).}
+Let $W$ be any unbiased estimator of $\tau(\theta)$, $T$ any random variable.
+Define $\phi(T)=\bbE[W\mid T]$. Then:
+\begin{enumerate}
+  \item $\bbE_\theta[\phi(T)]=\tau(\theta)$ for all $\theta$.
+  \item $\Var_\theta(\phi(T))\leq\Var_\theta(W)$ for all $\theta$.
+  \item If $T$ is sufficient, $\phi(T)$ is an estimator (does not
+    depend on $\theta$).
+\end{enumerate}
+
+\medskip
+\textbf{Complete statistic.}
+$T$ is \emph{complete} for $\theta$ if
+\[
+  \bbE_\theta[g(T)]=0\;\text{ for all }\theta \;\Longrightarrow\; g(T)=0\text{ a.s.}
+\]
+Intuitively: the only unbiased estimator of $0$ that is a function of $T$ is the zero function.
+
+\medskip
+\textbf{Completeness in exponential family.}
+For iid data from a $k$-parameter exp.\ family, $T=(\sum T_1(X_i),\ldots,\sum T_k(X_i))$
+is complete and sufficient, \emph{provided} the natural parameter space
+$\{\boldsymbol\eta(\boldsymbol\theta):\boldsymbol\theta\in\mathcal{R}\}$
+has non-empty interior in $\mathbb{R}^k$.
+(Always verify this condition before applying the theorem.)
+
+\medskip
+\textbf{Theorem (Lehmann--Scheff\'e).}
+Let $T$ be a \emph{complete sufficient} statistic for $\theta$.
+
+\begin{itemize}
+  \item[\textbf{(a)}] \textbf{Direct route.}
+    If $\phi(T)$ is unbiased for $\tau(\theta)$, i.e.\
+    $\bbE_\theta[\phi(T)]=\tau(\theta)$ for all $\theta$,
+    then $\phi(T)$ is the \emph{unique} UMVUE of $\tau(\theta)$.
+
+    \textit{Why:} if $W$ were another unbiased estimator with smaller variance,
+    then $\bbE_\theta[\phi(T)-\bbE[W\mid T]]=0$ for all $\theta$, and
+    by completeness $\phi(T)=\bbE[W\mid T]$ a.s., so no strictly better estimator exists.
+
+  \item[\textbf{(b)}] \textbf{Rao--Blackwell route.}
+    If $W$ is \emph{any} unbiased estimator of $\tau(\theta)$,
+    then $\phi(T)=\bbE[W\mid T]$ is the unique UMVUE.
+
+    \textit{Why this works:}
+    \begin{enumerate}
+      \item \textbf{Sufficiency} of $T$ $\Rightarrow$ $\phi(T)=\bbE[W\mid T]$ does not
+        depend on $\theta$, so it is a valid estimator.
+      \item \textbf{Rao--Blackwell} $\Rightarrow$ $\bbE_\theta[\phi(T)]=\tau(\theta)$
+        (unbiased) and $\Var_\theta(\phi(T))\leq\Var_\theta(W)$.
+      \item \textbf{Completeness} $\Rightarrow$ the result is \emph{unique}
+        (any two unbiased functions of $T$ must agree a.s.).
+      \item Apply (a) to conclude $\phi(T)$ is the UMVUE.
+    \end{enumerate}
+\end{itemize}
+
+\textbf{Uniqueness.} If $W_0$ is a UMVUE of $\tau(\theta)$, it is unique.
+
+\medskip
+\noindent\textbf{UMVUE procedure (two routes).}
+
+\noindent\textit{Route 1 (via (a)) — when you can guess $\phi(T)$ directly:}
+\begin{enumerate}
+  \item Find complete sufficient $T$.
+  \item Guess or derive $\phi(T)$ such that $\bbE_\theta[\phi(T)]=\tau(\theta)$.
+  \item Conclude $\phi(T)$ is the UMVUE.
+\end{enumerate}
+
+\noindent\textit{Route 2 (via (b)) — when a simple unbiased estimator is available:}
+\begin{enumerate}
+  \item Find complete sufficient $T$.
+  \item Find any unbiased $W$ (indicator trick: $\bbE[\mathbf{1}_A(X_1)]=P(X_1\in A)$
+    is often useful).
+  \item Compute $\phi(T)=\bbE[W\mid T=t]$ — this is the UMVUE.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Key examples of UMVUEs.}
+\begin{itemize}
+  \item Bernoulli$(p)$: UMVUE of $p$ is $\bar X_n$; UMVUE of $p(1-p)$
+    is $\frac{n\bar X_n(1-\bar X_n)}{n-1}$.
+  \item Uniform$(0,\theta)$: Complete sufficient $T=X_{(n)}$; UMVUE
+    of $\theta$ is $\frac{n+1}{n}X_{(n)}$.
+  \item Normal$(\mu,\sigma^2)$: UMVUE of $(\mu,\sigma^2)$ is $(\bar
+    X_n, S_n^2)$.
+  \item Poisson$(\theta)$: UMVUE of $e^{-2\theta}$ is $(1-2/n)^{\sum X_i}$.
+\end{itemize}
+
+%%================================================================
+\section*{10.\; Maximum Likelihood Estimation}
+%%================================================================
+
+\[
+  L(\theta\mid\mathbf{x}) = \prod_{i=1}^n f(x_i\mid\theta), \qquad
+  \ell(\theta\mid\mathbf{x}) = \sum_{i=1}^n \log f(x_i\mid\theta).
+\]
+Maximize $\ell$ by setting $\ell'(\theta)=0$ (check $\ell''<0$).
+
+\medskip
+\textbf{Invariance.} If $\hat\theta$ is MLE of $\theta$, then
+$g(\hat\theta)$ is MLE of $g(\theta)$.
+
+\medskip
+\textbf{Two-parameter MLE.} Maximize over $(\theta_1,\theta_2)$:
+often optimize one parameter given the other.
+For Normal: $\hat\mu=\bar X_n$, $\hat\sigma^2=\frac{1}{n}\sum(X_i-\bar X_n)^2$.
+
+%%================================================================
+\section*{11.\; Likelihood Ratio Test (LRT)}
+%%================================================================
+
+\textbf{Setup.} Test $H_0:\theta\in\Theta_0$
+vs.\ $H_1:\theta\in\Theta\setminus\Theta_0$.
+
+\medskip
+\textbf{LRT statistic.}
+\[
+  \lambda(\mathbf{x}) =
+  \frac{\sup_{\theta\in\Theta_0}L(\theta\mid\mathbf{x})}{\sup_{\theta\in\Theta}L(\theta\mid\mathbf{x})}
+  = \frac{L(\hat\theta_0\mid\mathbf{x})}{L(\hat\theta\mid\mathbf{x})},
+\]
+where $\hat\theta_0=\arg\max_{\Theta_0} L$ and $\hat\theta=\arg\max_\Theta L$.
+Note $0\leq\lambda\leq 1$.
+
+\textbf{Rejection region.} Reject $H_0$ when $\lambda(\mathbf{x})\leq
+c$, $c\in(0,1)$.
+
+\medskip
+\textbf{Procedure.}
+\begin{enumerate}
+  \item Compute $\lambda(\mathbf{x})$ (take log, find MLEs, plug in).
+  \item Identify the rejection region (simplify $\lambda\leq c$).
+  \item Set $\sup_{\theta\in\Theta_0}P_\theta(\text{reject})=\alpha$
+    to find $c$.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Errors and power.}
+\begin{itemize}
+  \item \textbf{Type I error}: reject $H_0$ when $H_0$ is true.
+  \item \textbf{Type II error}: fail to reject $H_0$ when $H_1$ is true.
+  \item \textbf{Power function}: $\beta(\theta)=P_\theta(\mathbf{X}\in R)$.
+    \quad $\beta(\theta)=$ Type I rate if $\theta\in\Theta_0$; $1-$
+    Type II rate if $\theta\notin\Theta_0$.
+  \item \textbf{Size-$\alpha$ test}:
+    $\sup_{\theta\in\Theta_0}\beta(\theta)=\alpha$.
+  \item \textbf{Upper quantile}: $z_\alpha$ satisfies
+    $P(Z>z_\alpha)=\alpha$ for $Z\sim N(0,1)$.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Key LRT results.}
+
+\begin{tabular}{lll}
+  \toprule
+  Setting & LRT statistic & Rejection region \\
+  \midrule
+  $N(\theta,1)$, $H_0:\theta=\theta_0$ & $\exp\bigl(-\frac{n}{2}(\bar
+  X-\theta_0)^2\bigr)$ & $|\bar X-\theta_0|\geq z_{\alpha/2}/\sqrt{n}$ \\[4pt]
+  $N(\mu,\sigma^2)$, $H_0:\mu\leq\mu_0$ (both unkn.) &
+  $\bigl(\hat\sigma^2/\hat\sigma_0^2\bigr)^{n/2}$ & $\frac{\bar
+  X-\mu_0}{S_n/\sqrt{n}}\geq t_\alpha(n-1)$ \\[4pt]
+  $\mathrm{Exp}(\theta)$, $H_0:\theta=\theta_0$ & $(\bar
+  X/\theta_0)^n e^{-n\bar X/\theta_0+n}$ & $\bar X\leq c_1\theta_0$
+  or $\bar X\geq c_2\theta_0$ \\
+  \bottomrule
+\end{tabular}
+
+\medskip
+\noindent\textbf{Pivotal quantities for rejection regions.}
+\begin{itemize}
+  \item $N(\mu,\sigma^2)$ both unknown, $H_0:\mu=\mu_0$: pivot
+    $W=\frac{\bar X-\mu_0}{S_n/\sqrt{n}}\sim t(n-1)$; reject when
+    $|W|\geq t_{\alpha/2}(n-1)$.
+  \item $\mathrm{Exp}(\theta_0)$, $H_0:\theta=\theta_0$: pivot
+    $Z=2n\bar X/\theta_0\sim\chi^2(2n)$.
+  \item Location exponential, $H_0:\theta\leq\theta_0$: reject when
+    $X_{(1)}\geq\theta_0+c'$ where $c'=\frac{-\ln\alpha}{n}$.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Randomized test} (discrete case). When
+$P(\text{reject}\mid H_0)$ cannot be made to equal exactly $\alpha$:
+reject always if $W\leq k_1$, reject with probability $\gamma$ if
+$W=k_2$, where $k_1,k_2,\gamma$ are chosen to achieve size $\alpha$.
+
+%%================================================================
+\section*{12.\; Key Identities and Tricks}
+%%================================================================
+
+\begin{itemize}
+  \item $\sum(x_i-a)^2 = \sum(x_i-\bar x)^2 + n(\bar x-a)^2$ for any
+    constant $a$.
+  \item $\prod x_i = x_{(1)}^n e^T$ where $T=\sum\log x_i - n\log
+    x_{(1)}$ (Pareto LRT trick).
+  \item If $X\sim\mathrm{Bern}(p)$: $\bbE[\mathbf{1}_A(X_1)]=P(X_1\in
+    A)$ is an unbiased estimator of $P(X\in A)$.
+  \item Conditional on sufficient statistic: $P(X_1=1\mid\sum X_i=t)
+    = t/n$ for Bernoulli.
+  \item $\binom{n-k}{t-k}/\binom{n}{t} =
+    \frac{t(t-1)\cdots(t-k+1)}{n(n-1)\cdots(n-k+1)}$ (used in Bernoulli UMVUE).
+  \item For Uniform$(0,\theta)$: $X_{(n)}\sim
+    f(x)=nx^{n-1}/\theta^n$, $\bbE[X_{(n)}]=n\theta/(n+1)$.
+\end{itemize}
+
+\end{document}

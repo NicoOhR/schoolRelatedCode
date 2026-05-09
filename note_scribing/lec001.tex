@@ -1,0 +1,288 @@
+% LaTeX template for Stat 4352.002: Mathematical Statistics
+% University of Texas at Dallas, Spring 2026
+% Yun Wei
+
+\documentclass{article}
+\usepackage{scribe} % specifies page and header format
+
+% Useful packages
+
+\RequirePackage{amsthm,amsmath,amsfonts,amssymb}
+\RequirePackage{mathrsfs} % mathscr fonts
+\RequirePackage{color}
+\RequirePackage{enumitem}
+\RequirePackage{mathtools}  % have the second line for subscript
+\RequirePackage{verbatim} % to comment block
+\RequirePackage{bm} % to change font to be both bold and ??it possible
+
+% Theorem type environments
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{assump}[thm]{Assumption}
+\newtheorem{prob}[thm]{Problem}
+\newtheorem{exa}[thm]{Example}
+\newtheorem{definition}[thm]{Definition}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+% Useful macros -- you can add your own
+
+\newcommand{\sH}{{\mathcal H}}
+\newcommand{\sX}{{\mathcal X}}
+\newcommand{\sY}{{\mathcal Y}}
+\newcommand{\hnhat}{\widehat{h}_n}
+
+% frequently used symbols
+\newcommand{\bbE}{\mathbb{E}} % use this for expectation
+\newcommand{\bbR}{\mathbb{R}} % real numbers
+
+% operators
+\newcommand{\sign}{\mathop{\mathrm{sign}}}
+\newcommand{\supp}{\mathop{\mathrm{supp}}} % support
+\newcommand{\argmin}{\operatornamewithlimits{arg\ min}}
+\newcommand{\argmax}{\operatornamewithlimits{arg\ max}}
+
+% indicator function
+\newcommand{\ind}[1]{\bm{1}_{\{#1\}}}
+
+% grouping operators
+\newcommand{\brac}[1]{\left[#1\right]}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\paren}[1]{\left(#1\right)}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+
+\begin{document}
+
+% Lecture header format:
+%\lecture{**TOPIC-NUMBER**}{**TITLE**}{**LECTURER**}{**SCRIBE**}
+\lecture{1}{Distributions of Functions of Random Variables}{Yun Wei}{Yun Wei}
+
+\noindent {\bf Disclaimer}: {\it These notes have not been subjected to
+the usual scrutiny reserved for formal publications.  They may be
+distributed outside this class only with the permission of the
+Instructor.} %\vspace*{2mm}
+
+\section{Introduction}
+
+If $X$ is a random variable with cdf $F_X(x)$, then any function of $X$, say $g(X)$, is
+also a random variable. Often $g(X)$ is of interest itself and we write $Y=g(X)$ to
+denote the new random variable $g(X)$. Since $Y$ is a function of $X$, we can describe
+the probabilistic behavior of $Y$ in terms of that of $X$. That is, for any set $A$,
+\[
+P(Y\in A)=P\bigl(g(X)\in A\bigr),
+\]
+showing that the distribution of $Y$ depends on the functions $F_X$ and $g$. Depending
+on the choice of $g$, it is sometimes possible to obtain a tractable expression for this
+probability.
+
+Formally, if we write $y=g(x)$, the function $g(x)$ defines a mapping from the original
+sample space of $X$, $\mathcal{X}$, to a new sample space, $\mathcal{Y}$, the sample
+space of the random variable $Y$. That is,
+\[
+g(x):\mathcal{X}\to\mathcal{Y}.
+\]
+We associate with $g$ an inverse mapping, denoted by $g^{-1}$, which is a mapping from
+subsets of $\mathcal{Y}$ to subsets of $\mathcal{X}$, and is defined by
+\begin{equation*}
+g^{-1}(A)=\{x\in\mathcal{X}: g(x)\in A\}.
+\end{equation*}
+
+Note that the mapping $g^{-1}$ takes sets into sets; that is, $g^{-1}(A)$ is the set of
+points in $\mathcal{X}$ that $g(x)$ takes into the set $A$. It is possible for $A$ to be
+a point set, say $A=\{y\}$. Then
+\[
+g^{-1}(\{y\})=\{x\in\mathcal{X}: g(x)=y\}.
+\]
+
+In this case we often write $g^{-1}(y)$ instead of $g^{-1}(\{y\})$. The quantity
+$g^{-1}(y)$ can still be a set, however, if there is more than one $x$ for which
+$g(x)=y$. If there is only one $x$ for which $g(x)=y$, then $g^{-1}(y)$ is the point
+set $\{x\}$, and we will write $g^{-1}(y)=x$. 
+
+\begin{rem}
+    In particular, if $g$ is an invertible function, then the inverse map matches the definition of inverse function. 
+\end{rem}
+
+If the random variable $Y$ is now
+defined by $Y=g(X)$, we can write for any set $A\subset \mathcal{Y}$,
+\begin{align*}
+P(Y\in A) &= P\bigl(g(X)\in A\bigr) \notag\\
+         &= P\bigl(\{x\in\mathcal{X}: g(x)\in A\}\bigr) \notag\\
+         &= P\bigl(X\in g^{-1}(A)\bigr).
+\end{align*}
+
+This defines the probability distribution of $Y$. 
+
+\section{Discrete distributions}
+If $X$ is a discrete random variable, then $\mathcal{X}$ is countable. The sample
+space for $Y=g(X)$ is $\mathcal{Y}=\{y: y=g(x),\ x\in\mathcal{X}\}$, which is also a
+countable set. Thus, $Y$ is also a discrete random variable. From (2.1.2), the pmf
+for $Y$ is
+\[
+f_Y(y)=P(Y=y)=\sum_{x\in g^{-1}(y)} P(X=x)
+       =\sum_{x\in g^{-1}(y)} f_X(x), \qquad \text{for } y\in\mathcal{Y},
+\]
+and $f_Y(y)=0$ for $y\notin\mathcal{Y}$. In this case, finding the pmf of $Y$ involves
+simply identifying $g^{-1}(y)$, for each $y\in\mathcal{Y}$, and summing the appropriate
+probabilities.
+
+\begin{exa}[Binomial transformation]
+    A discrete random variable $X$ has a \emph{binomial} distribution if its pmf is of the form
+\begin{equation*}
+f_X(x)=P(X=x)=\binom{n}{x}p^{x}(1-p)^{\,n-x}, \qquad x=0,1,\ldots,n,
+\end{equation*}
+where $n$ is a positive integer and $0\le p\le 1$. Values such as $n$ and $p$ that can be
+set to different values, producing different probability distributions, are called
+\emph{parameters}. Consider the random variable $Y=g(X)$, where $g(x)=n-x$; that is,
+$Y=n-X$. Here $\mathcal{X}=\{0,1,\ldots,n\}$ and
+$\mathcal{Y}=\{y: y=g(x),\ x\in\mathcal{X}\}=\{0,1,\ldots,n\}$.
+For any $y\in\mathcal{Y}$, $n-x=g(x)=y$ if and only if $x=n-y$. Thus, $g^{-1}(y)$ is the
+single point $x=n-y$, and
+\begin{align*}
+f_Y(y)
+&= \sum_{x\in g^{-1}(y)} f_X(x)\\
+&= f_X(n-y)\\
+&= \binom{n}{n-y}p^{\,n-y}(1-p)^{\,n-(n-y)}\\
+&= \binom{n}{y}(1-p)^{\,y}p^{\,n-y}.
+\qquad \Bigl( \binom{n}{y}=\binom{n}{n-y}\Bigr)
+\end{align*}
+Thus, we see that $Y$ also has a binomial distribution, but with parameters $n$ and
+$1-p$. Intuitively, $X$ is the number of heads, when we toss a coin with probability $p$ getting a head $n$ times; so $Y=n-X$ is the number of tails, which then is also a binomial distribution, but with parameters $n$ and $1-p$. 
+\end{exa}  
+
+\section{Continuous distributions}
+
+% (Excerpt-style LaTeX matching the screenshot)
+
+If $X$ and $Y$ are continuous random variables, then in some cases it is possible to
+find simple formulas for the cdf and pdf of $Y$ in terms of the cdf and pdf of $X$ and
+the function $g$. In the remainder of this section, we consider some of these cases.
+
+The cdf of $Y=g(X)$ is
+\begin{align}
+F_Y(y)
+&= P(Y\le y) \notag\\
+&= P\bigl(g(X)\le y\bigr) \notag\\
+&= P\bigl(\{x\in \mathcal{X}: g(x)\le y\}\bigr).
+\end{align}
+
+When transformations are made, it is important to keep track of the sample spaces
+of the random variables; otherwise, much confusion can arise. When the transformation
+is from $X$ to $Y=g(X)$, it is most convenient to use
+\begin{equation*}
+\mathcal{X}=\{x: f_X(x)>0\}
+\qquad \text{and} \qquad
+\mathcal{Y}=\{y: y=g(x)\ \text{for some } x\in\mathcal{X}\}.
+\end{equation*}
+
+The pdf of the random variable $X$ is positive only on the set $\mathcal{X}$ and is
+0 elsewhere. Such a set is called the \emph{support} set of a distribution or, more
+informally, the \emph{support} of a distribution. This terminology can also apply to
+a pmf or, in general, to any nonnegative function.
+
+It is easiest to deal with functions $g(x)$ that are \emph{monotone}, that is, those
+that satisfy either
+\[
+u>v \Rightarrow g(u)>g(v)\quad \text{(increasing)}
+\qquad \text{or} \qquad
+u<v \Rightarrow g(u)>g(v)\quad \text{(decreasing)}.
+\]
+If the transformation $x\to g(x)$ is monotone, then it is \emph{one-to-one and onto}
+from $\mathcal{X}\to\mathcal{Y}$. That is, each $x$ goes to only one $y$ and each $y$
+comes from at most one $x$ (one-to-one). Also, for $\mathcal{Y}$ defined as above,
+for each $y\in\mathcal{Y}$ there is an $x\in\mathcal{X}$ such that $g(x)=y$ (onto).
+Thus, the transformation $g$ uniquely pairs $x$s and $y$s. If $g$ is monotone, then
+$g^{-1}$ is single-valued; that is, $g^{-1}(y)=x$ if and only if $y=g(x)$. If $g$ is
+increasing, this implies that
+\begin{align*}
+\{x\in\mathcal{X}: g(x)\le y\}
+&= \{x\in\mathcal{X}: g^{-1}(g(x))\le g^{-1}(y)\} \notag\\
+&= \{x\in\mathcal{X}: x\le g^{-1}(y)\}.
+\end{align*}
+
+If $g(x)$ is an increasing function, then using (2.1.4), we can write
+\[
+F_Y(y)
+= \int_{\{x\in\mathcal{X}: x\le g^{-1}(y)\}} f_X(x)\,dx
+= \int_{-\infty}^{g^{-1}(y)} f_X(x)\,dx
+= F_X\bigl(g^{-1}(y)\bigr).
+\]
+If the pdf of $Y$ is continuous, it can be obtained by differentiating the cdf. Taking derivatives,
+\[
+f_Y(y)
+= f_X\bigl(g^{-1}(y)\bigr) \frac{d}{dy}g^{-1}(y) = f_X\bigl(g^{-1}(y)\bigr) \left|\frac{d}{dy}g^{-1}(y)\right|,
+\]
+where the last step follows since $g^{-1}(y)$ is increasing and thus has nonnegative derivatives.
+
+If $g$ is decreasing, this implies that
+\begin{align}
+\{x\in\mathcal{X}: g(x)\le y\}
+&= \{x\in\mathcal{X}: g^{-1}(g(x)) \ge g^{-1}(y)\} \notag\\
+&= \{x\in\mathcal{X}: x \ge g^{-1}(y)\}.
+\tag{2.1.9}
+\end{align}
+If $g(x)$ is decreasing, we have
+\[
+F_Y(y)
+= \int_{g^{-1}(y)}^{\infty} f_X(x)\,dx
+= 1 - F_X\bigl(g^{-1}(y)\bigr).
+\]
+The continuity of $X$ is used to obtain the second equality. Taking derivatives,
+\[
+f_Y(y)
+= -f_X\bigl(g^{-1}(y)\bigr) \frac{d}{dy}g^{-1}(y) = f_X\bigl(g^{-1}(y)\bigr) \left|\frac{d}{dy}g^{-1}(y)\right|,
+\]
+where the last step follows since $g^{-1}(y)$ is decreasing and thus has nonpositive derivatives.
+
+Define the indicator function $1_A(x) = \begin{cases} 1 & x\in A\\ 0 & x\not\in A \end{cases}$. 
+
+\begin{exa}[Uniform-exponential relationship--I] \quad
+Suppose $X\sim f_X(x)=1_{(0,1)}(x)$ , the \emph{uniform}$(0,1)$
+distribution. It is straightforward to check that $F_X(x)=\begin{cases}  0 & x\leq 0 \\
+x & 0<x<1 \\  1 & x\geq 1 \end{cases} $.
+We now make the transformation $Y=g(X)=-\log X$. Since
+\[
+\frac{d}{dx}g(x)=\frac{d}{dx}(-\log x)=\frac{-1}{x}<0,
+\qquad \text{for } 0<x<1,
+\]
+$g(x)$ is a decreasing function. As $X$ ranges between $0$ and $1$, $-\log x$ ranges
+between $0$ and $\infty$, that is, $\mathcal{Y}=(0,\infty)$. For $y>0$, $y=-\log x$
+implies $x=e^{-y}$, so $g^{-1}(y)=e^{-y}$. Therefore, for $y>0$,
+\[
+F_Y(y)=1-F_X\bigl(g^{-1}(y)\bigr)=1-F_X(e^{-y})=1-e^{-y}.
+\qquad (F_X(x)=x  \text{ when } x\in (0,1) \text{ and } e^{-y}\in (0,1) )
+\]
+Of course, $F_Y(y)=0$ for $y\le 0$.  Taking derivative, for $y>0$,
+\[
+f_Y(y)=e^{-y}.
+\]
+Of course, $f_Y(y)=0$ for $y\le 0$. Using indicator notation, $F_Y(y) = (1-e^{-y}) 1_{(0,\infty)}(y) $ and $f_Y(y) = e^{-y} 1_{(0,\infty)}(y) $.  \textbf{Note that it was necessary only to verify that
+$g(x)=-\log x$ is monotone on $(0,1)$, the support of $X$.}
+\end{exa}
+
+
+
+
+
+
+
+
+\begin{thebibliography}{10}
+\bibitem{devroye96}
+G. Casella,  and R. Berger,
+{\it Statistical inference}, Chapman and Hall/CRC, 2nd edition, 2024.  Section 2.1
+\end{thebibliography}
+
+\end{document}
+
+
+
+

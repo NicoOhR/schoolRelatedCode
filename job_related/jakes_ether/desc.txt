@@ -1,0 +1,29 @@
+Ether.fi is one of the fastest growing fintech companies in the world. We have over $10B AUM and a team of 30 nearly all technical staff. We've been profitable day one and are focusing on building real consumer applications for millions of users.
+
+The future we envision is true on-chain banking. Our current products — Stake, Liquid, and Cash — enable users to earn high yields and spend their digital assets in the real world with ease.
+
+Position Overview
+We are looking for a hungry, resourceful intern to contribute to our GTM efforts by automating processes and contributing to growth-oriented product development.
+
+What You'll Do
+Build our funnel tracking system for our iOS and Android apps (AppsFlyer, Amplitude).
+
+Develop internal tools to automate lead generation and cold outreach processes.
+
+Build growth-oriented features in our web and/or mobile products.
+
+Instrument and optimize even-driven notification systems, referral flows and onboarding funnels.
+
+What We're Looking For
+You ship quality software often with little oversight
+
+Comfortable working across the stack
+
+Self-starter, fast learner, all the usual stuff
+
+Brownie points if you have an interest in crypto, fintech, or on-chain products
+
+Term
+April - August (we are flexible), but there’s opportunity for an ongoing partnership if you’re a good fit.
+
+

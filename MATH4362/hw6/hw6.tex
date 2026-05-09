@@ -26,7 +26,7 @@
   \begin{center}
     \Large{\textbf{Assignment #1}
 
-    N. Ohayon Rozanes} % Name of course here
+    MATH 4362} % Name of course here
     \vspace{5pt}
 
     \normalsize{N. Ohayon Rozanes  % Your name here
@@ -36,7 +36,7 @@
 
 \end{center}}
 \begin{document}
-\maketitletwo[5]  % Optional argument is assignment number
+\maketitletwo[6]  % Optional argument is assignment number
 %Keep a blank space between maketitletwo and \question[1]
 
 \question[1]{}
@@ -145,4 +145,99 @@
       \end{cases}
     \]
 \end{enumerate}
+\question[4]{}
+\[
+  -cu'' = f(x)
+\]
+
+Then the Green's function is the solution to the problem
+\[
+  -cu'' = \delta_\xi(x)
+\]
+
+And is given by the formula
+
+\[
+  G = \frac{-\rho(x-\xi)}{c} + ax + b
+\]
+With
+\[
+  \rho(x-\xi) =
+  \begin{cases}
+    x - \xi & x \ge \xi \\
+    0 & x < \xi
+  \end{cases}
+\]
+
+It also helps to note that:
+\[
+  G' = \frac{-\sigma(x-\xi)}{c} + a
+\]
+
+We find the constants $a,b$ by conditioning on the boundary:
+\[
+  G(0) = \frac{-\rho(-\xi)}{c} + b = 0
+\]
+
+Since, for $\xi \in [0,1], -\xi < \xi \implies \rho(-\xi) = 0$, it
+must be that $b = 0$. Conditioning on the other end point, we have that
+
+\[
+  G'(1) = \frac{-\sigma(1-\xi)}{c} + a = 0
+\]
+
+Notice that $1-\xi > 0$ so $\sigma(1-\xi) = 1$
+
+\[
+  G'(1) = \frac{-1}{c} + a = 0 \implies a = \frac{1}{c}
+\]
+
+So the Green's function for this problem is
+\[
+  G(x) = \frac{-\rho(x-\xi)}{c} + \frac{x}{c} = \frac{1}{c}(-\rho(x-\xi) + x)
+\]
+
+Using linear superposition, we have
+
+\[
+  u(x) = \int_0^1  \frac{1}{c}(x -\rho(x-\xi))f(\xi)d\xi
+\]
+
+We now verify the above equation, first $x - \rho(x-\xi) = \xi$ if $x
+\ge \xi$ and $x$ otherwise, so we can split the integral at $x$
+
+\[
+  u(x) = \frac{1}{c}\left(\int_0^x \xi f(\xi)d\xi + x\int_x^1 f(\xi)d\xi\right).
+\]
+Then
+\[
+  u'(x) = \frac{1}{c}\int_x^1 f(\xi)d\xi,
+\]
+and
+\[
+  u''(x) = -\frac{1}{c}f(x) \implies -cu''(x) = f(x).
+\]
+Moreover, $u(0) = 0$ and $u'(1) = \frac{1}{c}\int_1^1 f(\xi)d\xi =
+0$ as desired.
+
+\question[5]{}
+
+The described problem in equation form
+\[
+  -2u'' = f(x)
+\]
+
+With $u(0) = 0$, and $u'(4) = 0$ for $x \in [0,4]$
+
+Using the general solution from the previous question, we have that:
+
+\[
+  G(x) = \frac{-\rho(x-\xi)}{2} + \frac{x}{2} = \frac{1}{2}(x -\rho(x-\xi))
+\]
+
+Which yields the following solution for a given $f$:
+
+\[
+  u(x) = \frac{1}{2}\left(\int_0^x \xi f(\xi)d\xi + x\int_x^4 f(\xi)d\xi\right).
+\]
 \end{document}

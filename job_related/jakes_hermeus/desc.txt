@@ -1,0 +1,27 @@
+Hermeus is a venture-backed defense aviation company reclaiming the lost art of rapid iterative prototyping to build the fastest aircraft in the world today. By prioritizing relentless hardware iteration, we deliver high-speed systems at the pace of the modern battlefield. We work with the Department of War to provide the high-speed capabilities our nation and its allies need to maintain a durable, asymmetric advantage.
+
+As a Modeling & Simulation Software Engineering Intern you will work with the software team to develop performant modeling and simulation code for our 6DOF SITL simulation using Julia. You'll Interface with the Flight Software, HMI, and Flight Sciences teams to meet stakeholder needs and ensure accurate results. Your work will involve creating hardware/physics informed software models and validate results with real data. 
+ 
+Fall: Around 16 weeks (September - December)
+ 
+Responsibilities:
+Develop performant simulation code for 6 Degrees of Freedom (6DOF) Software-in-the-Loop (SITL) systems using Julia.
+Develop user driven features and focus on scalability of our Monte Carlo simulation
+Collaborate with cross-functional teams including Flight Software, Human-Machine Interface (HMI), and Flight Sciences to align simulation outputs with stakeholder requirements.
+Design and implement physics-informed models that accurately represent hardware behavior and system dynamics.
+Validate simulation accuracy by comparing model outputs with real-world flight data and refining models accordingly.
+Optimize simulation performance to ensure real-time execution and scalability across different test environments.
+Participate in code reviews and testing cycles to maintain high software quality and reliability.
+Document modeling assumptions, validation results, and integration workflows for internal knowledge sharing and future development.
+Minimum Requirements:
+Pursuing a degree in Computer Science, Aerospace Engineering, Electrical Engineering, Applied Mathematics, or a related technical field.
+Proficiency in Julia or strong experience with scientific computing languages such as Python, MATLAB, or C++.
+Understanding of 6DOF dynamics and simulation principles, especially in aerospace or robotics contexts.
+Familiarity with modeling physical systems, including hardware-in-the-loop or physics-informed simulation techniques.
+Experience with data validation and analysis, including comparing simulation outputs to real-world data.
+Strong understanding of engineering first principles
+Demonstrated ability to work within cross-functional teams
+Enthusiasm for aviation and Hermeus' mission
+Excellent written and verbal communication skills
+GPA of 3.0 or above
+

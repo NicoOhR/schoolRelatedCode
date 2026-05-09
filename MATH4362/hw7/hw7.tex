@@ -1,0 +1,208 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+\usepackage{
+  amsmath,      % Math Environments
+  amssymb,      % Extended Symbols
+  enumerate,        % Enumerate Environments
+  graphicx,      % Include Images
+  lastpage,      % Reference Lastpage
+  multicol,      % Use Multi-columns
+  multirow      % Use Multi-rows
+}
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    MATH 4362} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[5]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+\begin{enumerate}
+  \item $$f(x) = e^{-(x+4)^2}$$
+    \begin{align*}
+      \hat f(k) &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty f(x)e^{-ikx} dx\\
+      &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty e^{-(x+4)^2}e^{-ikx} dx \\
+      &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty e^{-(x+4)^2 - ikx} dx
+    \end{align*}
+
+    Further analyzing the exponent:
+    \begin{align*}
+      -(x+4)^2 - ikx &= -x^2 - x(8+ ik) - 16 \\
+      &=-(x+\frac{8+ik}{2})^2 + \frac{(8+ik)^2}{4} -16\\
+    \end{align*}
+    substituting back into the integral and pulling out terms:
+    \begin{align*}
+      \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty e^{-(x+4)^2 - ikx}
+      dx &= \frac{\exp(\frac{(8+ik)^2}{4} - 16)}{\sqrt{2\pi}}
+      \int_{-\infty}^\infty \exp(-(x+\frac{8+ik}{2})^2) dx
+    \end{align*}
+    Which we recognize as the guassian integral, so the integral evaluates to
+    \begin{align*}
+      \hat f(k) = \frac{\exp(\frac{(8+ik)^2}{4} - 16)}{\sqrt{2}} =
+      \frac{\exp(4ik -\frac{k^2}{4})}{\sqrt{2}}
+    \end{align*}
+  \item
+    $$f(x) = e^{-|x+1|}$$
+    Given that we know that for $g(x) = e^{-|x|}$ $$\hat g(x) =
+    \sqrt{\frac{2}{\pi}}\frac{1}{k^2+1}$$,
+    We observe that $g(x+1) = g(x-(-1)) = f(x)$, then applying the
+    shift thereom,
+    we have that:
+    $$
+    \hat f(x) = e^{ik}\hat g(k)  = \sqrt{\frac{2}{\pi}}\frac{e^{ik}}{k^2+1}
+    $$
+\end{enumerate}
+\question[2]{}
+\begin{enumerate}
+  \item
+    \[
+      \hat f(k) = e^{-k^2}
+    \]
+    Then we have that
+    \[
+      f(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty \hat f e^{ikx}dk
+      = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty e^{-k^2 + ikx}dk
+    \]
+    Again, we can complete the square in the exponent:
+    \begin{align*}
+      -k^2 + ikx = -(k - \frac{ix}{2})^2 + \frac{x^2}{4}
+    \end{align*}
+    So the integral becomes recognizable as the Guassian integral
+    \[
+      \exp\left(\frac{x^2}{4}\right) \int_{-\infty}^\infty
+      e^{-(k-\frac{ix}{2})^2} dk = \exp(\frac{x^2}{4})\sqrt{\pi}
+    \]
+    Then we have that
+    $$
+    f(x) = \frac{\exp\left(\frac{x^2}{4}\right)}{\sqrt{2}}
+    $$
+  \item
+    \[
+      \hat f(k) = e^{-|k|} = e^{-k}\sigma(k) + e^{k}\sigma(-k)
+    \]
+    As a linear operator, we consider the inverse fourier transform
+    of each component seperatly:
+    \begin{align*}
+      \int_{-\infty}^\infty e^{-k}e^{ikx}\sigma(k) dk &=
+      \int_0^\infty e^{-k(1 - ix)} \\
+      &= \frac{1}{(1-ix)}e^{-k(1-ix)}\Big\vert_0^\infty \\
+      &= \frac{1}{1-ix}
+    \end{align*}
+    Similarly
+    \begin{align*}
+      \int_{-\infty}^\infty e^{k}e^{ikx}\sigma(-k) dk &=
+      \int_{-\infty}^0 e^{k(1+ix)} \\
+      &= \frac{1}{1+ix}e^{k(i+ix)}\Big\vert_{-\infty}^0 \\
+      &= \frac{1}{1+ix}
+    \end{align*}
+    Then we have that
+    $$
+    f(x) = \frac{1}{\sqrt{2\pi}}\left(\frac{1}{1+ix} + \frac{1}{1-ix}\right)
+    $$
+    Which we simplfy to
+    \[
+      f(x) = \frac{1}{\sqrt{2\pi}}\frac{2}{1+x^2} =
+      \sqrt{\frac{2}{\pi}}\frac{1}{1+x^2}
+    \]
+\end{enumerate}
+\question[3]{}
+\begin{enumerate}
+  \item
+    \[
+      \begin{cases}
+        u_t = u_{xx} \\
+        u(0,x) = e^{-x^2}
+      \end{cases}
+    \]
+    We begin by finding the Fourier transform of the initial
+    condition $f(x) = e^{-x^2}$, luckily, this is a known transform
+    \[
+      \hat f(k) = \frac{e^{-k^2/4}}{2\sqrt{2}}
+    \]
+    So we have the solution to the PDE in frequency:
+    \[
+      \hat u(t,k) = \frac{1}{2\sqrt{2}}e^{-k^2t}e^{-k^2/4} =
+      \frac{1}{2\sqrt{2}}e^{-k^2(t + 1/4)}
+    \]
+    Taking the inverse fourier transform
+    \begin{align*}
+      u(t,k) &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty
+      \frac{1}{2\sqrt{2}}e^{-k^2(t + 1/4) + ikx} dk\\
+      &= \frac{1}{4\sqrt{\pi}}\int_{-\infty}^\infty
+      e^{-k^2(t + 1/4) + ikx}\\
+    \end{align*}
+    Completing the square on the exponent, it becomes:
+    \[
+      -\left(t+\frac{1}{4}\right)\left(k-\frac{ix}{2(t+\frac{1}{4})}\right)^2
+      - \frac{x^2}{4(t + \frac{1}{4})}
+    \]
+    Thus the integral becomes
+    \[
+      e^{ - \frac{x^2}{4(t + \frac{1}{4})}}\int_{-\infty}^\infty
+      \exp\left(-\left(t+\frac{1}{4}\right)\left(k-\frac{ix}{2(t+\frac{1}{4})}\right)^2\right)
+    \]
+    Which evaluates to
+    \[
+      e^{ - \frac{x^2}{4(t + \frac{1}{4})}}
+      \sqrt{\frac{\pi}{(t+\frac{1}{4})}}
+    \]
+    Therefore, the solution to the PDE is:
+    \[
+      u(t,x) = \frac{e^{ - \frac{x^2}{4(t +
+      \frac{1}{4})}}}{\sqrt{t+\frac{1}{4}}}
+    \]
+  \item For $f(x) = \sigma(x)$, we have the Fourier transform
+    \[
+      \hat f(k) = \sqrt{\frac{\pi}{2}}\delta(x) - \frac{i}{\sqrt{2\pi}k}
+    \]
+    then, in frequency, the solution is
+    \[
+      \hat u(t,k) = e^{-k^2t}\left(\sqrt{\frac{\pi}{2}}\delta(x) -
+      \frac{i}{\sqrt{2\pi}k}\right)
+    \]
+    Taking the inverse Fourier transform:
+    \begin{align*}
+      \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty
+      e^{-k^2t}\left(\sqrt{\frac{\pi}{2}}\delta(x) -
+      \frac{i}{\sqrt{2\pi}k}\right) dk &=
+      \frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty
+      e^{-k^2t}\sqrt{\frac{\pi}{2}}\delta(x) -
+      e^{-k^2t}\frac{i}{\sqrt{2\pi}k} dk
+    \end{align*}
+    We evaluate each term individually: using the properties of the
+    $\delta$ distribution, the first is simply
+    \[
+      \int_{-\infty}^\infty e^{-k^2t}\sqrt{\frac{\pi}{2}}\delta(x) =
+      \sqrt{\frac{\pi}{2}}
+    \]
+    I don't believe the second term of the integrable has an
+    elemntary solution, so the final answer, as far as I can evaluate is:
+    \[
+      u(t,x) = \frac{1}{\sqrt{2\pi}}\left(\sqrt{\frac{\pi}{2}} -
+      \frac{i}{\sqrt{2\pi}}\int_{-\infty}^\infty \frac{e^{-k^2t}}{k}dk\right)
+    \]
+
+\end{enumerate}
+\end{document}

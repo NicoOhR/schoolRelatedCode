@@ -1,0 +1,47 @@
+Position Summary
+
+This is an on-site position in Cincinnati, OH
+
+The Software Engineer Intern will work with AI Scientists and Software Engineers, assisting with the development, testing, and utilization of our internal AI toolkits.    
+
+You will be a part of the Thales team that is leading the world in certifiable AI. We have developed and are deploying a technology that offers AI models primarily for mission/safety-critical applications. We offer an engaging opportunity to learn about a variety of AI topics, while working on exciting use-cases primarily within the aerospace and defense domains.
+
+While Thales is a large company, the Cincinnati office is a small, growing branch. You'll enjoy the benefits of a fast-paced startup style environment with the support of a leading multinational corporation. 
+
+We are seeking a Software Engineer Intern with basic Python proficiency and an enthusiastic capability to learn new topics quickly. 
+
+Essential Functions
+
+Will support various tasks within the office including but not limited to:
+
+Development of new code functionality
+
+Participation in internal research and development of AI/ML methodologies
+
+Supporting white paper writing as needed
+
+The position will require training in Thales' unique "Genetic Fuzzy Tree" AI approaches. Additionally, the Cincinnati office develops GFT AI Solutions for specific use-cases of clients, both internal and external. The ability to work within a team on such tasks will be required. 
+
+Minimum Requirements
+
+Proficiency in Python
+
+Familiarity with Object Oriented Programming
+
+Experience with documentation and report writing
+
+Minimum 3.0 GPA or equivalent in an accredited college or university
+
+Preferred Qualifications
+
+Due to the uniqueness of Thales’ approach, specific background in standard AI approaches is a plus, but absolutely not required; the ability to quickly pick up our internal processes will be necessary. 
+
+Proficiency with C/C++
+
+Experience utilizing GIT
+
+Familiar with Fuzzy Logic
+
+Experience with controls science and/or optimization
+
+

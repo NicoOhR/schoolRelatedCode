@@ -1,0 +1,7 @@
+At Cadence, we hire and develop leaders and innovators who want to make an impact on the world of technology.
+The circuit simulation intern will assist R&D staff in developing new algorithms and software for the Spectre circuit simulator.  Job duties may include hands-on experience in researching new algorithmic approaches, writing GUI features, software engineering to implement new features, performing software validation and testing, and investigating performance/accuracy issues in the simulator.
+
+Applicant should have previous exposure to the circuit simulation area and experience in EDA-relevant software development, particular C/C++ unix development.  Background in EDA algorithms based on graph theory, or software optimization is required, some UI knowledge is beneficial.  Applicants should be graduating in or before 2027 with a degree in electrical engineering, computer science, or related field.  Understanding of analog/memory/custom IC design and verification practices is a strong plus.
+
+We’re doing work that matters. Help us solve what others can’t.
+

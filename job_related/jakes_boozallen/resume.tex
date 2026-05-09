@@ -1,0 +1,207 @@
+% !TEX program = pdflatex
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Nico Ohayon} \\ \vspace{1pt}
+    \small 469-560-0141 $|$ \href{mailto:x@x.com}{\underline{nohayonr@gmail.com}} $|$
+    \href{https://linkedin.com/in/nico-ohayon-rozanes}{\underline{linkedin.com/in/nico-ohayon-rozanes}} $|$
+    \href{https://github.com/NicoOhR}{\underline{github.com/NicoOhR}}$|$
+    \href{https://nicoohr.github.io/Sicarii}{\underline{Portfolio}}
+\end{center}
+
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of Texas at Dallas}{Richardson, TX}
+      {Bachelor of Science in Data Science, Double Degree in Mathematics}{Aug. 2023 -- May 2027}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Bioinformatics Research Assistant}{August 2025 -- Present}
+      {University of Texas at Dallas}{Richardson, TX}
+      \resumeItemListStart
+      \resumeItem{Applied unsupervised ML to classify behavioral phenotypes from high-frequency mouse IMU data, supporting early disease detection research.}
+      \resumeItem{Improved clustering pipeline stability and correctness, removing failure modes from legacy code that produced invalid results.}
+      \resumeItem{Accelerated similarity computations with GPU methods (CUDA), reducing runtime from 12 hours to 3 hours on large datasets.}
+      \resumeItem{Designed time-series preprocessing that improved class separation and made model outputs more interpretable.}
+      \resumeItem{Built reproducible experiment tracking infrastructure enabling systematic parameter sweeps with auditable, comparable results.}
+    \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Engineering Intern}{May 2025 -- Aug 2025}
+      {Exolambda}{Richardson, TX}
+      \resumeItemListStart
+      \resumeItem{Developed and validated real-time sensor pipelines (ADC/IMU) against strict latency and bandwidth requirements for avionics systems.}
+      \resumeItem{Collaborated with cross-functional hardware and controls teams to verify flight-test algorithms through bench and field testing.}
+      \resumeItem{Standardized embedded build system and deployment workflow, reducing environment setup time and integration errors.}
+      \resumeItem{Diagnosed and resolved hardware and firmware issues under deadlines, supporting successful customer demos.}
+    \resumeItemListEnd
+
+    \resumeSubheading
+      {Undergraduate Research Scholar Award}{August 2024 -- December 2024}
+      {University of Texas at Dallas}{Richardson, TX}
+      \resumeItemListStart
+      \resumeItem{Developed high-performance C++ search algorithms using combinatorial pruning to tractably explore large state spaces in Latin square transversal problems.}
+      \resumeItem{Designed and executed large-scale computational experiments to validate prior mathematical results and surface new conjectures.}
+      \resumeItem{Analyzed experimental outputs to identify structural patterns, informing follow-up theoretical work with Prof.\ Bereg.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+    {Embedded Subteam Lead}{December 2023 -- December 2024}
+    {Dallas Formula Racing}{Richardson, TX}
+    \resumeItemListStart
+    \resumeItem{Led firmware and electronics for data acquisition and telemetry on the 2024 car, supporting 12 critical sensors and 4 auxiliary systems.}
+    \resumeItem{Ran weekly Agile-style meetings and design reviews, keeping 12 engineers on schedule through design, integration, and track testing.}
+    \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+      {\textbf{TradeX} $|$ \emph{Python, PyTorch, NumPy, Docker}}{January 2024 -- May 2024}
+          \resumeItemListStart
+          \resumeItem{Identified correlated stock pairs for algorithmic trading using correlation-based network analysis on market data.}
+          \resumeItem{Developed, validated, and backtested ML-driven trading strategies in simulation, outperforming the baseline by 40\%.}
+          \resumeItem{Built clean return and dependency estimate datasets to support model training and pair selection.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{FSAEStats} $|$ \emph{Rust, DuckDB, Arrow}}{}
+          \resumeItemListStart
+          \resumeItem{Built an end-to-end data engineering pipeline that automatically extracts structured race results from unstructured PDFs.}
+          \resumeItem{Designed a scalable analytical backend in Rust using Apache Arrow and DuckDB for high-performance queries over large race datasets.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{Three Body Simulation} $|$ \emph{Rust, Tokio, Python, gRPC, PyTorch, Bevy}}{}
+          \resumeItemListStart
+          \resumeItem{Built a three-body physics simulator in Rust to study orbital stability, collisions, and escape dynamics with real-time trajectory visualization.}
+          \resumeItem{Exposed a gRPC interface enabling Python clients to script and automate large experiment batches, accelerating model evaluation and research iteration.}
+          \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+%
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: Python, C/C++, Rust, Go, \LaTeX} \\
+     \textbf{Tools}{: Docker, Git, GitHub Actions, Linux, CMake, Kafka, Yocto, BusyBox} \\
+     \textbf{Data / ML}{: PyTorch, scikit-learn, CUDA, NumPy, pandas, SQL, DuckDB, Apache Arrow, Matplotlib/Seaborn}
+    }}
+ \end{itemize}
+
+%-------------------------------------------
+\end{document}

@@ -1,0 +1,328 @@
+% LaTeX template for Stat 4352.002: Mathematical Statistics
+% University of Texas at Dallas, Spring 2026
+% Yun Wei
+
+\documentclass{article}
+\usepackage{scribe} % specifies page and header format
+
+% Useful packages
+
+\RequirePackage{amsthm,amsmath,amsfonts,amssymb}
+\RequirePackage{mathrsfs} % mathscr fonts
+\RequirePackage{color}
+\RequirePackage{enumitem}
+\RequirePackage{mathtools}
+\RequirePackage{verbatim}
+\RequirePackage{bm}
+
+% Theorem type environments
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{assump}[thm]{Assumption}
+\newtheorem{prob}[thm]{Problem}
+\newtheorem{exa}[thm]{Example}
+\newtheorem{definition}[thm]{Definition}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
+% Useful macros
+
+\newcommand{\sH}{{\mathcal H}}
+\newcommand{\sX}{{\mathcal X}}
+\newcommand{\sY}{{\mathcal Y}}
+\newcommand{\hnhat}{\widehat{h}_n}
+
+% frequently used symbols
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbP}{\mathbb{P}}
+
+% operators
+\newcommand{\sign}{\mathop{\mathrm{sign}}}
+\newcommand{\supp}{\mathop{\mathrm{supp}}}
+\newcommand{\argmin}{\operatornamewithlimits{arg\ min}}
+\newcommand{\argmax}{\operatornamewithlimits{arg\ max}}
+
+% indicator function
+\newcommand{\ind}[1]{\bm{1}_{\{#1\}}}
+
+% grouping operators
+\newcommand{\brac}[1]{\left[#1\right]}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\paren}[1]{\left(#1\right)}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+
+\begin{document}
+
+\lecture{R}{Math Stat Review}{Yun Wei}{Nico OR}
+
+\noindent {\bf Disclaimer}: {\it These notes have not been subjected to
+  the usual scrutiny reserved for formal publications.  They may be
+  distributed outside this class only with the permission of the
+Instructor.}
+
+%%----------------------------------------------------------------
+\section{Geometric Distribution: Exponential Family \& MLE}
+%%----------------------------------------------------------------
+
+\noindent\textbf{Setup.} Let $X$ have PMF
+\[
+  \mathrm{pmf}(x;\,p) = (1-p)^{x-1}p.
+\]
+
+\medskip
+\noindent\textbf{(a) Expressing as a nautral exponential family.}
+Using the identities that $a = \exp(\log a)$ and $\log a^b = b\log a$
+\begin{align*}
+  \mathrm{pmf}(x;\,p)
+  &= e^{(x-1)\log(1-p)}\,e^{\log p}\\
+  &= \exp\!\bigl(x\log(1-p)+\log\tfrac{p}{1-p}\bigr) \\
+  &= \exp\!\bigl(x\log(1-p)-\log(1-p) + \log p \bigr)
+\end{align*}
+Let $\eta(p)=\log(1-p)$, therefore $1 - e^\eta = p$, and we obtain the
+natural exponential family:
+\[
+  \mathrm{pmf}(x; \eta) = \exp\!\bigl(x\eta - \eta + \log(1-e^{\eta})\bigr).
+\]
+
+\medskip
+\noindent\textbf{(b) MLE of $p$.}
+For an a random variable in the exponential family
+$$\bbE_p(X)=\frac{1}{n}\sum_{i=1}^{n}T(x_i)$$
+
+From the prior part, we have that $T(x) = x$. Since
+$X\sim\mathrm{Geom}(p)$ gives $\bbE_p[X]=1/p$:
+\begin{align*}
+  \frac{1}{p} &= \frac{1}{n}\sum_{i=1}^{n}T(x_i)\\
+  \hat{p} &= \frac{1}{\bar{X}}.
+\end{align*}
+
+\section{Beta$(1,\theta)$: Sufficient Statistic}
+
+\noindent\textbf{Setup.} Let
+$X_1,\ldots,X_n\sim\mathrm{Beta}(1,\theta)$ for $\theta>0$.
+Find a sufficient statistic for $\theta$.
+
+\medskip
+\noindent\textbf{Solution.}
+The PDF of a random variable which follows a
+$\mathrm{Beta}(1,\theta)$ distribution is:
+\[
+  f(x;\,\theta) = \theta(1-x)^{\theta-1}\,\mathbf{1}_{(0,1)}(x).
+\]
+Since each $X_i$ is independent, the likelihood is the same as the
+joint distribution:
+\begin{align*}
+  L(\theta;\,x_1,\ldots,x_n)
+  &= \prod_{i=1}^{n}\theta(1-x_i)^{\theta-1}\,\mathbf{1}_{(0,1)}(x_i)\\
+  &=
+  \underbrace{\theta^{n}\!\left(\prod_{i=1}^{n}(1-x_i)\right)^{\!\theta-1}}_{g(\theta,\,T)}
+  \cdot\underbrace{\mathbf{1}_{(0,1)^n}(\mathbf{x})}_{h(\mathbf{x})}.
+\end{align*}
+By the Fischer-Neyman factorization theorem:
+$$T=\prod_{i=1}^{n}(1-x_i)$$
+
+is a sufficient statistic for $\theta$.
+
+%%----------------------------------------------------------------
+\section{Fisher Information \& Cram\'er--Rao Lower Bound}
+%%----------------------------------------------------------------
+
+\noindent\textbf{Setup.} Let $X_1,\ldots,X_n\sim
+f(x\mid\theta)=\theta x^{\theta-1}$.
+
+\medskip
+\noindent\textbf{(a) Fisher information.}
+By additivity, $I_n(\theta)=nI_1(\theta)$, where
+\[
+  I_1(\theta)
+  = -\bbE\!\left[\frac{\partial^2}{\partial\theta^2}\log
+  f_{X_1 \hdots X_n}(\mathbf{x}\mid\theta)\right]
+  = -\bbE\!\left[\frac{\partial^2}{\partial\theta^2}\ell(\theta)\right].
+\]
+The single-observation log-likelihood is
+\[
+  \ell_1(\theta) = \log(\theta\,x^{\theta-1}) = \log\theta + (\theta-1)\log x.
+\]
+Thus
+\[
+  \frac{\partial\ell_1}{\partial\theta} = \frac{1}{\theta}+\log x,
+  \qquad
+  \frac{\partial^2\ell_1}{\partial\theta^2} = -\frac{1}{\theta^2}.
+\]
+Therefore
+\[
+  I_1(\theta)
+  = -\bbE\!\left[-\frac{1}{\theta^2}\right]
+  = \bbE\!\left[\frac{1}{\theta^2}\right]
+  = \frac{1}{\theta^2},
+  \qquad
+  I_n(\theta) = \frac{n}{\theta^2}.
+\]
+
+\medskip
+\noindent\textbf{(b) Cram\'er--Rao lower bound for $\tau(\theta)=\theta^4$.}
+Since $\tau'(\theta)=4\theta^3$:
+\[
+  \frac{(\tau'(\theta))^2}{I_n(\theta)}
+  = \frac{(4\theta^3)^2}{\dfrac{n}{\theta^2}}
+  = \frac{4}{n}\,\theta^8.
+\]
+
+%%----------------------------------------------------------------
+\section{UMVUE for $p^4$ (Bernoulli)}
+%%----------------------------------------------------------------
+
+\noindent\textbf{Setup.} Let $X_1,\ldots,X_n\sim\mathrm{Bern}(p)$.
+It is known that $\bar{X}_n$ is the UMVUE for $p$, and therefore so
+is $\sum X_n$.
+
+\medskip
+\noindent\textbf{(1) An unbiased estimator for $p^4$.}
+By independence:
+\begin{align*}
+  \bbE[X_i] &= p, \\
+  \bbE[X_1 X_2] &= \bbE[X_1]\,\bbE[X_2] = p^2, \\
+  \bbE\!\left[\prod_{i=1}^{4}X_i\right] &= p^4.
+\end{align*}
+Hence $U=\prod_{i=1}^{4}X_i$ is an unbiased estimator for $p^4$.
+
+\medskip
+\noindent\textbf{(2) UMVUE for $p^4$ via Rao--Blackwell.}
+Define
+\begin{align*}
+  \eta(T) &=
+  \bbE\!\left[\prod_{i=1}^{4}X_i\;\bigg|\;\sum_{i=1}^{n}X_i\right], \\[4pt]
+  \phi(t) &= \bbE\!\left[\prod_{i=1}^{4}X_i\;\bigg|\;\sum_{i=1}^{n}X_i=t\right].
+\end{align*}
+We analyze $\phi$.  Since the $X_i$ are Bernoulli, the conditional
+expectation reduces to a
+conditional probability:
+\[
+  \phi(t)
+  = \bbP\!\left(X_1=\cdots=X_4=1\;\bigg|\;\sum_{i=1}^{n} X_i=t\right).
+\]
+For $0\le t\le 3$, $\phi(t)=0$.  For $t\ge 4$:
+\begin{align*}
+  \phi(t)
+  &= \frac{\bbP\!\left(X_1=\cdots=X_4=1,\;\sum_{i=1}^{n}X_i=t\right)}
+  {\bbP\!\left(\sum_{i=1}^{n}X_i=t\right)} \\[8pt]
+  &= \frac{p^4\;\bbP\!\left(\sum_{i=5}^{n}X_i=t-4\right)}
+  {\bbP\!\left(\sum_{i=1}^{n}X_i=t\right)}
+  && \text{(by independence)} \\[8pt]
+  &= p^4\cdot
+  \frac{\dbinom{n-4}{t-4}p^{t-4}(1-p)^{n-t}}
+  {\dbinom{n}{t}p^{t}(1-p)^{n-t}}
+  && \text{($\sum$ of Bernoullis)} \\[8pt]
+  &= \frac{\dbinom{n-4}{t-4}}{\dbinom{n}{t}}.
+\end{align*}
+Expanding the binomial coefficients:
+\begin{align*}
+  \phi(t) &= \frac{t(t-1)(t-2)(t-3)}{n(n-1)(n-2)(n-3)}.
+\end{align*}
+By the Rao--Blackwell theorem, $\phi(T)$ with $T=\sum_{i=1}^{n}X_i$
+is the UMVUE for $p^4$.
+
+%%----------------------------------------------------------------
+\section{Pareto Distribution: Likelihood Ratio Test}
+%%----------------------------------------------------------------
+
+\noindent\textbf{Setup.} Let
+$X_1,\ldots,X_n\sim\mathrm{Pareto}(\theta,\mu)$ with PDF
+\[
+  f(x\mid\theta,\mu)=\frac{\theta\mu^{\theta}}{x^{\theta+1}}\,\mathbf{1}_{(\mu,\infty)}(x).
+\]
+Test $H_0:\theta=1$ versus $H_1:\theta\ne 1$.
+
+\medskip
+\noindent\textbf{(1) Likelihood Ratio Test (LRT).}
+
+The joint likelihood is
+\begin{align*}
+  L(\theta,\mu)
+  &=
+  \prod_{i=1}^{n}\frac{\theta\mu^{\theta}}{x_i^{\theta+1}}\,\mathbf{1}_{(\mu,\infty)}(x_i)
+  =
+  (\theta\mu^{\theta})^{n}\!\left(\prod_{i=1}^{n}\frac{1}{x_i}\right)^{\!\theta+1}
+  \ind{x_{(1)}\ge\mu}\\
+  &= \frac{\theta^{n}\mu^{n\theta}}{(\prod_{i=1}^{n}x_i)^{\theta+1}}\,
+  \ind{x_{(1)}\ge\mu},
+\end{align*}
+where $x_{(1)}=\min_i x_i$.  Recall
+\[
+  \lambda
+  = \frac{\displaystyle\sup_{\theta\in\Theta_0}L(\theta,\mu)}
+  {\displaystyle\sup_{\theta\in\Theta\phantom{_0}}L(\theta,\mu)},
+\]
+where $\Theta_0=\{1\}\times\bbR^+$ and $\Theta=\bbR^+\times\bbR^+$.
+To simplify the maximization, take the log:
+\[
+  \ell(\theta,\mu) = n\log\theta + n\theta\log\mu -
+  (\theta+1)\sum_{i=1}^{n}\log x_i.
+\]
+Since $L$ is increasing in $\mu$ (for fixed $\theta>0$, $\mu^{n\theta}$
+is increasing) and the indicator requires $\mu\le x_{(1)}$, the
+supremum over $\mu$ is attained at $\hat\mu=x_{(1)}$ in both numerator
+and denominator.  Let
+\[
+  T = \sum_{i=1}^{n}\log x_i - n\log x_{(1)}, \qquad
+  \ell(\theta,x_{(1)}) = n\log\theta - \theta T - \sum_{i=1}^{n}\log x_i.
+\]
+
+\medskip
+\noindent\textit{Numerator.}
+Under $H_0$ ($\theta=1$):
+\begin{align*}
+  \ell(1,\,x_{(1)})
+  &= n\log(1) + n\log x_{(1)} - 2\sum_{i=1}^{n}\log x_i \\
+  &= n\log x_{(1)} - 2\sum_{i=1}^{n}\log x_i.
+\end{align*}
+
+\medskip
+\noindent\textit{Denominator.}
+Maximize $\ell(\theta,x_{(1)})$ over $\theta>0$:
+\begin{align*}
+  \frac{d\ell}{d\theta} = \frac{n}{\theta} - T = 0
+  \quad\Longrightarrow\quad
+  \hat{\theta} = \frac{n}{T}.
+\end{align*}
+Substituting $\hat\theta$ back:
+\begin{align*}
+  \ell\!\left(\frac{n}{T},\,x_{(1)}\right)
+  &= n\log\frac{n}{T} - \frac{n}{T}\cdot T - \sum_{i=1}^{n}\log x_i \\
+  &= n\log n - n\log T - n - \sum_{i=1}^{n}\log x_i.
+\end{align*}
+
+\medskip
+\noindent\textit{Assembling $\lambda$.}
+Since $T=\sum\log x_i - n\log x_{(1)}$, we have
+$\prod_{i=1}^{n}x_i = x_{(1)}^{n}e^{T}$.
+Computing each term in the ratio directly:
+\begin{align*}
+  L(1,\,x_{(1)})
+  &= \frac{x_{(1)}^{n}}{(\prod x_i)^{2}}
+  = \frac{x_{(1)}^{n}}{x_{(1)}^{2n}e^{2T}}
+  = x_{(1)}^{-n}\,e^{-2T}, \\[6pt]
+  L\!\left(\tfrac{n}{T},\,x_{(1)}\right)
+  &= \frac{(n/T)^{n}\,x_{(1)}^{n^{2}/T}}{(\prod x_i)^{n/T+1}}
+  = \frac{(n/T)^{n}\,x_{(1)}^{n^{2}/T}}{x_{(1)}^{n^{2}/T+n}\,e^{n+T}}
+  = \left(\frac{n}{T}\right)^{\!n} x_{(1)}^{-n}\,e^{-(n+T)}.
+\end{align*}
+Therefore
+\begin{align*}
+  \lambda
+  &= \frac{L(1,\,x_{(1)})}{L(n/T,\,x_{(1)})}
+  = \frac{x_{(1)}^{-n}\,e^{-2T}}{(n/T)^{n}\,x_{(1)}^{-n}\,e^{-(n+T)}} \\[6pt]
+  &= \left(\frac{T}{n}\right)^{\!n} e^{-2T+(n+T)}
+  = \left(\frac{T}{n}\right)^{\!n} e^{n-T}.
+\end{align*}
+
+\end{document}
