@@ -1,4 +1,14 @@
-from criteria import MSESplitFinder
+from dataclasses import dataclass, field
+from typing import Callable, Optional
+
+import numpy as np
+import pandas as pd
+
+from .criteria import MSELoss, SplitFinder
+
+
+def _mean_leaf(df, label):
+    return df[label].mean()
 
 
 class TreeNode:
@@ -11,20 +21,42 @@ class TreeNode:
         self.right = None
 
     def next(self, x_i):
-        return (
-            self.left if (x_i[self.condition_feature] < self.condition) else self.right
-        )
+        return self.left if x_i[self.condition_feature] < self.condition else self.right
 
 
+@dataclass
 class Tree:
-    def __init__(self, label, max_depth=2, n_features=None,
-                 split_finder=None, leaf_fn=None):
-        self.label = label
-        self.max_depth = max_depth
-        self.n_features = n_features
-        self.split_finder = split_finder or MSESplitFinder()
-        self.leaf_fn = leaf_fn or (lambda y: y.mean())
-        self.root = None
+    """Single CART decision tree.
+
+    Parameters
+    ----------
+    label : str
+        Name of the target column in the DataFrame passed to fit/predict.
+    max_depth : int
+        Maximum number of splits from root to any leaf.
+    n_features : int, optional
+        Number of features to consider at each split (column subsampling).
+        None uses all features.
+    split_finder : SplitFinder, optional
+        Controls split scoring and the gamma pruning threshold.
+        Defaults to SplitFinder(MSELoss()).
+    leaf_fn : callable, optional
+        f(df, label) -> float that computes the leaf output value.
+        Defaults to the column mean.
+    """
+
+    label: str
+    max_depth: int = 2
+    n_features: Optional[int] = None
+    split_finder: Optional[SplitFinder] = None
+    leaf_fn: Optional[Callable] = None
+    root: Optional[TreeNode] = field(default=None, init=False)
+
+    def __post_init__(self):
+        if self.split_finder is None:
+            self.split_finder = SplitFinder(MSELoss())
+        if self.leaf_fn is None:
+            self.leaf_fn = _mean_leaf
 
     def find_split(self, df):
         return self.split_finder.find_split(df, self.label, self.n_features)
@@ -32,7 +64,7 @@ class Tree:
     def build_tree(self, df, curr):
         if curr is None or curr.condition is None or curr.condition_feature is None:
             return
-        curr.prediction = self.leaf_fn(df[self.label])
+        curr.prediction = self.leaf_fn(df, self.label)
         if curr.level == self.max_depth:
             return
         left_subset = df.loc[df[curr.condition_feature] < curr.condition]
@@ -63,7 +95,24 @@ class Tree:
         return None if node is None else node.prediction
 
     def predict(self, df):
-        return df.apply(lambda row: self.predict_one(row), axis=1)
+        if self.root is None:
+            return pd.Series(np.nan, index=df.index)
+        col_idx = {col: i for i, col in enumerate(df.columns)}
+        arr = df.to_numpy()
+        results = np.empty(len(arr))
+        for i in range(len(arr)):
+            node = self.root
+            while node and (node.left or node.right):
+                next_node = (
+                    node.left
+                    if arr[i, col_idx[node.condition_feature]] < node.condition
+                    else node.right
+                )
+                if next_node is None:
+                    break
+                node = next_node
+            results[i] = np.nan if node is None else node.prediction
+        return pd.Series(results, index=df.index)
 
     def print_conditions(self, node=None, indent=""):
         if node is None:

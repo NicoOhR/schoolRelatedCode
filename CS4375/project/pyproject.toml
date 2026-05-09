@@ -1,0 +1,23 @@
+[tool.basedpyright]
+typeCheckingMode = "basic"
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/tests",
+    ".git",
+    ".venv",
+]
+ignore = ["**/node_modules", "**/__pycache__", ".venv"]
+# Setting this to false can significantly speed up basedpyright
+useLibraryCodeForTypes = false
+
+[dependency-groups]
+dev = [
+      "matplotlib>=3.10.9",
+      "pandas>=3.0.2",
+      "pandas-stubs",
+      "scikit-learn>=1.8.0",
+      "scipy>=1.17.1",
+      "scipy-stubs",
+      "tqdm>=4.67.3",
+  ]
