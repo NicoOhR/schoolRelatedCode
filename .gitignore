@@ -124,3 +124,6 @@ latexmkrc
 .jukit*
 _minted*
 .Rproj.user
+
+# Archives (submission zips, etc.)
+*.zip
