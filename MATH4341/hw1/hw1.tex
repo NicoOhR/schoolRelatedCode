@@ -1,0 +1,272 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+\usepackage{amsfonts}
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Topology} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[1]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+\begin{enumerate}
+  \item $$A \setminus (B \cap C) = (A \setminus B) \cup (A \setminus C)$$
+    By definition we have that
+    \begin{align*}
+      A \setminus (B\cap C) &= \left\{x \vert x \in A \setminus (B
+      \cap C) \right\} \\
+      &= \left\{x \in A \text{ and } x \notin B \cap C \right\} \\
+      &= \left\{x \in A \text{ and } x \notin B \text{ or }  x
+      \notin C \right\}
+    \end{align*}
+    Similarily
+    \begin{align*}
+      (A \setminus B) \cup (A \setminus C) &= \left\{x \vert x \in
+      (A\setminus B) \cup (A \setminus C)\right\} \\
+      &= \left\{x | x \in A\setminus B \text{ or }  x \in A
+      \setminus C \right\} \\
+      &= \left\{x | x \in A\setminus B \text{ or }  x \in A
+      \setminus C \right\} \\
+      &= \left\{x | x \in A \text{ and } x \notin B \text{ or }  x \in A
+      \text{ and } x \notin C \right\} \\
+      &= \left\{x | x \in A \text{ and } x \notin B \text{ or }
+      x \notin C \right\} \\
+    \end{align*}
+    As such,$\forall x \in A \setminus (B \cap C)$ it must be that
+    $x \in A$ as well as $x \notin B$ or $x \notin C$, and therefore
+    $x \in (A \setminus B) \cup (A \setminus C)$ as such we have that
+    $A \setminus (B \cap C) \subset (A \setminus B) \cup (A \setminus
+    C)$. Through a similar line of reasoning, $\forall x \in
+    (A\setminus B) \cup (A \setminus C)$, we have that $x \in A$ as
+    well as $x \notin B$ or $x \notin C$, so $(A \setminus B)
+    \cup (A \setminus C)\subset A \setminus (B\cap C)$. Since by
+    definition, two sets containing each other are equal, we have
+    that $A \setminus (B \cap C) = (A \setminus B) \cup (A\setminus
+    C)$ as desired.
+  \item  $$ A \setminus (B \cup C) = (A \setminus B) \cap (A \setminus C)$$
+    Using a similar process to the last problem, we have the
+    following from definition
+    \begin{align*}
+      A \setminus (B \cup C) &= \{x | x \in A \text{ and } x \notin B
+      \cup C \} \\
+      &= \{x | x \in A \text{ and } x \notin B \text{ and } x \notin C \}
+    \end{align*}
+    And
+    \begin{align*}
+      (A \setminus B) \cap (A \setminus C) &= \{x | x \in A \setminus
+      B \text{ and }  x \in A \setminus B \} \\
+      &= \{x | x \in A \text{ and } x \notin B \text{ and } x \notin C\}
+    \end{align*}
+    Therefore $\forall x \in A \setminus (B \cup C)$, it follows that
+    $x \in (A \setminus B) \cap (A \setminus C)$, so $A \setminus (B
+    \cup C) \subset (A \setminus B) \cap (A \setminus C)$. In the
+    same way $\forall x \in (A\setminus B) \cap (A \setminus C)$ it
+    follows that $x \in A \setminus (B\cup C)$, therefore $(A
+    \setminus B) \cap (A\setminus C) \subset A \setminus (B \cup C)$
+    as such, we have that $A \setminus (B \cup C) = (A \setminus B)
+    \cap (A \setminus C)$
+\end{enumerate}
+
+\question[2]{}
+\begin{enumerate}
+  \item Begin by considering the definition of the two sets
+    $$
+    \bigcap_{i \in I} A_i \cup \bigcap_{j\in J} B_i = \{x~|~x \in A_i
+    \forall i \in I\} \cup \{x~|~x \in B_j \forall j \in J\}
+    $$
+    \[
+      \bigcap_{i\in I, j\in J} (A_i \cup B_j) = \{x | \forall (i, j)
+      \in I \times J, x \in A_i \cup B_j\}
+    \]
+    For an element $x$ to be included in the left hand side, it must be
+    that its either in all $A_i$ or in all $B_j$, assume that $x \in
+    A_i$ for all $i \in I$, then because $A_i  \subset A_i \cup B_j$,
+    then  $x \in A_i \cup B_j$ $\forall i \in I$ or $j \in J$. Then
+    it must be that $x$ is also in the right hand set. By symmetry,
+    assume that $x\in B_j, \forall j \in J$, then it follows that $x
+    \in A_i \cup B_j, \forall i \in I, j \in J$, therefore it follows that
+    $$
+    \bigcap_{i \in I} A_i \cup \bigcap_{j \in J} B_j \subset
+    \bigcap_{i\in I, j\in J}
+    (A_i \cup B_j)
+    $$
+    We now seek to show the reverse direction. Let $x \in
+    \bigcap_{(i,j)} A_i \cup B_j$ , then either $\forall i
+    \in I, x \in A_i$, in which case $x \in \bigcap A_i \subset
+    \bigcap A_i \cup \bigcap B_j$ and we are done, or $\exists i_0
+    \in I$ such that $x \notin A_{i_0}$. In which case, $x \in
+    \bigcap A_i \cup B_j \implies x \in \bigcap B_j \implies x \in
+    \bigcap B_j \cup \bigcap A_i$
+    $$
+    \bigcap_{i\in I, j\in J}
+    (A_i \cup B_j)
+    \subset
+    \bigcap_{i \in I} A_i \cup \bigcap_{j \in J} B_j
+    $$
+    And therefore:
+    $$
+    \bigcap_{i\in I, j\in J}
+    (A_i \cup B_j)
+    =
+    \bigcap_{i \in I} A_i \cup \bigcap_{j \in J} B_j
+    $$
+  \item
+    \[
+      \bigcup_{i \in I} A_i \cap \bigcup_{j \in J} B_j = \{x |
+      \exists i \in I, x \in A_i \} \cap \{x | \exists j \in J, x \in B_j \}
+    \]
+    \[
+      \bigcup_{i \in I,j \in J} A_i \cap B_j = \{ x| \exists i \in I
+      \text{ and } j \in J, x \in A_i \cap B_j \}
+    \]
+    For any element $x$ to be in the left hand set, it must be that
+    $\exists i_0 \in I$ such that $x \in A_{i_0}$ and also that $\exists j_0
+    \in J$ such that $x \in B_{j_0}$, equivalently, $x \in A_{i_0}
+    \cap B_{j_0}$. Then, $$x \in A_{i_0} \cap B_{j_0} \subset
+    \bigcup_{i,j} A_i \cap B_j  \implies x \in \bigcup_{i,j} A_i \cap B_j$$
+    And therefore
+    \[\bigcup_{i \in I} A_i \cap \bigcup_{j \in J} B_j  \subset
+      \bigcup_{i \in I,j \in J} A_i \cap B_j
+    \]
+    For the reverse direction, if an element $x$ is in the right hand
+    set, there must be $i_0 \in I$ and $j_0 \in J$ such that $x \in
+    A_{i_0} \cap B_{j_0}$. Since $$A_{i_0} \cap B_{j_0} \subset
+    A_{i_0} \subset \bigcup_{i\in I} A_i$$ as well as $$A_{i_0} \cap B_{j_0}
+    \subset B_{j_0} \subset \bigcup_{j \in J} B_j$$ it follows that
+    \[
+      x \in A_{i_0} \cap B_{j_0}  \subset \bigcup_{i \in I} A_i \cap
+      \bigcup_{j \in J} B_j
+    \]
+    Since this holds for any element $x$ in the left hand set, we
+    finally have that
+    \[
+      \bigcup_{i \in I,  j \in J} A_i \cap B_j \subset \bigcup_{i \in
+      I} A_i \cap \bigcup_{j \in J} B_j
+    \]
+    \[
+      \bigcup_{i \in I,  j \in J} A_i \cap B_j = \bigcup_{i \in
+      I} A_i \cap \bigcup_{j \in J} B_j
+    \]
+    As desired.
+\end{enumerate}
+
+\question[3]{}
+\begin{enumerate}
+  \item Let $A \subset \mathbb{R}$ and $B \subset \mathbb{R}$, then
+    $C = A \times B \subset \mathbb{R} \times \mathbb{R}$. Assume that $(a_1,
+    b_1) \in C$ and $(a_2, b_2) \in C$. By definition:
+    \[
+      C = A\times B = \{(x,y)| x \in A \text{ and } y \in B\}
+    \]
+    That is, for any elements $a \in A$ and $b \in B, (a,b) \in C$
+    We have from the assumptions that
+    \[
+      (a_1, b_1) \in C \text{ and } (a_2, b_2 ) \in C \implies a_1, a_2 \in
+      A \text{ and } b_1, b_2 \in B
+    \]
+    It follows:
+    \[
+      a_1 \in A \text{ and } b_2 \in B \implies (a_1, b_2) \in C
+    \]
+    And
+    \[
+      a_2 \in A \text{ and } b_1 \in B \implies (a_2, b_1) \in C
+    \]
+  \item  The previous result gives us that if $C = A \times B$ for
+    $A,B$ arbitrary subsets of $\mathbb{R}$, then it must be that
+    $$(a_1, b_1) \in C \text{ and } (a_2, b_2) \in C \implies (a_1, b_2) \in C
+    \text{ and } (a_2, b_1) \in C$$
+    Taking the contrapositive of that, we have that
+    if $\exists (a_1,
+    b_1), (a_2, b_2) \in C$ and either $(a_1, b_2) \notin C$ or
+    $(a_2, b_1) \notin C$ then there are no subsets of $\mathbb{R},
+    A, B$ such that $C = A \times B$. It suffices to find $(a_1,
+    b_1)$ and $(a_2, b_2)$ in $C$, such that $(a_1, b_2)$ is not in $C$.
+
+    Consider the points $(1, 1)$ and $(-1, 1.4)$. It's clear that
+    $$
+    3^1 + 1^4 = 4 < 5 \implies (1,1) \in C
+    $$
+    And that
+    $$
+    3^{-1} + (1.4)^4 \approx 4.1749 < 5 \implies (-1, 1.4) \in C
+    $$
+    However,
+    \[
+      3^1 + (1.4)^4 = 6.8416 \ge 5 \implies (1, 1.4) \notin C
+    \]
+    Therefore, there does not exist subsets $A, B$ such that $C = A \times B$
+
+\end{enumerate}
+
+\question[4]{}
+
+For $C$ to be an equivalence relation, it must be reflexive,
+transative, and symmetric.
+\begin{itemize}
+  \item reflexivity: From the definition of a function, we have that
+    $a = b \implies f(a) = f(b)$, and through the reflexivity of
+    equality, $a = a$, so $f(a) =
+    f(b)$, and therefore $aCa$
+  \item transativity: If $f(a) = f(b)$, and $f(b) = f(c)$, then
+    through transitivity of equality, we have that $f(a) = f(c)$. As
+    such if $aCb$ and $bCc$, it must be that $aCc$
+  \item symmetry: If $f(a) = f(b)$ then through symmetry of
+    equivalence $f(b) = f(a)$, then we have that if $aCb \implies bCa$
+\end{itemize}
+Thus, $C$ is an equivlance relation.
+
+\question[5]{}
+\begin{enumerate}
+  \item We demonstrate reflexivity, transitivity, and symmetry.
+    \begin{itemize}
+      \item reflexivity: For any $x \in \mathbb{Q}$, we have that $x
+        - x = 0$, further, $6$ divides $0$ trivially, so $xCx$
+      \item transitivity: For any $xCy$ and $yCz$, we have that $x -
+        y  = 0 \mod 6$ and $y - z = 0 \mod 6$, this implies that $x -
+        y + y - z = 0 \mod 6 \implies x - z = 0 \mod 6 \implies xCz$.
+        Therefore if $xCy, y Cz \implies xCz$
+      \item symmetry:
+        \begin{align*}
+          xCy &\implies x - y = 0 \mod 6\\
+          &\implies -(x - y) = -(0)\mod 6 \\
+          &\implies y - x = 0 \mod 6 \\
+          &\implies yCx
+        \end{align*}
+        Thus $xCy \implies yCx$ as desired.
+    \end{itemize}
+  \item fix $x \in \mathbb{Q}$, then, for $k \in \mathbb{Z}$, then
+    for any $y$ such that
+    \begin{align*}
+      xCy &\implies x - y = 0 \mod 6 \\
+      &\implies x - y =  6k \\
+      &\implies y = x - 6k
+    \end{align*}
+    Therefore, the equivalence class for $x$ is given by:
+    \[
+      [x] = \{x - 6k | \forall k \in \mathbb{Z}\}
+    \]
+\end{enumerate}
+\end{document}
