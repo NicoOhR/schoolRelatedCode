@@ -7,6 +7,8 @@ __pycache__/
 # C extensions
 *.so
 
+job_related/
+
 # Distribution / packaging
 build/
 develop-eggs/
