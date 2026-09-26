@@ -1,0 +1,343 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{float}
+\usepackage{hyperref}
+
+\title{CS4372 Assignment 1\\\large Bike Sharing --- SGDRegressor and OLS}
+\author{N. Ohayon Rozanes}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+The data set chosen for this assignment is the Bike Sharing data set
+from UC Irvine's machine learning repository. First, the variables
+are inspected and the preprocessing process is described. Then a
+linear regression is fit with SGDRegressor using SciKit-Learn, then
+an OLS and penalized OLS using statsmodels. The goal of the analysis
+is to determine mobility patterns in a city as a function of the time
+of day, the point in the year, and weather.
+
+AI use disclosure: AI was only used in the production of this report in
+the formatting of the tables and figures present in the report.
+
+\section{Feature distributions}
+\label{sec:features}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/distributions.pdf}
+  \caption{Marginal distribution of every numeric feature in the raw UCI
+  Bike Sharing (hourly) data. Bins are computed per facet.}
+  \label{fig:distributions}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/timeseries.pdf}
+  \caption{Hourly ridership (\texttt{cnt}) over the full observation window;
+  the band is the intraday spread around each day's mean.}
+  \label{fig:timeseries}
+\end{figure}
+
+The dataset essentially has two varieties of predictor variables,
+categorical temporal variables and continuous weather related
+variables, with the exception of \textit{weathersit}, which is weather
+related but ordinal. The dataset also includes a timeseries
+element, reporting day by day counts. Of course, since time
+dependence breaks independence assumptions, trying to include the day
+as a regression variable would be problematic. Further, since we are
+more interested in movement patterns depending on the qualities of a
+day rather than the performence of the company, the specific date
+does not capture any additional information that other variables do
+not report on.
+
+\textit{workingday} is defined as if it is not a weekend or a
+holiday, that is, it is perfectly colinear with the \textit{holiday}
+and \textit{weekday} column, and can therefore be safely dropped from
+the analysis.
+
+Since we are not interested in the time trend of the data,
+\textit{yr} is not qualitatively interesting in the analysis, but as
+Figure~\ref{fig:timeseries} shows, there is a noticible phase shift
+from 2011 to 2012.
+Omitting \textit{yr} would cause omitted variable bias, as such, it
+is included in the model.
+
+\textit{atemp} is the ``actual'' temperature that day, and is a
+function of the measured temperature, humidity, and windspeed, among
+other factors, this is supported by its high VIF. It is therefore
+omitted from the model, since it does not capture any additional
+information on the bike rides as a function of temperature. A further
+analysis into the relationship between the weather related variables
+is presented in the PCA section.
+
+The choice between month and season, which are obviously
+correlated to each other, is largely arbitrary. They present the same
+information at different coarsness. For this analysis, it was found
+that the additional values of the month did not carry any additional
+information when measured with AIC and BIC.
+
+Lastly, a data entry error seems to report \textit{weatherit}, which
+is an ordinal measure of how cloudy the day is, as four seperate
+values, but the page itself only lists three. This is likely an error
+since very few days are actually reported as having a value of four.
+Level four was merged into the level three.
+
+Tables~\ref{tab:vif} and~\ref{tab:cond} demonstrate the positive
+effects of the drops on the
+data. Making it much more suitable for a regression analysis.
+Categorical variables were ran through one-hot encoding and standard
+scaling. One hot encoding was chosen in place of ordinal since its
+plausible that the relationship between the hour and the ridership is
+not necessarily linear, this is confirmed after fitting in
+Figure~\ref{fig:hour-effects}.
+
+\input{tables/vif}
+\input{tables/cond}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/corr_heatmap.pdf}
+  \caption{Correlation matrix of the standardised design matrix.}
+  \label{fig:corr}
+\end{figure}
+
+\section{Principal component analysis: weather block}
+\label{sec:pca}
+
+\input{tables/pca_variance}
+\input{tables/pca_loadings}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.65\textwidth]{figures/scree.pdf}
+  \caption{Scree plot of the weather-block PCA, with the Kaiser criterion
+  ($\lambda = 1$) marked.}
+  \label{fig:scree}
+\end{figure}
+
+Although the components are not used in the regression, the PCA
+reduces the weather block to three interpretable axes that together
+account for $99.7\%$ of its variance. PC1 ($49.9\%$) loads almost
+entirely on \textit{temp} and \textit{atemp}, at $0.705$ each, with
+humidity and windspeed contributing nothing; it is a pure temperature
+axis. PC2 ($32.3\%$) sets humidity against windspeed ($-0.703$ and
+$0.710$), separating muggy, still days from dry, windy ones. PC3
+($17.5\%$) loads the same two variables in the same direction ($0.707$
+and $0.702$), and so measures how unsettled the day is overall rather
+than which of the two conditions dominates.
+
+PC4 is the informative null result. It accounts for $0.3\%$ of the
+variance and is almost exactly the contrast between \textit{temp} and
+\textit{atemp} ($-0.706$ against $0.707$), so the only direction in
+which the two temperature measures disagree is one the data barely
+varies along. This is the same conclusion the VIF reaches in the
+preceding section, and it justifies carrying only \textit{temp} into
+the model.
+
+\section{SGDRegressor}
+\label{sec:sgd}
+
+The data are split $80/20$ into a training and a held-out test set
+under a fixed seed, and the model is selected by grid search over the
+training half alone. The search ranges over both available penalties,
+\texttt{l1} and \texttt{l2}, and over $100$ logarithmically spaced
+values of $\alpha$ from $10^{-5}$ to $10^{3}$, scoring each candidate
+by five-fold cross-validated $R^2$. The convergence budget is at most $5000$
+epochs at a tolerance of $10^{-4}$, this was chosen so that the
+differences between grid points reflect the penalty being tested
+rather than one candidate stopping earlier than another. The winning
+configuration is refit on the full training set and scored once
+against the test set. The cross validation grid search utilizes the
+$R^2$ of the model.
+
+\input{tables/sgd_metrics}
+
+\input{tables/sgd_coefs}
+
+The search settles on \texttt{l1} at $\alpha = 10^{-5}$, which is the
+smallest value the grid offers. This is the
+first of several signs that the model is not variance-limited, which
+is further addressed in the regularised OLS in Section~\ref{sec:reg}
+makes directly. The cross-validated
+$R^2$ of $0.6788$ and the test $R^2$ of $0.6775$ agree to within
+$0.0013$, so the grid search has not tuned itself into the folds.
+
+The error metrics are reported in riders per hour and are more
+informative here than $R^2$. Mean ridership over the window is about
+$189$ riders/hour, so an RMSE of $101.1$ is substantial since a typical
+prediction misses by more than half the mean. That RMSE exceeds MAE
+says that a minority of hours are missed badly
+enough to dominate the squared error. This is likely because
+ridership depending on the hour depends on season in a non trivial
+manner, $8$ in the peak of the summer has much more light than 8
+during the winter, where it is pitch black. As such, the model splits
+the difference and underpredicts the former and over predicts the latter.
+
+\section{OLS: \texttt{fit}}
+\label{sec:ols}
+
+Where \texttt{SGDRegressor} approaches the coefficients iteratively,
+this section solves for them in closed form, and does so on all
+$17{,}379$ observations rather than the training split, in order to
+obtain standard errors, $t$-statistics and confidence intervals for
+every predictor. The reported $R^2$ is consequently in-sample and is
+not directly comparable with the held-out figures above. That it
+exceeds the SGD test $R^2$ by only $0.0044$ shows that almost none of
+the fit is specific to the sample it was
+estimated on.
+
+\input{tables/ols_fitstats}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/qqplot.pdf}
+  \caption{Normal Q--Q plot of the OLS residuals.}
+  \label{fig:qq}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/hour_effects.pdf}
+  \caption{Observed mean ridership by hour of day (bars, left axis) against the
+    fitted OLS hour coefficients (line, right axis). Coefficients are
+    rescaled to riders/hour and are relative to the dropped reference
+  level, midnight.}
+  \label{fig:hour-effects}
+\end{figure}
+
+\input{tables/ols_coefs}
+
+The model as a whole is significant beyond any useful resolution, $F =
+952.9$ on $39$ and $17{,}339$ degrees of freedom, with a $p$-value that
+underflows to zero. The adjusted $R^2$ of $0.6811$ falls only $0.0008$
+below the unadjusted $0.6819$, so the $39$ predictors are well justified.
+
+Every predictor in Table~\ref{tab:ols-coefs} is significant at the
+$5\%$ level, and all but two clear $10^{-3}$. The weakest is
+\textit{weekday\_1} at $p = 0.002$; the strongest are reported as
+exactly zero because the $p$-values fall below double precision. The
+confidence intervals are correspondingly narrow. The interval on
+\textit{temp} spans $[44.49,\ 49.86]$ around a point estimate of
+$47.18$, a width of about $11\%$ of the estimate, and the interval on
+\textit{yr} spans $[41.21,\ 44.28]$ around $42.74$. Nothing in the
+table is close to admitting zero.
+
+Because the design matrix is standardised, each coefficient is the
+change in ridership associated with a one standard deviation change in
+that predictor, holding the rest fixed. This is natural for the
+continuous weather variables and awkward for the one-hot columns, where
+a standard deviation is a fraction of a level; Figure~\ref{fig:hour-effects}
+therefore rescales the hour coefficients back into riders per hour
+against the midnight reference. On that scale the 5~p.m. effect is
+close to $380$ riders/hour above midnight and the 8~a.m. effect close
+to $310$. These hours make a great deal of sense as people commuting
+to and from work. Hour of day is by a wide margin the dominant predictor, and
+the fitted hour profile tracks the observed hourly means closely,
+including the twin commute peaks and the midday shoulder between them.
+This is the confirmation promised in Section~\ref{sec:features}, the
+relationship
+between hour and ridership is not monotone, so an ordinal encoding
+would have been unable to represent it and one-hot encoding was the
+correct choice.
+
+Among the remaining predictors, \textit{temp} is the largest at
+$47.18$ riders/hour per standard deviation, and the year indicator is
+nearly as large at $42.74$, which is the level shift already visible in
+Figure~\ref{fig:timeseries} and the reason \textit{yr} was retained
+despite not being of interest in itself. Autumn contributes $28.23$
+over the spring reference. The weather terms all suppress ridership in
+the expected direction and order: bad weather costs $18.22$, humidity
+$13.27$, wind $4.15$, and a holiday $4.83$. Day-of-week effects are
+significant but small, spanning only $3.29$ to $5.94$ across the six
+non-reference days, so once the hour, the season and the weather are
+known, which weekday it is adds little.
+
+The residuals are also non-normal. The Jarque--Bera statistic is
+$2624.3$ with skew $0.4724$ and kurtosis $4.6527$, describing a
+right-skewed, heavy-tailed distribution, and the Q--Q plot in
+Figure~\ref{fig:qq} shows the departure concentrated in the upper tail.
+This is the same phenomenon as the RMSE MAE gap in the previous
+section, the model under-predicts the
+busiest hours leading to heavy tails at the extreme of the residual
+distribution, and ridership is a count bounded below at zero whose
+variance grows with its mean, which a homoskedastic linear model in the
+levels cannot accommodate. Plausibly, a log transform of the response would fit
+the shape of the data better. Collinearity, by contrast, is no longer a
+concern: the condition number of the fitted standardised design is
+$6.8$, against the $3.33 \times 10^{15}$ recorded in
+Table~\ref{tab:cond} before the drops.
+
+\section{OLS: \texttt{fit\_regularized}}
+\label{sec:reg}
+
+The penalised fits are estimated on the training split only and scored
+by $R^2$ on the held-out test set, so that the comparison between
+penalty strengths is an out-of-sample one. The grid crosses seven
+values of $\alpha$, from $0$ to $10$, with five values of
+\texttt{L1\_wt} from pure ridge to pure lasso. The penalty vector is
+constructed so that the intercept is left unpenalised, which matters
+here: the intercept carries the mean ridership of roughly $189$
+riders/hour, and shrinking it toward zero would force the other
+coefficients to absorb a large constant.
+
+\input{tables/reg_grid}
+\input{tables/reg_best}
+
+The grid is flat where it is not actively harmful. Held-out $R^2$ is
+$0.6783$ at every combination with $\alpha \le 10^{-3}$, and the best
+grid point, $\alpha = 10^{-3}$ with $\texttt{L1\_wt} = 0.15$, matches
+the wholly unpenalised fit at $\alpha = 0$ to four decimal places. At
+the selected point all $40$ coefficients remain non-zero: the lasso
+component eliminates nothing. Past $\alpha = 10^{-2}$ the fit degrades
+monotonically, and by $\alpha = 10$ ridge has collapsed to $R^2 =
+0.1447$. Lasso degrades more gracefully at the top of the range, at
+$0.5922$, because it discards the weaker predictors outright while
+leaving the few dominant hour and temperature terms near their
+unpenalised values, whereas ridge shrinks everything at once, the
+terms carrying the most signal included.
+
+The reason regularisation buys nothing here is that neither condition
+it corrects is present. Shrinkage trades bias for variance, and is
+most helpful when predictors are collinear, when
+they are numerous relative to the sample, or when many of them are
+noise. Collinearity was removed by hand in
+Section~\ref{sec:features}, leaving a maximum
+VIF of $4.23$ and a condition number of $38.4$. The sample provides
+$17{,}379$ observations for $39$ parameters, a ratio of over $440$ to
+one. And, as Section~\ref{sec:ols} establishes, every predictor is individually
+significant, so there is no noise column for the lasso to find and
+discard.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+The two estimators agree closely with a test $R^2$ of $0.6775$ for the
+tuned SGD fit against $0.6783$ for the best penalised OLS and $0.6819$
+in-sample for the unpenalised one. They agree on the substance
+as well. Roughly two thirds of the variation in hourly ridership is
+explained by when in the day it is, what the weather is doing, and
+where in the year the day falls, in that order of importance. The hour
+profile is the dominant structure and is primarily explained by
+commutors forming twin peaks at 8~a.m. and 5~p.m., a midday shoulder,
+and near-zero overnight traffic. Temperature is the strongest
+continuous driver, with humidity and bad weather suppressing
+ridership and wind mattering comparatively little. Day of week, once
+those are accounted for, is almost irrelevant.
+
+The remaining third of the variance is not noise, the residuals are
+autocorrelated and right-skewed, which point towards a limitation of
+additive model that the levels of these variables cannot
+let the size of the evening peak depend on the
+weather or the season. An interaction between hour and temperature, or
+a count model fitted to the log of the response, would be the natural
+next step.
+
+\end{document}

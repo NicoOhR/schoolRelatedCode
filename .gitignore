@@ -129,3 +129,8 @@ _minted*
 
 # Archives (submission zips, etc.)
 *.zip
+
+# CS6350 downloaded datasets
+CS6350/assignment1/MovieSummaries/
+CS6350/assignment1/MovieSummaries.tar.gz
+CS6350/assignment1/www.gutenberg.org/

@@ -1,0 +1,227 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amssymb}
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{enumitem}
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Topology} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[3]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+
+\begin{enumerate}[label=(\alph*)]
+  \item $\mathcal{T}_1$ and $\mathcal{T}_2$ are topologies on a set $X$. When is
+    $\mathrm{id}(x) = x$ a continuous map from $(X, \mathcal{T}_1)$
+    to $(X, \mathcal{T}_2)$?
+
+    A map is continuous iff $\forall V \in \mathcal{T}_2$, $\exists U
+    \in \mathcal{T}_1$ such that
+    \[
+      \mathrm{id}^{-1}(V) = U
+    \]
+    Since $\mathrm{id}(x) = x \Rightarrow \mathrm{id}^{-1}(V) = \{x
+    \in X \mid x \in V\} = V$,
+    \[
+      V = U
+    \]
+    therefore, the identity map is continuous only when for every open set in
+    $\mathcal{T}_2$, the same set is open in $\mathcal{T}_1$, that is
+    \[
+      \mathcal{T}_2 \subseteq \mathcal{T}_1
+    \]
+
+  \item Want to show $\forall \mathcal{T}$ on $Y$, $Y \subset X$, for which
+    $\iota : Y \to X$ is continuous, then $\mathcal{T}_Y \subset \mathcal{T}$.
+
+    Our conditions: $\mathcal{T}$ is a topology on $Y$, and
+    \[
+      \iota^{-1}(V) \in \mathcal{T}_X \quad \forall V \in \mathcal{T}
+    \]
+    By definition
+    \[
+      \mathcal{T}_Y = \{Y \cap U \mid U \in \mathcal{T}_X\}
+    \]
+    Want to show $\mathcal{T}_Y \subset \mathcal{T}$. $\iota^{-1}$ is
+    continuous, therefore for
+    all $V \in \mathcal{T}$, $V \in \mathcal{T}_X$ as well. Since
+    $U \supset Y \cap U \Rightarrow \mathcal{T}_Y \subset \mathcal{T}$.
+\end{enumerate}
+
+\question[2]{}
+
+\begin{enumerate}[label=(\alph*)]
+  \item $Y \subset X$, $Y$ is open. Show that $U \subset Y$ is open in
+    $\mathcal{T}_Y$ iff $U \in \mathcal{T}$.
+
+    ($\Leftarrow$) Because of closure under finite intersection: $$U
+    \in \mathcal{T} \Rightarrow U \cap Y \in
+    \mathcal{T}$$ since by definition
+    $U \cap Y \in \mathcal{T}_Y$  and for
+    $U \subset Y \Rightarrow U \cap Y = U$, then
+    $$U \cap Y \in \mathcal{T}_Y \Rightarrow U \in \mathcal{T}_Y$$
+
+    ($\Rightarrow$) $V \in \mathcal{T}_Y \Rightarrow \exists U \in
+    \mathcal{T}$ such that
+    $U \cap Y = V$, since the intersection of open sets is open it follows that
+    $V \in \mathcal{T}$.
+
+  \item
+    \begin{enumerate}[label=(\roman*)]
+      \item $X \setminus Y \in \mathcal{T}$, $U \subset Y$,
+        $Y \setminus U \in \mathcal{T}_Y \Rightarrow X \setminus U
+        \in \mathcal{T}$
+        \[
+          Y \setminus U = V \cap Y \quad \text{for } \exists V \in \mathcal{T}
+        \]
+        \[
+          x \in Y,\ x \notin U \iff x \in V,\ x \in Y
+        \]
+        \[
+          x \notin U \iff x \in V \Rightarrow U = V^c \Rightarrow U =
+          X \setminus V
+        \]
+        \[
+          X \setminus U = X \setminus (X \setminus V) = X \cap V = V
+          \in \mathcal{T}
+        \]
+
+      \item $X \setminus U \in \mathcal{T} \Rightarrow Y \setminus U
+        \in \mathcal{T}_Y$
+
+        \[
+          x \in Y \cap (X \setminus U) \implies
+          x \in Y,\ x \in X,\ x \notin U \implies x \in Y \setminus U
+        \]
+        Since $X \setminus U \in \mathcal{T}$, we have that $Y \cap
+        (X \setminus U) \in \mathcal{T}_Y$ and therefore that
+        \[
+          Y \cap (X \setminus U) = Y \setminus U \in \mathcal{T}_Y
+        \]
+    \end{enumerate}
+\end{enumerate}
+
+\question[3]{}
+
+$(X_1, d_1)$ and $(X_2, d_2)$ are metric spaces.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Define a function $d : X_1 \times X_2 \to \mathbb{R}$,
+    \[
+      d((x_1, x_2), (y_1, y_2)) = \max(d_1(x_1, y_1), d_2(x_2, y_2))
+    \]
+  \begin{enumerate}[label=\roman*)]
+    \item Since $d \geq d_1$ and $d \geq d_2$, and $d_1, d_2 \geq 0$, then
+      it follows $d \geq 0$.
+    \item $d_1(x_1, y_1) = 0 \Rightarrow x_1 = y_1$ (same with $d_2$), then
+      \[
+        d((x_1, x_2), (y_1, y_2)) = 0 \Rightarrow d_1 = 0,\ d_2 = 0
+        \Rightarrow (x_1, x_2) = (y_1, y_2)
+      \]
+    \item
+      \begin{align*}
+        d((y_1, y_2), (x_1, x_2)) &= \max(d_1(y_1, x_1), d_2(y_2, x_2)) \\
+        &= \max(d_2(x_2, y_2), d_1(x_1, y_1)) \\
+        &= d((x_1, x_2), (y_1, y_2))
+      \end{align*}
+    \item $(z_1, z_2) \in X_1 \times X_2$. For each $i \in \{1, 2\}$, by
+      the triangle inequality for $d_i$,
+      \begin{align*}
+        d_i(x_i, y_i) &\leq d_i(x_i, z_i) + d_i(z_i, y_i) \\
+        &\leq \max(d_1(x_1, z_1), d_2(x_2, z_2))
+        + \max(d_1(z_1, y_1), d_2(z_2, y_2)) \\
+        &= d((x_1, x_2), (z_1, z_2)) + d((z_1, z_2), (y_1, y_2))
+      \end{align*}
+      Since this bound holds for both $i = 1$ and $i = 2$, it also holds
+      for the larger of the two, so
+      \[
+        d((x_1, x_2), (y_1, y_2)) = \max(d_1(x_1, y_1), d_2(x_2, y_2))
+        \leq d((x_1, x_2), (z_1, z_2)) + d((z_1, z_2), (y_1, y_2))
+      \]
+  \end{enumerate}
+
+\item The metric topology on $X_1 \times X_2$ is generated by the basis
+  \[
+    \mathcal{B} = \{B_d((x_1, x_2), r) \mid (x_1, x_2) \in X_1 \times
+    X_2,\ r > 0\}
+  \]
+  For each $i$, the metric topology on $X_i$ is generated by the basis
+  \[
+    \mathcal{B}_i = \{B_{d_i}(x, r) \mid x \in X_i,\ r > 0\}
+  \]
+  and the product topology is generated by the basis of products of
+  these balls,
+  \[
+    \mathcal{B}_p = \{U_1 \times U_2 \mid U_1 \in \mathcal{B}_1,\ U_2
+    \in \mathcal{B}_2\}
+  \]
+  that is,
+  \[
+    \mathcal{B}_p = \{B_{d_1}(x_1, r_1) \times B_{d_2}(x_2, r_2) \mid
+    x_1 \in X_1,\ x_2 \in X_2,\ r_1, r_2 > 0\}
+  \]
+  Want to show that $\mathcal{T}_{\mathcal{B}} = \mathcal{T}_{\mathcal{B}_p}$.
+
+  ($\Rightarrow$) $\mathcal{T}_{\mathcal{B}} \subset
+  \mathcal{T}_{\mathcal{B}_p}$
+  \begin{align*}
+    (y_1, y_2) \in B_d((x_1, x_2), r)
+    &\Leftrightarrow r > \max(d_1(x_1, y_1), d_2(x_2, y_2)) \\
+    &\Leftrightarrow \underbrace{r > d_1(x_1, y_1)}_{y_1 \in B_{d_1}(x_1, r)}
+    \text{ and } \underbrace{r > d_2(x_2, y_2)}_{y_2 \in B_{d_2}(x_2, r)} \\
+    &\Leftrightarrow (y_1, y_2) \in B_{d_1}(x_1, r) \times B_{d_2}(x_2, r)
+  \end{align*}
+  Thus, for any elements in the basis of the metric topology of
+  $d$, there exists a basis element in the product topology such that
+  $B_d((x_1,x_2), r)= B_{d_1}(x_1, r)\times B_{d_2}(x_2, r)$,
+  therefore we have that $\mathcal{B} \subset \mathcal{B}_p \implies
+  \mathcal{T} \subset \mathcal{T}_{\mathcal{B}_p}$
+
+  ($\Leftarrow$) $\mathcal{T}_{\mathcal{B}_p} \subset
+  \mathcal{T}_{\mathcal{B}}$,
+
+  Take any $B_{d_1}(x_1, r_1) \times B_{d_2}(x_2, r_2) \in
+  \mathcal{B}_p$, we can construct an open set in
+  $\mathcal{T}_\mathcal{B}$ as follows, $\forall (y_1, y_2) \in
+  B_{d_1}(x_1, r_1) \times B_{d_2}(x_2, r_2)$, define $r =
+\min(r_1 -d_1(y_1, x_1)) , r_2 - d_2(y_2, x_2))$ take the open set
+$U_{y_1, y_2} \in \mathcal{B}$ as $U_{y_1, y_2} = B_d((y_1,
+y_2), r)$. Clearly, $U_{y_1, y_2} \subset B_{d_1}(x_1, r_1) \times B_{d_2}(x_2,
+r_2)$ since, by the triangle inequalty $\forall (z_1, z_2)\in U_{y_1,
+y_2}, d(z_i, x_i) \le d_i(z_i, y_i) + d_i(y_i, x_i) < r_i$ and
+therefore, $(z_1, z_2) \in B_{d_1}(x_1, r_1) \times B_{d_2}(x_2,
+r_2)$. Then take
+\[
+  \bigcup_{(y_1, y_2) \in B_{d_1}(x_1, r_1) \times B_{d_2}(x_2, r_2)}
+  U_{y_1, y_2}  = B_{d_1}(x_1, r_1) \times B_{d_2}(x_2, r_2)
+\]
+
+Since each $U_{y_1, y_2} \in \mathcal{T}_{\mathcal{B}}$ and the
+arbitrary union of open sets is open, we have that $B_{d_1}(x_1,
+r_1)\times B_{d_2}(x_2, r_2) \in \mathcal{T}_{\mathcal{B}}$
+\end{enumerate}
+
+\end{document}

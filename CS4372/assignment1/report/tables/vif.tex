@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\caption{Variance inflation factors for the non-dummy predictors, before and after the collinearity drops. \texttt{---} marks a predictor removed from the final matrix.}\label{tab:vif}
+\begin{tabular}{lrr}
+\toprule
+predictor & before drops & after drops \\
+\midrule
+yr & 1.02 & 1.02 \\
+mnth & 3.41 & --- \\
+holiday & 1e+15 & 1.09 \\
+workingday & 1e+15 & --- \\
+temp & 48.78 & 3.10 \\
+atemp & 45.29 & --- \\
+hum & 1.84 & 1.82 \\
+windspeed & 1.23 & 1.16 \\
+\bottomrule
+\end{tabular}
+\end{table}
