@@ -1,0 +1,401 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{hyperref}
+
+\graphicspath{{figures/}}
+
+% \onefig{file}{caption}
+\newcommand{\onefig}[2]{%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{#1}
+    \caption{#2}
+\end{figure}}
+
+% \twofig{left file}{left caption}{right file}{right caption}{overall caption}
+\newcommand{\twofig}[5]{%
+  \begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+      \includegraphics[width=\linewidth]{#1}
+      \caption{#2}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.48\textwidth}
+      \includegraphics[width=\linewidth]{#3}
+      \caption{#4}
+    \end{subfigure}
+    \caption{#5}
+\end{figure}}
+
+% \tablerow{file}: pulls in one table row (plain \input breaks inside a tabular)
+\makeatletter
+\newcommand{\tablerow}[1]{\@@input tables/#1.tex }
+\makeatother
+
+% \tableinput{file}{caption}
+\newcommand{\tableinput}[2]{%
+  \begin{table}[H]
+    \centering
+    \caption{#2}
+    \input{tables/#1}
+\end{table}}
+
+\title{CS 4372 Assignment 2: Taiwanese Bankruptcy Prediction}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% =====================================================================
+\section{Data}
+
+The data set chosen for this assignment is the Taiwanese Bankruptcy
+Prediction data set from the UC Irvine Machine Learning Repository.
+The data was collected from 1999 to 2009 and includes a little under
+7000 companies. The target variable is if the company defaulted, and
+there are 95 continuous features which cover various aspects of a
+companies balance sheet, such as revenue per employee, realized sales
+gross margin, and various ratios. A tree is a good fit for a dataset
+such as this since many of the feature variables would be highly
+correlated with one another, making regression difficult. For
+example, the cash assets to total assets ratio would be colinear with
+the cash to current liability ratio.
+
+One challenge in this data set is that, by far, the vast majority of
+data points have a feature variable equal to 0, that is, they did not default.
+
+By the nature of this data set, we are mostly interested in being
+able to predict if a company would fail based on their current
+balance sheet, as such, we are mostly interested in the recall and F1
+statistic of a model. Through the report, the predictive power of the
+model will be emphesized.
+
+% =====================================================================
+\section{Methodology}
+
+All four models were fit with the same procedure, implemented in
+scikit-learn (and the \textit{xgboost} package for XGBoost).
+
+\paragraph{Train/test split.} The data was split once into 80\%
+training and 20\% test partitions, stratified on the target so that
+both partitions keep the same proportion of bankrupt companies. The
+same split (fixed random seed) is used for every model, so all test-set
+results are computed on identical data. The test partition is not used
+for any fitting or tuning.
+
+\paragraph{Baseline model.} Each model was first fit on the training
+partition with its library default parameters, and its
+precision--recall curve on the test partition was recorded as a
+baseline.
+
+\paragraph{Grid search.} Hyperparameters were selected with an
+exhaustive grid search using 5-fold stratified cross-validation on the
+training partition, scored by F1 on the bankrupt (positive) class.
+Training-fold scores were also recorded. The parameter combination
+with the highest mean validation F1 was then refit on the full
+training partition; this refit model is the final estimator for that
+model family.
+
+\paragraph{Validation curves.} To isolate the effect of a single
+complexity parameter (\textit{max\_depth} for the tree-based models,
+\textit{n\_estimators} for the boosting models), that parameter was
+varied over a range while all others were left at their defaults. At
+each value the mean and standard deviation of the training and
+validation F1 over 5-fold cross-validation are reported. A second plot
+uses the grid-search results instead, showing for each value of the
+same parameter the best mean F1 over all combinations of the remaining
+grid parameters.
+
+\paragraph{Threshold tuning.} The final estimator predicts the
+bankrupt class when its predicted probability exceeds 0.5. Because the
+classes are heavily imbalanced, a second decision threshold was
+chosen: the final estimator was wrapped in scikit-learn's
+\textit{TunedThresholdClassifierCV}, which evaluates candidate
+thresholds by 5-fold cross-validation on the training partition,
+selects the threshold maximizing F1, and refits the model on the full
+training partition.
+
+\paragraph{Evaluation.} The final estimator was evaluated on the test
+partition at both the 0.5 threshold and the tuned threshold, reporting
+accuracy, balanced accuracy, precision, recall, F1, and the Matthews
+correlation coefficient (MCC), along with the confusion matrix at each
+threshold. ROC AUC and average precision (the area under the
+precision--recall curve) are computed from the predicted probabilities
+and do not depend on the threshold.
+
+\section{Decision Tree}
+
+The first model fit was a naive descision tree fit with the default
+parameters from scikit learn. As expected, since the tree fits until
+all samples in leaf nodes are pure, the precision/recall curve has
+one point somewhere around the middle of the graph (at a 0.5
+threshold) where it is not either all precision or all recall. A grid
+search with 5 fold cross validation over the \textit{ccp\_alpha} and
+\textit{max\_depth} using F1 as the scoring criterion was conducted.
+
+The candidate \textit{ccp\_alpha} values were taken from the
+cost-complexity pruning path of the unpruned tree on the training
+partition, i.e.\ the values of $\alpha$ at which pruning removes
+another subtree. The largest value, which prunes the tree down to a
+single root node, was dropped, and every tenth remaining value was
+kept to limit the size of the grid. The candidate \textit{max\_depth}
+values were every integer from 1 up to (but not including) the depth
+of the unpruned tree, plus an unrestricted depth. All trees use the
+Gini impurity criterion and consider every feature at each split. The
+validation curve varies \textit{max\_depth} from 1 to the depth of the
+unpruned tree with no pruning ($\alpha = 0$).
+
+\subsection{Hyperparameter Search}
+\onefig{descision_tree_unpruned_pr_curve}{Precision--recall curve of
+the unpruned decision tree (default parameters).}
+\tableinput{descision_tree_best_params}{Decision tree: best
+hyperparameters from the grid search.}
+\twofig{descision_tree_f1_vs_max_depth}{Validation curve}%
+{descision_tree_grid_f1_vs_max_depth}{Best grid-search F1 per depth
+(over \texttt{ccp\_alpha})}%
+{Decision tree: F1 vs.\ \texttt{max\_depth}.}
+
+When regularization is introduced, the best CV F1 per max depth came out to
+be 0.366 with a max depth of 12. Without any alpha, the best max
+depth came out to be 8. The difference in explainability between 8
+and 12 is relatively minimal, so we proceed with the best descision
+tree that the grid search came out to.
+
+\subsection{Test-Set Evaluation}
+\tableinput{descision_tree_metrics}{Decision tree: test-set metrics
+at the default and tuned thresholds.}
+\twofig{descision_tree_confusion_matrix}{Threshold 0.5}%
+{descision_tree_tuned_confusion_matrix}{Tuned threshold}%
+{Decision tree: test-set confusion matrices.}
+\twofig{descision_tree_pr_curve}{Precision--recall curve}%
+{descision_tree_roc_curve}{ROC curve}%
+{Decision tree: test-set precision--recall and ROC curves.}
+
+As is the case with the rest of the models in this report, the ROC
+AUC is high since the vast majority of the dataset did not default,
+as such, the model will get the vast majority of its classifications
+correct, but we only care about the precision and recall of the model.
+
+% =====================================================================
+\section{Random Forest}
+
+A random forest fits many decision trees, each on a bootstrap sample
+of the training partition, considering a random subset of
+$\sqrt{95} \approx 9$ features at each split, and predicts the average
+of the trees' class probabilities. The baseline used scikit-learn's
+defaults: 100 trees grown to purity with the Gini criterion.
+
+The grid search covered \textit{n\_estimators} $\in \{100, 300\}$,
+\textit{max\_depth} $\in \{5, 10, 20, \textrm{unrestricted}\}$, and
+\textit{class\_weight} $\in \{\textrm{none}, \textrm{balanced}\}$, for 16
+combinations. The balanced setting weights each class inversely to
+its frequency in the training data, so errors on the rare bankrupt
+class cost proportionally more when growing the trees. The validation
+curve varies \textit{max\_depth} over $2, 4, \dots, 30$ with 100 trees
+and no class weighting.
+
+\subsection{Hyperparameter Search}
+\onefig{random_forest_default_pr_curve}{Precision--recall curve of
+the random forest with default parameters.}
+\tableinput{random_forest_best_params}{Random forest: best
+hyperparameters from the grid search.}
+\twofig{random_forest_f1_vs_max_depth}{Validation curve}%
+{random_forest_grid_f1_vs_max_depth}{Best grid-search F1 per depth
+(over \texttt{n\_estimators}, \texttt{class\_weight})}%
+{Random forest: F1 vs.\ \texttt{max\_depth}.}
+
+The random forest model benefit much more from the regularization
+parameter class weight as well as from being provided with additional
+estimators. A mean F1 of 0.425 is a definite improvement which holds
+up in the test set.
+
+\subsection{Test-Set Evaluation}
+\tableinput{random_forest_metrics}{Random forest: test-set metrics at
+the default and tuned thresholds.}
+\twofig{random_forest_confusion_matrix}{Threshold 0.5}%
+{random_forest_tuned_confusion_matrix}{Tuned threshold}%
+{Random forest: test-set confusion matrices.}
+\twofig{random_forest_pr_curve}{Precision--recall curve}%
+{random_forest_roc_curve}{ROC curve}%
+{Random forest: test-set precision--recall and ROC curves.}
+
+Although worse on the precision and about the same in accuracy, the
+random forest model outperformed the descision tree in recall. This
+is beneficial since we are more tolerant of a false positive than we
+are of a false negative (that is, the possible financial loss is
+  larger from a bankruptcy we failed to predict than incorrectly
+diagnosing a company as high risk).
+
+% =====================================================================
+\section{AdaBoost}
+
+AdaBoost fits a sequence of decision stumps (depth-1 trees). After
+each round, the sample weights of
+misclassified training points are increased so the next stump focuses
+on them, and each stump receives a vote weight based on its weighted
+error. The prediction is the weighted vote of all stumps. The
+baseline used the defaults of 50 stumps and a learning rate of 1.0;
+the learning rate shrinks each stump's vote weight.
+
+The grid search covered \textit{n\_estimators} $\in \{50, 100, 200,
+400\}$ and \textit{learning\_rate} $\in \{0.1, 0.5, 1.0\}$, for 12
+combinations. The validation curve varies \textit{n\_estimators} over
+$\{25, 50, 100, 200, 300, 400, 600\}$ at a learning rate of 1.0.
+
+For the boosting diagnostics, the training partition was split again
+into 80\% fitting and 20\% validation subsets (stratified). A model
+with the best grid-search parameters was fit on the fitting subset,
+and the average precision on both subsets was computed after every
+boosting round. The per-round stump weights and weighted errors, and
+the feature importances (each stump's impurity-based importance,
+averaged with the stump weights), are taken from the final estimator.
+
+\subsection{Hyperparameter Search}
+\onefig{adaboost_default_pr_curve}{Precision--recall curve of
+AdaBoost with default parameters.}
+\tableinput{adaboost_best_params}{AdaBoost: best hyperparameters from
+the grid search.}
+\twofig{adaboost_f1_vs_n_estimators}{Validation curve}%
+{adaboost_grid_f1_vs_n_estimators}{Best grid-search F1 per
+\texttt{n\_estimators} (over \texttt{learning\_rate})}%
+{AdaBoost: F1 vs.\ \texttt{n\_estimators}.}
+\onefig{adaboost_learning_rate_vs_n_estimators}{AdaBoost:
+cross-validated F1 vs.\ \texttt{n\_estimators} for each learning rate.}
+
+The number of estimators agreed between training with the learning
+rate and without, which indicates that the learning rate is not
+particularly meaningful with this data set. This is confirmed when we
+plot the learning rate against number of estimators and the CV F1.
+
+\subsection{Test-Set Evaluation}
+\tableinput{adaboost_metrics}{AdaBoost: test-set metrics at the
+default and tuned thresholds.}
+\twofig{adaboost_confusion_matrix}{Threshold 0.5}%
+{adaboost_tuned_confusion_matrix}{Tuned threshold}%
+{AdaBoost: test-set confusion matrices.}
+\twofig{adaboost_pr_curve}{Precision--recall curve}%
+{adaboost_roc_curve}{ROC curve}%
+{AdaBoost: test-set precision--recall and ROC curves.}
+% Analysis
+
+\subsection{Boosting Diagnostics}
+\twofig{adaboost_staged_average_precision}{Average precision per
+boosting round}%
+{adaboost_estimator_weights_errors}{Per-round estimator weights and
+weighted errors}%
+{AdaBoost: behaviour across boosting rounds.}
+\onefig{adaboost_feature_importance}{AdaBoost: top 15 features by importance.}
+
+After tuning the threshold, AdaBoost does about as well as the random
+forest model does. I suspect that if we biased the adaptive boosting
+weights towards towards giving false negatives higher weight than
+false positives, we would end up with a model which more completly
+identifies bankrupting companies.
+
+% =====================================================================
+\section{XGBoost}
+
+XGBoost fits gradient-boosted trees: each round adds a tree fit to the
+gradient of the logistic loss of the current ensemble, scaled by the
+learning rate, with regularization on leaf weights. The baseline used
+the library defaults of 100 rounds, a learning rate of 0.3, and a
+maximum tree depth of 6, with histogram-based split finding.
+
+The grid search covered \textit{n\_estimators} $\in \{100, 200,
+400\}$, \textit{max\_depth} $\in \{3, 6\}$, \textit{learning\_rate}
+$\in \{0.1, 0.3\}$, and \textit{scale\_pos\_weight} $\in \{1, w\}$,
+for 24 combinations, where $w$ is the ratio of non-bankrupt to
+bankrupt companies in the training partition. Setting
+\textit{scale\_pos\_weight} to $w$ multiplies the loss on bankrupt
+companies by $w$, so both classes contribute equally in total. The
+validation curve varies \textit{n\_estimators} over $\{25, 50, 100,
+200, 300, 400, 600\}$ with all other parameters at their defaults.
+
+For the boosting diagnostics, the training partition was split again
+into 80\% fitting and 20\% validation subsets (stratified). A model
+with the best grid-search parameters, but allowed up to 1000 rounds,
+was fit on the fitting subset while the area under the
+precision--recall curve (AUCPR) was tracked on both subsets after
+every round. Training stopped once the validation AUCPR had not
+improved for 50 consecutive rounds, and the best round is reported.
+Feature importance is measured by gain: the average reduction in loss
+from the splits that use each feature in the final estimator.
+
+\subsection{Hyperparameter Search}
+\onefig{xgboost_default_pr_curve}{Precision--recall curve of XGBoost
+with default parameters.}
+\tableinput{xgboost_best_params}{XGBoost: best hyperparameters from
+the grid search.}
+\twofig{xgboost_f1_vs_n_estimators}{Validation curve}%
+{xgboost_grid_f1_vs_n_estimators}{Best grid-search F1 per
+\texttt{n\_estimators} (over the other parameters)}%
+{XGBoost: F1 vs.\ \texttt{n\_estimators}.}
+\onefig{xgboost_learning_rate_vs_n_estimators}{XGBoost:
+cross-validated F1 vs.\ \texttt{n\_estimators} for each learning rate.}
+The grid search preferred the slower configuration: a learning rate
+of 0.1, shallow trees of depth 3, the largest number of rounds in the
+grid (400), and \textit{scale\_pos\_weight} set to $w \approx 30$.
+XGBoost was the only boosting model given a way to weight the
+bankrupt class directly, and the grid search chose to use it.
+
+\subsection{Test-Set Evaluation}
+\tableinput{xgboost_metrics}{XGBoost: test-set metrics at the default
+and tuned thresholds.}
+\twofig{xgboost_confusion_matrix}{Threshold 0.5}%
+{xgboost_tuned_confusion_matrix}{Tuned threshold}%
+{XGBoost: test-set confusion matrices.}
+\twofig{xgboost_pr_curve}{Precision--recall curve}%
+{xgboost_roc_curve}{ROC curve}%
+{XGBoost: test-set precision--recall and ROC curves.}
+At the default threshold XGBoost had the highest F1 (0.484) and MCC
+(0.466) of the four models, mostly because of its precision (0.468).
+Tuning lowered the threshold to 0.414, which traded a small amount of
+precision for recall (0.500 to 0.568) and raised F1 to 0.500. Even so,
+XGBoost still identifies fewer of the 44 bankrupt companies in the
+test set (25) than the random forest does (29).
+
+\subsection{Boosting Diagnostics}
+\twofig{xgboost_staged_aucpr}{AUCPR per boosting round (early stopping)}%
+{xgboost_feature_importance}{Top 15 features by gain}%
+{XGBoost: behaviour across boosting rounds and feature importance.}
+% Analysis
+
+% =====================================================================
+\section{Model Comparison}
+
+\begin{table}[H]
+  \centering
+  \caption{Test-set results for all models. ``Tuned'' uses the
+  F1-maximizing threshold chosen by cross-validation on the training set.}
+  \begin{tabular}{lcccccc}
+    \toprule
+    & \multicolumn{2}{c}{F1} & \multicolumn{2}{c}{MCC} & & \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+    Model & 0.5 & Tuned & 0.5 & Tuned & ROC AUC & Avg.\ precision \\
+    \midrule
+    \tablerow{descision_tree_summary_row}
+    \tablerow{random_forest_summary_row}
+    \tablerow{adaboost_summary_row}
+    \tablerow{xgboost_summary_row}
+    \bottomrule
+  \end{tabular}
+\end{table}
+All three ensembles clearly outperformed the single decision tree,
+which had the lowest ROC AUC (0.827) and average precision (0.375).
+Among the ensembles the differences are small: with only 44 bankrupt
+companies in the test set, a difference of 0.02--0.04 in F1 amounts to
+two or three companies. XGBoost has the best F1 and MCC, but the
+random forest has the highest recall (0.659), balanced accuracy
+(0.809), ROC AUC (0.949), and average precision (0.464), and it reaches
+these at the default threshold without any tuning, since its
+\textit{class\_weight} setting already accounts for the imbalance.
+Because missing a bankruptcy is more costly than flagging a healthy
+company, recall matters most for this task, so the random forest is
+the best of the four models here.
+
+\end{document}
