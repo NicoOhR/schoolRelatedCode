@@ -5,6 +5,7 @@
 \usepackage{amsmath}  % This package allows the use of a large range
 % of mathematical formula, commands, and symbols
 \usepackage{graphicx}  % This package allows the importing of images
+\usepackage{amssymb}
 
 \newcommand{\question}[2][]{
   \begin{flushleft}
@@ -26,7 +27,7 @@
 
 \end{center}}
 \begin{document}
-\maketitletwo[5]  % Optional argument is assignment number
+\maketitletwo[4]  % Optional argument is assignment number
 %Keep a blank space between maketitletwo and \question[1]
 
 \question[1]{}
@@ -134,6 +135,13 @@ as such
       \overline{(Y \cap Z)} \subset \overline Y \text{ and } \\
       &\implies \overline{Y \cap Z} \subset \overline Y \cap \overline Z
     \end{align*}
+    The reverse inclusion does not hold in general: take $X = \mathbf{R}$
+    with the standard topology, $Y = (0,1)$ and $Z = (1,2)$. Then $Y \cap
+    Z = \emptyset$, so $\overline{Y \cap Z} = \emptyset$, but
+    \[
+      \overline Y \cap \overline Z = [0,1] \cap [1,2] = \{1\}
+      \not\subset \emptyset = \overline{Y \cap Z}
+    \]
   \item $\text{Int}(Y) \cup \text{Int}(Z) \subset \text{Int}(Y \cup Z)$\\
     \[
       Y \subset Y \cup Z \text{ and } Z \subset Y \cup Z \text{ and }
@@ -153,6 +161,14 @@ as such
     \[
       \text{Int}(Y) \cup  \text{Int}(Z) \subset \text{Int}(Y \cup Z)
     \]
+    The reverse inclusion does not hold in general: take $X = \mathbf{R}$
+    with the standard topology, $Y = [0,1]$ and $Z = [1,2]$. Then
+    $\text{Int}(Y) \cup \text{Int}(Z) = (0,1) \cup (1,2)$, but
+    \[
+      \text{Int}(Y \cup Z) = \text{Int}([0,2]) = (0,2)
+    \]
+    so $1 \in \text{Int}(Y \cup Z)$ but $1 \notin \text{Int}(Y) \cup
+    \text{Int}(Z)$.
   \item $\text{Int}(Y) \cap \text{Int}(Z) = \text{Int}(Y\cap Z)$ \\
     First we show that $\text{Int}(Y\cap Z) \subset \text{Int}(Y)
     \cap \text{Int}(Z)$:
@@ -174,5 +190,45 @@ as such
 
 \end{itemize}
 \question[4]{}
+\begin{itemize}
+  \item $\partial \mathcal{I} = \{x \in \mathbb{R} \mid U \cap
+      \mathcal{I} \neq \emptyset \text{ and } U \cap \mathcal{I}^c \neq
+    \emptyset \text{ for every nbhd } U \text{ of } x\}$\\
+    Take any $x \in \mathbb{R}$ and any neighborhood of it such that
+    $x \in U = (a, b]$ for some $a, b\in \mathcal{R}$. If $x$ is
+    irrational, that is $x \in \mathcal{I}$, then $x \in U \cap
+    \mathcal{I} \neq \emptyset$ is trivial. Therefore, it suffcies to
+    show that $U \cap \mathcal{I}^c \neq \emptyset$, that is, that
+    for any neighborhood of a real number $x$ in the upper limit
+    topology, there is a rational number included. Since $a,b \in
+    \mathbb{R}$, and $a < b$ then by the archimedean property, there
+    exists $r \in \mathbb{Q}$ such that $a < r < b$, and therefore $U
+    \cap \mathcal{I}^c \neq \emptyset$ \\
 
+    Similarily, if $x$ is rational, then $U \cap \mathcal{I}^c \neq
+    \emptyset$ trivially, so it suffices to show that $U \cap
+    \mathcal{I} \neq \emptyset$, to show that this is the case, take
+    $x - a = \varepsilon$. Since $a < x$, $\varepsilon > 0$, so by the
+    archimedean property there exists $n \in \mathbb{N}$ such that
+    $\frac{\sqrt{2}}{n} < \varepsilon$. Let $y = x -
+    \frac{\sqrt{2}}{n}$, then $a < y < x \le b$, so $y \in U$. Further,
+    $y$ is irrational, since otherwise $\sqrt{2} = n(x - y)$ would be
+    rational. Therefore $y \in U \cap \mathcal{I}$, and $U \cap
+    \mathcal{I} \neq \emptyset$. \\
+
+    Since every neighborhood of $x$ contains a basis element $(a, b]$
+    containing $x$, every neighborhood of every $x \in \mathbb{R}$
+    intersects both $\mathcal{I}$ and $\mathcal{I}^c$, as such
+    \[
+      \partial \mathcal{I} = \mathbb{R}
+    \]
+  \item a subset is dense if it's closure is the entire space.
+    \[
+      \overline{\mathcal{I}} = \mathcal{I} \cup \partial \mathcal{I}
+    \]
+    As demonstrated above $\partial\mathcal{I} = \mathbb{R}_u$,
+    therefore, $\overline{\mathcal{I}} = \mathbb{R}_u$, and
+    therefore, the closure is equal to the entire space and
+    $\mathcal{I}$ is dense in $\mathbb{R}_u$
+\end{itemize}
 \end{document}
