@@ -1,8 +1,3 @@
-"""CS4372 Assignment 2: tree-based models on the Taiwanese bankruptcy dataset.
-
-Trains and evaluates a decision tree, random forest, AdaBoost and XGBoost, saving
-figures to figures/ and the LaTeX tables that report.tex pulls in to tables/.
-"""
 from ucimlrepo import fetch_ucirepo
 import matplotlib.pyplot as plt
 from sklearn import tree

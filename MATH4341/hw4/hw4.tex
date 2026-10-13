@@ -1,0 +1,178 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Topology} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{Nimrod Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[5]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+
+By definition
+$$
+\text{Int}(Y) = \bigcup U_i
+$$
+For $\{U_i\}$ being the set of all open sets for which $U_i \subset
+Y$. Then we want to show that
+
+\[
+  \bigcup U_i = \{x \vert \forall x \in X, \exists
+  \text{nbhd}(x) \subset Y\}
+\]
+
+Since $\text{nbhd}(x) \subset Y$ and a neighborhood is open, then for
+all $x, \exists \text{nbhd}(x) \in \{U_i\}$. Take the union of all
+such neighborhoods, yeilding that
+
+$$
+\{x \vert \forall x \in X, \exists
+\text{nbhd}(x) \subset Y\} \subset \bigcup \text{nbhd}(x) \subset \bigcup U_i
+$$
+
+Now we want to show that
+
+\[
+  \bigcup U_i \subset \{x \vert \forall x \in X, \exists
+  \text{nbhd}(x) \subset Y\}
+\]
+
+Take any $y \in \bigcup U_i$, then $\exists i \in I, y \in U_i$, by
+definition, $U_i$ is a neighborhood of $y$ which is a subset of $Y$.
+Therefore $\forall y \in \bigcup U_i$, it is the case that
+
+\[
+  y  \in \{x \vert \forall x \in X, \exists \text{nbhd}(x) \subset Y\}
+\]
+
+as such
+\[
+  \bigcup U_i = \{x \vert \forall x \in X, \exists \text{nbhd}(x) \subset Y\}
+\]
+
+\question[2]{}
+\begin{itemize}
+  \item $\text{Int}(Y) = X \setminus \overline{X \setminus Y}$\\
+    Consider that
+    \[
+      X \setminus \overline{X\setminus Y} = X \setminus \bigcap C_i =
+      \bigcup X \setminus C_i
+    \]
+    for $\{C_i\}$ being the set of all sets such that $X\setminus Y
+    \subset C_i$ and $X \setminus C_i$ is open. Further, consider that
+    \[
+      X \setminus Y \subset C_i \iff X \subset C_i
+      \cup Y \iff X \setminus C_i \subset Y
+    \]
+
+    Clearly, $X \setminus \overline{X \setminus Y}$ is the union of
+    all open sets which are contained inside of $Y$, which is the
+    definition of $\text{Int}(Y)$
+  \item $\overline Y = X \setminus \text{Int}(X\setminus Y)$\\
+    Consider that
+
+    \[
+      X \setminus \text{Int}(X\setminus Y) = X \setminus \bigcup U_i
+      = \bigcap X \setminus U_i
+    \]
+
+    for $\{U_i\}$ the set of all sets which are open and contained in $X
+    \setminus Y$. Since $U_i$ is open, $X \setminus U_i$ is closed, further,
+    \[
+      U_i \subset X \setminus  Y \iff U_i \cup Y \subset X
+      \iff Y \subset X \setminus U_i
+    \]
+    Therefore, $X \setminus \text{Int}(X \setminus Y)$ is the
+    intersection of all closed sets which contain $Y$, which is the
+    defintion of the closure of $Y$
+\end{itemize}
+\question[3]{}
+\begin{itemize}
+  \item $\overline{Y \cup Z} = \overline{Y} \cup \overline{Z}$\\
+    First we show $\overline{Y}  \cup \overline{Z} \subset
+    \overline{Y \cup Z}$: We have that $Y \subset Y \cup Z \implies
+    \overline Y \subset \overline{Y \cup Z}$ and that
+    $Z \subset Y \cup Z \implies \overline{Z} \subset \overline{Y
+    \cup Z}$, then $\overline Y \cup \overline Z \subset \overline{Y
+    \cup Z}$. To show that $\overline{Y \cup Z} \subset
+    \overline Y \cup  \overline Z$: since $Y \subset \overline Y$ and
+    $Z \subset \overline Z$, we have that $Y \cup Z \subset \overline
+    Y \cup  \overline Z \implies \overline{Y \cup Z} \subset
+    \overline{\overline{Y} \cup \overline{Z}}$. Since $\overline Y$
+    and $\overline Z$ are
+    closed, so is $\overline Y \cup \overline Z$ as such
+    $\overline{\overline Y \cup \overline Z} = \overline Y \cup
+    \overline Z$, therefore, $\overline{Y \cup Z} \subset \overline Y
+    \cup \overline Z$ as desired.
+
+  \item $\overline{Y \cap Z}  \subset \overline Y \cap \overline Z$
+
+    \begin{align*}
+      Y \cap Z \subset Y \text{ and } Y \cap Z \subset Z &\implies
+      \overline{(Y \cap Z)} \subset \overline Y \text{ and } \\
+      &\implies \overline{Y \cap Z} \subset \overline Y \cap \overline Z
+    \end{align*}
+  \item $\text{Int}(Y) \cup \text{Int}(Z) \subset \text{Int}(Y \cup Z)$\\
+    \[
+      Y \subset Y \cup Z \text{ and } Z \subset Y \cup Z \text{ and }
+      \text{Int}(Y) \subset Y \text{ and } \text{Int}(Z) \subset Z
+    \]
+    then
+    \[
+      \text{Int}(Y) \cup \text{Int}(Z) \subset Y \cup Z
+    \]
+    then
+    \[
+      \text{Int}(\text{Int}(Y) \cup  \text{Int}(Z)) \subset \text{Int}(Y \cup Z)
+    \]
+    Since $\text{Int}(Y)$ and $\text{Int}(Z)$ are by definition open,
+    their union is as well, therefore, $\text{Int}(\text{Int}(Y) \cup
+    \text{Int}(Z)) = \text{Int}(Y) \cup \text{Int}(Z)$, as such:
+    \[
+      \text{Int}(Y) \cup  \text{Int}(Z) \subset \text{Int}(Y \cup Z)
+    \]
+  \item $\text{Int}(Y) \cap \text{Int}(Z) = \text{Int}(Y\cap Z)$ \\
+    First we show that $\text{Int}(Y\cap Z) \subset \text{Int}(Y)
+    \cap \text{Int}(Z)$:
+    \begin{align*}
+      Y \cap Z  \subset Y  \text{ and } Y \cap Z  \subset Z
+      &\implies  \text{Int}(Y \cap Z) \subset \text{Int}(Y) \text{
+      and } \text{Int}(Z) \\
+      &\implies \text{Int}(Y \cap Z)\subset \text{Int}(Y) \cap \text{Int}(Z)
+    \end{align*}
+    Then also that $\text{Int}(Y) \cap \text{Int}(Z) \subset
+    \text{Int}(Y \cap Z)$:
+    \begin{align*}
+      \text{Int}(Y) \subset Y \text{ and } \text{Int}(Z) \subset Z
+      &\implies \text{Int}(Y) \cap \text{Int}(Z) \subset Y \cap Z \\
+      &\implies \text{Int}(\text{Int}(Y) \cap \text{Int}(Z)) \subset
+      \text{Int}A(Y \cap Z) \\
+      &\implies \text{Int}(Y) \cap \text{Int}(Z) \subset \text{Int}(Y \cap Z)
+    \end{align*}
+
+\end{itemize}
+\question[4]{}
+
+\end{document}
