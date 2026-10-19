@@ -1,0 +1,131 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+\usepackage{amssymb}
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Course Title} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[6]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+\begin{enumerate}
+  \item A space $X$ is Hausdorff if $\forall x, y  \in X, \exists$
+    open neighborhoods $U_x, U_y$ such that $U_x \cap U_y =
+    \emptyset$. Since open balls form a basis in a metric space, it
+    suffices to show that $\exists r_x, r_y > 0$ such that
+    $$
+    B_{r_x} \cap B_{r_y} = \emptyset
+    $$
+    This can be achieved by first setting $r_x$ to be any positive
+    real number less than $d(x,y)$, and setting $r_y = d(x,y) - r_x$.
+    We confirm that the open balls centered at $x$ and $y$ with radii
+    $r_x$ and $r_y$ are disjoint:
+    \begin{align*}
+      B_{r_x}(x) \cap B_{r_y}(y) &= \left\{z \in X | d(z, x) < r_x,
+      d(z,y) < r_y\right\}\\
+      &= \left\{z \in X | d(z, x) < r_x,
+      d(z,y) < d(x, y) - r_x\right\}\\
+      &= \left\{z \in X | d(z, x) < r_x,
+      d(z,y) + r_x < d(x, y) \right\}\\
+    \end{align*}
+    Assume for the sake of contradiction that the above set is not
+    empty, that is that there exists $z \in X$ such that
+    \[
+      d(z,y) + r_x < d(x,y) \quad d(z,x) < r_x
+    \]
+    Of course $d(z,x) < r_x \implies d(z,x) - r_x < 0$ then
+    \[
+      d(z,y) + r_x + d(z,x) - r_x < d(x,y) \implies d(z,y) + d(z,x) < d(x,y)
+    \]
+    However, by the triangle inequality
+    \[
+      d(x,y) \leq d(z,y) + d(z,x)
+    \]
+    Therefore, no such $z$ can exist, and the set
+    \[
+      B_{r_x}(x) \cap B_{r_y}(y) = \emptyset
+    \]
+    so any metric space $X$ is Hausdorff.
+  \item A space is first countable if $\forall x \in X, x$ has a
+    countable basis, that is, a countable collection of neighborhoods
+    $\{ U_n \}$ such that if $U$ is a neighborhood of $x$, $\exists n$
+    such that $U_n \subset U$.  Take the countable set of
+    neighborhoods of a point $x\in X$
+    \[
+      \{U_n\} = \{ B_{\frac{1}{n}}(x)\}
+    \]
+    Since open balls form a basis in metric space, we have that the
+    neighborhood $U$ of $x$ can be expressed as union of open balls
+    of some radius $r$ centered on every point in $U$
+    \[
+      U = \bigcup_{y \in U} B_r(y)
+    \]
+    then there exists an open ball of some radius $r$ centered on $x$
+    contained in $U$
+    $$
+    B_r(x) \subset U
+    $$
+    by the archimedian property of real numbers, $\exists n \in
+    \mathbb{N}$ such that
+    \[
+      \frac{1}{n} < r \implies B_{\frac{1}{n}}(x) \subset B_r(x) \subset U
+    \]
+    Therefore, every point in a metrix space has a countable basis,
+    and therefore every metric space is first countable.
+
+\end{enumerate}
+\question[2]{}
+\begin{enumerate}
+  \item
+    \begin{enumerate}
+      \item first we show that for every $x$, there exists $B \in
+        \mathcal{B}$ such that $x \in B$. Take $\varepsilon > 0$ and $B =
+        (x - \varepsilon, \infty)$ then $B \in \mathcal{B}$ and $x \in B$
+      \item We wish to show that for any basis elements $B_a, B_b \in
+        \mathcal{B}$ then $\exists B_c \in \mathcal{B}$ such that $B_c
+        \subset B_a \cap B_b$. Let $a, b \in \mathbb{R}$ and $B_a = (a,
+        \infty), B_b = (b, \infty)$, without loss of generality, assume
+        that $a \leq b$. Then
+        \[
+          B_a \cap B_b = (b, \infty) = B_b
+        \]
+        Clearly then:
+        \[
+          B_b \subset B_a \cap B_b
+        \]
+        So take $B_c = B_b$. Therefore, $\mathcal{B}$ forms a basis as desired.
+    \end{enumerate}
+  \item Let $x \in (a, \infty)$ and $y \in (b, \infty)$, assume
+    without loss of generality $a \leq b$
+\end{enumerate}
+\question[3]{What is the \Large{$\int_0^2 x^2 \, dx $}\normalsize{.
+Show all steps}}
+
+\begin{align*}
+  \int_0^2 x^2 &= \left. \frac{x^3}{3} \right|_0^2 \\
+  &= \frac{2^3}{3}-\frac{0^3}{3}\\
+  &= \frac{8}{3}
+\end{align*}
+\end{document}
