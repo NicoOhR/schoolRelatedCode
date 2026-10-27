@@ -1,7 +1,13 @@
 import pathlib
 import subprocess
 
+import numpy as np
 import pyspark
+from pyspark.ml import Pipeline
+from pyspark.ml.evaluation import RegressionEvaluator
+from pyspark.ml.feature import StringIndexer
+from pyspark.ml.recommendation import ALS
+from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
 from pyspark.sql.session import SparkSession
 
 friend_path = pathlib.Path("./soc-LiveJournal1Adj.txt")
@@ -15,10 +21,12 @@ if not friend_path.is_file():
 spark = (
     SparkSession.builder.master("local[*]")
     .config("spark.jars.packages", "io.graphframes:graphframes-spark4_2.13:0.12.3")
+    .config("spark.driver.memory", "20g")
     .getOrCreate()
 )
 sc = spark.sparkContext
 
+# (user, [friends])
 text_file = (
     sc.textFile(str(friend_path))
     .map(lambda x: x.split("\t"))
@@ -48,4 +56,45 @@ def getFriendsRecFstOrder(user):
     print(neighbors.takeOrdered(10, lambda x: -x[1]))
 
 
-getFriendsRecFstOrder("0")
+# getFriendsRecFstOrder("0")
+
+
+# (user, user_friend, 1)
+sparse = text_file.flatMap(lambda x: [(x[0], x1) for x1 in x[1]]).map(
+    lambda x: (x[0], x[1], 1)
+)
+sparse_df = spark.createDataFrame(sparse, ["user", "user_friend", "connected"])
+
+indexer = StringIndexer(
+    inputCols=["user", "user_friend"], outputCols=["userIdx", "user_friendIdx"]
+).setHandleInvalid("keep")
+als = ALS(
+    rank=10,
+    seed=0,
+    userCol="userIdx",
+    itemCol="user_friendIdx",
+    ratingCol="connected",
+    coldStartStrategy="drop",
+    implicitPrefs=True,
+)
+
+pipeline = Pipeline(stages=[indexer, als])
+
+grid = (
+    ParamGridBuilder()
+    .addGrid(als.rank, [5, 10, 20])
+    .addGrid(als.regParam, [0.01, 0.1, 0.5])
+    .addGrid(als.maxIter, [10, 20])
+    .build()
+)
+
+crossval = CrossValidator(
+    estimator=pipeline,
+    estimatorParamMaps=grid,
+    evaluator=RegressionEvaluator(
+        metricName="rmse", labelCol="connected", predictionCol="prediction"
+    ),
+    numFolds=2,
+)
+
+cvModel = crossval.fit(sparse_df)
