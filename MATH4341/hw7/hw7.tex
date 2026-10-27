@@ -1,0 +1,214 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Topology} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[7]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+\begin{enumerate}
+  \item
+    A linear function that maps between $(a, b)$ to $(-1,1)$ would
+    suffice, this can be achieved with the mapping
+
+    \[
+      f(x) = \frac{2}{b-a}x - \frac{a+b}{b-a}
+    \]
+
+    First we verify that indeed $f((a,b)) = (-1,1)$,
+    \begin{align*}
+      a < x < b &\iff \frac{2a}{b-a} < \frac{2}{b-a}x < \frac{2b}{b-a} \\
+      &\iff \frac{2a - b - a}{b-a} < \frac{2}{b-a}x -
+      \frac{b+a}{b-a}< \frac{2b
+      - b - a}{b-a} \\
+      &\iff \frac{a - b}{b-a} < \frac{2}{b-a}x - \frac{b+a}{b-a}<
+      \frac{b-a}{b-a} \\
+      &\iff -1 < \frac{2}{b-a}x - \frac{b+a}{b-a}<
+      1 \\
+      &\iff -1 < f(x)<
+      1 \\
+    \end{align*}
+
+    We verify that the function is bijective, continuous and with a
+    continuous inverse:
+
+    A function is bijective if $\forall y \in Y, \exists!x \in X, y =
+    f(x)$, take any $y \in Y$, then $y = f(x) = ax + b \implies
+    \frac{y-b}{a} = x$, which in this case
+    $$
+    x = \frac{b-a}{2}y + \frac{a+b}{2}
+    $$
+
+    As demonstrated for any $y \in  (-1,1) \implies x\in(a,b)$, and this $x$ is
+    unique, therefore the function is bijective from $(a,b) \to (-1,1)$.
+
+    To demonstrate that this function and it's inverse are continuous,
+    consider that for any open set $A \subset (-1,1)$, since open
+    intervals form a basis in $\mathbb{R}$,
+
+    \[
+      A = \bigcup (a_i, b_i) \implies f^{-1}(A) = \bigcup f^{-1}(a_i, b_i)
+    \]
+
+    It suffices to show that for any interval $(a_i, b_i) \subset (-1,1)$,
+    $f^{-1}(a_i, b_i)$ is open.
+
+    \begin{align*}
+      a_i < f(x) < b_i &\iff a_i < \frac{2}{b-a}x - \frac{b+a}{b-a} < b_i \\
+      &\iff \frac{b-a}{2}a_i + \frac{b+a}{2} < x < \frac{b-a}{2}b_i +
+      \frac{b+a}{2} \\
+      &\iff f^{-1}(a_i) < x < f^{-1}(b_i)
+    \end{align*}
+    Which is the open interval $(f^{-1}(a_i), f^{-1}(b_i)) \subset
+    (a,b)$, since the function is bijective, and the above shows
+    equivalency, the same argument holds for $f^-1$. That is to say, that
+    both $f$ and $f^{-1}$ are continuous. As such, $f$ is bijective,
+    continuous, and with a continuous inverse, as such, it is a homeomorphism.
+  \item
+
+    % this might be too lazy, largely the proof is that tan on the
+    % domain continuous since it maps intervals to intervals,this can
+    % be shown from inequality equivalences
+    % it is bijective as you take limits
+
+    % then arctan follows since tan is increasing and continuous
+    Using the previous part, and the fact that the composition of
+    bijective, continuous mappings is bijective and continuous, it
+    suffices to find a homeomorphism $g: (-1, 1) \to (-\infty, \infty)$
+    is a homeomorphism, since then $g
+    \circ f$ would be a homeomorphism from $(a, b) \to (-\infty,
+    \infty)$. For this $g(x) = \tan(\frac{\pi}{2}x)$ satisfies the
+    requirements, since it is bijective, is continuous on the domain,
+    and has a continuous inverse $\frac{\pi}{2}\arctan(x)$. As such,
+    the function
+    $$
+    \tan\left(\frac{\pi}{2}\left(\frac{b-a}{2}x + \frac{b+a}{2} \right)\right)
+    $$
+    is a homeomorphism
+\end{enumerate}
+\question[2]{}
+
+Using the stereographic projection, which draws a line from the
+removed point $(1,0)$ to every other point on the circle $(x,y)$, and
+sets $f(x,y)$ to where it crosses the $y$ axis, we obtain the
+following explicit formula:
+
+$$
+f(x,y) = \frac{y}{1-x}
+$$
+
+We now seek to verify that it is bijective, that it is continuous,
+and that it's inverse is continuous.
+
+To show bijectivity, take any $b \in \mathbb{R}$ then we can solve
+the following equations for $x,y \in C\setminus\{(0,1)\}$
+
+\[
+  b = \frac{y}{1-x}
+\]
+
+\[
+  x^2 + y^2 = 1
+\]
+
+It follow from the first that $y = (1-x)b$, substituting that into
+the second yields
+\[
+  x^2 + ((1-x)b)^2 = 1 \implies x^2(1+b^2) - 2b^2x + (b^2-1) = 0
+\]
+
+As a quadratic equation, this has two solutions, however, note that
+$x = 1$ satisfies the above equation
+\[
+  1+b^2 - 2b^2 + b^2-1 = 0
+\]
+
+Therefore, there is only one $x \in C\setminus\{(0,1)\}$ which
+satisifies the conditions, and it follows that there exists only one
+$y$ which does as well. As such, for any $b\in\mathbb{R}$ there
+exists only one $(x,y) \in C\setminus\{(0,1)\}$ such that $f(x,y) =
+b$, and therefore the function is bijective. From this we can also
+compute the explicit inverse function, using the quadratic formula
+
+\[
+  x = \frac{2b^2 - \sqrt{4b^4 - 4(1+b^2)(b^2-1)}}{2(1+b^2)} =
+  \frac{2b^2 - 2}{2(1+b^2)} = \frac{b^2 -1}{b^2+1}
+\]
+Therefore
+
+$$
+f^{-1}(b) = \left(\frac{b^2-1}{b^2+1}, \frac{2b}{b^2+1}\right)
+$$
+
+%% continuity proofs of various kinds proceed, I think the proof for
+% 1/b^2 + 1 and b^2-1 are simple enough,
+%% then composition of continuous + continuous components is
+% continuous. For f I'm not sure how to do that, it probably follows
+% pretty quickly with the subspace topology
+
+\question[3]{}
+To show that $\mathcal{I}$ is not connected, we find two disjoint
+open sets $U, V$ in the subspace topology of $\mathcal{I}$ such that
+
+$$
+\mathcal{I} = U \cup V
+$$
+
+Take $U = (-\infty, 0) \cap \mathcal{I}$ and $V = (0,\infty) \cap
+\mathcal{I}$, clearly, since $(-\infty, 0)$ and $(0, \infty)$ are in
+the topology of $\mathbb{R}$, $U, V  \in \mathcal{T}_\mathcal{I}$, further
+
+$$
+U \cup V = (-\infty, \infty)  \cap \mathcal{I} = \mathcal{I} \quad U
+\cap V = \emptyset
+$$
+As such, $U,V$ is a seperation of $\mathcal{I}$, and therefore
+$\mathcal{I}$ is not connected.
+\question[4]{}
+
+Let $x \in [a,b]$, assume for the sake of contradiction that $x
+\notin A$, then take $U = (-\infty, x)$ and $V = (x, \infty)$. $U,V$
+are open in $\mathbb{R}$, so $U \cap A$ and $V \cap A$ are open in
+the subset topology of $A$. Further more, since $x\in [a,b] \implies a
+\leq x \leq b$, and $a,b \in A$, we have that at least $a \in U \cap
+A$ and $b \in V \cap A$, which is to say neither sets are empty. Further
+
+$$
+(U \cap A) \cup (V \cap A)  = (U \cup V) \cap A = \mathbb{R}\setminus
+\{x\} \cap A = A
+$$
+
+And also
+$$
+(U \cap A) \cap (V \cap A) = (U \cap V) \cap A  = \emptyset \cap A = \emptyset
+$$
+
+Therefore, $U\cap A$ and $V \cap A$ seperate $A$, however, $A$ is
+connected, which is a contradiction. As such $\forall x \in [a,b],
+x\in A \implies [a,b] \subset A$
+\end{document}
