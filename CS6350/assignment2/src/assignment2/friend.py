@@ -64,6 +64,7 @@ sparse = text_file.flatMap(lambda x: [(x[0], x1) for x1 in x[1]]).map(
     lambda x: (x[0], x[1], 1)
 )
 sparse_df = spark.createDataFrame(sparse, ["user", "user_friend", "connected"])
+training, test = sparse_df.randomSplit([0.8, 0.2])
 
 indexer = StringIndexer(
     inputCols=["user", "user_friend"], outputCols=["userIdx", "user_friendIdx"]
@@ -79,6 +80,9 @@ als = ALS(
 )
 
 pipeline = Pipeline(stages=[indexer, als])
+evaluator = RegressionEvaluator(
+    metricName="rmse", labelCol="connected", predictionCol="prediction"
+)
 
 grid = (
     ParamGridBuilder()
@@ -89,12 +93,13 @@ grid = (
 )
 
 crossval = CrossValidator(
-    estimator=pipeline,
-    estimatorParamMaps=grid,
-    evaluator=RegressionEvaluator(
-        metricName="rmse", labelCol="connected", predictionCol="prediction"
-    ),
-    numFolds=2,
+    estimator=pipeline, estimatorParamMaps=grid, numFolds=2, evaluator=evaluator
 )
 
-cvModel = crossval.fit(sparse_df)
+cvModel = crossval.fit(training)
+predictions = cvModel.transform(test)
+rmse = evaluator.evaluate(predictions)
+print(rmse)
+
+## output plots for training, the best model selected
+## and compare against the mapreduce solution
