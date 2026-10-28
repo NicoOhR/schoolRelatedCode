@@ -137,6 +137,23 @@ class NaiveBayes:
 
 model = NaiveBayes()
 model.fit(training.select("sender_labels", "filtered"))
-print(model.predict(test).collect())
 
-##compute accuracy and F1 of the model
+predictions = (
+    model.predict(test)
+    .map(lambda x: (x[0].item(), x[1].item(), x[2].item()))
+    .toDF(["lie prior", "truth prior", "prediction_label"])
+).join(test.select("sender_labels").alias("true label"))
+
+true_positive = predictions.where(
+    (predictions.prediction_label == predictions.sender_labels)
+    & (predictions.prediction_label == False)
+).count()
+
+false_positive = predictions.where(
+    (predictions.prediction_label != predictions.sender_labels)
+    & (predictions.prediction_label == False)
+).count()
+
+print(true_positive)
+print(false_positive)
+print(true_positive / (false_positive + true_positive))

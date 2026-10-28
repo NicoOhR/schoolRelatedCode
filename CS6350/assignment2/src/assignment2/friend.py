@@ -8,7 +8,9 @@ from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.feature import StringIndexer
 from pyspark.ml.recommendation import ALS
 from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+from pyspark.sql import Row
 from pyspark.sql.session import SparkSession
+from pyspark.sql.types import *
 
 friend_path = pathlib.Path("./soc-LiveJournal1Adj.txt")
 
@@ -53,10 +55,7 @@ def getFriendsRecFstOrder(user):
         .reduceByKey(lambda x, y: x + y)
         .filter(lambda x: x[0] not in friends_list)
     )
-    print(neighbors.takeOrdered(10, lambda x: -x[1]))
-
-
-# getFriendsRecFstOrder("0")
+    return neighbors.takeOrdered(10, lambda x: -x[1])
 
 
 # (user, user_friend, 1)
@@ -97,9 +96,45 @@ crossval = CrossValidator(
 )
 
 cvModel = crossval.fit(training)
-predictions = cvModel.transform(test)
+best_model = cvModel.bestModel
+best_model.stages[-1].rank
+print(best_model.rank)
+predictions = best_model.transform(test)
+test.printSchema()
 rmse = evaluator.evaluate(predictions)
 print(rmse)
 
-## output plots for training, the best model selected
-## and compare against the mapreduce solution
+recs = best_model.stages[-1].recommendForAllUsers(10)
+
+random = [
+    x[0]
+    for x in training.sample(
+        withReplacement=False, fraction=(30 / text_file.count()), seed=2
+    ).take(10)
+]
+
+als_rec = recs.filter(recs.userIdx.isin(random))
+
+schema = StructType(
+    [
+        StructField("userIdx", IntegerType(), True),
+        StructField(
+            "mapReduceRecs",
+            ArrayType(
+                StructType(
+                    [
+                        StructField("friend", StringType(), True),
+                        StructField("reccScore", IntegerType(), True),
+                    ]
+                )
+            ),
+            True,
+        ),
+    ]
+)
+map_reduce_rec = sc.parallelize(
+    list(map(lambda x: (int(x), getFriendsRecFstOrder(x)), random))
+).toDF(schema=schema)
+
+combined = als_rec.join(map_reduce_rec, "userIdx")
+combined.head()
