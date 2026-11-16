@@ -1,5 +1,7 @@
 import os
 
+from pyspark.sql.functions import struct, to_json
+
 from processor.Processor import Processor
 
 
@@ -8,7 +10,8 @@ def main() -> None:
     stream = processor.get_stream()
     ##format needs to get posted to kafka somehow
     query = (
-        stream.writeStream.outputMode("complete")
+        stream.select(to_json(struct("entities", "count")).alias("value"))
+        .writeStream.outputMode("complete")
         .format("kafka")
         .option("kafka.bootstrap.servers", os.environ["KAFKA_SERVER"])
         .option("topic", "logs.entities")

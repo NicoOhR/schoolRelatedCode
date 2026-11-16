@@ -42,6 +42,7 @@ class Processor:
             self.spark.readStream.format("kafka")
             .option("kafka.bootstrap.servers", kafka_server)
             .option("subscribe", "articles")
+            .option("startingOffsets", "earliest")
             .load()
             .withColumn(
                 "entities",
