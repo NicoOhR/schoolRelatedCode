@@ -1,0 +1,15 @@
+\begin{table}
+\caption{Baseline: TF-IDF retrieval of whole chapters, then answers from impira/layoutlm-document-qa}
+\label{tab:qa-chapters}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{1.1cm}>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{1.0cm}r}
+\toprule
+Question & Expected & Top 3 ch. (cos sim) & Answer in top 3 & Answer & Answer ch. & Score \\
+\midrule
+What is the name of the bank Mr. Lorry works for? & Tellson's & 3.3 (0.07), 2.12 (0.07), 3.13 (0.06) & True & King’s Bench & 2.12 & 0.62 \\
+What number was Doctor Manette's cell in the Bastille? & One Hundred and Five, North Tower & 3.10 (0.08), 3.9 (0.07), 3.2 (0.07) & True & 1767. & 3.10 & 0.22 \\
+Who was tried for treason at the Old Bailey? & Charles Darnay & 2.2 (0.11), 2.5 (0.05), 2.3 (0.04) & True & Mr. Carton & 2.3 & 1.00 \\
+What does Madame Defarge do while she sits in the wine-shop? & knits & 3.3 (0.13), 2.16 (0.11), 3.12 (0.11) & True & returned to her counter to get the wine, & 3.12 & 0.17 \\
+Who takes Darnay's place at the guillotine? & Sydney Carton & 3.6 (0.06), 3.5 (0.05), 2.16 (0.05) & False & Charles Evrémonde, & 3.6 & 0.56 \\
+\bottomrule
+\end{tabular}
+\end{table}

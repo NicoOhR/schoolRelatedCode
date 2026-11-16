@@ -1,0 +1,15 @@
+\begin{table}
+\caption{TF-IDF retrieval of the top 3 200-word passages, then answers from deepset/roberta-base-squad2}
+\label{tab:qa}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{2.1cm}>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{1.1cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{0.9cm}rl}
+\toprule
+Question & Expected & Top 3 passages: ch. (cos sim) & Answer in top 3 & Answer & Answer ch. & Score & Correct \\
+\midrule
+What is the name of the bank Mr. Lorry works for? & Tellson's & 1.4 (0.14), 3.13 (0.14), 2.3 (0.12) & True & Tellson & 2.3 & 0.50 & True \\
+What number was Doctor Manette's cell in the Bastille? & One Hundred and Five, North Tower & 3.9 (0.28), 3.10 (0.15), 3.2 (0.15) & True & One Hundred and Five & 3.9 & 0.26 & True \\
+Who was tried for treason at the Old Bailey? & Charles Darnay & 2.2 (0.21), 2.2 (0.17), 2.2 (0.14) & False & Mr. Jerry Cruncher & 2.2 & 0.01 & False \\
+What does Madame Defarge do while she sits in the wine-shop? & knits & 2.22 (0.19), 2.15 (0.18), 2.15 (0.18) & True & taken up her knitting & 2.15 & 0.03 & True \\
+Who takes Darnay's place at the guillotine? & Sydney Carton & 2.16 (0.18), 3.15 (0.10), 2.16 (0.10) & False & Spy & 3.15 & 0.00 & False \\
+\bottomrule
+\end{tabular}
+\end{table}

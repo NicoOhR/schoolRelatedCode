@@ -1,0 +1,286 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{minted}
+\usepackage[hidelinks]{hyperref}
+
+% keep the generated tables where they are \input, next to their discussion
+\floatplacement{table}{H}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\title{CS4372 Assignment 4: A Tale of Two Cities}
+\author{N. Ohayon Rozanes}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Data}
+
+All four tasks use Charles Dickens' A Tale of Two Cities, taken from Project
+Gutenberg and split into chapter. In total, there are 45 chapters
+across three books. The novel was chosen because the BookSum
+dataset (\texttt{kmfoda/\allowbreak booksum}) has reference summaries
+at the chapter level, and Project Gutenberg also has a Spanish translation
+by Gregorio Lafuerza with the same 45-chapter structure. The
+Gutenberg chapters match BookSum's chapter text to within 20 words
+for every chapter. All models were run on a Google Colab T4 GPU. Each
+task is split into a method, evaluation, and discussion section.
+
+%-------------------------------------------------------------------------------
+\section{Summarization}
+
+\textbf{Method.} Each chapter was summarized with
+facebook's bart-large-cnn. This was a BART model fine tuned to
+summarize CNN articles. BART reads at most 1024 tokens and every
+chapter is longer (1,288 to 7,866 tokens, median 3,585), so each
+chapter was split into equal chunks of at most 1,000 tokens.
+Each chunk was decoded with beam search, tuned to give a similar
+output to BookSum's reference summary.
+
+\textbf{Evaluation.} BookSum has 4 to 6 reference summaries per
+chapter, written by different study guides. Each generated summary
+was scored against every reference for its chapter, keeping the best
+F1 for ROUGE-1, ROUGE-2 and ROUGE-L and for BERTScore (rescaled with
+its baseline, so that 0 is roughly the similarity of two unrelated sentences).
+
+\begin{center}
+  \begin{tabular}{rrrr}
+    \toprule
+    ROUGE-1 & ROUGE-2 & ROUGE-L & BERTScore \\
+    \midrule
+    0.262 & 0.064 & 0.244 & 0.017 \\
+    \bottomrule
+  \end{tabular}
+  \captionof{table}{Mean scores over the 45 chapters.}
+  \label{tab:summary-means}
+\end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{summary_scores.png}
+  \caption{Summary scores by chapter (top) and chapter length in
+    tokens (bottom).
+  Dashed lines mark the start of Books 2 and 3.}
+  \label{fig:summary}
+\end{figure}
+
+\textbf{Discussion.} BART-CNN was trained
+on CNN/DailyMail
+articles, where the important content is stated plainly, so it's
+summarization strategy is primarily lifting sentences from the
+chapter, and as such looks much closer to the prose of the book than
+to anything a student might write. The BookSum references are instead written in
+modern study-guide language. As such, the large gap between modern
+and Dickensian English is apparant in ROUGE-2 and the BERTScore.
+ROUGE-1 and ROUGE-L sit slightly above the two other metrics because
+the reference and generated summaries would still share some of the
+same words when referring to specific nouns or locations.
+
+An example of a generated summary and a reference summary
+demonstrates this gap very clearly, while the
+generated summary
+follows Dickens' sentences about the mail coach, the reference names the
+characters and explains their situation. This mismatch in wording is
+why the rescaled
+BERTScore sits near zero. Across chapters, ROUGE barely changes with
+chapter length, but BERTScore falls as chapters get longer. Longer
+chapters are split into more chunks, and joining more
+chunk summaries produces a choppier, less focused summary.
+
+\textbf{Example (chapter 1.2, ``The Mail'').}
+
+\begin{quote}\small
+  \textit{Generated:} Dover road lay, as to him, beyond the Dover
+  mail, as it lumbered
+  up Shooter's Hill. The horses had three times already come to a
+  stop, besides once
+  drawing the coach across the road. The team had capitulated and
+  returned to their
+  duty. Three passengers were on board a coach when it was stopped by
+  a guard. [\ldots]
+  The rider stooped, and, casting up his eyes at the guard, handed
+  the passenger a
+  small folded paper.
+
+  \textit{Reference (first of 6):} Mr. Jarvis Lorry, a confidential
+  clerk at Tellson's
+  Bank of London, is on his way to Dover in a mail-coach. It is a
+  cold night and he is
+  wrapped up to the ears, so his physical appearance is concealed from his
+  fellow-passengers, all of whom are strangers. [\ldots] Jerry
+  Cruncher, the rider of
+  the horse, asks for Mr. Lorry, giving him a paper message [\ldots]
+\end{quote}
+
+The full per-chapter scores are in Table~\ref{tab:summary} at the end
+of the report.
+
+%-------------------------------------------------------------------------------
+\section{Translation}
+
+\textbf{Method.} The first five chapters were
+translated from English to Spanish with pfnet's
+plamo-3-translate-0.8b, a translation-specialized
+LLM. Each chapter was split on sentence boundaries into chunks of at
+most 300 words, and each chapter's chunks were translated together as
+one batch. The model was run in float32 because the T4 has no native
+bfloat16 support.
+
+\textbf{Evaluation.} Each machine-translated chapter was compared
+against the same
+chapter of Lafuerza's translation using BLEU and chrF, from the
+sacrebleu package.
+
+\input{translation_results.tex}
+
+\textbf{Discussion.} The BLEU scores are low (mean 11.13) but chrF is moderate
+(mean 57.25), this is partially because spanish is a somewhat high
+morphology language (that is, the same base word can be conjugated in
+different ways such that it makes a n-gram measure like BLEU fail).
+chrF is also more leniant in regards to how strictly a translation
+adheres to the reference, since it gives credit for similar letter sequences.
+
+Reading the output shows the generated translations themselves are
+accurate. The gap comes from the reference since Lafuerza's
+translation is literary, and the LLM instead translated directly. The
+opening line shows the difference clearly:
+
+\begin{quote}\small
+  \textit{English:} It was the best of times, it was the worst of
+  times, it was the age
+  of wisdom, it was the age of foolishness [\ldots]
+
+  \textit{PLaMo:} Fue la mejor época, fue la peor época, fue la edad
+  de la sabiduría,
+  fue la edad de la necedad [\ldots]
+
+  \textit{Lafuerza:} Erase el mejor de los tiempos y el más
+  detestable de los tiempos;
+  la época de la sabiduría y la época de la bobería [\ldots]
+\end{quote}
+
+The model translates the text more or less word for word, but BLEU counts exact
+matches of word sequences, and the two versions rarely use the same
+phrasing, since Lafuerza mimics the tone and period of Dickens.
+chrF's leniancy makes it the more informative metric against a loose
+reference like this one.
+
+%-------------------------------------------------------------------------------
+\section{Retrieval and Question Answering}
+
+\textbf{Method.} Questions are answered in two steps: TF-IDF retrieval
+(scikit-learn, English stop words removed, sublinear term frequency)
+finds the three pieces of text most similar to the question by cosine
+similarity, then an extractive reader picks an answer span from each
+and the most confident one is kept. Five questions with known answers
+, generated by claude code (I have not read this book) were used. To
+evaluate retrieval separately from reading, if the
+answer text appeared in the top 3 records whether the answer text
+appears anywhere in the retrieved text. Then and whether
+the final answer contains it the known correct text is recorded seperately.
+
+The first version treated each chapter as one
+document and used deepset's roberta-base-squad2 as the reader. This model is
+fine-tuned for question answering questions based on short wikipedia
+paragraphs. Using each chapter as the base document for TF-IDF to
+retrieve resulted in the LLM answering none of the questions
+correctly. This was less the fault of the reader and more of the
+retrieval method, since with entire chapters the answer was buried in
+too much useless information.  Instead, each chapter was
+split into overlapping 200-word passages (50-word overlap), giving
+909 passages. The answer span is the highest-scoring
+start/end pair within the passage, up to 30 tokens long.
+
+{\small \input{qa_results.tex}}
+
+\textbf{Discussion.} Three of the five answers were answered correctly
+(``Tellson'', ``One
+Hundred and Five'', ``taken up her knitting'').  The retrieved
+passages are also on topic, for example, the top passage for the
+Bastille question is Defarge's testimony at Darnay's trial, which names the cell
+outright.
+
+Both failures are retrieval failures; the answer is not in
+any retrieved passage, so no reader could find it:
+\begin{itemize}
+  \item \textbf{Old Bailey.} All three passages come from the right
+    chapter (2.2, the
+    trial), but from its opening, where Jerry Cruncher enters the
+    court before the
+    prisoner has been named. The reader answered with the only person
+    in the passage.
+  \item \textbf{Guillotine.} The top passage matches on the words ``takes'' and
+    ``place'' in Madame Defarge's line about the revolution, ``when
+    it is ready, it takes
+    place''. TF-IDF matches words, not meaning, and the passage that
+    describes Carton's
+    sacrifice (chapter 3.13) shares few words with the question.
+\end{itemize}
+
+Both wrong answers scored 0.01 or less, so a threshold around 0.02
+would have rejected both instead of returning a wrong answer. With
+passages, retrieval is the limiting step. Rephrasing the question
+with words the book uses (``Who goes to the guillotine
+in Darnay's stead?'') or a retriever that matches on meaning rather
+than tokens would address the two misses.
+
+%-------------------------------------------------------------------------------
+\section{Text Generation}
+
+\textbf{Method.} Five seeds were made from the first 20 words of five
+random, lesser known chapters. Chapter 1.1 was left out because GPT-2 has
+memorized its famous opening. \texttt{openai-community/\allowbreak
+gpt2} generated 60 new tokens from each seed using nucleus sampling
+($p = 0.9$, temperature 0.8, no repeated 3-grams, random seed 0).
+
+\textbf{Evaluation.} Perplexity was computed by a separate, larger model,
+gpt2-large, so that the generator does not grade its own
+output. It scores just the generated continuation, with the seed as
+context. As a baseline, the same perplexity was computed for the
+book's real continuation, cut to the same number of tokens.
+
+\input{generation_results.tex}
+
+\textbf{Discussion.} The generated text has a mean perplexity of 13.32, against
+39.47 for Dickens' actual continuations, so GPT-2 Large finds GPT-2's text
+\emph{less} surprising than the book's. As with the summarization,
+this again demonstrates the large gap between modern and Dickensian
+English. Since GPT-2 is trained on a primarily modern corpus, it is
+reasonable that it would generate words that are more modern in nature.
+Sampled text is drawn from high-probability regions of a
+GPT-2 model, so a model from the same family predicts it easily.
+Dickens' idiosyncratic (even for his own time) prose is far harder
+to predict. Reading the output makes this clear: the
+continuations are fluent but generic and drift away from the book
+The largest gap is for chapter 3.5, whose real
+continuation (perplexity 90.36) is written in Dickens' most
+particular register. Perplexity measures how
+predictable text is to a model, not how faithful or interesting it
+is, so it should be read alongside the samples themselves.
+
+%-------------------------------------------------------------------------------
+\clearpage
+\appendix
+\section{Per-chapter summarization scores}
+{\footnotesize\renewcommand{\arraystretch}{1.0}\input{summary_results.tex}}
+
+\clearpage
+\section{Code}
+\inputminted[
+  fontsize=\footnotesize,
+  linenos,
+  breaklines,
+  frame=lines,
+]{python}{assignment4.py}
+
+\end{document}

@@ -1,0 +1,127 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+% of mathematical formula, commands, and symbols
+\usepackage{amssymb}
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    MATH 4341} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[5]
+
+\question[1]{}
+Let $\mathcal{U}$ be an arbitrary open cover of $A$. Since $x_n \to
+x$, by definition for any open neighborhood $U$ of $x$, $\exists N
+\in \mathbb{N}$ such that if $n>N$ then $x_n \in U$; that is to say,
+that for all but a finite number of $n$, $x_n \in U$. Take $U$ to be
+any $U \in \mathcal{U}$ such that $x\in U$, the points in $A$ not in
+$U$ are all sequence elements such that $n \leq N$. Since
+$\mathcal{U}$ covers $A$, there must exist at least one $U_n \in
+\mathcal{U}$ such that $\forall n \leq N, x_n \in U_n$, since theres
+only a finite number of such $x_n$, simply collect all $U_n$ along
+with $U$ to obtain a finite subcover of $A$.
+
+\question[2]{}
+
+Let $\{A_i\}$ to be a finite collection of compact subspaces. Let
+$\mathcal{U}$ be an open cover of the union of all $A_i$
+
+\[
+  \bigcup^N A_i = \bigcup_{U \in\mathcal{U}} U
+\]
+
+Consider that, since each $A_i$ is compact, and since $A_i \subset
+\bigcup A_i$ implies that $\mathcal{U}$ is an open cover of $A_i$ as
+well, for any $i$, we can pick out a finite open subcover $\{U_{ij}\}
+\subset \mathcal{U}$ such that
+\[
+  A_i = \bigcup_j U_{ij}
+\]
+
+Since there are only finitely many $A_i$, collecting all such
+$\{U_{ij}\}$ would be an open subcover of the union of all $A_i$, that is
+
+\[
+  \bigcup A_i = \bigcup_{i,j} U_{ij}
+\]
+
+is a finite open subcover, hence, $\bigcup A_i$ is compact.
+
+\question[3]{}
+
+Since $X$ is Hausdorff, and each $A_i$ is compact, then $\forall i,
+A_i$ is closed. The arbitrary intersection of closed sets is in
+itself closed, so $\bigcap A_i$ is closed.
+
+Further, since, $\forall j, \bigcap A_i \subset A_j$, $\bigcap A_i$
+is a closed subset of a compact space, which is compact.
+
+\question[4]{}
+
+An open set in this topology is given by  $U =
+\mathbb{R}\setminus A$ where $A$ is any finite set, including the
+empty set. Then any open cover $\mathcal{U}$ of a subspace $X$ is such that
+\[
+  X  \subset \bigcup \mathbb{R} \setminus A_i = \mathbb{R} \setminus \bigcap A_i
+\]
+
+For a collection of finite sets $A_i$. We can construct an open
+subcover as follows, take any $A_i$, call it $A_0$, if $X \cap A_0$
+is empty, take $X \subset U_1 = \mathbb{R} \setminus A_0$ to be the
+finite subcover of $X$. Since $A_0$ is finite, so is $X \cap A_0$.
+Now, since $\{\mathbb{R}\setminus A_i\}$ covers $X$, $\forall x \in X
+\cap A_0, \exists A_i$ such that
+$x\notin A_i$, collect all such $A_i$ for each $x \in X \cap A_0$,
+labeled $A_{x}$, then we have the finite collection
+\[
+  X \subset \mathbb{R} \setminus A_0 \cup \bigcup_{x\in X\cap A_0} \mathbb{R}
+  \setminus A_{x}
+\]
+
+Thus any set $X$ in this topology is compact.
+
+\question[5]{}
+
+Take $(\mathbb{R}, \mathcal{T})$ where $\mathcal{T}$ is the ray topology.
+
+\[
+  \mathcal{T} = \{[a, \infty) \vert a \in \mathbb{R}\}
+\]
+
+For any arbitrary $X \subset \mathbb{R}$, any open cover $\mathcal{U}$ such that
+
+\[
+  X \subset \bigcup_{U_i \in \mathcal{U}} [a_i, \infty)
+\]
+
+Take the $U_i$ with the smallest possible $a_i$, call it $a_m$, then
+
+\[
+  X \subset [a_m, \infty) \subset \bigcup_{U_i \in \mathcal{U}} [a_i, \infty)
+\]
+
+is clearly a compact. However, take $X = (a,b)$, then $X^c =
+(-\infty, a] \cup [b, \infty)$, however, $(-\infty, a]$ is not in the
+topology, so $X^c$ is not open, and therefore $X$ is not closed.
+
+\end{document}
