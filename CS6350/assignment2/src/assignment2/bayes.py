@@ -132,17 +132,21 @@ class NaiveBayes:
                 true += np.log(t)
             return (lie, true, true > lie)
 
-        return rdd.map(lambda row: score(row.filtered))
+        return rdd.map(lambda row: score(row.filtered)).zip(
+            df.select("sender_labels").rdd
+        )
 
+
+test.select("sender_labels").rdd.collect()
 
 model = NaiveBayes()
 model.fit(training.select("sender_labels", "filtered"))
 
 predictions = (
     model.predict(test)
-    .map(lambda x: (x[0].item(), x[1].item(), x[2].item()))
-    .toDF(["lie prior", "truth prior", "prediction_label"])
-).join(test.select("sender_labels").alias("true label"))
+    .map(lambda x: (x[0][0].item(), x[0][1].item(), x[0][2].item(), x[1][0]))
+    .toDF(["lie prior", "truth prior", "prediction_label", "sender_labels"])
+)
 
 true_positive = predictions.where(
     (predictions.prediction_label == predictions.sender_labels)

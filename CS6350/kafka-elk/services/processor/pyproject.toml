@@ -7,7 +7,12 @@ authors = [
     { name = "Nico OR", email = "nohayonr@gmail.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "dotenv>=0.9.9",
+    "kafka-python>=3.0.13",
+    "pyspark>=4.3.0",
+    "spacy>=3.8.18",
+]
 
 [project.scripts]
 processor = "processor:main"

@@ -5,12 +5,13 @@ import numpy as np
 import pyspark
 from pyspark.ml import Pipeline
 from pyspark.ml.evaluation import RegressionEvaluator
-from pyspark.ml.feature import StringIndexer
 from pyspark.ml.recommendation import ALS
 from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
 from pyspark.sql import Row
+from pyspark.sql import functions as F
 from pyspark.sql.session import SparkSession
 from pyspark.sql.types import *
+from pyspark.sql.types import FloatType
 
 friend_path = pathlib.Path("./soc-LiveJournal1Adj.txt")
 
@@ -32,8 +33,9 @@ sc = spark.sparkContext
 text_file = (
     sc.textFile(str(friend_path))
     .map(lambda x: x.split("\t"))
-    .map(lambda x: (x[0], x[1]))
-    .mapValues(lambda x: x.split(","))
+    .map(lambda x: (int(x[0]), x[1]))
+    .mapValues(lambda x: x.split(",") if x != "" else [])
+    .mapValues(lambda xs: [int(x) for x in xs])
 )
 
 
@@ -65,20 +67,16 @@ sparse = text_file.flatMap(lambda x: [(x[0], x1) for x1 in x[1]]).map(
 sparse_df = spark.createDataFrame(sparse, ["user", "user_friend", "connected"])
 training, test = sparse_df.randomSplit([0.8, 0.2])
 
-indexer = StringIndexer(
-    inputCols=["user", "user_friend"], outputCols=["userIdx", "user_friendIdx"]
-).setHandleInvalid("keep")
 als = ALS(
     rank=10,
     seed=0,
-    userCol="userIdx",
-    itemCol="user_friendIdx",
+    userCol="user",
+    itemCol="user_friend",
     ratingCol="connected",
     coldStartStrategy="drop",
     implicitPrefs=True,
 )
 
-pipeline = Pipeline(stages=[indexer, als])
 evaluator = RegressionEvaluator(
     metricName="rmse", labelCol="connected", predictionCol="prediction"
 )
@@ -92,39 +90,54 @@ grid = (
 )
 
 crossval = CrossValidator(
-    estimator=pipeline, estimatorParamMaps=grid, numFolds=2, evaluator=evaluator
+    estimator=als, estimatorParamMaps=grid, numFolds=2, evaluator=evaluator
 )
 
 cvModel = crossval.fit(training)
 best_model = cvModel.bestModel
-best_model.stages[-1].rank
 print(best_model.rank)
 predictions = best_model.transform(test)
 test.printSchema()
 rmse = evaluator.evaluate(predictions)
 print(rmse)
 
-recs = best_model.stages[-1].recommendForAllUsers(10)
-
 random = [
     x[0]
-    for x in training.sample(
-        withReplacement=False, fraction=(30 / text_file.count()), seed=2
-    ).take(10)
+    for x in training.select("user")
+    .distinct()
+    .sample(withReplacement=False, fraction=(30 / text_file.count()), seed=2)
+    .take(10)
 ]
 
-als_rec = recs.filter(recs.userIdx.isin(random))
+users_df = spark.createDataFrame([(u,) for u in random], schema=["user"])
+raw = best_model.recommendForUserSubset(users_df, 500)
+exploded = raw.select("user", F.explode("recommendations").alias("r")).select(
+    "user",
+    F.col("r.user_friend").alias("user_friend"),
+    F.col("r.rating").alias("rating"),
+)
+filtered = exploded.join(
+    sparse_df.select("user", "user_friend"), ["user", "user_friend"], "left_anti"
+).filter(F.col("user") != F.col("user_friend"))
+
+als_rec = filtered.groupBy("user").agg(
+    F.slice(
+        F.sort_array(F.collect_list(F.struct("rating", "user_friend")), asc=False),
+        1,
+        10,
+    ).alias("recommendations")
+)
 
 schema = StructType(
     [
-        StructField("userIdx", IntegerType(), True),
+        StructField("user", IntegerType(), True),
         StructField(
             "mapReduceRecs",
             ArrayType(
                 StructType(
                     [
-                        StructField("friend", StringType(), True),
-                        StructField("reccScore", IntegerType(), True),
+                        StructField("friend", IntegerType(), True),
+                        StructField("MutualCount", IntegerType(), True),
                     ]
                 )
             ),
@@ -133,8 +146,8 @@ schema = StructType(
     ]
 )
 map_reduce_rec = sc.parallelize(
-    list(map(lambda x: (int(x), getFriendsRecFstOrder(x)), random))
+    list(map(lambda x: (x, getFriendsRecFstOrder(x)), random))
 ).toDF(schema=schema)
 
-combined = als_rec.join(map_reduce_rec, "userIdx")
-combined.head()
+combined = als_rec.join(map_reduce_rec, "user")
+combined.show(n=combined.count(), truncate=False, vertical=True)

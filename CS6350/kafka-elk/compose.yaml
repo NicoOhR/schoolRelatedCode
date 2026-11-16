@@ -3,6 +3,9 @@ name: kafka-elk
 services:
   poller:
     build: ./services/poller/
+    restart: unless-stopped
+    depends_on:
+      kafka: { condition: service_healthy }
   kafka:
     image: docker.io/apache/kafka:${KAFKA_VERSION}
     container_name: kafka

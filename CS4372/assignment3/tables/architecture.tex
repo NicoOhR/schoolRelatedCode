@@ -1,0 +1,10 @@
+\begin{tabular}{llll}
+\toprule
+Layer & Type & Output shape & Parameters \\
+\midrule
+resnet50 & Functional & (5, 5, 2048) & 23,587,712 \\
+global\_average\_pooling2d & GlobalAveragePooling2D & (2048,) & 0 \\
+dropout & Dropout & (2048,) & 0 \\
+dense & Dense & (6,) & 12,294 \\
+\bottomrule
+\end{tabular}

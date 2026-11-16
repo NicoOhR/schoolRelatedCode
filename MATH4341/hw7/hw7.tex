@@ -165,11 +165,58 @@ $$
 f^{-1}(b) = \left(\frac{b^2-1}{b^2+1}, \frac{2b}{b^2+1}\right)
 $$
 
-%% continuity proofs of various kinds proceed, I think the proof for
-% 1/b^2 + 1 and b^2-1 are simple enough,
-%% then composition of continuous + continuous components is
-% continuous. For f I'm not sure how to do that, it probably follows
-% pretty quickly with the subspace topology
+We demonstrate that the componenets of $f^{-1}$ are continuosu and
+therefore since a function to a cartesian product of topological
+spaces is continuous if each of it's component functions are
+continuous, $f^{-1}$ is continuous. For an open basis element in
+$\mathbb{R}, U = (x,y)$
+
+\begin{align*}
+  f_1^{-1}(U) &= \left\{b \in \mathbb{R} | x < \frac{b^2-1}{b^2+1} <
+  y\right\} \\
+  &= \left\{b \in \mathbb{R} | (x-1)b^2+x+1< 0 <
+  (y-1)b^2 + y + 1\right\} \\
+  &= \left\{b \in \mathbb{R} | \frac{\sqrt{1 - x^2}}{1-x}< |b| <
+  \frac{\sqrt{1 - y^2}}{1-y}\right\} \\
+  &=\left(-\frac{\sqrt{1 - y^2}}{1-y},
+  -\frac{\sqrt{1 - x^2}}{1-x}\right) \cup
+  \left(\frac{\sqrt{1 - x^2}}{1-x},
+  \frac{\sqrt{1 - y^2}}{1-y}\right)
+\end{align*}
+
+Since $b^2+1>b^2-1$, $\frac{b^2-1}{b^2+1} < 1$, and therefore the
+above range is always real and well defined. Since the condition only
+constrains $b^2$, both $b$ and $-b$ satisfy it, so the preimage is the
+union of the positive interval and its reflection across $0$. This is
+a union of open intervals, and is therefore an open set, and
+therefore $f_1$ is continuous. Further
+\begin{align*}
+  f_2^{-1}(U) &= \left\{b \in \mathbb{R} | x < \frac{2b}{b^2+1} <
+  y\right\} \\
+  &= \left\{b \in \mathbb{R} | (x)b^2-2b+x< 0 <
+  (y)b^2 -2b + y\right\} \\
+  &= \left\{b \in \mathbb{R} | \frac{1 \pm \sqrt{1- x^2}}{x}< b <
+  \frac{1 \pm \sqrt{1-y^2}}{y}\right\} \\
+\end{align*}
+
+The above interval exists everywhere trivially except for $b = \pm
+1$, where $x, y = 0$, though using standard tools of analysis, the
+bounds are still continuous and defined to be $0$ at those points. As
+such $f^{-1}$ is a continuous function.
+
+To show that $f$ is cotinuous, consider
+
+\begin{align*}
+  f^{-1}((a, b)) &= \{(x,y) \in C\setminus(0,1) | a < \frac{y}{1-x} < b\}\\
+  &= \{(x,y) \in C \setminus (0, 1)| a(1-x)-y < 0 < b(1-x)-y\}\\
+\end{align*}
+
+Holding $x$ fixed, it's clear that the range of $y$ which satsifies
+the above is an open interval, the same holds true when $y$ is held
+fixed for $x$. Then, in $\mathbb{R}^2$, the set of $(x,y)$ is a box,
+since this is an open set in $\mathbb{R}^2$, that set intersected
+with $C\setminus(0,1)$ is open in the subspace topology of
+$C\setminus(0,1)$. Therefore, $f$ is continuous.
 
 \question[3]{}
 To show that $\mathcal{I}$ is not connected, we find two disjoint
