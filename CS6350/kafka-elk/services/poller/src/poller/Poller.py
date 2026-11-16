@@ -57,6 +57,7 @@ class Poller:
                     "articles",
                     bytes(
                         (art.get("title"))
+                        + " "
                         + (art.get("description") or "")
                         + " "
                         + (art.get("content") or ""),

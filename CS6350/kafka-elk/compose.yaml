@@ -1,6 +1,11 @@
 name: kafka-elk
 
 services:
+  processor:
+    build: ./services/processor/
+    restart: unless-stopped
+    depends_on:
+      kafka: { condition: service_healthy }
   poller:
     build: ./services/poller/
     restart: unless-stopped
