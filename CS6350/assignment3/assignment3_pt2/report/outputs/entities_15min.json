@@ -1,0 +1,48 @@
+{
+  "minutes": 15,
+  "captured_at": "2026-11-17T01:00:16.000Z",
+  "distinct_entities": 84,
+  "docs": 84,
+  "top10": [
+    [
+      "AI",
+      7
+    ],
+    [
+      "US",
+      7
+    ],
+    [
+      "Nvidia",
+      6
+    ],
+    [
+      "Americans",
+      3
+    ],
+    [
+      "Android",
+      3
+    ],
+    [
+      "Samsung",
+      3
+    ],
+    [
+      "Social Security",
+      3
+    ],
+    [
+      "U.S.",
+      3
+    ],
+    [
+      "six",
+      3
+    ],
+    [
+      "75",
+      2
+    ]
+  ]
+}

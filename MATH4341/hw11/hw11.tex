@@ -1,0 +1,222 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+\usepackage{mathtools}
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+\usepackage{amsfonts}
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Topology} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[11]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{}
+\begin{enumerate}
+  \item
+    \[
+      (f \star e_q)(t)  =
+      \begin{cases}
+        f(2t) & 0 \le t \le \frac{1}{2}\\
+        e_q(2t-1) & \frac{1}{2} \le t \le 1
+      \end{cases} =
+      \begin{cases}
+        f(2t) & 0 \le t \le \frac{1}{2}\\
+        q & \frac{1}{2} \le t \le 1
+      \end{cases}
+    \]
+    \[
+      (e_p \star f)(t)  =
+      \begin{cases}
+        e_p(2t) & 0 \le t \le \frac{1}{2}\\
+        f(2t-1) & \frac{1}{2} \le t \le 1
+      \end{cases} =
+      \begin{cases}
+        p & 0 \le t \le \frac{1}{2}\\
+        f(2t-1) & \frac{1}{2} \le t \le 1
+      \end{cases}
+    \]
+  \item One such homotopy from $f$ to $f \star e_q$.
+
+    \[
+      F(x,t) =
+      \begin{cases}
+        f(x(1-t) + t(2x)) & x \le \frac{1}{2} \\
+        f(x(1-t) + t) & x \ge \frac{1}{2}
+      \end{cases}
+    \]
+    To see that this is a homotopy, consider that:
+    \[
+      F(x, 0) = f(x) \quad F(x, 1) =
+      \begin{cases}
+        f(2x) & x\le \frac{1}{2} \\
+        q & x\ge \frac{1}{2}
+      \end{cases}
+      = (f\star e_q)(x)
+    \]
+    Further, that $F$ is continuous is given by the fact that in $t$,
+    the functions $t \to x(1-t)+ t(2x)$ and $t \to x(1-t) + t$ are
+    straight lines in $\mathbb{R}^2$, and are therefore both
+    continuous. Then since $f$ is also continuous, both $f \circ (t \to x(1-t)
+    + t(2x))$ and $f \circ (t \to x(1-t) + t)$ are continuous. Then
+    by the pasting lemma, $F(x,t)$ is a continuous function, and
+    therefore is a homotopy from $f \to f\star e_q$
+
+\end{enumerate}
+
+\question[2]{}
+
+\begin{enumerate}
+  \item
+    \[
+      f \star \bar f =
+      \begin{cases}
+        f(2t)&  t \le \frac{1}{2} \\
+        \bar f(2t - 1) & t \ge \frac{1}{2}
+      \end{cases}
+      =
+      \begin{cases}
+        f(2t)&  t \le \frac{1}{2} \\
+        f(2(1 - t)) & t \ge \frac{1}{2}
+      \end{cases}
+    \]
+    \[
+      \bar f \star  f =
+      \begin{cases}
+        \bar f(2t)&  t \le \frac{1}{2} \\
+        f(2t - 1) & t \ge \frac{1}{2}
+      \end{cases}
+      =
+      \begin{cases}
+        f(1-2t)&  t \le \frac{1}{2} \\
+        f(2t-1) & t \ge \frac{1}{2}
+      \end{cases}
+    \]
+  \item A homotopy from $e_p \to f \star \bar f$ is
+    \[
+      F(x,t) = f \star \bar f (tx)
+    \]
+    We have that
+    $$F(x, 0) = f\star\bar f(0) = f(0) = p = e_p \quad F(x,1) = f(x)$$
+    Since $f$ and therefore $\bar f$ are continuos, and therefore so
+    is $f\star \bar f$ by the pasting lemma. Further, $t \to tx$ is
+    clearly continuous as well, so $f \star \bar f \circ (t \to tx)$
+    is continuous. As such $F(x,t)$ is continuous and therefore a homotopy.
+\end{enumerate}
+
+\question[3]{}
+\begin{enumerate}
+  \item \[
+      f \star g =
+      \begin{cases}
+        f(2t) & t \le \frac{1}{2} \\
+        g(2t - 1) & \frac{1}{2} \le t
+      \end{cases}
+    \]
+    \[
+      (f \star g) \star h =
+      \begin{cases}
+        f\star g (2k) & k \le \frac{1}{2} \\
+        h(2k-1) & \frac{1}{2} \le k
+      \end{cases} =
+      \begin{cases}
+        f(4t)  & t \le \frac{1}{4} \\
+        g(4(t-\frac{1}{4}))  &  \frac{1}{4} \le t \le \frac{1}{2} \\
+        h(2t-1) & \frac{1}{2} \le t
+      \end{cases}
+    \]
+    similarily:
+
+    \[
+      f\star (g \star h) =
+      \begin{cases}
+        f(2t) & 0 \le t \le \frac{1}{2} \\
+        g(4(t - \frac{1}{2})) & \frac{1}{2} \le t \le \frac{3}{4} \\
+        h(4(t- \frac{3}{4})) & \frac{3}{4} \le t \le 1
+      \end{cases}
+    \]
+  \item A homotopy from $(f \star g) \star h \to f \star (g \star h)$
+    is a series of straight line homotopies.
+\end{enumerate}
+\question[4]{}
+\[
+  f \star g =
+  \begin{cases}
+    f(2t) & t \le \frac{1}{2} \\
+    g(2t - 1) & \frac{1}{2} \le t
+  \end{cases} \quad
+  h \circ (f \star g) =
+  \begin{cases}
+    (h \circ f)(2t) & t \le \frac{1}{2} \\
+    (h \circ g)(2t - 1) & \frac{1}{2} \le t
+  \end{cases}
+\]
+And also
+
+\[
+  (h \circ f) \star (h \circ g) =
+  \begin{cases}
+    h\circ f (2t) & t \le \frac{1}{2} \\
+    h \circ g (2t - 1) & \frac{1}{2} \le t
+  \end{cases}
+\]
+
+Then clearly $(h \circ f) \star (h \circ g) =  h \circ (f \star g)$
+\question[5]{}
+First consider the line between $h:= h(x)$ and $x$, given by
+\[
+  h + v = x \to v = x - h
+\]
+
+Then the vector $v$ scaled by some constant $k \in \mathbb{R}$ from
+$h$ will eventually intersect the unit circle, that point will be $r(x)$
+
+\[
+  kv + h = r(x) \quad ||r(x)||^2 = 1
+\]
+Then
+\begin{align*}
+  ||kv + h||^2 &= 1 \\
+  ||k(x-h) + h||^2 &= 1 \\
+\end{align*}
+Expanding the above to vector components
+\[
+  k^2((x_1 - h_1)^2 + (x_2 - h_2)^2)  -  2k(h_1(x_1-h_1) + h_2(x_2 -
+  h_2)) + (h_1^2 + h_2^2)-1= 0
+\]
+Then collecting this back into vector form, we get the follwing quadratic in $k$
+\[
+  k^2||v||^2 - 2k(h\cdot v) + (||h||^2 - 1) = 0
+\]
+Then through the quadratic equation we get that
+
+\[
+  k = \frac{h\cdot v + \sqrt{||v||^2 - ||h \times v||^2}}{||v||^2}
+\]
+
+With that, the closed form solution for $r$ is
+
+$$
+r(x) =  \frac{h\cdot v + \sqrt{||v||^2 - ||h \times v||^2}}{||v||^2} (x - h) + h
+$$
+
+\end{document}

@@ -45,6 +45,7 @@ uv-cache/
 .env
 .env.*
 !.env.example
+.env_docker
 
 # Testing / coverage
 .pytest_cache/

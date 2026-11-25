@@ -1,0 +1,182 @@
+\documentclass{article} % This command is used to set the type of
+% document you are working on such as an article, book, or presenation
+\usepackage{mathtools}
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range
+\usepackage{amsfonts}
+% of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+
+\newcommand{\question}[2][]{
+  \begin{flushleft}
+    \textbf{Question #1}: \textit{#2}
+
+\end{flushleft}}
+\newcommand{\sol}{\textbf{Solution}:} %Use if you want a boldface solution line
+\newcommand{\maketitletwo}[2][]{
+  \begin{center}
+    \Large{\textbf{Assignment #1}
+
+    Topology} % Name of course here
+    \vspace{5pt}
+
+    \normalsize{N. Ohayon Rozanes  % Your name here
+
+    \today}        % Change to due date if preferred
+    \vspace{15pt}
+
+\end{center}}
+\begin{document}
+\maketitletwo[10]  % Optional argument is assignment number
+%Keep a blank space between maketitletwo and \question[1]
+
+\question[1]{Show that for a sequence $\{A_i\}$ of nested, closed,
+nonempty subsets $S^n \subset\mathbb{R}^{n+1}$, $\bigcap A_i$ is non empty}
+
+Take a point $x_i$ in every $A_i$, which is a sequence in $S^n
+\subset \mathbb{R}^{n+1}$. Since each $x_i$ is in $S^n$, the sequence
+is trivially bounded by the hyper box containing $S^n$, and therefore
+by Bolzano–Weierstrass, it has a convergent subsequence $x_{i_k} \to
+c$. Note that, since $S^n$ is a compact subspace of $\mathbb{R^n}$,
+every convergent sequence in it converges to a point in it, so $c \in S^n$.
+
+Assume for the sake of contradiction that $\bigcap A_i$ is empty,
+which implies that $c \notin \bigcap A_i$. Since each $A_i$ is
+nested, this implies that $\exists M \in \mathbb{N}$ such that  $c
+\notin \bigcap_M^\infty A_i$.
+
+Consider that since each $A_i$ is closed in $S^n$, any arbitrary
+intersection of closed sets must be closed as well, as such
+$\bigcup_M^\infty A_i$ must
+be closed. Therefore $S^n \setminus \bigcap_M^\infty A_i$ must be
+open in the topology
+of $S^n$. Additionaly, since $c\notin \bigcap_M^\infty A_i$ and $c
+\in S^n$, it must
+be that $c \in S^n \setminus \bigcap_M^\infty A_i$. As such $S^n
+\setminus \bigcap_M^\infty A_i $ is a valid open neighborhood of $c$.
+From convergence of the sequence ${x_{i_k}}$ to $c$, there must exist
+$I$ such that $\forall i_k > I$, $x_{i_k} \in S^n \setminus
+\bigcap_M^\infty A_i$, but this implies that for any $i_k > M$,
+$x_{i_k} \notin A_{i_k}$, which is a contradiction, as such, it must
+be that $c \in \bigcap A_i$ and therefore that $\bigcap A_i$ is nonempty.
+
+\question[2]{Show that every compact subspace $A$ of a metric space $X$ is
+bounded and closed}
+
+First, we show that $A$ is closed. Let $a$ be any limit point of $A$,
+that is, if $V$ is an open neighborhood of $a$, then $V \cap A \neq
+\emptyset$. Assume that $a \notin A$, and take any other point $b\in
+A$, since $X$ is metric and therefore Haussdorf, there must exist
+disjoint open neighborhoods $V_b$ and $U_b$, of $a$ and $b$
+respectively. Collect all such $U_b$, which form an open cover of
+$A$. Then by compactness, there must exist a finite subcover such that
+
+\[
+  A = U_1 \cup U_2 ... \cup U_n
+\]
+
+Then consider $V_1 \cap V_2 ... \cap V_n$. Since each $V_i$ is open,
+so is their finite intersection. Further, since each $V_i$ is a
+neighborhood of $a$, it must be that their intersection is also a
+neighborhood of $a$. However
+
+$$V_i \cap U_i = \emptyset \implies V_i \cap \bigcup_1^N U_i = \emptyset
+\implies \bigcap V_i \cap \bigcup U_i = \emptyset \implies \bigcap
+V_i \cap A = \emptyset$$
+
+Which is a contradiction since $a$ is an accumulation of point of
+$A$. Therefore, $A$ must contain all of its accumulation points, and
+therefore, $A$ is closed.
+
+Now we show that $A$ is bounded. $A$ is bounded if there exists an $x
+\in X$ and $r \in\mathbb{R}$ such that $A \subset B(x_0, r)$. Let
+$\mathcal{U}$ be an open cover of $A$. Since $X$ is a metric space,
+each $U \in  \mathcal{U}$ is expressible as an arbitrary collection
+of open balls, that is, any $\mathcal{U}$ is alternatively
+expressible as an arbitrary collection of open balls. Therefore, the
+finite subcover given by compactness can also be expressed as a
+finite collection of open balls, $\{B(x_i, r_i)\}$. Each open ball is
+naturally bounded, it is easy to see that the finite union of balls
+is also bounded. Take any $y \in B(x_i, r_i)$, and let $x_j$ be the
+center of another ball in the finite collection
+\[
+  d(y, x_j) \leq d(y,x_i) + d(x_i, x_j) \implies B(x_i, r_i) \cup
+  B(x_j, r_j) \subset B(x_j, r_i + d(x_i,x_j))
+\]
+
+Therefore, $A = \bigcup B(x_i, r_i)$ is bounded.
+
+\question[3]{Show that a bounded and closed subset of a metric space
+is not always compact.}
+
+Let the metric space be $X = \mathbb{R}$, endowed with the binary
+metric, that is
+
+\[
+  d(x,y) =
+  \begin{cases*}
+    0 & if $x = y$ \\
+    1 & if $x \neq y$
+  \end{cases*}
+\]
+
+and $A = \{\frac{1}{n} | n \in
+\mathbb{N}\}$. Clearly, $X \setminus A$ is the uncountably infinite
+union of balls with radius less than 1 around points between each
+$\frac{1}{n}$, which is open, and therefore $A$ is closed. Further,
+the entire set $A$ is contained in any open ball with radius greater than $1$.
+
+However, take the open cover of $A$ to be the collection of open
+intervals around each $\frac{1}{n}$ of radius less than $1$, then
+this is the countable union of singleton sets. No finite subcover can
+be constructed of this.
+
+\question[4]{Suppose $A$ is a compact subspace of the Hausdorff space $X$
+  and $x \in X \setminus A$.
+  Show that there exist disjoint open sets $U$ and $V$ of $X$ containing $x$
+and $A$ respectively.}
+
+Similar to the closedness proof in question 2, since $X$ is
+Hausdorff, for every point in $a$ there exists $V_a, U_a$ which are
+disjoint open neighborhoods of $x$ and $a$ respectively. Then
+\[
+  \mathcal{U} = \{U_a | a \in A \}
+\]
+
+is an open covering of $A$. By compactness, there must exist a finite
+subcover of it such that
+\[
+  A = U_1 \cup U_2 ... \cup U_n
+\]
+
+Define this finite union to be $U$, then take the corrosponding $V_i$
+and intersect them. Define the finite intersection to be $V$. Since
+$V$ is the finite intersection of open sets, it is in itself open,
+and since each $V_a$ is an open neighborhood of $x$, $V$ must be as well.
+
+Lastly:
+
+$$V_i \cap U_i = \emptyset \implies V_i \cap \bigcup_1^N U_i = \emptyset
+\implies \bigcap V_i \cap \bigcup U_i = \emptyset \implies V \cap U =
+\emptyset$$
+
+\question[5]{Let $A$ and $B$ be disjoint compact subspaces of a
+  Hausdorff space $X$. Show
+  that there exist disjoint open sets $U$ and $V$ containing $A$ and $B$
+respectively.}
+
+From question 4, for every $a \in A$, there exists disjoin $U_a$ and
+$V_a$ containing $a$ and $B$ respectively. The collection of all such
+$U_a$ is an open cover of $A$, and each $V_a$ contains $B$. Since $A$
+is compact, there is a finite union of $U_a$ which contain $A$,
+define it to be $U$. Take
+the corrosponding finite collection of $V_a$, take the intersection
+of all those and define that intersection to be $V$.
+
+\[
+  U_a \cap V_a = \emptyset \implies U_a \cap \bigcap V_a = \emptyset
+  \implies \bigcup U_a \cap \bigcap V_a = \emptyset \implies U \cap V
+  = \emptyset
+\]
+
+\end{document}

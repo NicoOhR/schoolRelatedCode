@@ -1,0 +1,20 @@
+[project]
+name = "assignment3-pt2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Nico OR", email = "nohayonr@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "graphframes>=0.6",
+    "pyspark>=4.3.0",
+]
+
+[project.scripts]
+assignment3-pt2 = "assignment3_pt2:main"
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"
